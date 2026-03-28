@@ -2,9 +2,8 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Boda Carlos & Joselyn • Invitación Premium 💍</title>
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Boda Carlos & Joselyn 💍</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
@@ -12,314 +11,174 @@
       --marsala: #7A2F3E; 
       --jade: #1A4D3E; 
       --gold: #C5A059; 
-      --cream: #FFFDF8; /* Tono cálido de respaldo */
-      --text: #333333;
-      --paper: rgba(255, 255, 255, 0.95);
-      --shadow: rgba(0, 0, 0, 0.08);
+      --bg-cream: #F4F1EA; /* El tono beige de tu referencia */
     }
 
-    * { scroll-behavior: smooth; box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Poppins', sans-serif; background-color: var(--cream); color: var(--text); overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Poppins', sans-serif; background-color: #fff; overflow-x: hidden; }
 
-    /* --- TRANSICIONES SOFISTICADAS (Cubic-Bezier) --- */
-    .reveal { 
-      opacity: 0; 
-      transform: translateY(30px); 
-      transition: opacity 1.2s cubic-bezier(0.2, 0.8, 0.2, 1), transform 1s cubic-bezier(0.2, 0.8, 0.2, 1); 
-      will-change: transform, opacity; 
-    }
-    .reveal.active { 
-      opacity: 1; 
-      transform: translateY(0); 
-    }
-
-    /* --- ESTILO SECCIÓN INMERSIVA --- */
-    section { 
-      position: relative;
-      min-height: 110vh; /* Un poco más alto para asegurar el solapamiento */
+    /* --- ESTRUCTURA DE SECCIÓN DIVIDIDA (50/50) --- */
+    .split-section {
+      display: flex;
+      height: 100vh;
       width: 100%;
-      display: flex; align-items: center; justify-content: center;
-      background-size: cover; background-position: center; background-repeat: no-repeat;
-      background-attachment: fixed; /* Parallax suave en PC */
-      margin-top: -10vh; /* Elimina espacios entre secciones */
+      overflow: hidden;
     }
-    section:first-child { margin-top: 0; }
 
-    /* --- OVERLAYS DIFUMINADOS --- */
-    .overlay-hero { background-image: linear-gradient(rgba(10, 46, 36, 0.6), rgba(74, 10, 22, 0.7)); }
-    .overlay-jade { background-image: linear-gradient(rgba(10, 46, 36, 0.8), rgba(10, 46, 36, 0.9)); }
-    .overlay-vino { background-image: linear-gradient(rgba(74, 10, 22, 0.8), rgba(74, 10, 22, 0.9)); }
-
-    /* --- TARJETA DE TEXTO FLOTANTE (REPLICADA DE "UN DETALLE") --- */
-    .text-card {
-      background: var(--paper);
-      padding: 60px 35px;
-      border-radius: 15px;
+    /* LADO DE LA FOTO */
+    .photo-side {
+      width: 50%;
+      height: 100%;
+      background-size: cover;
+      background-position: center;
       position: relative;
-      border: 1px solid rgba(197, 160, 89, 0.2);
-      max-width: 480px; width: 90%;
-      box-shadow: 0 15px 35px var(--shadow);
+    }
+    .photo-side::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.1); /* Velo muy suave */
     }
 
-    /* --- TÍTULOS Y TEXTO MARSALA --- */
-    h1 { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 3.5rem; 
-      color: var(--gold); 
-      line-height: 1;
-      font-style: italic;
-    }
-    
-    h2 { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 2.2rem; 
-      color: var(--marsala); 
-      margin-bottom: 20px;
-    }
-
-    p { font-size: 1rem; line-height: 1.7; color: var(--text); margin: 15px 0; font-weight: 300; }
-    b { color: var(--jade); font-weight: 600; }
-
-    /* --- VECTORES DECORATIVOS SVGs (Inline) --- */
-    .decor { position: absolute; fill: none; stroke: var(--gold); stroke-width: 1; opacity: 0.6; z-index: 5; }
-    
-    /* Marcos y ramas simplificados */
-    .decor-frame { top: 15px; left: 15px; width: calc(100% - 30px); height: calc(100% - 30px); stroke-dasharray: 4, 8; }
-    .decor-branch { width: 130px; height: 130px; }
-    .decor-branch.tl { top: 10px; left: 10px; transform: rotate(-10deg); }
-    .decor-branch.br { bottom: 10px; right: 10px; transform: rotate(170deg); }
-
-    .decor-divider {
+    /* LADO DEL TEXTO (SOLIDO CON ADORNOS) */
+    .text-side {
+      width: 50%;
+      height: 100%;
+      background-color: var(--bg-cream);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 40px;
       position: relative;
-      width: 100px; height: 25px;
-      display: block;
-      margin: -5px auto 20px;
     }
 
-    /* --- BOTONES MINIMALISTAS --- */
+    /* --- ADORNOS VECTORIALES (COMO TU IMAGEN) --- */
+    .decor-curve {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: auto;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    .decor-flower {
+      position: absolute;
+      width: 120px;
+      bottom: 20px;
+      right: 20px;
+      opacity: 0.9;
+    }
+
+    /* --- TIPOGRAFÍA --- */
+    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--marsala); margin-bottom: 10px; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--marsala); margin-bottom: 20px; }
+    p { color: #444; font-size: 1.1rem; line-height: 1.6; max-width: 400px; }
+    b { color: var(--jade); }
+
     .btn {
-      background: transparent;
-      color: var(--marsala);
-      padding: 16px 40px;
-      border: 1px solid var(--gold);
-      text-decoration: none;
-      font-weight: 400;
       display: inline-block;
-      margin-top: 35px;
+      margin-top: 25px;
+      padding: 12px 35px;
+      border: 1px solid var(--gold);
+      color: var(--marsala);
+      text-decoration: none;
       text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 11px;
-      transition: 0.4s ease;
+      letter-spacing: 2px;
+      font-size: 12px;
+      transition: 0.3s;
+      z-index: 10;
     }
-    .btn:hover { background: var(--marsala); color: white; border-color: var(--marsala); }
+    .btn:hover { background: var(--marsala); color: #fff; }
 
-    /* --- ASIGNACIÓN DE FONDOS CON OVERLAYS --- */
-    .s-hero { background-image: var(--overlay-hero), url('0010.jpg'); background-attachment: scroll; } /* PORTADA ACTUALIZADA */
-    .s-count { background-image: var(--overlay-jade), url('0002.jpg'); }
-    .s-historia { background-image: var(--overlay-vino), url('0003.jpg'); }
-    .s-ubicacion { background-image: var(--overlay-jade), url('0004.jpg'); }
-    .s-vestimenta { background-image: var(--overlay-vino), url('0005.jpg'); }
-    .s-galeria { background-image: var(--overlay-jade), url('0013.jpg'); } /* EL QR USANDO 0013 */
-    .s-regalos { background-image: var(--overlay-vino), url('0006.jpg'); }
-    .s-confirmacion { background-image: var(--overlay-jade), url('0014.jpg'); }
+    /* Countdown Style */
+    .countdown { display: flex; gap: 15px; margin-top: 20px; }
+    .unit span { font-size: 2rem; font-family: 'Playfair Display', serif; color: var(--jade); display: block; }
+    .unit small { font-size: 10px; color: var(--marsala); text-transform: uppercase; }
 
-    /* --- MOSAICO ORGÁNICO LUMINOSO (Fotos 0009 - 0012) --- */
-    .s-mosaico { background-color: var(--cream); min-height: 80vh; padding: 50px 0; margin-top: 0; }
-    .mosaico-container {
-      width: 95%; max-width: 1000px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 35vh);
-      gap: 10px;
-      padding: 10px;
-    }
-    .mosaico-item { 
-      width: 100%; height: 100%; 
-      object-fit: cover; 
-      border: 6px solid white; /* Marco de papel */
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: 0.5s ease;
-      will-change: transform;
-    }
-    .mosaico-item:hover { transform: scale(1.03); z-index: 10; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    
-    /* Distribución asimétrica elegante */
-    .m1 { grid-column: span 2; grid-row: span 2; } /* Foto grande a la izquierda */
-    .m2 { grid-column: 3 / 5; } /* Dos fotos pequeñas a la derecha */
-    .m3 { grid-column: 3; grid-row: 2; }
-    .m4 { grid-column: 4; grid-row: 2; }
+    /* Alternancia de lados */
+    .reverse { flex-direction: row-reverse; }
 
-    /* Countdown Jade */
-    .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
-    .unit span { font-size: 2.5rem; font-family: 'Playfair Display', serif; color: var(--jade); display: block; }
-    .unit small { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--marsala); }
-
-    /* Optimización para móviles */
-    @media (max-width: 768px) { 
-      section { background-attachment: scroll; height: 100vh; }
-      h1 { font-size: 2.8rem; }
-      h2 { font-size: 2rem; }
-      .text-card { padding: 40px 20px; }
-      .mosaico-container { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 25vh); }
-      .m1 { grid-column: span 2; grid-row: span 2; }
-      .m2 { grid-column: span 2; }
-      .m3, .m4 { grid-column: span 1; }
+    /* Mobile */
+    @media (max-width: 768px) {
+      .split-section { flex-direction: column; height: auto; }
+      .photo-side { width: 100%; height: 45vh; }
+      .text-side { width: 100%; height: 55vh; padding: 30px 20px; }
     }
   </style>
 </head>
 <body>
 
-  <svg style="display: none;">
-    <symbol id="f" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path d="M5,15 Q5,5 15,5 L85,5 Q95,5 95,15 L95,85 Q95,95 85,95 L15,95 Q5,95 5,85 Z" stroke-dasharray="3, 5"/>
-    </symbol>
-    <symbol id="b" viewBox="0 0 100 100">
-      <path d="M98,98 C90,80 70,70 50,70 C60,50 50,30 30,30 Q40,40 40,50 Q30,60 20,60 M50,70 L55,65 M45,75 L40,80 Q45,85 55,75 Q60,65 50,70" stroke-linecap="round"/>
-    </symbol>
-    <symbol id="d" viewBox="0 0 100 20" preserveAspectRatio="none">
-      <path d="M0,10 Q25,0 50,10 Q75,20 100,10 M45,10 C50,5 55,5 60,10 C55,15 50,15 45,10 Z"/>
-    </symbol>
-  </svg>
-
-  <section class="s-hero">
-    <div class="content reveal active">
-      <p style="letter-spacing: 12px; text-transform: uppercase; font-size: 11px; font-weight: 300; color: white;">Nuestra Boda</p>
+  <section class="split-section">
+    <div class="photo-side" style="background-image: url('0010.jpg');"></div>
+    <div class="text-side">
+      <p style="letter-spacing: 5px; color: var(--gold);">NUESTRA BODA</p>
       <h1>Carlos & Joselyn</h1>
-      <div style="width: 80px; height: 1px; background: var(--gold); margin: 25px auto;"></div>
-      <p style="color: white; font-size: 1.2rem; letter-spacing: 2px;">19 DE DICIEMBRE, 2026</p>
+      <p>19 de Diciembre, 2026</p>
+      <svg class="decor-curve" viewBox="0 0 500 150" preserveAspectRatio="none">
+        <path d="M0,80 C150,150 350,0 500,100 L500,150 L0,150 Z" fill="#7A2F3E" opacity="0.2"></path>
+      </svg>
     </div>
   </section>
 
-  <section class="s-count">
-    <div class="content reveal">
-      <div class="text-card">
-        <svg class="decor decor-frame"><use href="#f"/></svg>
-        <svg class="decor decor-branch tl"><use href="#b"/></svg>
-        <svg class="decor decor-branch br"><use href="#b"/></svg>
-        
-        <h2>Faltan...</h2>
-        <svg class="decor-divider"><use href="#d"/></svg>
-        
-        <div class="countdown">
-          <div class="unit"><span id="days">00</span><small>Días</small></div>
-          <div class="unit"><span id="hours">00</span><small>Hrs</small></div>
-          <div class="unit"><span id="mins">00</span><small>Min</small></div>
-        </div>
+  <section class="split-section reverse">
+    <div class="photo-side" style="background-image: url('0002.jpg');"></div>
+    <div class="text-side">
+      <h2>Faltan...</h2>
+      <div class="countdown">
+        <div class="unit"><span id="days">00</span><small>Días</small></div>
+        <div class="unit"><span id="hours">00</span><small>Hrs</small></div>
+        <div class="unit"><span id="mins">00</span><small>Min</small></div>
       </div>
+      <svg class="decor-curve" viewBox="0 0 500 150" preserveAspectRatio="none">
+        <path d="M0,100 C200,50 400,150 500,80 L500,150 L0,150 Z" fill="#1A4D3E" opacity="0.1"></path>
+      </svg>
     </div>
   </section>
 
-  <section class="s-historia">
-    <div class="content reveal">
-      <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; font-style: italic; text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">"Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."</p>
+  <section class="split-section">
+    <div class="photo-side" style="background-image: url('0004.jpg');"></div>
+    <div class="text-side">
+      <h2>¿Dónde será?</h2>
+      <p><b>Luna Azul</b><br>La Rita, Pococí</p>
+      <p>Sábado, 19 de Dic | 4:00 PM</p>
+      <a href="https://waze.com/ul?ll=10.2794,-83.7845&navigate=yes" class="btn">Ver en Waze</a>
     </div>
   </section>
 
-  <section class="s-ubicacion">
-    <div class="content reveal">
-      <div class="text-card">
-        <svg class="decor decor-frame"><use href="#f"/></svg>
-        <svg class="decor decor-branch tl"><use href="#b"/></svg>
-        <svg class="decor decor-branch br"><use href="#b"/></svg>
-        
-        <h2>¿Dónde será?</h2>
-        <svg class="decor-divider"><use href="#d"/></svg>
-        
-        <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-        <p>Sábado, 19 de Diciembre | <b>4:00 PM</b></p>
-        <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir en Waze ✅</a>
-      </div>
+  <section class="split-section reverse">
+    <div class="photo-side" style="background-image: url('0005.jpg');"></div>
+    <div class="text-side">
+      <h2>Dress Code</h2>
+      <p style="letter-spacing: 3px; font-weight: 600; color: var(--marsala);">FORMAL / ELEGANTE</p>
+      <p>Tu presencia es nuestro mejor adorno.<br>Agradecemos evitar el blanco.</p>
     </div>
   </section>
 
-  <section class="s-mosaico">
-    <div class="content reveal" style="width: 100%; max-width: 1000px;">
-      <h2>Nuestros Momentos</h2>
-      <svg class="decor-divider" style="margin-bottom: 40px;"><use href="#d"/></svg>
-      
-      <div class="mosaico-container">
-        <img src="0009.jpg" class="mosaico-item m1" alt="Boda 9">
-        <img src="0001.jpg" class="mosaico-item m2" alt="Boda 1"> <img src="0011.jpg" class="mosaico-item m3" alt="Boda 11">
-        <img src="0012.jpg" class="mosaico-item m4" alt="Boda 12">
-      </div>
+  <section class="split-section">
+    <div class="photo-side" style="background-image: url('0006.jpg');"></div>
+    <div class="text-side">
+      <h2>Un Detalle</h2>
+      <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle, tendremos lluvia de sobres el día del evento.</p>
+      <svg class="decor-flower" viewBox="0 0 100 100" fill="none" stroke="#C5A059" stroke-width="0.5">
+        <path d="M10,90 Q30,40 80,10 M30,90 Q50,60 90,40 M10,60 Q40,40 60,10" />
+      </svg>
     </div>
   </section>
 
-  <section class="s-vestimenta">
-    <div class="content reveal">
-      <div class="text-card">
-        <svg class="decor decor-frame"><use href="#f"/></svg>
-        <svg class="decor decor-branch tl"><use href="#b"/></svg>
-        <svg class="decor decor-branch br"><use href="#b"/></svg>
-        
-        <h2>Dress Code</h2>
-        <svg class="decor-divider"><use href="#d"/></svg>
-        
-        <p style="letter-spacing: 5px; font-weight: 600; color: var(--marsala);">FORMAL / ELEGANTE</p>
-        <p style="font-size: 14px; opacity: 0.9; margin-top: 15px;">Tu presencia es nuestro mejor adorno.<br>Agradecemos evitar el color blanco.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="s-galeria">
-    <div class="content reveal">
-      <div class="text-card" style="background: white; border: 3px solid var(--gold); border-radius: 15px;">
-        <h2 style="color: var(--marsala);">Comparte la Magia</h2>
-        <svg class="decor-divider"><use href="#d"/></svg>
-        
-        <p style="color: var(--text); font-size: 13px;">Inmortaliza esta noche subiendo tus fotos y videos a nuestra galería en vivo durante la fiesta.</p>
-        <div style="background: white; padding: 10px; display: inline-block; border-radius: 10px; margin: 20px 0; border: 1px solid rgba(197, 160, 89, 0.3);">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="display:block; width: 140px; height: 140px;">
-        </div><br>
-        <a href="index.html" class="btn" style="background: var(--marsala); color: white; border:none;">Subir Fotos 📸</a>
-      </div>
-    </div>
-  </section>
-
-  <section class="s-regalos">
-    <div class="content reveal">
-      <div class="text-card">
-        <svg class="decor decor-frame"><use href="#f"/></svg>
-        <svg class="decor decor-branch tl"><use href="#b"/></svg>
-        <svg class="decor decor-branch br"><use href="#b"/></svg>
-        
-        <h2>Un Detalle</h2>
-        <svg class="decor-divider"><use href="#d"/></svg>
-        <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle, tendremos lluvia de sobres el día del evento.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="s-confirmacion">
-    <div class="content reveal">
-      <div class="text-card">
-        <svg class="decor decor-frame"><use href="#f"/></svg>
-        <svg class="decor decor-branch tl"><use href="#b"/></svg>
-        <svg class="decor decor-branch br"><use href="#b"/></svg>
-        
-        <h2>¿Nos acompañas?</h2>
-        <svg class="decor-divider"><use href="#d"/></svg>
-        
-        <p>Por favor, confírmanos tu asistencia antes del <b>1 de Diciembre, 2026</b>.</p>
-        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">WhatsApp ✅</a>
-      </div>
+  <section class="split-section reverse">
+    <div class="photo-side" style="background-image: url('0014.jpg');"></div>
+    <div class="text-side">
+      <h2>¿Nos acompañas?</h2>
+      <p>Confímanos antes del 1 de Diciembre.</p>
+      <a href="https://wa.me/50683484866?text=Confirmo%20asistencia" class="btn">Confirmar WhatsApp</a>
     </div>
   </section>
 
   <script>
-    // --- LÓGICA DE APARICIÓN SOFISTICADA (Cubic-Bezier) ---
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.15 });
-
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // --- CUENTA REGRESIVA MARSALA ---
     const target = new Date("Dec 19, 2026 16:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -331,6 +190,5 @@
       }
     }, 1000);
   </script>
-
 </body>
 </html>
