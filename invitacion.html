@@ -9,18 +9,19 @@
   
   <style>
     :root {
-      --gold: #d4af37; /* Oro más brillante */
+      --gold: #d4af37; 
       --white: #ffffff;
-      --shadow: rgba(0, 0, 0, 0.4);
+      --shadow: rgba(0, 0, 0, 0.5);
+      --glass: rgba(0, 0, 0, 0.3); /* Tarjeta muy sutil para Marsala */
     }
 
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: #000; color: var(--white); overflow-x: hidden; }
 
-    /* --- TRANSICIÓN SUAVE DE SECCIONES --- */
+    /* --- FONDOS INMERSIVOS (PARALLAX) --- */
     section { 
       position: relative;
-      height: 100vh;
+      min-height: 100vh;
       width: 100%;
       display: flex; 
       flex-direction: column; 
@@ -30,159 +31,241 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-attachment: fixed; /* Efecto Parallax como Marsala */
+      background-attachment: fixed;
     }
 
-    /* Overlay Negro muy sutil para legibilidad sin perder el color de la foto */
+    /* Overlay Negro Sutil Universal */
     section::before {
       content: "";
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.35); /* Solo oscurece un poco para que el texto resalte */
+      background: rgba(0, 0, 0, 0.4); 
       z-index: 1;
     }
 
-    .content { position: relative; z-index: 2; width: 90%; max-width: 500px; padding: 20px; }
+    .content { position: relative; z-index: 2; width: 90%; max-width: 480px; padding: 20px; }
 
-    /* --- TIPOGRAFÍA ESTILO MARSALA --- */
+    /* --- TARJETA FLOTANTE (ESTILO MARSALA) --- */
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(212, 175, 55, 0.2);
+      border-radius: 15px;
+      padding: 40px 20px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.6);
+      position: relative;
+    }
+
+    /* --- VECTORES DECORATIVOS (SVG DORADOS) --- */
+    .decor-top, .decor-bottom {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      fill: var(--gold);
+      opacity: 0.8;
+    }
+    .decor-top { top: -20px; left: -20px; transform: rotate(-90deg); }
+    .decor-bottom { bottom: -20px; right: -20px; transform: rotate(90deg); }
+
+    /* Títulos y Texto */
     h1 { 
       font-family: 'Playfair Display', serif; 
-      font-size: 3.8rem; 
+      font-size: 3.5rem; 
       margin: 0; 
-      line-height: 1;
+      line-height: 1.1;
       text-shadow: 2px 4px 15px var(--shadow);
     }
     
     h2 { 
       font-family: 'Playfair Display', serif; 
-      font-size: 2.5rem; 
+      font-size: 2.3rem; 
       color: var(--gold); 
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       text-shadow: 2px 2px 10px var(--shadow);
-    }
-
-    p { font-size: 1.1rem; line-height: 1.6; text-shadow: 1px 1px 8px var(--shadow); }
-
-    /* --- ELEMENTOS DE DISEÑO (FLORES/DIVISORES) --- */
-    .divider {
-      width: 100px;
-      height: 2px;
-      background: var(--gold);
-      margin: 20px auto;
-      box-shadow: 0 0 10px var(--gold);
-    }
-
-    .btn {
-      background: transparent;
-      color: var(--white);
-      padding: 15px 40px;
-      border: 1px solid var(--gold);
-      border-radius: 0; /* Estilo minimalista Marsala */
-      text-decoration: none;
-      font-weight: 400;
+      position: relative;
       display: inline-block;
-      margin-top: 30px;
+    }
+    
+    /* Adorno debajo del título H2 */
+    h2::after {
+      content: "";
+      display: block;
+      width: 60px;
+      height: 15px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 20' preserveAspectRatio='none'%3E%3Cpath d='M0,10 Q25,0 50,10 Q75,20 100,10' stroke='%23d4af37' stroke-width='2' fill='none'/%3E%3C/svg%3E");
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin: 10px auto 0;
+    }
+
+    p { font-size: 1rem; line-height: 1.7; text-shadow: 1px 1px 8px var(--shadow); margin: 15px 0; }
+
+    /* Botones Minimalistas */
+    .btn {
+      background: rgba(255,255,255,0.05);
+      color: var(--white);
+      padding: 16px 35px;
+      border: 1px solid var(--gold);
+      text-decoration: none;
+      font-weight: 300;
+      display: inline-block;
+      margin-top: 35px;
       text-transform: uppercase;
       letter-spacing: 3px;
+      font-size: 12px;
       transition: 0.5s;
       backdrop-filter: blur(5px);
     }
-    .btn:hover { background: var(--gold); color: black; }
+    .btn:hover { background: var(--gold); color: black; box-shadow: 0 0 15px var(--gold); }
 
-    /* --- ASIGNACIÓN DE FOTOS (LIMPIAS) --- */
+    /* --- ASIGNACIÓN DE FOTOS --- */
     .s1 { background-image: url('0001.jpg'); }
-    .s2 { background-image: url('0002.jpg'); }
-    .s3 { background-image: url('0003.jpg'); }
-    .s4 { background-image: url('0004.jpg'); }
-    .s5 { background-image: url('0005.jpg'); }
-    .s6 { background-image: url('0006.jpg'); }
-    .s7 { background-image: url('0007.jpg'); }
-    .s8 { background-image: url('0008.jpg'); }
+    /* SECCIÓN 2: COLLAGE 1 (0002, 0003, 0004) */
+    .s2 { background: #000; min-height: 80vh; }
+    .s3 { background-image: url('0005.jpg'); }
+    .s4 { background-image: url('0006.jpg'); }
+    .s5 { background-image: url('0007.jpg'); }
+    .s6 { background-image: url('0008.jpg'); }
+    /* SECCIÓN 7: COLLAGE 2 (0009, 0010, 0011, 0012) */
+    .s7 { background: #000; min-height: 80vh; }
+    .s8 { background-image: url('0013.jpg'); }
+    .s9 { background-image: url('0014.jpg'); }
 
-    /* Animación de aparición */
-    .reveal { opacity: 0; transform: scale(0.9); transition: all 1.5s ease; }
-    .reveal.active { opacity: 1; transform: scale(1); }
+    /* Animación de aparición (Scroll) */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1.2s ease; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* Countdown minimalista */
-    .countdown { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
-    .unit span { font-size: 2rem; font-family: 'Playfair Display', serif; display: block; }
+    /* Countdown Minimalista */
+    .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
+    .unit { border: 1px solid rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; min-width: 70px; }
+    .unit span { font-size: 2.2rem; font-family: 'Playfair Display', serif; display: block; color: var(--gold); }
+    .unit small { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; }
+
+    /* --- ESTILOS DE COLLAGE --- */
+    .collage-container {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      gap: 5px;
+      padding: 5px;
+    }
+    .collage-item { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.7); transition: 0.5s; }
+    .collage-item:hover { filter: brightness(1); transform: scale(1.02); z-index: 2; }
+
+    /* Collage 1: 3 fotos */
+    .collage-3 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 30vh); }
+    .c3-1 { grid-row: span 2; } /* Foto grande a la izquierda */
+
+    /* Collage 2: 4 fotos */
+    .collage-4 { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 25vh); }
 
     @media (max-width: 768px) { 
       section { background-attachment: scroll; height: 100vh; }
-      h1 { font-size: 2.8rem; }
+      h1 { font-size: 2.6rem; }
+      .unit { min-width: 60px; padding: 10px; }
+      .unit span { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
 
+  <svg style="display: none;">
+    <symbol id="botanic-corner" viewBox="0 0 100 100">
+      <path d="M98.5,1.5 C80,20 50,30 20,20 C30,50 20,80 1.5,98.5 M20,20 L15,15 M30,30 L25,25 M40,40 L35,35 M25,45 Q35,50 45,40 Q50,30 40,25" stroke-width="2" stroke-linecap="round"/>
+    </symbol>
+  </svg>
+
   <section class="s1">
     <div class="content reveal active">
-      <p style="letter-spacing: 10px; text-transform: uppercase; font-size: 12px;">Nuestra Boda</p>
+      <p style="letter-spacing: 12px; text-transform: uppercase; font-size: 11px; font-weight: 300;">Nuestra Boda</p>
       <h1>Carlos & Joselyn</h1>
-      <div class="divider"></div>
-      <p>19 DE DICIEMBRE, 2026</p>
+      <p style="margin-top: 30px; font-size: 1.1rem; letter-spacing: 1px;">19 DE DICIEMBRE, 2026</p>
     </div>
   </section>
 
   <section class="s2">
-    <div class="content reveal">
-      <h2>Estamos contando los días...</h2>
-      <div class="countdown">
-        <div class="unit"><span id="days">00</span>DÍAS</div>
-        <div class="unit"><span id="hours">00</span>HRS</div>
-        <div class="unit"><span id="mins">00</span>MIN</div>
-      </div>
+    <div class="collage-container collage-3">
+      <img src="0002.jpg" class="collage-item c3-1" alt="Compromiso 2">
+      <img src="0003.jpg" class="collage-item" alt="Compromiso 3">
+      <img src="0004.jpg" class="collage-item" alt="Compromiso 4">
     </div>
   </section>
 
   <section class="s3">
     <div class="content reveal">
-      <p style="font-style: italic; font-size: 1.4rem;">"Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."</p>
-      <div class="divider"></div>
-      <p>Hoy decidimos caminar juntos para siempre.</p>
+      <div class="glass-card">
+        <svg class="decor-top"><use href="#botanic-corner"/></svg>
+        <svg class="decor-bottom"><use href="#botanic-corner"/></svg>
+        <h2>Faltan...</h2>
+        <div class="countdown">
+          <div class="unit"><span id="days">00</span><small>Días</small></div>
+          <div class="unit"><span id="hours">00</span><small>Hrs</small></div>
+          <div class="unit"><span id="mins">00</span><small>Min</small></div>
+        </div>
+      </div>
     </div>
   </section>
 
   <section class="s4">
     <div class="content reveal">
-      <h2>La Ceremonia</h2>
-      <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-      <p>Sábado, 4:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Cómo llegar</a>
+      <div class="glass-card">
+        <h2>La Ceremonia</h2>
+        <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
+        <p>Sábado, 4:00 PM</p>
+        <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Ver Mapa</a>
+      </div>
     </div>
   </section>
 
   <section class="s5">
     <div class="content reveal">
-      <h2>Código de Vestimenta</h2>
-      <p style="letter-spacing: 4px;">FORMAL / ELEGANTE</p>
-      <p style="font-size: 14px; margin-top: 20px;">Tu presencia es nuestro mejor adorno.<br>Agradecemos evitar el color blanco.</p>
+      <p style="font-style: italic; font-size: 1.3rem;">"Porque el amor es el viaje, no el destino."</p>
     </div>
   </section>
 
   <section class="s6">
     <div class="content reveal">
-      <h2>Captura la Magia</h2>
-      <p>Ayúdanos a guardar cada recuerdo subiendo tus fotos a nuestra galería en vivo.</p>
-      <div style="background: white; padding: 10px; display: inline-block; margin: 20px 0;">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="display:block;">
-      </div><br>
-      <a href="index.html" class="btn">Subir mis Fotos 📸</a>
+      <div class="glass-card">
+        <h2>Dress Code</h2>
+        <p style="letter-spacing: 5px; font-weight: 600;">FORMAL / ELEGANTE</p>
+        <p style="font-size: 13px; opacity: 0.8; margin-top: 15px;">Nos hace ilusión verte con tus mejores galas.<br>Agradecemos evitar el color blanco.</p>
+      </div>
     </div>
   </section>
 
-  <section class="s7">
-    <div class="content reveal">
-      <h2>Detalles</h2>
-      <p>Tu presencia es lo más importante. Si deseas tener un detalle con nosotros, tendremos lluvia de sobres el día del evento.</p>
+  <section class="s2 s7">
+    <div class="collage-container collage-4">
+      <img src="0009.jpg" class="collage-item" alt="Compromiso 9">
+      <img src="0010.jpg" class="collage-item" alt="Compromiso 10">
+      <img src="0011.jpg" class="collage-item" alt="Compromiso 11">
+      <img src="0012.jpg" class="collage-item" alt="Compromiso 12">
     </div>
   </section>
 
   <section class="s8">
     <div class="content reveal">
-      <h2>¿Nos acompañas?</h2>
-      <p>Por favor, confírmanos tu asistencia antes del 1 de diciembre.</p>
-      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar Asistencia</a>
+      <div class="glass-card" style="background: white; border: 5px solid var(--gold);">
+        <h2 style="color: black; text-shadow: none;">Captura la Magia</h2>
+        <p style="color: black; text-shadow: none; font-size: 14px;">Escanea o toca el código para subir tus fotos a nuestra galería en vivo durante la fiesta.</p>
+        <div style="background: white; padding: 10px; display: inline-block; border-radius: 10px;">
+          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="display:block;">
+        </div><br>
+        <a href="index.html" class="btn" style="background: black; color: white;">Subir Fotos 📸</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s9">
+    <div class="content reveal">
+      <div class="glass-card">
+        <svg class="decor-top"><use href="#botanic-corner"/></svg>
+        <svg class="decor-bottom"><use href="#botanic-corner"/></svg>
+        <h2>¿Nos acompañas?</h2>
+        <p>Tu presencia haría este día aún más especial.</p>
+        <p>Confírmanos antes del 1 de diciembre, 2026.</p>
+        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
+      </div>
     </div>
   </section>
 
@@ -194,7 +277,7 @@
           entry.target.classList.add('active');
         }
       });
-    }, { threshold: 0.3 });
+    }, { threshold: 0.25 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
