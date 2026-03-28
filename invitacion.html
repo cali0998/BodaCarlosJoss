@@ -4,7 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boda Carlos & Joselyn 💍</title>
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
   <style>
     :root {
       --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24;
@@ -14,8 +16,8 @@
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
 
-    /* Animación de entrada fluida */
-    .reveal { opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
+    /* Animaciones */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     section { min-height: 100vh; padding: 100px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
@@ -33,105 +35,117 @@
       background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 30px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
-    .btn:active { transform: scale(0.95); }
+    /* SECCIONES CON TUS FOTOS */
+    .hero { 
+      background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
+                  url('0001.jpg') center/cover no-repeat; 
+    }
 
-    /* SECCIÓN PORTADA */
-    .hero { background: linear-gradient(rgba(10,46,36,0.65), rgba(10,46,36,0.65)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200') center/cover; }
+    .seccion-historia {
+      background: linear-gradient(rgba(10,46,36,0.8), rgba(10,46,36,0.9)), 
+                  url('0002.jpg') center/cover no-repeat;
+    }
 
-    /* SECCIÓN QR */
-    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); transition: 0.3s; cursor: pointer; }
-    .qr-container:hover { transform: scale(1.05); }
-    .qr-container img { width: 180px; height: 180px; display: block; }
+    /* GALERÍA MINIATURA */
+    .mini-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+    .mini-gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid var(--gold); }
 
-    .countdown-box { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-    .unit { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; min-width: 70px; border: 1px solid rgba(197, 157, 95, 0.2); }
+    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); }
+    .qr-container img { width: 180px; display: block; }
+    
+    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+    .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; min-width: 65px; border: 1px solid var(--gold); }
   </style>
 </head>
 <body>
 
   <section class="hero">
     <div class="reveal active">
-      <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 14px; opacity: 0.9;">Nuestra Boda</p>
+      <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 14px;">Nuestra Boda</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="margin-top: 30px; font-style: italic; font-size: 1.2rem;">19 • Diciembre • 2026</p>
+      <p style="margin-top: 30px; font-size: 1.2rem;">19 • Diciembre • 2026</p>
       
-      <div class="countdown-box">
-        <div class="unit"><span id="days" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Días</small></div>
-        <div class="unit"><span id="hours" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Hrs</small></div>
+      <div class="countdown">
+        <div class="unit"><span id="days">00</span><br><small>Días</small></div>
+        <div class="unit"><span id="hours">00</span><br><small>Hrs</small></div>
+        <div class="unit"><span id="mins">00</span><br><small>Min</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion-historia">
+    <div class="glass-card reveal">
+      <h2>Un Nuevo Comienzo</h2>
+      <p>Nos hace muy felices compartir el inicio de nuestra vida juntos con las personas que más queremos.</p>
+      
+      <div class="mini-gallery">
+        <img src="0003.jpg" alt="Compromiso">
+        <img src="0004.jpg" alt="Compromiso">
+        <img src="0005.jpg" alt="Compromiso">
       </div>
     </div>
   </section>
 
   <section style="background: rgba(0,0,0,0.2);">
     <div class="glass-card reveal">
-      <h2>Lugar y Hora</h2>
+      <h2>¿Dónde será?</h2>
       <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-      <p style="color: var(--gold); font-size: 1.3rem; margin-top: 10px;">Recepción: 4:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir en Waze 🚗</a>
+      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: 4:00 PM</p>
+      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
     </div>
   </section>
 
-  <section>
+  <section style="background: linear-gradient(var(--jade), var(--wine));">
     <div class="glass-card reveal">
       <h2>Dress Code</h2>
       <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
-      <hr style="width: 60px; border: 1px solid var(--gold); margin: 20px auto; opacity: 0.5;">
-      <p style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
-        Nos encantaría verte con tus mejores galas.<br>
-        <i>Nota: El color blanco es exclusivo para la novia.</i>
+      <p style="font-size: 14px; opacity: 0.8; margin-top: 15px;">
+        Agradecemos evitar el color blanco.<br>
+        Tonos sugeridos: Verde Jade y Vino.
       </p>
     </div>
   </section>
 
   <section style="background: var(--wine);">
-    <div class="glass-card reveal" style="border-color: var(--gold);">
-      <h2>Captura el Momento</h2>
-      <p>Escanea el código con otro celular o toca el botón si estás en este dispositivo para subir tus fotos.</p>
-      
-      <div class="qr-container" onclick="window.open('index.html', '_blank')">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="Escanear para subir fotos">
+    <div class="glass-card reveal">
+      <h2>Captura la Magia</h2>
+      <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
+      <div class="qr-container" onclick="window.location.href='index.html'">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="QR">
       </div>
-
       <br>
-      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Tocar para Subir Fotos 📸</a>
+      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
     </div>
   </section>
 
-  <section style="background: rgba(0,0,0,0.1);">
-    <div class="glass-card reveal">
-      <h2>Lluvia de Sobres</h2>
-      <p>Tu presencia es nuestro mayor regalo, pero si deseas tener un detalle con nosotros, tendremos lluvia de sobres el día del evento.</p>
-    </div>
-  </section>
-
-  <section>
-    <div class="glass-card reveal">
+  <section style="background: url('0006.jpg') center/cover;">
+    <div class="glass-card reveal" style="background: rgba(10, 46, 36, 0.9);">
       <h2>Confirmar Asistencia</h2>
-      <p>Por favor, confírmanos tu lugar antes del<br><b>01 de Diciembre, 2026</b>.</p>
-      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar por WhatsApp ✅</a>
+      <p>Esperamos contar con tu presencia.</p>
+      <p>Confírmanos antes del 01/12/2026</p>
+      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
     </div>
   </section>
 
   <script>
-    // --- LÓGICA DE APARICIÓN (SCROLL REVEAL) ---
+    // Efecto Reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
       });
     }, { threshold: 0.1 });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // --- CUENTA REGRESIVA ---
-    const eventDate = new Date("Dec 19, 2026 16:00:00").getTime();
+    // Cuenta Regresiva Exacta
+    const target = new Date("Dec 19, 2026 16:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
-      const diff = eventDate - now;
+      const diff = target - now;
       document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
       document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60));
     }, 1000);
   </script>
 
