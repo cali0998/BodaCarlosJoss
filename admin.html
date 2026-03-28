@@ -3,32 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Galería de Recuerdos 💍</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <title>Galería • Carlos & Joselyn 💍</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #c59d5f;
+      --gold-light: #e0c08d;
       --wine: #4a0a16;
       --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.08);
     }
 
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, var(--jade), var(--wine));
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
       background-attachment: fixed;
       color: white;
       min-height: 100vh;
-      padding-bottom: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
+    /* Header con efecto de vidrio */
     header {
-      padding: 50px 20px 30px;
+      width: 100%;
+      padding: 40px 20px 25px;
       text-align: center;
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.3);
       backdrop-filter: blur(15px);
       -webkit-backdrop-filter: blur(15px);
-      border-bottom: 1px solid var(--gold);
+      border-bottom: 1px solid rgba(197, 157, 95, 0.3);
       position: sticky;
       top: 0;
       z-index: 1000;
@@ -36,102 +42,161 @@
 
     h1 {
       font-family: 'Playfair Display', serif;
-      margin: 0;
       font-size: 28px;
       color: var(--gold);
+      margin: 0;
       letter-spacing: 1px;
     }
 
     #counter {
-      font-size: 12px;
-      color: #ddd;
-      margin-top: 10px;
+      font-size: 11px;
+      letter-spacing: 3px;
       text-transform: uppercase;
-      letter-spacing: 2px;
+      color: var(--gold-light);
+      margin-top: 10px;
+      opacity: 0.9;
     }
 
+    /* Contenedor de la Galería */
     #gallery {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 4px;
-      padding: 4px;
+      gap: 8px;
+      padding: 20px;
+      width: 100%;
+      max-width: 600px;
+      box-sizing: border-box;
     }
 
     .img-container {
       aspect-ratio: 1/1;
+      background: var(--glass);
+      backdrop-filter: blur(5px);
+      border-radius: 12px;
       overflow: hidden;
-      background: rgba(255,255,255,0.05);
       border: 1px solid rgba(197, 157, 95, 0.2);
+      box-shadow: 0 8px 15px rgba(0,0,0,0.3);
+      animation: fadeIn 0.8s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; transform: translateY(0); }
+      from { opacity: 0; transform: translateY(15px); }
     }
 
     .img-container img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.4s ease;
     }
 
-    /* Botón Refresco Dorado */
+    .img-container img:active {
+      transform: scale(1.1);
+    }
+
+    /* Botón de Refresco Flotante (Estilo Glass-Gold) */
     .refresh-btn {
       position: fixed;
-      bottom: 40px;
+      bottom: 30px;
       right: 30px;
-      background: var(--gold);
+      background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%);
       border: none;
-      width: 60px;
-      height: 60px;
+      width: 55px;
+      height: 55px;
       border-radius: 50%;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       cursor: pointer;
       z-index: 1100;
       display: flex;
       align-items: center;
       justify-content: center;
+      transition: all 0.3s ease;
     }
 
-    .refresh-btn svg { fill: white; width: 24px; height: 24px; }
+    .refresh-btn:active { transform: scale(0.9); }
+    .refresh-btn svg { fill: white; width: 22px; height: 22px; }
+
+    /* Visor de Foto Grande */
+    #viewer {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 2000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(15px);
+    }
+
+    #viewer img {
+      max-width: 90%;
+      max-height: 80%;
+      border-radius: 15px;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 30px rgba(197, 157, 95, 0.4);
+    }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Nuestros Recuerdos ❤️</h1>
-  <div id="counter">Sincronizando...</div>
+  <div id="counter">Sincronizando la magia...</div>
 </header>
 
 <div id="gallery"></div>
 
-<button class="refresh-btn" onclick="loadGallery()">
+<button class="refresh-btn" onclick="loadGallery()" id="refreshBtn">
   <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
 </button>
+
+<div id="viewer" onclick="this.style.display='none'"><img id="viewerImg"></div>
 
 <script>
   const cloudName = "dhruy6ftj";
   const tagBoda = "boda_carlos_y_joss";
 
   async function loadGallery() {
+    const btn = document.getElementById("refreshBtn");
+    btn.style.transform = "rotate(360deg)";
+    
     const url = `https://res.cloudinary.com/${cloudName}/image/list/v${new Date().getTime()}/${tagBoda}.json`;
+    
     try {
       const response = await fetch(url);
+      if (!response.ok) throw new Error();
       const data = await response.json();
+      
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = "";
       document.getElementById("counter").innerText = `${data.resources.length} Momentos capturados`;
 
-      data.resources.sort((a,b) => b.version - a.version).forEach(img => {
-        const thumb = `https://res.cloudinary.com/${cloudName}/image/upload/c_fill,w_300,h_300,g_auto/v${img.version}/${img.public_id}.${img.format}`;
+      data.resources.sort((a,b) => b.version - a.version).forEach((img, index) => {
+        const thumb = `https://res.cloudinary.com/${cloudName}/image/upload/c_fill,w_400,h_400,g_auto/v${img.version}/${img.public_id}.${img.format}`;
+        const full = `https://res.cloudinary.com/${cloudName}/image/upload/v${img.version}/${img.public_id}.${img.format}`;
+        
         const div = document.createElement("div");
         div.className = "img-container";
-        div.innerHTML = `<img src="${thumb}">`;
+        div.style.animationDelay = `${index * 0.05}s`; // Efecto cascada
+        div.innerHTML = `<img src="${thumb}" onclick="openImg('${full}')">`;
         gallery.appendChild(div);
       });
     } catch (e) {
-      document.getElementById("counter").innerText = "Sincronizando galería...";
+      document.getElementById("counter").innerText = "Aún no hay fotos. ¡Sé el primero!";
+    } finally {
+      setTimeout(() => { btn.style.transform = "rotate(0deg)"; }, 600);
     }
+  }
+
+  function openImg(url) {
+    document.getElementById("viewerImg").src = url;
+    document.getElementById("viewer").style.display = "flex";
   }
 
   setInterval(loadGallery, 30000); // Auto-actualizar cada 30 segundos
   window.onload = loadGallery;
 </script>
-
 </body>
 </html>
