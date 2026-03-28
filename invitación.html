@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boda Carlos & Joselyn 💍</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
   <style>
     :root {
       --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24;
@@ -15,7 +14,7 @@
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
 
-    /* Efecto de aparición suave al hacer scroll (Marsala Style) */
+    /* Animación de entrada fluida */
     .reveal { opacity: 0; transform: translateY(40px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -27,30 +26,42 @@
       padding: 50px 30px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 25px; }
 
     .btn {
       background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 30px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
 
+    .btn:active { transform: scale(0.95); }
+
     /* SECCIÓN PORTADA */
-    .hero { background: linear-gradient(rgba(10,46,36,0.6), rgba(10,46,36,0.6)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200') center/cover; }
+    .hero { background: linear-gradient(rgba(10,46,36,0.65), rgba(10,46,36,0.65)), url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1200') center/cover; }
 
     /* SECCIÓN QR */
-    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); }
+    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); transition: 0.3s; cursor: pointer; }
+    .qr-container:hover { transform: scale(1.05); }
     .qr-container img { width: 180px; height: 180px; display: block; }
+
+    .countdown-box { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    .unit { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; min-width: 70px; border: 1px solid rgba(197, 157, 95, 0.2); }
   </style>
 </head>
 <body>
 
   <section class="hero">
     <div class="reveal active">
-      <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 14px; opacity: 0.8;">Nuestra Boda</p>
+      <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 14px; opacity: 0.9;">Nuestra Boda</p>
       <h1>Carlos &<br>Joselyn</h1>
       <p style="margin-top: 30px; font-style: italic; font-size: 1.2rem;">19 • Diciembre • 2026</p>
+      
+      <div class="countdown-box">
+        <div class="unit"><span id="days" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Días</small></div>
+        <div class="unit"><span id="hours" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Hrs</small></div>
+      </div>
     </div>
   </section>
 
@@ -58,27 +69,30 @@
     <div class="glass-card reveal">
       <h2>Lugar y Hora</h2>
       <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-      <p style="color: var(--gold); font-size: 1.3rem;">4:00 PM</p>
-      <a href="https://waze.com/ul/..." target="_blank" class="btn">Abrir en Waze 🚗</a>
+      <p style="color: var(--gold); font-size: 1.3rem; margin-top: 10px;">Recepción: 4:00 PM</p>
+      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir en Waze 🚗</a>
     </div>
   </section>
 
   <section>
     <div class="glass-card reveal">
       <h2>Dress Code</h2>
-      <p style="font-size: 1.2rem; letter-spacing: 2px;">FORMAL / ELEGANTE</p>
-      <hr style="width: 50px; border: 1px solid var(--gold); margin: 20px auto;">
-      <p style="font-size: 14px; opacity: 0.8;">Agradecemos evitar el color blanco y tonos reservados para el cortejo.</p>
+      <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
+      <hr style="width: 60px; border: 1px solid var(--gold); margin: 20px auto; opacity: 0.5;">
+      <p style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
+        Nos encantaría verte con tus mejores galas.<br>
+        <i>Nota: El color blanco es exclusivo para la novia.</i>
+      </p>
     </div>
   </section>
 
   <section style="background: var(--wine);">
-    <div class="glass-card reveal">
-      <h2>Comparte la Magia</h2>
-      <p>Escanea el código o toca el botón para subir tus fotos y videos a nuestra galería en vivo.</p>
+    <div class="glass-card reveal" style="border-color: var(--gold);">
+      <h2>Captura el Momento</h2>
+      <p>Escanea el código con otro celular o toca el botón si estás en este dispositivo para subir tus fotos.</p>
       
-      <div class="qr-container">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="QR de la Boda">
+      <div class="qr-container" onclick="window.open('index.html', '_blank')">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="Escanear para subir fotos">
       </div>
 
       <br>
@@ -86,23 +100,39 @@
     </div>
   </section>
 
+  <section style="background: rgba(0,0,0,0.1);">
+    <div class="glass-card reveal">
+      <h2>Lluvia de Sobres</h2>
+      <p>Tu presencia es nuestro mayor regalo, pero si deseas tener un detalle con nosotros, tendremos lluvia de sobres el día del evento.</p>
+    </div>
+  </section>
+
   <section>
     <div class="glass-card reveal">
       <h2>Confirmar Asistencia</h2>
-      <p>Es un honor para nosotros contar con tu presencia.</p>
-      <a href="https://wa.me/TUNUMERO" class="btn">Confirmar vía WhatsApp ✅</a>
+      <p>Por favor, confírmanos tu lugar antes del<br><b>01 de Diciembre, 2026</b>.</p>
+      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar por WhatsApp ✅</a>
     </div>
   </section>
 
   <script>
-    // Lógica para que las secciones aparezcan al bajar (Scroll Reveal)
-    window.addEventListener('scroll', () => {
-      document.querySelectorAll('.reveal').forEach(el => {
-        if (el.getBoundingClientRect().top < window.innerHeight - 100) {
-          el.classList.add('active');
-        }
+    // --- LÓGICA DE APARICIÓN (SCROLL REVEAL) ---
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
       });
-    });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // --- CUENTA REGRESIVA ---
+    const eventDate = new Date("Dec 19, 2026 16:00:00").getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = eventDate - now;
+      document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
+      document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+    }, 1000);
   </script>
 
 </body>
