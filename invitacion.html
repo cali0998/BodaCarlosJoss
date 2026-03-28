@@ -12,10 +12,10 @@
       --marsala: #7A2F3E; 
       --jade: #1A4D3E; 
       --gold: #C5A059; 
-      --cream: #FFFDF8; /* Tono cálido, no blanco */
+      --cream: #FFFDF8; /* Tono cálido de respaldo */
       --text: #333333;
       --paper: rgba(255, 255, 255, 0.95);
-      --shadow: rgba(0, 0, 0, 0.08);
+      --shadow: rgba(0, 0, 0, 0.1);
     }
 
     * { scroll-behavior: smooth; box-sizing: border-box; margin: 0; padding: 0; }
@@ -114,13 +114,21 @@
     .btn:hover { background: var(--marsala); color: white; border-color: var(--marsala); }
 
     /* --- ASIGNACIÓN DE FONDOS CON OVERLAYS --- */
-    .s-hero { background-image: var(--overlay-hero), url('0010.jpg'); background-attachment: scroll; } /* PORTADA ACTUALIZADA */
+    /* PORTADA (Usando 0010.jpg) */
+    .s-hero { background-image: var(--overlay-hero), url('0010.jpg'); background-attachment: scroll; }
+    /* CUENTA REGRESIVA (Usando 0002.jpg) */
     .s-count { background-image: var(--overlay-jade), url('0002.jpg'); }
+    /* HISTORIA (Usando 0003.jpg) */
     .s-historia { background-image: var(--overlay-vino), url('0003.jpg'); }
+    /* UBICACIÓN (Usando 0004.jpg) */
     .s-ubicacion { background-image: var(--overlay-jade), url('0004.jpg'); }
+    /* DRESS CODE (Usando 0005.jpg) */
     .s-vestimenta { background-image: var(--overlay-vino), url('0005.jpg'); }
-    .s-galeria { background-image: var(--overlay-jade), url('0013.jpg'); } /* EL QR USANDO 0013 */
+    /* EL QR (Usando 0013.jpg) */
+    .s-galeria { background-image: var(--overlay-jade), url('0013.jpg'); }
+    /* REGALOS (Usando 0006.jpg) */
     .s-regalos { background-image: var(--overlay-vino), url('0006.jpg'); }
+    /* CONFIRMACIÓN (Usando 0014.jpg) */
     .s-confirmacion { background-image: var(--overlay-jade), url('0014.jpg'); }
 
     /* --- MOSAICO ORGÁNICO LUMINOSO (Rediseñado) --- */
@@ -221,7 +229,7 @@
         <h2>¿Dónde y Cuándo?</h2>
         <svg class="decor-divider"><use href="#d"/></svg>
         
-        <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
+        <p><b>Luna Azul</b><br>La Rita, Pococí</p>
         <p>Sábado, 19 de Diciembre | <b>4:00 PM</b></p>
         <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir en Waze ✅</a>
       </div>
