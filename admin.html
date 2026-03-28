@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Nuestros Recuerdos 💍</title>
+  
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Boda C&J">
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #c59d5f;
+      --dark-gold: #a67c3d;
+      --bg-dark: #0a0a0a;
+      --card-dark: #161616;
+      --text-main: #e0e0e0;
+      --text-muted: #888;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      -webkit-font-smoothing: antialiased;
+      padding-bottom: 80px; /* Espacio para el botón flotante */
+    }
+
+    header {
+      padding: 30px 20px 20px;
+      text-align: center;
+      border-bottom: 1px solid #222;
+      position: sticky;
+      top: 0;
+      background: rgba(10, 10, 10, 0.95);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      z-index: 100;
+      padding-top: calc(30px + env(safe-area-inset-top));
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      margin: 0;
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.5px;
+    }
+
+    #counter {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 8px;
+      font-weight: 300;
+    }
+
+    /* Galería Moderna */
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 3px;
+      padding: 3px;
+    }
+
+    .img-container {
+      aspect-ratio: 1/1;
+      overflow: hidden;
+      background: var(--card-dark);
+      position: relative;
+      cursor: pointer;
+      animation: fadeIn 0.5s ease backwards;
+    }
+
+    .img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .img-container:hover img {
+      transform: scale(1.08);
+    }
+
+    /* Efecto de carga inicial de imágenes */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Botón de Refresh Flotante y Elegante */
+    .refresh-btn {
+      position: fixed;
+      bottom: calc(25px + env(safe-area-inset-bottom));
+      right: 25px;
+      background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+      border: none;
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      box-shadow: 0 8px 25px rgba(197, 157, 95, 0.4);
+      cursor: pointer;
+      z-index: 200;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .refresh-btn svg {
+      fill: white;
+      width: 24px;
+      height: 24px;
+      transition: transform 0.5s ease;
+    }
+
+    .refresh-btn:active {
+      transform: scale(0.9) translateY(3px);
+      box-shadow: 0 4px 10px rgba(197, 157, 95, 0.2);
+    }
+
+    .refresh-btn.loading svg {
+      animation: rotate 1s linear infinite;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* Vista en grande (Viewer) Moderna */
+    #viewer {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    #viewer.open {
+      display: flex;
+      opacity: 1;
+    }
+
+    #viewer img {
+      max-width: 95%;
+      max-height: 95%;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      transform: scale(0.9);
+      transition: transform 0.3s ease;
+    }
+
+    #viewer.open img {
+      transform: scale(1);
+    }
+
+    /* Estilos para el scrollbar */
+    body::-webkit-scrollbar { width: 6px; }
+    body::-webkit-scrollbar-track { background: var(--bg-dark); }
+    body::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Nuestros Recuerdos ❤️</h1>
+  <div id="counter">Buscando nuevas fotos...</div>
+</header>
+
+<div id="gallery"></div>
+
+<button class="refresh-btn" onclick="loadGallery()" id="refreshBtn">
+  <svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+</button>
+
+<div id="viewer" onclick="closeViewer()">
+  <img id="viewerImg" src="" alt="Foto en grande">
+</div>
+
+<script>
+  const cloudName = "dhruy6ftj";
+  const tagBoda = "boda_carlos_y_joss";
+
+  const gallery = document.getElementById("gallery");
+  const counter = document.getElementById("counter");
+  const refreshBtn = document.getElementById("refreshBtn");
+  const viewer = document.getElementById("viewer");
+  const viewerImg = document.getElementById("viewerImg");
+
+  async function loadGallery() {
+    // Animación de carga en el botón
+    refreshBtn.classList.add('loading');
+    
+    // Cache Buster agresivo
+    const randomBuffer = Math.floor(Math.random() * 9999999);
+    const url = `https://res.cloudinary.com/${cloudName}/image/list/v${randomBuffer}/${tagBoda}.json`;
+
+    try {
+      const response = await fetch(url);
+      
+      if (!response.ok) {
+        throw new Error("No se pudo obtener la lista");
+      }
+
+      const data = await response.json();
+      
+      if (!data.resources || data.resources.length === 0) {
+        counter.innerText = "Esperando la primera foto... 📸";
+        gallery.innerHTML = "";
+        return;
+      }
+
+      gallery.innerHTML = "";
+      counter.innerText = `${data.resources.length} fotos compartidas`;
+
+      // Ordenamos para que las más nuevas salgan ARRIBA
+      const sortedPhotos = data.resources.sort((a, b) => b.version - a.version);
+
+      sortedPhotos.forEach((img, index) => {
+        // Miniatura optimizada
+        const thumb = `https://res.cloudinary.com/${cloudName}/image/upload/c_thumb,w_400,g_auto/v${img.version}/${img.public_id}.${img.format}`;
+        // Imagen completa
+        const full = `https://res.cloudinary.com/${cloudName}/image/upload/v${img.version}/${img.public_id}.${img.format}`;
+        
+        const div = document.createElement("div");
+        div.className = "img-container";
+        // Añadimos un retraso en la animación para cada foto (efecto cascada)
+        div.style.animationDelay = `${index * 30}ms`;
+        div.innerHTML = `<img src="${thumb}" onclick="openViewer('${full}')" loading="lazy">`;
+        gallery.appendChild(div);
+      });
+
+    } catch (e) {
+      console.error("Error:", e);
+      counter.innerText = "Error cargando. Revisa la configuración en Cloudinary.";
+    } finally {
+      // Detener animación de carga
+      setTimeout(() => refreshBtn.classList.remove('loading'), 500);
+    }
+  }
+
+  function openViewer(url) {
+    viewerImg.src = url;
+    viewer.classList.add('open');
+    // Prevenir scroll en el fondo
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeViewer() {
+    viewer.classList.remove('open');
+    document.body.style.overflow = '';
+    // Limpiar imagen después de cerrar para ahorrar memoria
+    setTimeout(() => viewerImg.src = "", 300);
+  }
+
+  // Cargar al abrir la página
+  window.onload = loadGallery;
+
+  // Auto-refrescar cada 2 minutos
+  setInterval(loadGallery, 120000);
+</script>
+
+</body>
+</html>
