@@ -2,101 +2,209 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Boda Carlos & Joss 💍</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Poppins:wght@300;500&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Boda Carlos & Joselyn 💍</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root { --gold: #c59d5f; --dark-gold: #a67c3d; --wine: #5a0f1c; --emerald: #0f3d2e; }
-    body { margin: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, var(--wine), var(--emerald)); min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
-    .card { background: rgba(255, 255, 255, 0.98); padding: 40px 25px; border-radius: 25px; text-align: center; max-width: 400px; width: 100%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 1px solid var(--gold); }
-    h1 { font-family: 'Playfair Display', serif; font-size: 30px; margin-bottom: 5px; color: var(--gold); }
-    .date { font-size: 14px; color: #888; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; }
-    .selection-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px; }
-    .btn-select { background: #fff; border: 1.5px solid #eee; color: #555; padding: 20px 10px; border-radius: 20px; cursor: pointer; font-weight: 500; display: flex; flex-direction: column; align-items: center; gap: 10px; }
-    .btn-select span { font-size: 24px; }
-    .btn-primary { background: linear-gradient(135deg, var(--gold), var(--dark-gold)); color: white; width: 100%; padding: 18px; border-radius: 35px; border: none; font-weight: 600; font-size: 16px; cursor: pointer; }
-    .btn-primary:disabled { opacity: 0.5; filter: grayscale(1); }
-    #preview { display: grid; grid-template-columns: repeat(auto-fill, minmax(65px, 1fr)); gap: 8px; margin-bottom: 20px; max-height: 150px; overflow-y: auto; }
-    #preview img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; border: 1px solid #ddd; }
-    .progress-container { width: 100%; background: #f0f0f0; border-radius: 10px; margin-bottom: 15px; display: none; overflow: hidden; }
-    .progress-bar { width: 0%; height: 10px; background: var(--gold); transition: width 0.3s; }
-    #status { font-size: 14px; margin-top: 15px; }
+    :root {
+      --gold: #c59d5f;
+      --gold-light: #e0c08d;
+      --wine: #4a0a16;
+      --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.08);
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      /* Gradiente radial para dar efecto de iluminación central */
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
+      background-attachment: fixed;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+
+    /* Contenedor tipo "Invitación de Lujo" */
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(197, 157, 95, 0.3);
+      border-radius: 24px;
+      padding: 40px 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    /* Adorno de esquina dorado sutil */
+    .glass-card::before {
+      content: "💍";
+      position: absolute;
+      top: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 30px;
+      background: var(--jade);
+      padding: 5px 15px;
+      border-radius: 50px;
+      border: 1px solid var(--gold);
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 34px;
+      color: var(--gold);
+      margin: 10px 0 5px;
+      letter-spacing: 1px;
+    }
+
+    .date-badge {
+      font-size: 12px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 30px;
+      display: block;
+    }
+
+    .welcome-text {
+      font-weight: 300;
+      line-height: 1.7;
+      font-size: 15px;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 35px;
+    }
+
+    .quote {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 14px;
+      display: block;
+      margin-top: 15px;
+    }
+
+    /* Botón de acción principal */
+    .custom-upload-btn {
+      position: relative;
+      background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%);
+      color: white;
+      padding: 18px 40px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 16px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      display: inline-block;
+      border: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+      transition: all 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .custom-upload-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 30px rgba(197, 157, 95, 0.3);
+    }
+
+    .custom-upload-btn:active {
+      transform: translateY(0);
+    }
+
+    #fileInput { display: none; }
+
+    /* Barra de progreso elegante */
+    #status {
+      margin-top: 25px;
+      font-size: 13px;
+      color: var(--gold-light);
+      font-style: italic;
+    }
+
+    .progress-bar {
+      height: 2px;
+      background: var(--gold);
+      width: 0%;
+      transition: width 0.3s;
+      margin-top: 10px;
+      border-radius: 10px;
+      display: none;
+    }
   </style>
 </head>
 <body>
-<div class="card">
-  <h1>💍 Carlos & Joss</h1>
-  <div class="date">19 de Diciembre 2026</div>
-  <p>¡Gracias por acompañarnos! Sube tus fotos aquí ❤️</p>
-  <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display:none">
-  <input type="file" id="galleryInput" accept="image/*" multiple style="display:none">
-  <div class="selection-grid">
-    <button class="btn-select" onclick="document.getElementById('cameraInput').click()"><span>📸</span> Tomar Foto</button>
-    <button class="btn-select" onclick="document.getElementById('galleryInput').click()"><span>🖼️</span> Galería</button>
-  </div>
-  <div id="preview"></div>
-  <div class="progress-container" id="progressContainer"><div class="progress-bar" id="progressBar"></div></div>
-  <button class="btn-primary" onclick="upload()" id="uploadBtn">Enviar fotos</button>
-  <p id="status"></p>
+
+<div class="glass-card">
+  <span class="date-badge">19 • 12 • 2026</span>
+  <h1>Carlos & Joselyn</h1>
+  
+  <p class="welcome-text">
+    ¡Bienvenidos a nuestra historia! 🥂<br><br>
+    Queremos guardar cada risa y cada baile. Ayúdanos a capturar la magia de nuestra noche compartiendo tus fotos aquí.
+  </p>
+  
+  <label for="fileInput" class="custom-upload-btn">
+    Compartir Fotos 📸
+  </label>
+  <input type="file" id="fileInput" accept="image/*" multiple onchange="uploadFiles(this.files)">
+  
+  <div id="status">Listo para recibir tus recuerdos...</div>
+  <div id="progress" class="progress-bar"></div>
+
+  <span class="quote">"Tus recuerdos son nuestro mejor regalo"</span>
 </div>
+
 <script>
   const cloudName = "dhruy6ftj";
   const uploadPreset = "boda_carlos_y_joss";
-  const tagBoda = "boda_carlos_y_joss";
-  let allFiles = [];
-  const cameraInput = document.getElementById("cameraInput");
-  const galleryInput = document.getElementById("galleryInput");
-  const status = document.getElementById("status");
-  const uploadBtn = document.getElementById("uploadBtn");
-  const progressBar = document.getElementById("progressBar");
-  const progressContainer = document.getElementById("progressContainer");
-  const preview = document.getElementById("preview");
-  cameraInput.addEventListener("change", handleFiles);
-  galleryInput.addEventListener("change", handleFiles);
-  function handleFiles(e) {
-    const newFiles = Array.from(e.target.files);
-    allFiles = [...allFiles, ...newFiles];
-    renderPreview();
-    status.innerText = `${allFiles.length} foto(s) listas ✨`;
-  }
-  function renderPreview() {
-    preview.innerHTML = "";
-    allFiles.forEach((file) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const img = document.createElement("img");
-        img.src = e.target.result;
-        preview.appendChild(img);
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-  async function upload() {
-    if (allFiles.length === 0) { status.innerText = "Selecciona fotos primero 📸"; return; }
-    uploadBtn.disabled = true;
-    progressContainer.style.display = "block";
-    let uploadedCount = 0;
-    for (let i = 0; i < allFiles.length; i++) {
+
+  async function uploadFiles(files) {
+    const status = document.getElementById('status');
+    const progress = document.getElementById('progress');
+    progress.style.display = 'block';
+    
+    let count = 0;
+    for (let file of files) {
+      count++;
+      status.innerText = `Enviando recuerdo ${count} de ${files.length}...`;
+      
       const formData = new FormData();
-      formData.append("file", allFiles[i]);
-      formData.append("upload_preset", uploadPreset);
-      formData.append("tags", tagBoda);
+      formData.append('file', file);
+      formData.append('upload_preset', uploadPreset);
+      formData.append('tags', 'boda_carlos_y_joss');
+
       try {
-        const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, { method: "POST", body: formData });
-        if (response.ok) {
-          uploadedCount++;
-          progressBar.style.width = (uploadedCount / allFiles.length * 100) + "%";
-          status.innerText = `Subiendo: ${uploadedCount} de ${allFiles.length}`;
-        }
-      } catch (error) { console.error(error); }
+        await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: 'POST',
+          body: formData
+        });
+        
+        let percent = (count / files.length) * 100;
+        progress.style.width = percent + '%';
+        
+      } catch (e) {
+        status.innerText = "Algo falló, intenta de nuevo 🥂";
+      }
     }
-    if (uploadedCount === allFiles.length) {
-      status.innerText = "¡Enviado con éxito! 🎉";
-      status.style.color = "#27ae60";
-      setTimeout(resetUI, 4000);
-    }
+    
+    status.innerText = "¡Gracias por compartir este momento! ❤️";
+    setTimeout(() => {
+      progress.style.width = '0%';
+      progress.style.display = 'none';
+      status.innerText = "Listo para más recuerdos...";
+    }, 4000);
   }
-  function resetUI() { allFiles = []; cameraInput.value = ""; galleryInput.value = ""; preview.innerHTML = ""; progressContainer.style.display = "none"; progressBar.style.width = "0%"; uploadBtn.disabled = false; status.innerText = ""; }
 </script>
+
 </body>
 </html>
