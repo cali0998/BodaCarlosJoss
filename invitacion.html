@@ -12,24 +12,35 @@
       --gold: #c59d5f; 
       --wine: #4a0a16; 
       --jade: #0a2e24;
-      --glass: rgba(255, 255, 255, 0.08);
-      /* Definimos los overlays estándar para reusar */
-      --overlay-jade: linear-gradient(rgba(10, 46, 36, 0.8), rgba(10, 46, 36, 0.9));
-      --overlay-vino: linear-gradient(rgba(74, 10, 22, 0.8), rgba(74, 10, 22, 0.9));
-      --overlay-hero: linear-gradient(rgba(10, 46, 36, 0.6), rgba(74, 10, 22, 0.7));
+      --glass: rgba(255, 255, 255, 0.1);
     }
 
     * { scroll-behavior: smooth; box-sizing: border-box; }
-    body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
+    body { 
+      margin: 0; 
+      padding: 0;
+      font-family: 'Poppins', sans-serif; 
+      background-color: var(--jade); /* Color de respaldo */
+      color: white; 
+      overflow-x: hidden; 
+    }
 
-    /* Animaciones Scroll Reveal */
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+    /* --- TRANSICIONES DIFUMINADAS (SCROLL REVEAL) --- */
+    .reveal { 
+      opacity: 0; 
+      transform: translateY(20px); 
+      transition: opacity 1.5s ease, transform 1.2s ease; 
+    }
+    .reveal.active { 
+      opacity: 1; 
+      transform: translateY(0); 
+    }
 
-    /* Estilo Base de Sección */
+    /* --- ESTILO DE SECCIÓN INMERSIVA --- */
     section { 
-      min-height: 100vh; 
-      padding: 80px 20px; 
+      position: relative;
+      min-height: 110vh; /* Un poco más alto para asegurar el solapamiento */
+      margin-top: -10vh; /* Elimina espacios entre secciones */
       display: flex; 
       flex-direction: column; 
       align-items: center; 
@@ -38,182 +49,156 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-attachment: fixed; /* Efecto Parallax suave en PC */
+      /* Máscara para difuminar los bordes de la foto */
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
     }
-    
-    /* Tarjeta de Cristal */
+
+    /* Primera sección sin desvanecimiento superior */
+    section:first-child { 
+      margin-top: 0; 
+      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent);
+      mask-image: linear-gradient(to bottom, black 90%, transparent);
+    }
+
+    /* --- OVERLAYS DIFUMINADOS --- */
+    .overlay-jade { background-image: linear-gradient(rgba(10, 46, 36, 0.75), rgba(10, 46, 36, 0.85)); }
+    .overlay-vino { background-image: linear-gradient(rgba(74, 10, 22, 0.75), rgba(74, 10, 22, 0.85)); }
+
+    /* --- TARJETA DE CRISTAL --- */
     .glass-card {
       background: var(--glass); 
-      backdrop-filter: blur(15px); 
-      -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(197, 157, 95, 0.3); 
-      border-radius: 40px;
-      padding: 40px 25px; 
-      width: 100%; 
-      max-width: 420px; 
-      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      backdrop-filter: blur(20px); 
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(197, 157, 95, 0.2); 
+      border-radius: 45px;
+      padding: 50px 30px; 
+      width: 90%; 
+      max-width: 400px; 
+      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
     }
 
-    /* Títulos */
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.2rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 20px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; }
 
-    /* Botones */
     .btn {
-      background: var(--gold); 
-      color: white; 
-      padding: 16px 30px; 
-      border-radius: 50px;
-      text-decoration: none; 
-      font-weight: 600; 
-      display: inline-block; 
-      margin-top: 25px;
-      text-transform: uppercase; 
-      font-size: 12px; 
-      letter-spacing: 1px; 
-      transition: 0.3s;
-      box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+      background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
+      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
+      text-transform: uppercase; font-size: 13px; letter-spacing: 2px; transition: 0.4s;
     }
-    .btn:active { transform: scale(0.95); }
 
-    /* --- FONDOS DE SECCIONES ESPECÍFICAS --- */
+    /* --- ASIGNACIÓN DE FOTOS --- */
+    .s1 { background-image: linear-gradient(rgba(10,46,36,0.5), rgba(74,10,22,0.6)), url('0001.jpg'); }
+    .s2 { background-image: linear-gradient(rgba(10,46,36,0.8), rgba(10,46,36,0.8)), url('0002.jpg'); }
+    .s3 { background-image: linear-gradient(rgba(74,10,22,0.8), rgba(74,10,22,0.8)), url('0003.jpg'); }
+    .s4 { background-image: linear-gradient(rgba(10,46,36,0.8), rgba(10,46,36,0.8)), url('0004.jpg'); }
+    .s5 { background-image: linear-gradient(rgba(74,10,22,0.8), rgba(74,10,22,0.8)), url('0005.jpg'); }
+    .s6 { background-image: linear-gradient(rgba(10,46,36,0.8), rgba(10,46,36,0.8)), url('0006.jpg'); }
+    .s7 { background-image: linear-gradient(rgba(74,10,22,0.8), rgba(74,10,22,0.8)), url('0007.jpg'); }
+    .s8 { background-image: linear-gradient(rgba(10,46,36,0.9), rgba(10,46,36,0.9)), url('0008.jpg'); }
+
+    /* Elementos Countdown */
+    .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    .unit { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; min-width: 75px; border: 1px solid var(--gold); }
     
-    /* 1. PORTADA - Usa 0001.jpg con overlay suave mixto */
-    .s-hero { background-image: var(--overlay-hero), url('0001.jpg'); background-attachment: scroll; }
-
-    /* 2. CUENTA REGRESIVA - Usa 0002.jpg con overlay Jade fuerte */
-    .s-countdown { background-image: var(--overlay-jade), url('0002.jpg'); }
-
-    /* 3. HISTORIA - Usa 0003.jpg con overlay Jade fuerte */
-    .s-historia { background-image: var(--overlay-jade), url('0003.jpg'); }
-
-    /* 4. UBICACIÓN - Usa 0004.jpg con overlay Vino fuerte */
-    .s-ubicacion { background-image: var(--overlay-vino), url('0004.jpg'); }
-
-    /* 5. VESTIMENTA - Usa 0005.jpg con overlay Jade fuerte */
-    .s-vestimenta { background-image: var(--overlay-jade), url('0005.jpg'); }
-
-    /* 6. GALERÍA INTERACTIVA (QR) - Usa 0006.jpg con overlay Vino fuerte */
-    .s-galeria { background-image: var(--overlay-vino), url('0006.jpg'); }
-
-    /* 7. REGALOS - Usa 0007.jpg con overlay Jade fuerte */
-    .s-regalos { background-image: var(--overlay-jade), url('0007.jpg'); }
-
-    /* 8. CONFIRMACIÓN - Usa 0008.jpg con overlay Vino fuerte */
-    .s-confirmacion { background-image: var(--overlay-vino), url('0008.jpg'); }
-
-    /* Elementos Internos */
-    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-    .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; min-width: 65px; border: 1px solid var(--gold); }
-    
-    .qr-container { background: white; padding: 12px; border-radius: 20px; display: inline-block; margin: 25px 0; border: 4px solid var(--gold); cursor: pointer; }
-    .qr-container img { width: 160px; height: 160px; display: block; }
-    
-    .icon-box { font-size: 2rem; color: var(--gold); margin-bottom: 10px; }
-
-    /* Fix para parallax en móviles */
-    @media (max-width: 768px) { section { background-attachment: scroll; } }
+    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 25px 0; border: 5px solid var(--gold); }
+    .qr-container img { width: 170px; display: block; }
   </style>
 </head>
 <body>
 
-  <section class="s-hero">
+  <section class="s1">
     <div class="reveal active">
-      <p style="letter-spacing: 5px; text-transform: uppercase; font-size: 13px; opacity: 0.9;">Nuestra Boda</p>
+      <p style="letter-spacing: 8px; text-transform: uppercase; font-size: 14px;">Nuestra Boda</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="margin-top: 25px; font-style: italic; font-size: 1.1rem;">19 • Diciembre • 2026</p>
+      <p style="margin-top: 30px; font-style: italic; font-size: 1.3rem;">19 • Diciembre • 2026</p>
     </div>
   </section>
 
-  <section class="s-countdown">
+  <section class="s2">
     <div class="glass-card reveal">
-      <h2>Faltan...</h2>
+      <h2>El Gran Día</h2>
       <div class="countdown">
-        <div class="unit"><span id="days" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Días</small></div>
-        <div class="unit"><span id="hours" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Hrs</small></div>
-        <div class="unit"><span id="mins" style="font-size: 1.5rem; font-weight: 600;">00</span><br><small>Min</small></div>
+        <div class="unit"><span id="days" style="font-size: 1.8rem; font-weight: 600;">00</span><br><small>Días</small></div>
+        <div class="unit"><span id="hours" style="font-size: 1.8rem; font-weight: 600;">00</span><br><small>Hrs</small></div>
+        <div class="unit"><span id="mins" style="font-size: 1.8rem; font-weight: 600;">00</span><br><small>Min</small></div>
       </div>
     </div>
   </section>
 
-  <section class="s-historia">
+  <section class="s3">
     <div class="glass-card reveal">
-      <div class="icon-box">❤️</div>
-      <h2>Nuestra Historia</h2>
-      <p>Nos conocimos en el momento perfecto y hoy, con mucha ilusión, decidimos emprender el viaje más importante de nuestras vidas.</p>
-      <p style="font-style: italic; color: var(--gold); margin-top: 15px;">"Lo mejor está por venir..."</p>
+      <h2>Nuestro Camino</h2>
+      <p>Caminar de la mano ha sido nuestra mayor aventura, y hoy decidimos que sea para siempre.</p>
+      <p style="font-style: italic; color: var(--gold); margin-top: 20px;">"Donde tú vayas, yo iré."</p>
     </div>
   </section>
 
-  <section class="s-ubicacion">
+  <section class="s4">
     <div class="glass-card reveal">
-      <div class="icon-box">📍</div>
-      <h2>¿Dónde y Cuándo?</h2>
+      <h2>¿Dónde Celebraremos?</h2>
       <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-      <p style="color: var(--gold); font-size: 1.3rem; margin-top: 10px;">Recepción: 4:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
+      <p style="color: var(--gold); font-size: 1.3rem; margin-top: 15px;">4:00 PM</p>
+      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Mapa en Waze 🚗</a>
     </div>
   </section>
 
-  <section class="s-vestimenta">
+  <section class="s5">
     <div class="glass-card reveal">
-      <div class="icon-box">👔</div>
       <h2>Dress Code</h2>
-      <p style="font-size: 1.1rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
-      <hr style="width: 50px; border: 1px solid var(--gold); margin: 15px auto; opacity: 0.4;">
-      <p style="font-size: 14px; opacity: 0.8; line-height: 1.6;">
-        Reservamos el color blanco para la novia.<br>
-        Tonos sugeridos: Verde Jade y Vino.
+      <p style="font-size: 1.2rem; letter-spacing: 3px; color: var(--gold);">FORMAL / ELEGANTE</p>
+      <p style="font-size: 14px; opacity: 0.8; margin-top: 20px; line-height: 1.8;">
+        Nos encantaría que nos acompañes con los colores de nuestra boda:<br>
+        <b>Vino o Verde Jade</b>
       </p>
     </div>
   </section>
 
-  <section class="s-galeria">
-    <div class="glass-card reveal" style="border-color: var(--gold);">
-      <div class="icon-box">📸</div>
-      <h2>Captura la Magia</h2>
-      <p>Escanea el código con otro celular o toca el botón para subir tus fotos a nuestra galería en vivo.</p>
+  <section class="s6">
+    <div class="glass-card reveal">
+      <h2>Comparte tu Lente</h2>
+      <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
       <div class="qr-container" onclick="window.location.href='index.html'">
         <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="QR">
       </div>
       <br>
-      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos</a>
+      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir Fotos 📸</a>
     </div>
   </section>
 
-  <section class="s-regalos">
+  <section class="s7">
     <div class="glass-card reveal">
-      <div class="icon-box">🎁</div>
       <h2>Lluvia de Sobres</h2>
-      <p>Tu presencia es nuestro mejor regalo, pero si deseas tener un detalle con nosotros, tendremos lluvia de sobres el día del evento.</p>
+      <p>Tu presencia es nuestro mejor regalo, pero si deseas tener un detalle, tendremos lluvia de sobres el día del evento.</p>
     </div>
   </section>
 
-  <section class="s-confirmacion">
+  <section class="s8">
     <div class="glass-card reveal">
-      <div class="icon-box">✅</div>
       <h2>Confirmar Asistencia</h2>
-      <p>Esperamos contar con tu presencia.<br>Por favor confírmanos antes del:</p>
-      <p style="font-size: 1.2rem; color: var(--gold);">01 de Diciembre, 2026</p>
-      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp</a>
+      <p>Por favor, confírmanos tu lugar antes del:</p>
+      <p style="font-size: 1.3rem; color: var(--gold); font-weight: 600;">01 / 12 / 2026</p>
+      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia" class="btn">Confirmar por WhatsApp ✅</a>
     </div>
   </section>
 
   <script>
-    // --- LÓGICA DE APARICIÓN (SCROLL REVEAL) ---
+    // --- EFECTO REVEAL DIFUMINADO ---
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.2 });
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // --- CUENTA REGRESIVA ---
-    const target = new Date("Dec 19, 2026 16:00:00").getTime();
+    const eventDate = new Date("Dec 19, 2026 16:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
-      const diff = target - now;
+      const diff = eventDate - now;
       if (diff > 0) {
         document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
         document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
