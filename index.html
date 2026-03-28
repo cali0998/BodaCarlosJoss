@@ -34,19 +34,26 @@
 
     h1 { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold); margin: 10px 0 5px; }
     .date-badge { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold-light); margin-bottom: 35px; display: block; }
-    .welcome-text { font-weight: 300; line-height: 1.8; font-size: 15px; color: rgba(255, 255, 255, 0.95); margin-bottom: 30px; }
-
+    
     .state-container { display: flex; flex-direction: column; gap: 15px; }
     .hidden { display: none !important; }
 
+    /* ESTILO DE LOS BOTONES ELEGANTES */
     .btn-action {
       display: flex; align-items: center; justify-content: center; gap: 12px;
       padding: 18px; border-radius: 16px; font-weight: 600; text-transform: uppercase;
       cursor: pointer; border: none; transition: all 0.3s ease; font-size: 14px; color: white; width: 100%;
+      box-sizing: border-box;
     }
 
-    .btn-camera { background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%); }
+    .btn-camera { background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%); box-shadow: 0 8px 20px rgba(197, 157, 95, 0.2); }
     .btn-gallery { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); }
+    
+    /* ESTO OCULTA EL BOTÓN GRIS FEO DEL NAVEGADOR */
+    input[type="file"] {
+      display: none !important;
+    }
+
     .btn-confirm { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); flex: 2; }
     .btn-cancel { background: rgba(255, 255, 255, 0.1); flex: 1; text-transform: none; font-weight: 400; border: 1px solid rgba(255,255,255,0.2); }
 
@@ -57,10 +64,7 @@
     }
 
     .preview-media { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; border: 1px solid var(--gold); }
-
     #status { margin-top: 10px; font-size: 14px; color: var(--gold-light); min-height: 60px; display: flex; flex-direction: column; align-items: center; }
-    .loader-ring { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid var(--gold); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin-bottom: 10px; display: none; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
@@ -68,11 +72,15 @@
 <div class="glass-card">
   <span class="date-badge">19 • DIC • 2026</span>
   <h1>Carlos & Joselyn</h1>
-  <p class="welcome-text" id="mainText">Captura la magia de nuestra noche. <br><small>(Fotos y videos cortos de hasta 20MB)</small></p>
+  <p class="welcome-text" id="mainText" style="font-weight: 300; margin-bottom: 30px;">
+    Captura la magia de nuestra noche. ✨<br>
+    <small style="opacity:0.7">(Fotos y videos cortos)</small>
+  </p>
   
   <div class="state-container" id="actions-state">
     <label for="cameraInput" class="btn-action btn-camera">Tomar Foto / Video 📸</label>
     <input type="file" id="cameraInput" accept="image/*,video/*" capture="camera" onchange="handleFileSelection(this.files)">
+    
     <label for="fileInput" class="btn-action btn-gallery">Elegir de Galería 📂</label>
     <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
   </div>
@@ -86,7 +94,6 @@
   </div>
   
   <div id="status" class="hidden">
-    <div id="spinner" class="loader-ring"></div>
     <div id="statusText"></div>
   </div>
 </div>
@@ -105,7 +112,7 @@
 
     Array.from(files).forEach(file => {
       if (file.size > MAX_SIZE) {
-        alert(`El archivo "${file.name}" es muy pesado. Máximo 20MB por video.`);
+        alert(`El archivo "${file.name}" supera los 20MB.`);
         return;
       }
       selectedFiles.push(file);
@@ -126,7 +133,6 @@
   async function confirmAndUpload() {
     setVisualState('uploading');
     const statusText = document.getElementById('statusText');
-    document.getElementById('spinner').style.display = 'block';
     
     for (let i = 0; i < selectedFiles.length; i++) {
       statusText.innerText = `Subiendo recuerdo ${i+1} de ${selectedFiles.length}...`;
@@ -136,7 +142,7 @@
       formData.append('tags', 'boda_carlos_y_joss');
       try {
         await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, { method: 'POST', body: formData });
-      } catch (e) { statusText.innerText = "Error en la red. Intenta de nuevo."; return; }
+      } catch (e) { statusText.innerText = "Error. Intenta de nuevo."; return; }
     }
     statusText.innerHTML = "<b>¡Gracias por este recuerdo! ❤️</b>";
     setTimeout(cancelUpload, 4000);
@@ -153,6 +159,7 @@
     document.getElementById('actions-state').className = (state === 'init') ? 'state-container' : 'state-container hidden';
     document.getElementById('preview-state').className = (state === 'preview') ? 'state-container' : 'state-container hidden';
     document.getElementById('status').className = (state === 'uploading') ? '' : 'hidden';
+    document.getElementById('mainText').style.opacity = (state === 'init') ? '1' : '0.3';
   }
 </script>
 </body>
