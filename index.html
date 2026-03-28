@@ -17,7 +17,6 @@
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
-      /* Gradiente radial para dar efecto de iluminación central */
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
       background-attachment: fixed;
       color: white;
@@ -26,142 +25,150 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
-      overflow-x: hidden;
     }
 
-    /* Contenedor tipo "Invitación de Lujo" */
     .glass-card {
       background: var(--glass);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(197, 157, 95, 0.3);
-      border-radius: 24px;
-      padding: 40px 30px;
+      border-radius: 28px;
+      padding: 45px 30px;
       text-align: center;
       max-width: 400px;
       width: 100%;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+      box-shadow: 0 25px 50px rgba(0,0,0,0.6);
       position: relative;
     }
 
-    /* Adorno de esquina dorado sutil */
     .glass-card::before {
       content: "💍";
       position: absolute;
-      top: -20px;
+      top: -22px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 30px;
+      font-size: 28px;
       background: var(--jade);
-      padding: 5px 15px;
+      padding: 8px 18px;
       border-radius: 50px;
       border: 1px solid var(--gold);
     }
 
     h1 {
       font-family: 'Playfair Display', serif;
-      font-size: 34px;
+      font-size: 36px;
       color: var(--gold);
       margin: 10px 0 5px;
       letter-spacing: 1px;
     }
 
     .date-badge {
-      font-size: 12px;
-      letter-spacing: 4px;
+      font-size: 11px;
+      letter-spacing: 5px;
       text-transform: uppercase;
       color: var(--gold-light);
-      margin-bottom: 30px;
+      margin-bottom: 35px;
       display: block;
+      opacity: 0.9;
     }
 
     .welcome-text {
       font-weight: 300;
-      line-height: 1.7;
+      line-height: 1.8;
       font-size: 15px;
-      color: rgba(255, 255, 255, 0.9);
-      margin-bottom: 35px;
+      color: rgba(255, 255, 255, 0.95);
+      margin-bottom: 40px;
     }
 
-    .quote {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      color: var(--gold);
-      font-size: 14px;
-      display: block;
-      margin-top: 15px;
+    /* Contenedor de botones */
+    .actions-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    /* Botón de acción principal */
-    .custom-upload-btn {
-      position: relative;
-      background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%);
-      color: white;
-      padding: 18px 40px;
-      border-radius: 12px;
+    /* Estilo Base para Botones */
+    .btn-action {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 18px;
+      border-radius: 14px;
       font-weight: 600;
-      font-size: 16px;
       text-transform: uppercase;
       letter-spacing: 1px;
       cursor: pointer;
-      display: inline-block;
       border: none;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
       transition: all 0.3s ease;
-      width: 100%;
-      box-sizing: border-box;
+      font-size: 14px;
+      color: white;
+      text-decoration: none;
     }
 
-    .custom-upload-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 15px 30px rgba(197, 157, 95, 0.3);
+    /* Botón Cámara (Principal) */
+    .btn-camera {
+      background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%);
+      box-shadow: 0 8px 20px rgba(197, 157, 95, 0.2);
     }
 
-    .custom-upload-btn:active {
-      transform: translateY(0);
+    /* Botón Galería (Secundario) */
+    .btn-gallery {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    #fileInput { display: none; }
+    .btn-action:active {
+      transform: scale(0.96);
+    }
 
-    /* Barra de progreso elegante */
+    #fileInput, #cameraInput { display: none; }
+
     #status {
-      margin-top: 25px;
+      margin-top: 30px;
       font-size: 13px;
       color: var(--gold-light);
-      font-style: italic;
+      min-height: 20px;
     }
 
-    .progress-bar {
-      height: 2px;
-      background: var(--gold);
-      width: 0%;
-      transition: width 0.3s;
-      margin-top: 10px;
-      border-radius: 10px;
-      display: none;
+    .quote-footer {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      color: var(--gold);
+      font-size: 13px;
+      margin-top: 30px;
+      display: block;
+      opacity: 0.8;
     }
   </style>
 </head>
 <body>
 
 <div class="glass-card">
-  <span class="date-badge">19 • 12 • 2026</span>
+  <span class="date-badge">19 • DIC • 2026</span>
   <h1>Carlos & Joselyn</h1>
   
   <p class="welcome-text">
     ¡Bienvenidos a nuestra historia! 🥂<br><br>
-    Queremos guardar cada risa y cada baile. Ayúdanos a capturar la magia de nuestra noche compartiendo tus fotos aquí.
+    Ayúdanos a capturar cada risa y baile de esta noche mágica.
   </p>
   
-  <label for="fileInput" class="custom-upload-btn">
-    Compartir Fotos 📸
-  </label>
-  <input type="file" id="fileInput" accept="image/*" multiple onchange="uploadFiles(this.files)">
-  
-  <div id="status">Listo para recibir tus recuerdos...</div>
-  <div id="progress" class="progress-bar"></div>
+  <div class="actions-container">
+    <label for="cameraInput" class="btn-action btn-camera">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M12 15.5c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5-3.5 1.57-3.5 3.5 1.57 3.5 3.5 3.5z"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+      Tomar Foto
+    </label>
+    <input type="file" id="cameraInput" accept="image/*" capture="camera" onchange="uploadFiles(this.files)">
 
-  <span class="quote">"Tus recuerdos son nuestro mejor regalo"</span>
+    <label for="fileInput" class="btn-action btn-gallery">
+      <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
+      Subir Archivos
+    </label>
+    <input type="file" id="fileInput" accept="image/*" multiple onchange="uploadFiles(this.files)">
+  </div>
+  
+  <div id="status"></div>
+  <span class="quote-footer">"Tus recuerdos son nuestro mejor regalo"</span>
 </div>
 
 <script>
@@ -170,10 +177,8 @@
 
   async function uploadFiles(files) {
     const status = document.getElementById('status');
-    const progress = document.getElementById('progress');
-    progress.style.display = 'block';
-    
     let count = 0;
+    
     for (let file of files) {
       count++;
       status.innerText = `Enviando recuerdo ${count} de ${files.length}...`;
@@ -188,21 +193,12 @@
           method: 'POST',
           body: formData
         });
-        
-        let percent = (count / files.length) * 100;
-        progress.style.width = percent + '%';
-        
       } catch (e) {
-        status.innerText = "Algo falló, intenta de nuevo 🥂";
+        status.innerText = "Error al subir 🥂";
       }
     }
-    
-    status.innerText = "¡Gracias por compartir este momento! ❤️";
-    setTimeout(() => {
-      progress.style.width = '0%';
-      progress.style.display = 'none';
-      status.innerText = "Listo para más recuerdos...";
-    }, 4000);
+    status.innerText = "¡Gracias por compartir! ❤️";
+    setTimeout(() => { status.innerText = ""; }, 4000);
   }
 </script>
 
