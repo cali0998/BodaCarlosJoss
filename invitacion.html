@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Boda Carlos & Joselyn • Invitación Premium 💍</title>
+  <title>Boda Carlos & Joselyn • Invitación 💍</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
@@ -12,268 +12,184 @@
       --marsala: #7A2F3E; 
       --jade: #1A4D3E; 
       --gold: #C5A059; 
-      --bg-warm: #F0EADC; /* NUEVO: Beige Arena Cálido (menos blanco, más paleta) */
+      --bg-warm: #F0EADC; 
       --text: #333333;
-      --paper: rgba(255, 255, 255, 0.9);
+      --paper: rgba(255, 255, 255, 0.94);
     }
 
     * { scroll-behavior: smooth; box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Poppins', sans-serif; background-color: var(--bg-warm); color: var(--text); overflow-x: hidden; }
 
-    /* --- REVEAL LIGERO (MENOS PESADO) --- */
-    .reveal { opacity: 0; transform: translateY(20px); transition: opacity 1s ease, transform 1s ease; will-change: transform, opacity; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+    /* --- ANIMACIONES FLUIDAS --- */
+    .reveal { 
+      opacity: 0; 
+      transform: translateY(30px) scale(0.98); 
+      transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); 
+      will-change: transform, opacity; 
+    }
+    .reveal.active { 
+      opacity: 1; 
+      transform: translateY(0) scale(1); 
+    }
 
-    /* --- ESTILO SECCIÓN INMERSIVA --- */
     section { 
       position: relative;
       min-height: 100vh;
-      padding: 80px 20px; 
-      display: flex; 
-      flex-direction: column; 
-      align-items: center; 
-      justify-content: center; 
-      text-align: center;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed; /* Parallax suave en PC */
+      padding: 60px 20px; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      overflow: hidden;
     }
 
-    .content { position: relative; z-index: 10; width: 95%; max-width: 500px; }
-
-    /* --- TIPOGRAFÍA MARSALA --- */
-    h1 { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 3.5rem; 
-      color: var(--marsala); 
-      line-height: 1;
-      font-style: italic;
-      text-shadow: 1px 1px 5px rgba(0,0,0,0.1);
-    }
-    
-    h2 { 
-      font-family: 'Playfair Display', serif; 
-      font-size: 2.2rem; 
-      color: var(--jade); 
-      margin-bottom: 15px;
-    }
-
-    p { font-size: 1rem; line-height: 1.7; color: var(--text); margin: 10px 0; font-weight: 300; }
-    b { color: var(--marsala); font-weight: 600; }
-
-    /* --- VECTORES DECORATIVOS (SVG OPTIMIZADOS) --- */
-    .decor-frame, .decor-branch, .decor-divider {
+    /* Efecto de profundidad en el fondo */
+    section::after {
+      content: "";
       position: absolute;
-      fill: none;
-      stroke: var(--gold);
-      stroke-width: 1;
-      opacity: 0.6;
-      z-index: 5;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 1;
     }
 
-    /* Marcos y ramas simplificados para menor peso visual */
-    .decor-frame { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); stroke-dasharray: 5; }
-    .decor-branch { width: 120px; height: 120px; }
-    .decor-branch.top-left { top: 15px; left: 15px; transform: rotate(-10deg); }
-    .decor-branch.bottom-right { bottom: 15px; right: 15px; transform: rotate(170deg); }
+    .content { position: relative; z-index: 10; width: 100%; max-width: 480px; }
 
-    .decor-divider {
-      position: relative;
-      width: 100px; height: 25px;
-      display: block;
-      margin: -5px auto 20px;
-    }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--marsala); line-height: 1.1; font-style: italic; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--jade); margin-bottom: 15px; }
+    p { font-size: 1rem; line-height: 1.6; font-weight: 300; }
 
-    /* --- TARJETA DE TEXTO (ESTILO PAPEL CÁLIDO) --- */
-    .text-card {
-      background: var(--paper);
-      padding: 50px 30px;
-      border-radius: 8px;
-      position: relative;
-      border: 1px solid rgba(197, 160, 89, 0.2);
-    }
+    /* --- DECORACIONES --- */
+    .decor { position: absolute; fill: none; stroke: var(--gold); stroke-width: 1; opacity: 0.5; z-index: 5; }
+    .decor-frame { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); stroke-dasharray: 4; }
+    .decor-branch { width: 100px; height: 100px; }
+    .tl { top: 15px; left: 15px; transform: rotate(-10deg); }
+    .br { bottom: 15px; right: 15px; transform: rotate(170deg); }
 
-    /* --- BOTONES MINIMALISTAS --- */
+    .text-card { background: var(--paper); padding: 50px 25px; border-radius: 15px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+
     .btn {
-      background: transparent;
-      color: var(--marsala);
-      padding: 16px 40px;
-      border: 1px solid var(--gold);
-      text-decoration: none;
-      font-weight: 400;
-      display: inline-block;
-      margin-top: 30px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-      font-size: 11px;
-      transition: 0.4s;
+      background: transparent; color: var(--marsala); padding: 16px 35px; border: 1px solid var(--gold);
+      text-decoration: none; font-weight: 400; display: inline-block; margin-top: 25px;
+      text-transform: uppercase; letter-spacing: 3px; font-size: 11px; transition: 0.4s ease;
     }
-    .btn:hover { background: var(--marsala); color: white; border-color: var(--marsala); }
+    .btn:hover { background: var(--marsala); color: white; transform: translateY(-3px); }
 
-    /* --- FONDOS --- */
-    .s-hero { background-image: url('0001.jpg'); }
-    .s-countdown { background-image: url('0002.jpg'); }
-    .s-ubicacion { background-image: url('0003.jpg'); }
-    .s-vestimenta { background-image: url('0004.jpg'); }
-    .s-galeria { background-image: url('0005.jpg'); }
-    .s-regalos { background-image: url('0006.jpg'); }
-    .s-confirmacion { background-image: url('0007.jpg'); }
-    /* Últimas fotos secuenciales */
-    .s-historia { background-image: url('0013.jpg'); }
+    /* --- FONDOS (PORTADA ACTUALIZADA A 0010) --- */
+    .s-hero { background-image: url('0010.jpg'); }
+    .s-count { background-image: url('0002.jpg'); }
+    .s-frase { background-image: url('0003.jpg'); }
+    .s-loc { background-image: url('0004.jpg'); }
+    .s-dress { background-image: url('0005.jpg'); }
+    .s-qr { background-image: url('0013.jpg'); }
+    .s-sobres { background-image: url('0006.jpg'); }
     .s-final { background-image: url('0014.jpg'); }
 
-    /* --- MOSAICO ORGÁNICO LIGERO --- */
-    .s-mosaico { background-color: var(--bg-warm); min-height: 70vh; padding: 40px 0; }
-    .mosaico-container {
-      width: 95%; max-width: 900px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 30vh);
-      gap: 8px;
-      padding: 8px;
-    }
-    .mosaico-item { 
-      width: 100%; height: 100%; 
-      object-fit: cover; 
-      border: 4px solid white;
-      transition: 0.4s;
-      will-change: transform;
-    }
-    .mosaico-item:hover { transform: scale(1.02); z-index: 5; }
-    
+    /* MOSAICO */
+    .s-mosaico { background-color: var(--bg-warm); min-height: 70vh; padding: 40px 10px; z-index: 2; }
+    .s-mosaico::after { display: none; } /* Sin oscurecer el mosaico */
+    .mosaico-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 28vh); gap: 8px; width: 100%; max-width: 900px; }
+    .m-img { width: 100%; height: 100%; object-fit: cover; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
     .m1 { grid-column: span 2; grid-row: span 2; }
-    .m2 { grid-column: 3 / 5; }
+    .m2 { grid-column: span 2; }
 
-    /* Countdown Jade */
-    .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 25px; }
-    .unit span { font-size: 2.3rem; font-family: 'Playfair Display', serif; color: var(--marsala); display: block; }
-    .unit small { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: var(--jade); }
+    .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    .unit span { font-size: 2.5rem; font-family: 'Playfair Display', serif; color: var(--marsala); display: block; }
+    .unit small { font-size: 10px; text-transform: uppercase; color: var(--jade); letter-spacing: 1px; }
 
-    /* Optimización para móviles */
     @media (max-width: 768px) { 
-      section { background-attachment: scroll; padding: 60px 15px; }
       h1 { font-size: 2.8rem; }
-      h2 { font-size: 1.9rem; }
-      .text-card { padding: 35px 20px; }
-      .mosaico-container { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 20vh); }
-      .m1 { grid-column: span 2; grid-row: span 2; }
-      .m2 { grid-column: span 2; }
-      .reveal { transition: opacity 0.8s ease, transform 0.8s ease; } /* Transición más rápida en móvil */
+      section { background-attachment: scroll; } /* Mejor rendimiento en móviles */
+      .mosaico-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 20vh); }
     }
   </style>
 </head>
 <body>
 
   <svg style="display: none;">
-    <symbol id="decor-frame" viewBox="0 0 100 100" preserveAspectRatio="none">
-      <path d="M5,10 Q5,5 10,5 L90,5 Q95,5 95,10 L95,90 Q95,95 90,95 L10,95 Q5,95 5,90 Z" stroke-dasharray="3, 6"/>
-    </symbol>
-    <symbol id="decor-branch" viewBox="0 0 100 100">
-      <path d="M98,98 C90,80 70,70 50,70 C60,50 50,30 30,30 Q40,40 40,50 Q30,60 20,60 M50,70 L55,65 M45,75 L40,80" stroke-linecap="round"/>
-    </symbol>
-    <symbol id="decor-divider" viewBox="0 0 100 20" preserveAspectRatio="none">
-      <path d="M0,10 Q25,0 50,10 Q75,20 100,10 M45,10 C50,5 55,5 60,10 C55,15 50,15 45,10 Z"/>
-    </symbol>
+    <symbol id="f" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,10 Q5,5 10,5 L90,5 Q95,5 95,10 L95,90 Q95,95 90,95 L10,95 Q5,95 5,90 Z"/></symbol>
+    <symbol id="b" viewBox="0 0 100 100"><path d="M98,98 C90,80 70,70 50,70 C60,50 50,30 30,30 Q40,40 40,50 Q30,60 20,60 M50,70 L55,65 M45,75 L40,80"/></symbol>
   </svg>
 
   <section class="s-hero">
     <div class="content reveal active">
-      <p style="letter-spacing: 10px; text-transform: uppercase; font-size: 11px; font-weight: 300; color: white;">Nuestra Boda</p>
-      <h1 style="color: white; text-shadow: 1px 1px 10px rgba(0,0,0,0.3);">Carlos & Joselyn</h1>
+      <p style="letter-spacing: 10px; text-transform: uppercase; font-size: 11px; color: white;">Nuestra Boda</p>
+      <h1 style="color: white; text-shadow: 0 3px 15px rgba(0,0,0,0.5);">Carlos & Joselyn</h1>
       <div style="width: 70px; height: 1px; background: white; margin: 20px auto;"></div>
-      <p style="color: white; font-size: 1.1rem; letter-spacing: 1px;">19 DE DICIEMBRE, 2026</p>
+      <p style="color: white; font-size: 1.2rem; font-weight: 400;">19 DE DICIEMBRE, 2026</p>
     </div>
   </section>
 
-  <section class="s-countdown">
+  <section class="s-count">
     <div class="content reveal">
       <div class="text-card">
-        <svg class="decor-frame"><use href="#decor-frame"/></svg>
-        <svg class="decor-branch top-left"><use href="#decor-branch"/></svg>
-        <svg class="decor-branch bottom-right"><use href="#decor-branch"/></svg>
-        
+        <svg class="decor decor-frame"><use href="#f"/></svg>
+        <svg class="decor decor-branch tl"><use href="#b"/></svg>
+        <svg class="decor decor-branch br"><use href="#b"/></svg>
         <h2>Faltan...</h2>
-        <svg class="decor-divider"><use href="#decor-divider"/></svg>
-        
         <div class="countdown">
-          <div class="unit"><span id="days">00</span><small>Días</small></div>
-          <div class="unit"><span id="hours">00</span><small>Hrs</small></div>
+          <div class="unit"><span id="dias">00</span><small>Días</small></div>
+          <div class="unit"><span id="horas">00</span><small>Hrs</small></div>
           <div class="unit"><span id="mins">00</span><small>Min</small></div>
         </div>
       </div>
     </div>
   </section>
 
-  <section class="s-ubicacion">
+  <section class="s-frase">
     <div class="content reveal">
-      <p style="font-family: 'Playfair Display', serif; font-size: 1.4rem; color: white; font-style: italic; text-shadow: 1px 1px 10px rgba(0,0,0,0.5);">"Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."</p>
+      <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; font-style: italic; text-shadow: 0 2px 12px rgba(0,0,0,0.7);">"Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."</p>
     </div>
   </section>
 
-  <section class="s-vestimenta">
+  <section class="s-loc">
     <div class="content reveal">
       <div class="text-card">
-        <h2>¿Dónde y Cuándo?</h2>
-        <svg class="decor-divider"><use href="#decor-divider"/></svg>
-        
-        <p><b>Salón de Eventos Elegance</b></p>
-        <p>Guápiles, Limón</p>
-        <p>Sábado, 19 de Diciembre | <b>4:00 PM</b></p>
-        <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Ver Mapa</a>
+        <h2>Lugar del Evento</h2>
+        <p><b>Luna Azul</b></p>
+        <p>La Rita, Pococí</p>
+        <p>Sábado, 19 de Dic. | <b>4:00 PM</b></p>
+        <a href="https://maps.google.com/?cid=2796042345171284784&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ" target="_blank" class="btn">Cómo llegar</a>
       </div>
     </div>
   </section>
 
   <section class="s-mosaico">
-    <div class="content reveal" style="width: 100%; max-width: 900px;">
-      <h2>Nuestros Momentos</h2>
-      <svg class="decor-divider" style="margin-bottom: 30px;"><use href="#decor-divider"/></svg>
-      
-      <div class="mosaico-container">
-        <img src="0009.jpg" class="mosaico-item m1" alt="Boda 9">
-        <img src="0010.jpg" class="mosaico-item m2" alt="Boda 10">
-        <img src="0011.jpg" class="mosaico-item" alt="Boda 11">
-        <img src="0012.jpg" class="mosaico-item" alt="Boda 12">
+    <div class="content reveal">
+      <h2 style="margin-bottom: 30px;">Momentos</h2>
+      <div class="mosaico-grid">
+        <img src="0009.jpg" class="m-img m1">
+        <img src="0001.jpg" class="m-img m2"> <img src="0011.jpg" class="m-img">
+        <img src="0012.jpg" class="m-img">
       </div>
     </div>
   </section>
 
-  <section class="s-galeria">
+  <section class="s-dress">
     <div class="content reveal">
       <div class="text-card">
-        <svg class="decor-branch bottom-right"><use href="#decor-branch"/></svg>
-        <h2>Dress Code</h2>
-        <svg class="decor-divider"><use href="#decor-divider"/></svg>
-        
-        <p style="letter-spacing: 4px; font-weight: 600; color: var(--marsala);">FORMAL / ELEGANTE</p>
-        <p style="font-size: 13px; opacity: 0.9; margin-top: 10px;">Tonos sugeridos: Verde Jade y Vino Marsala.<br>Agradecemos evitar el color blanco.</p>
+        <svg class="decor decor-branch br"><use href="#b"/></svg>
+        <h2>Vestimenta</h2>
+        <p style="letter-spacing: 4px; font-weight: 600; color: var(--marsala); margin-bottom: 10px;">FORMAL / ELEGANTE</p>
+        <p style="font-size: 14px; opacity: 0.8;">Agradecemos evitar el color blanco.</p>
       </div>
     </div>
   </section>
 
-  <section class="s-historia">
+  <section class="s-qr">
     <div class="content reveal">
-      <div class="text-card" style="background: white; border: 3px solid var(--gold); border-radius: 15px;">
-        <h2 style="color: var(--marsala);">Captura la Magia</h2>
-        <svg class="decor-divider"><use href="#decor-divider"/></svg>
-        
-        <p style="color: var(--text); font-size: 13px;">Inmortaliza esta noche subiendo tus fotos y videos a nuestra galería en vivo.</p>
-        <div style="background: white; padding: 10px; display: inline-block; border: 1px solid rgba(197, 160, 89, 0.3); border-radius: 8px; margin: 15px 0;">
-          <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="display:block; width: 140px; height: 140px;">
-        </div><br>
-        <a href="index.html" class="btn" style="background: var(--marsala); color: white; border:none;">Subir Fotos 📸</a>
+      <div class="text-card" style="background: white; border: 2px solid var(--gold);">
+        <h2 style="color: var(--marsala);">Galería en Vivo</h2>
+        <p style="font-size: 14px;">Comparte tus fotos con nosotros:</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="margin: 20px 0; border: 1px solid #eee; padding: 8px;">
+        <br><a href="index.html" class="btn" style="background: var(--marsala); color: white; border:none;">Subir Fotos 📸</a>
       </div>
     </div>
   </section>
 
-  <section class="s-regalos">
+  <section class="s-sobres">
     <div class="content reveal">
       <div class="text-card">
-        <svg class="decor-branch top-left"><use href="#decor-branch"/></svg>
-        <h2>Lluvia de Sobres</h2>
-        <svg class="decor-divider"><use href="#decor-divider"/></svg>
-        <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle con nosotros, tendremos lluvia de sobres el día del evento.</p>
+        <svg class="decor decor-branch tl"><use href="#b"/></svg>
+        <h2>Regalos</h2>
+        <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle, tendremos lluvia de sobres el día del evento.</p>
       </div>
     </div>
   </section>
@@ -281,47 +197,273 @@
   <section class="s-final">
     <div class="content reveal">
       <div class="text-card">
-        <svg class="decor-frame"><use href="#decor-frame"/></svg>
-        <svg class="decor-branch top-left"><use href="#decor-branch"/></svg>
-        <svg class="decor-branch bottom-right"><use href="#decor-branch"/></svg>
-        
+        <svg class="decor decor-frame"><use href="#f"/></svg>
+        <svg class="decor decor-branch tl"><use href="#b"/></svg>
+        <svg class="decor decor-branch br"><use href="#b"/></svg>
         <h2>¿Nos acompañas?</h2>
-        <svg class="decor-divider"><use href="#decor-divider"/></svg>
-        
-        <p>Sería un honor contar con tu presencia.</p>
-        <p>Confírmanos antes del <b>1 de Diciembre, 2026</b>.</p>
+        <p>Por favor, confírmanos antes del<br><b>1 de Diciembre, 2026</b>.</p>
         <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
       </div>
     </div>
   </section>
 
   <script>
-    // --- LÓGICA DE APARICIÓN OPTIMIZADA (will-change) ---
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-          observer.unobserve(entry.target); // Detener observación tras activar (menos CPU)
-        }
+    // OBSERVADOR MEJORADO: Detecta cuando el elemento está casi en el centro
+    const obs = new IntersectionObserver((es) => {
+      es.forEach(e => { 
+        if (e.isIntersecting) { 
+          e.target.classList.add('active'); 
+        } 
       });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
 
-    // --- CUENTA REGRESIVA ---
+    // CUENTA REGRESIVA
     const target = new Date("Dec 19, 2026 16:00:00").getTime();
-    const updateCountdown = () => {
+    setInterval(() => {
       const now = new Date().getTime();
       const diff = target - now;
       if (diff > 0) {
-        document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24)).toString().padStart(2, '0');
-        document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2, '0');
+        document.getElementById('dias').innerText = Math.floor(diff / (1000*60*60*24)).toString().padStart(2, '0');
+        document.getElementById('horas').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2, '0');
         document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60)).toString().padStart(2, '0');
       }
-    };
-    setInterval(updateCountdown, 1000);
-    updateCountdown(); // Ejecutar una vez al inicio
+    }, 1000);
   </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>Boda Carlos & Joselyn • Invitación 💍</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --marsala: #7A2F3E; 
+      --jade: #1A4D3E; 
+      --gold: #C5A059; 
+      --bg-warm: #F0EADC; 
+      --text: #333333;
+      --paper: rgba(255, 255, 255, 0.94);
+    }
 
+    * { scroll-behavior: smooth; box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Poppins', sans-serif; background-color: var(--bg-warm); color: var(--text); overflow-x: hidden; }
+
+    /* --- ANIMACIONES FLUIDAS --- */
+    .reveal { 
+      opacity: 0; 
+      transform: translateY(30px) scale(0.98); 
+      transition: all 1.2s cubic-bezier(0.2, 0.8, 0.2, 1); 
+      will-change: transform, opacity; 
+    }
+    .reveal.active { 
+      opacity: 1; 
+      transform: translateY(0) scale(1); 
+    }
+
+    section { 
+      position: relative;
+      min-height: 100vh;
+      padding: 60px 20px; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      overflow: hidden;
+    }
+
+    /* Efecto de profundidad en el fondo */
+    section::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      z-index: 1;
+    }
+
+    .content { position: relative; z-index: 10; width: 100%; max-width: 480px; }
+
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--marsala); line-height: 1.1; font-style: italic; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--jade); margin-bottom: 15px; }
+    p { font-size: 1rem; line-height: 1.6; font-weight: 300; }
+
+    /* --- DECORACIONES --- */
+    .decor { position: absolute; fill: none; stroke: var(--gold); stroke-width: 1; opacity: 0.5; z-index: 5; }
+    .decor-frame { top: 10px; left: 10px; width: calc(100% - 20px); height: calc(100% - 20px); stroke-dasharray: 4; }
+    .decor-branch { width: 100px; height: 100px; }
+    .tl { top: 15px; left: 15px; transform: rotate(-10deg); }
+    .br { bottom: 15px; right: 15px; transform: rotate(170deg); }
+
+    .text-card { background: var(--paper); padding: 50px 25px; border-radius: 15px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
+
+    .btn {
+      background: transparent; color: var(--marsala); padding: 16px 35px; border: 1px solid var(--gold);
+      text-decoration: none; font-weight: 400; display: inline-block; margin-top: 25px;
+      text-transform: uppercase; letter-spacing: 3px; font-size: 11px; transition: 0.4s ease;
+    }
+    .btn:hover { background: var(--marsala); color: white; transform: translateY(-3px); }
+
+    /* --- FONDOS (PORTADA ACTUALIZADA A 0010) --- */
+    .s-hero { background-image: url('0010.jpg'); }
+    .s-count { background-image: url('0002.jpg'); }
+    .s-frase { background-image: url('0003.jpg'); }
+    .s-loc { background-image: url('0004.jpg'); }
+    .s-dress { background-image: url('0005.jpg'); }
+    .s-qr { background-image: url('0013.jpg'); }
+    .s-sobres { background-image: url('0006.jpg'); }
+    .s-final { background-image: url('0014.jpg'); }
+
+    /* MOSAICO */
+    .s-mosaico { background-color: var(--bg-warm); min-height: 70vh; padding: 40px 10px; z-index: 2; }
+    .s-mosaico::after { display: none; } /* Sin oscurecer el mosaico */
+    .mosaico-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 28vh); gap: 8px; width: 100%; max-width: 900px; }
+    .m-img { width: 100%; height: 100%; object-fit: cover; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+    .m1 { grid-column: span 2; grid-row: span 2; }
+    .m2 { grid-column: span 2; }
+
+    .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
+    .unit span { font-size: 2.5rem; font-family: 'Playfair Display', serif; color: var(--marsala); display: block; }
+    .unit small { font-size: 10px; text-transform: uppercase; color: var(--jade); letter-spacing: 1px; }
+
+    @media (max-width: 768px) { 
+      h1 { font-size: 2.8rem; }
+      section { background-attachment: scroll; } /* Mejor rendimiento en móviles */
+      .mosaico-grid { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(4, 20vh); }
+    }
+  </style>
+</head>
+<body>
+
+  <svg style="display: none;">
+    <symbol id="f" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M5,10 Q5,5 10,5 L90,5 Q95,5 95,10 L95,90 Q95,95 90,95 L10,95 Q5,95 5,90 Z"/></symbol>
+    <symbol id="b" viewBox="0 0 100 100"><path d="M98,98 C90,80 70,70 50,70 C60,50 50,30 30,30 Q40,40 40,50 Q30,60 20,60 M50,70 L55,65 M45,75 L40,80"/></symbol>
+  </svg>
+
+  <section class="s-hero">
+    <div class="content reveal active">
+      <p style="letter-spacing: 10px; text-transform: uppercase; font-size: 11px; color: white;">Nuestra Boda</p>
+      <h1 style="color: white; text-shadow: 0 3px 15px rgba(0,0,0,0.5);">Carlos & Joselyn</h1>
+      <div style="width: 70px; height: 1px; background: white; margin: 20px auto;"></div>
+      <p style="color: white; font-size: 1.2rem; font-weight: 400;">19 DE DICIEMBRE, 2026</p>
+    </div>
+  </section>
+
+  <section class="s-count">
+    <div class="content reveal">
+      <div class="text-card">
+        <svg class="decor decor-frame"><use href="#f"/></svg>
+        <svg class="decor decor-branch tl"><use href="#b"/></svg>
+        <svg class="decor decor-branch br"><use href="#b"/></svg>
+        <h2>Faltan...</h2>
+        <div class="countdown">
+          <div class="unit"><span id="dias">00</span><small>Días</small></div>
+          <div class="unit"><span id="horas">00</span><small>Hrs</small></div>
+          <div class="unit"><span id="mins">00</span><small>Min</small></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-frase">
+    <div class="content reveal">
+      <p style="font-family: 'Playfair Display', serif; font-size: 1.5rem; color: white; font-style: italic; text-shadow: 0 2px 12px rgba(0,0,0,0.7);">"Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."</p>
+    </div>
+  </section>
+
+  <section class="s-loc">
+    <div class="content reveal">
+      <div class="text-card">
+        <h2>Lugar del Evento</h2>
+        <p><b>Luna Azul</b></p>
+        <p>La Rita, Pococí</p>
+        <p>Sábado, 19 de Dic. | <b>4:00 PM</b></p>
+        <a href="https://maps.google.com/?cid=2796042345171284784&g_mp=Cidnb29nbGUubWFwcy5wbGFjZXMudjEuUGxhY2VzLlNlYXJjaFRleHQ" target="_blank" class="btn">Cómo llegar</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-mosaico">
+    <div class="content reveal">
+      <h2 style="margin-bottom: 30px;">Momentos</h2>
+      <div class="mosaico-grid">
+        <img src="0009.jpg" class="m-img m1">
+        <img src="0001.jpg" class="m-img m2"> <img src="0011.jpg" class="m-img">
+        <img src="0012.jpg" class="m-img">
+      </div>
+    </div>
+  </section>
+
+  <section class="s-dress">
+    <div class="content reveal">
+      <div class="text-card">
+        <svg class="decor decor-branch br"><use href="#b"/></svg>
+        <h2>Vestimenta</h2>
+        <p style="letter-spacing: 4px; font-weight: 600; color: var(--marsala); margin-bottom: 10px;">FORMAL / ELEGANTE</p>
+        <p style="font-size: 14px; opacity: 0.8;">Agradecemos evitar el color blanco.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-qr">
+    <div class="content reveal">
+      <div class="text-card" style="background: white; border: 2px solid var(--gold);">
+        <h2 style="color: var(--marsala);">Galería en Vivo</h2>
+        <p style="font-size: 14px;">Comparte tus fotos con nosotros:</p>
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="margin: 20px 0; border: 1px solid #eee; padding: 8px;">
+        <br><a href="index.html" class="btn" style="background: var(--marsala); color: white; border:none;">Subir Fotos 📸</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-sobres">
+    <div class="content reveal">
+      <div class="text-card">
+        <svg class="decor decor-branch tl"><use href="#b"/></svg>
+        <h2>Regalos</h2>
+        <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle, tendremos lluvia de sobres el día del evento.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-final">
+    <div class="content reveal">
+      <div class="text-card">
+        <svg class="decor decor-frame"><use href="#f"/></svg>
+        <svg class="decor decor-branch tl"><use href="#b"/></svg>
+        <svg class="decor decor-branch br"><use href="#b"/></svg>
+        <h2>¿Nos acompañas?</h2>
+        <p>Por favor, confírmanos antes del<br><b>1 de Diciembre, 2026</b>.</p>
+        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // OBSERVADOR MEJORADO: Detecta cuando el elemento está casi en el centro
+    const obs = new IntersectionObserver((es) => {
+      es.forEach(e => { 
+        if (e.isIntersecting) { 
+          e.target.classList.add('active'); 
+        } 
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+
+    // CUENTA REGRESIVA
+    const target = new Date("Dec 19, 2026 16:00:00").getTime();
+    setInterval(() => {
+      const now = new Date().getTime();
+      const diff = target - now;
+      if (diff > 0) {
+        document.getElementById('dias').innerText = Math.floor(diff / (1000*60*60*24)).toString().padStart(2, '0');
+        document.getElementById('horas').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2, '0');
+        document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60)).toString().padStart(2, '0');
+      }
+    }, 1000);
+  </script>
 </body>
 </html>
