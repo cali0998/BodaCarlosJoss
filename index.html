@@ -12,6 +12,7 @@
       --wine: #4a0a16;
       --jade: #0a2e24;
       --glass: rgba(255, 255, 255, 0.08);
+      --glass-dark: rgba(0, 0, 0, 0.2);
     }
 
     body {
@@ -25,6 +26,7 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      overflow-x: hidden;
     }
 
     .glass-card {
@@ -39,6 +41,7 @@
       width: 100%;
       box-shadow: 0 25px 60px rgba(0,0,0,0.6);
       position: relative;
+      transition: all 0.4s ease;
     }
 
     .glass-card::before {
@@ -78,16 +81,23 @@
       font-size: 15px;
       color: rgba(255, 255, 255, 0.95);
       margin-bottom: 40px;
+      transition: opacity 0.3s ease;
     }
 
-    /* Contenedor de botones que se ocultará */
-    .actions-container {
+    /* Contenedores de Estado */
+    .state-container {
       display: flex;
       flex-direction: column;
       gap: 15px;
-      transition: opacity 0.4s ease;
+      transition: all 0.3s ease;
     }
 
+    .hidden {
+      display: none !important;
+      opacity: 0;
+    }
+
+    /* Botones Principales */
     .btn-action {
       display: flex;
       align-items: center;
@@ -103,6 +113,8 @@
       transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       font-size: 14px;
       color: white;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .btn-camera {
@@ -115,9 +127,55 @@
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .btn-action:active { transform: scale(0.95); }
+    .btn-action:active { transform: scale(0.96); }
 
     #fileInput, #cameraInput { display: none; }
+
+    /* --- NUEVO: Área de Previsualización --- */
+    #preview-container {
+      margin-top: -20px;
+      margin-bottom: 30px;
+    }
+
+    #preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px;
+      margin-bottom: 25px;
+      max-height: 200px;
+      overflow-y: auto;
+      padding: 10px;
+      background: var(--glass-dark);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .preview-image {
+      width: 100%;
+      aspect-ratio: 1/1;
+      object-fit: cover;
+      border-radius: 8px;
+      border: 1px solid rgba(197, 157, 95, 0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+
+    .preview-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-confirm {
+      background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); /* Verde Éxito */
+      flex: 2;
+    }
+
+    .btn-cancel {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      flex: 1;
+      text-transform: none;
+      font-weight: 400;
+    }
 
     /* Mensaje de Estado y carga */
     #status {
@@ -152,6 +210,7 @@
       margin-top: 30px;
       display: block;
       opacity: 0.7;
+      transition: opacity 0.3s ease;
     }
   </style>
 </head>
@@ -166,47 +225,92 @@
     Ayúdanos a capturar cada risa y baile de esta noche mágica.
   </p>
   
-  <div class="actions-container" id="actions">
+  <div class="state-container" id="actions-state">
     <label for="cameraInput" class="btn-action btn-camera">
       <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M12 15.5c1.93 0 3.5-1.57 3.5-3.5s-1.57-3.5-3.5-3.5-3.5 1.57-3.5 3.5 1.57 3.5 3.5 3.5z"/><path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
       Tomar Foto
     </label>
-    <input type="file" id="cameraInput" accept="image/*" capture="camera" onchange="uploadFiles(this.files)">
+    <input type="file" id="cameraInput" accept="image/*" capture="camera" onchange="handleFileSelection(this.files)">
 
     <label for="fileInput" class="btn-action btn-gallery">
       <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24"><path d="M19 7v2.99s-1.99.01-2 0V7h-3s.01-1.99 0-2h3V2h2v3h3v2h-3zm-3 4V8h-3V5H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2v-8h-3zM5 19l3-4 2 3 3-4 4 5H5z"/></svg>
       Subir Archivos
     </label>
-    <input type="file" id="fileInput" accept="image/*" multiple onchange="uploadFiles(this.files)">
+    <input type="file" id="fileInput" accept="image/*" multiple onchange="handleFileSelection(this.files)">
+  </div>
+
+  <div class="state-container hidden" id="preview-state">
+    <div id="preview-container">
+      <div id="preview-grid"></div>
+      <div class="preview-actions">
+        <button class="btn-action btn-cancel" onclick="cancelUpload()">Cancelar</button>
+        <button class="btn-action btn-confirm" onclick="confirmAndUpload()">Subir 💖</button>
+      </div>
+    </div>
   </div>
   
-  <div id="status">
+  <div id="status" class="hidden">
     <div id="spinner" class="loader-ring"></div>
     <div id="statusText"></div>
   </div>
 
-  <span class="quote-footer">"Tus recuerdos son nuestro mejor regalo"</span>
+  <span class="quote-footer" id="quote">"Tus recuerdos son nuestro mejor regalo"</span>
 </div>
 
 <script>
   const cloudName = "dhruy6ftj";
   const uploadPreset = "boda_carlos_y_joss";
+  
+  // Variable global para guardar los archivos temporalmente
+  let selectedFiles = [];
 
-  async function uploadFiles(files) {
+  // --- PASO 1: Manejar la Selección de Archivos ---
+  function handleFileSelection(files) {
+    if (files.length === 0) return;
+    
+    selectedFiles = Array.from(files); // Guardar archivos
+    const grid = document.getElementById('preview-grid');
+    grid.innerHTML = ''; // Limpiar grid anterior
+
+    // Crear previsualizaciones locales (sin subir nada aún)
+    selectedFiles.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'preview-image';
+        grid.appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    });
+
+    // Cambiar de estado visual
+    setVisualState('preview');
+  }
+
+  // --- PASO 2: Cancelar la subida ---
+  function cancelUpload() {
+    selectedFiles = []; // Limpiar selección
+    // Limpiar inputs de archivo para que detecten el mismo archivo si se selecciona de nuevo
+    document.getElementById('cameraInput').value = '';
+    document.getElementById('fileInput').value = '';
+    setVisualState('init');
+  }
+
+  // --- PASO 3: Confirmar y realizar la subida real ---
+  async function confirmAndUpload() {
+    if (selectedFiles.length === 0) return;
+    
+    setVisualState('uploading');
+    
     const statusText = document.getElementById('statusText');
     const spinner = document.getElementById('spinner');
-    const actions = document.getElementById('actions');
-    const mainText = document.getElementById('mainText');
-    
-    // 1. Efecto Visual: Ocultar botones y texto de bienvenida
-    actions.style.display = 'none';
-    mainText.style.opacity = '0.3';
     spinner.style.display = 'block';
     
     let count = 0;
-    for (let file of files) {
+    for (let file of selectedFiles) {
       count++;
-      statusText.innerHTML = `<span style="color:var(--gold-light)">Enviando recuerdo ${count} de ${files.length}...</span>`;
+      statusText.innerHTML = `<span style="color:var(--gold-light)">Enviando recuerdo ${count} de ${selectedFiles.length}...</span>`;
       
       const formData = new FormData();
       formData.append('file', file);
@@ -221,21 +325,49 @@
       } catch (e) {
         statusText.innerText = "Error al subir. Inténtalo de nuevo 🥂";
         spinner.style.display = 'none';
-        actions.style.display = 'flex';
+        setTimeout(cancelUpload, 2000); // Volver al inicio tras error
         return;
       }
     }
 
-    // 2. Finalización Exitosa
+    // Finalización Exitosa
     spinner.style.display = 'none';
     statusText.innerHTML = "<b style='color:var(--gold); font-size:16px'>¡Gracias por compartir este momento! ❤️</b>";
     
-    // 3. Resetear la página tras 4 segundos
-    setTimeout(() => {
-      statusText.innerHTML = "";
-      actions.style.display = 'flex';
-      mainText.style.opacity = '1';
-    }, 4000);
+    // Resetear la página tras 4 segundos
+    setTimeout(cancelUpload, 4000);
+  }
+
+  // --- Función Auxiliar para gestionar los estados visuales ---
+  function setVisualState(state) {
+    const initActions = document.getElementById('actions-state');
+    const previewActions = document.getElementById('preview-state');
+    const statusArea = document.getElementById('status');
+    const mainText = document.getElementById('mainText');
+    const quote = document.getElementById('quote');
+
+    // Ocultar todo por defecto
+    initActions.classList.add('hidden');
+    previewActions.classList.add('hidden');
+    statusArea.classList.add('hidden');
+
+    switch(state) {
+      case 'init':
+        initActions.classList.remove('hidden');
+        mainText.style.opacity = '1';
+        quote.style.opacity = '0.7';
+        break;
+      case 'preview':
+        previewActions.classList.remove('hidden');
+        mainText.style.opacity = '0.3'; // Atenuar texto de fondo
+        quote.style.opacity = '0'; // Ocultar frase provisionalmente
+        break;
+      case 'uploading':
+        statusArea.classList.remove('hidden');
+        mainText.style.opacity = '0.3';
+        quote.style.opacity = '0';
+        break;
+    }
   }
 </script>
 
