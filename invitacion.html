@@ -152,7 +152,18 @@
     /* --- ASIGNACIÓN DE FOTOS SECUENCIALMENTE (1-14) --- */
     .s1 { background-image: url('0010.jpg'); } /* PORTADA ACTUALIZADA */
     .s2 { background-image: url('0001.jpg'); } /* COUNTDOWN */
-    .s3 { background-image: url('0002.jpg'); } /* FRASE CORREGIDA (CERO NEGRO) */
+    .s3 { 
+  background-image: url('0002.jpg') !important; 
+  background-color: transparent !important;
+}
+.s3::before { 
+  display: none !important; 
+}
+.s3 p { 
+  color: white; 
+  text-shadow: 2px 2px 15px rgba(0,0,0,0.8); 
+  font-weight: 500;
+}
     .s4 { background-image: url('0003.jpg'); } /* LUGAR */
     .s5 { background-image: url('0004.jpg'); } /* UBICACIÓN */
     .s6 { background-image: url('0005.jpg'); } /* VESTIMENTA */
