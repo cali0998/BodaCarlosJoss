@@ -13,14 +13,16 @@
       --deep-bg: #050505; /* Negro profundo para fundir secciones */
     }
 
+    /* Reset y Estilos Base */
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { 
       margin: 0; font-family: 'Poppins', sans-serif; 
       background-color: var(--deep-bg); 
       color: white; overflow-x: hidden; 
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* --- EFECTO DE FUNDIDO INVISIBLE --- */
+    /* --- EFECTO DE FUNDIDO Y MATIZ DE COLOR --- */
     section { 
       min-height: 100vh; 
       padding: 100px 20px; 
@@ -29,69 +31,135 @@
       background-size: cover !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
+      overflow: hidden;
     }
 
-    /* Esta es la clave: el degradado ahora va de negro a transparente y a negro otra vez */
+    /* Esta capa crea el desvanecimiento a negro y el sutil tinte de color */
     .overlay-vignette {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(to bottom, 
-        var(--deep-bg) 0%, 
-        transparent 20%, 
-        transparent 80%, 
-        var(--deep-bg) 100%);
       z-index: 0;
     }
 
-    /* --- TARJETAS MÁS LIGERAS --- */
+    /* --- TARJETAS MÁS TRANSPARENTES (Para no tapar la foto teñida) --- */
     .glass-card {
-      background: rgba(255, 255, 255, 0.03); 
-      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(197, 157, 95, 0.15);
+      background: rgba(255, 255, 255, 0.02); /* Vidrio casi invisible */
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(197, 157, 95, 0.1);
       border-radius: 40px;
       padding: 50px 25px; 
       width: 100%; max-width: 500px;
       position: relative; z-index: 1;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
     }
 
-    /* --- FOTOS DE FONDO (Sutiles y Elegantes) --- */
-    .hero { background-image: url('Foto10.jpg'); }
-    .seccion-pase { background-image: url('Foto11.jpg'); }
-    .seccion-lugar { background-image: url('Foto12.jpg'); }
-    .seccion-vestimenta { background-image: url('Foto13.jpg'); }
-    .seccion-musica { background-image: url('Foto14.jpg'); }
-    .seccion-regalos { background-image: url('Foto15.jpg'); }
-    .seccion-qr { background-image: url('Foto16.jpg'); }
+    /* --- FOTOS DE FONDO CON TINTE DE COLOR (Sutiles) --- */
+    
+    /* 1. Portada: Matiz mixto muy suave */
+    .hero { 
+      background-image: url('Foto10.jpg');
+    }
+    .hero .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.3) 20%, /* Matiz Jade suave */
+        rgba(74,10,22,0.4) 80%, /* Matiz Vino suave */
+        var(--deep-bg) 100%);
+    }
 
-    /* Animación de entrada suave */
-    .reveal { opacity: 0; transform: translateY(30px); transition: 1.5s ease; }
+    /* 2. Pase Especial: Matiz Jade */
+    .seccion-pase { background-image: url('Foto11.jpg'); }
+    .seccion-pase .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.5) 20%, /* Matiz Jade */
+        var(--deep-bg) 100%);
+    }
+
+    /* 3. Lugar: Matiz Neutro Oscuro (para claridad de Waze) */
+    .seccion-lugar { background-image: url('Foto12.jpg'); }
+    .seccion-lugar .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(0,0,0,0.6) 20%, 
+        var(--deep-bg) 100%);
+    }
+
+    /* 4. Carrete (Nosotros): Fondo Jade sólido (sin foto de fondo) */
+    .seccion-nosotros { background: var(--jade); padding: 80px 20px; }
+
+    /* 5. Vestimenta: Matiz Vino */
+    .seccion-vestimenta { background-image: url('Foto13.jpg'); }
+    .seccion-vestimenta .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(74,10,22,0.5) 20%, /* Matiz Vino */
+        var(--deep-bg) 100%);
+    }
+
+    /* 6. Música: Matiz Jade (Nuevo) */
+    .seccion-musica { background-image: url('Foto14.jpg'); } /* <--- CAMBIA ESTA FOTO */
+    .seccion-musica .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.5) 20%, 
+        var(--deep-bg) 100%);
+    }
+
+    /* 7. Regalos: Matiz Vino (Nuevo) */
+    .seccion-regalos { background-image: url('Foto15.jpg'); } /* <--- CAMBIA ESTA FOTO */
+    .seccion-regalos .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(74,10,22,0.5) 20%, 
+        var(--deep-bg) 100%);
+    }
+
+    /* 8. QR / Fotos: Matiz Mixto Final (Nuevo) */
+    .seccion-qr { background-image: url('Foto16.jpg'); } /* <--- CAMBIA ESTA FOTO */
+    .seccion-qr .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.4) 20%, 
+        rgba(74,10,22,0.5) 80%, 
+        var(--deep-bg) 100%);
+    }
+
+    /* Animaciones y Tipografía */
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: var(--gold); margin-bottom: 20px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 25px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    h3 { font-family: 'Poppins', sans-serif; font-weight: 600; color: white; margin: 0; }
+    p { font-size: 1.1rem; line-height: 1.7; opacity: 0.95; margin: 10px 0; }
 
     .btn {
       background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
-      text-transform: uppercase; font-size: 13px; letter-spacing: 2px; transition: 0.3s;
+      text-transform: uppercase; font-size: 13px; letter-spacing: 2px; transition: 0.3s ease;
       width: 100%; max-width: 280px; border: none; cursor: pointer;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
+    .btn:hover { background: #d4a76a; transform: translateY(-2px); }
 
     /* Carrete Modernizado */
     .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 0; gap: 15px; }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-track img { 
-      width: 75%; flex-shrink: 0; scroll-snap-align: center; border-radius: 25px; 
-      border: 2px solid var(--gold); opacity: 0.4; transition: 0.5s; 
+      width: 75%; flex-shrink: 0; scroll-snap-align: center; object-fit: cover;
+      aspect-ratio: 1/1; border-radius: 25px; border: 3px solid var(--gold);
+      opacity: 0.4; transition: 0.5s ease; box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
-    .carousel-track img.active-img { opacity: 1; transform: scale(1.05); }
+    .carousel-track img.active-img { opacity: 1; transform: scale(1.03); }
 
-    .unit span { font-size: 2.2rem; font-weight: 600; color: var(--gold); }
-    .divisor { width: 60px; height: 2px; background: var(--gold); margin: 25px auto; opacity: 0.6; }
+    .unit span { font-size: 2.5rem; font-weight: 600; color: var(--gold); font-family: 'Playfair Display', serif; }
+    .divisor { width: 70px; height: 3px; background: var(--gold); margin: 30px auto; border-radius: 2px; }
 
     @media (min-width: 992px) {
       section { background-attachment: fixed; }
-      h1 { font-size: 5.5rem !important; }
+      .glass-card { max-width: 600px; padding: 60px; }
+      h1 { font-size: 6rem !important; }
+      h2 { font-size: 3.2rem !important; }
     }
   </style>
 </head>
@@ -100,11 +168,11 @@
   <section class="hero">
     <div class="overlay-vignette"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem;">"Toda aventura comienza con un sí"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem;">"Toda aventura comienza con un sí"</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 20px;">19 • DICIEMBRE • 2026</p>
+      <p style="letter-spacing: 5px; margin-top: 25px; text-transform: uppercase; font-size: 14px;">19 • Diciembre • 2026</p>
       
-      <div class="countdown" style="display: flex; justify-content: center; gap: 15px; margin-top: 30px;">
+      <div class="countdown" style="display: flex; justify-content: center; gap: 20px; margin-top: 35px;">
         <div class="unit"><span id="days">00</span><br><small>Días</small></div>
         <div class="unit"><span id="hours">00</span><br><small>Hrs</small></div>
         <div class="unit"><span id="mins">00</span><br><small>Min</small></div>
@@ -117,10 +185,10 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <p>Un lugar reservado para:</p>
+      <p>Un lugar reservado con cariño para:</p>
       <div class="divisor"></div>
-      <h3 style="font-size: 2rem; color: var(--gold);">[Nombre del Invitado]</h3>
-      <p>Pases: <b>2</b></p>
+      <h3 style="font-size: 2.3rem; color: var(--gold);">[Nombre del Invitado]</h3>
+      <p style="font-size: 1.2rem;">Pases reservados: <b>2</b></p>
     </div>
   </section>
 
@@ -130,17 +198,32 @@
       <h2>¿Dónde será?</h2>
       <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
       <div class="divisor"></div>
-      <p>Ceremonia: 3:00 PM | Recepción: 4:00 PM</p>
+      <p style="font-size: 1.1rem;">Ceremonia: <b>3:00 PM</b></p>
+      <p style="color: var(--gold); font-size: 1.4rem; font-weight: 600;">Recepción: <b>4:00 PM</b></p>
       <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Ver en Waze 🚗</a>
+    </div>
+  </section>
+
+  <section class="seccion-nosotros">
+    <div class="glass-card reveal" style="max-width: 700px; background: rgba(255,255,255,0.01); border:none; box-shadow:none;">
+      <h2 style="color: white;">Nuestra Historia</h2>
+      <div class="carousel-track" id="track">
+        <img src="Foto1.jpg" alt="Foto 1" class="active-img">
+        <img src="Foto2.jpg" alt="Foto 2">
+        <img src="Foto3.jpg" alt="Foto 3">
+        <img src="Foto4.jpg" alt="Foto 4">
+        <img src="Foto5.jpg" alt="Foto 5">
+      </div>
     </div>
   </section>
 
   <section class="seccion-vestimenta">
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
-      <h2>Vestimenta</h2>
-      <p style="letter-spacing: 2px; color: var(--gold); font-weight: 600;">FORMAL / ELEGANTE</p>
-      <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 15px;">Sugerimos tonos Verde Jade y Vino.<br>Por favor, evitar el color blanco.</p>
+      <h2>Código de Vestimenta</h2>
+      <p style="letter-spacing: 3px; color: var(--gold); font-weight: 600; font-size: 1.3rem;">FORMAL / ELEGANTE</p>
+      <div class="divisor"></div>
+      <p style="font-size: 0.95rem; opacity: 0.9; margin-top: 15px;">Sugerimos los tonos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
     </div>
   </section>
 
@@ -148,15 +231,15 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Música</h2>
-      <p>¿Qué canción te haría bailar toda la noche?</p>
-      <a href="https://wa.me/50683484866?text=Sugerencia+música:" class="btn">Sugerir Canción 🎵</a>
+      <p>¿Qué canción no puede faltar en la fiesta?</p>
+      <a href="https://wa.me/50683484866?text=Sugerencia+música:" target="_blank" class="btn">Sugerir Canción 🎵</a>
     </div>
   </section>
 
   <section class="seccion-regalos">
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
-      <h2>Regalos</h2>
+      <h2>Mesa de Regalos</h2>
       <p>Su presencia es nuestro mayor regalo.</p>
       <div class="divisor"></div>
       <p>Si desean tener un detalle con nosotros,<br>contaremos con <b>Lluvia de Sobres</b>.</p>
@@ -167,26 +250,28 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
-      <p>Comparte tus capturas del evento</p>
-      <div style="background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 20px 0;">
-        <img src="qrphotos.png" alt="QR" style="width: 140px; display: block;">
+      <p>Ayúdanos a capturar los mejores momentos.</p>
+      <div style="background: white; padding: 20px; border-radius: 25px; display: inline-block; margin: 30px 0; border: 4px solid var(--gold);">
+        <img src="qrphotos.png" alt="QR" style="width: 160px; display: block;">
       </div>
       <br>
       <a href="index.html" class="btn" style="background: white; color: black;">Subir Fotos 📸</a>
     </div>
   </section>
 
-  <section style="background-image: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.6)), url('Foto17.jpg');">
-    <div class="overlay-vignette"></div>
+  <section style="background-image: linear-gradient(to bottom, var(--jade) 0%, var(--wine) 100%); padding: 80px 20px;">
     <div class="glass-card reveal">
-      <h2 style="font-size: 3rem;">Te Esperamos</h2>
-      <p style="font-style: italic;">Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866?text=Confirmo+mi+asistencia" class="btn">Confirmar Asistencia</a>
+      <h2 style="font-size: 3.2rem; color: white;">Te Esperamos</h2>
+      <p style="font-style: italic; margin-bottom: 30px; color: var(--gold);">Carlos & Joselyn</p>
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        <a href="https://wa.me/50683484866?text=Confirmación+Ceremonia" target="_blank" class="btn">Confirmar Ceremonia</a>
+        <a href="https://wa.me/50683484866?text=Confirmación+Recepción" target="_blank" class="btn">Confirmar Recepción</a>
+      </div>
     </div>
   </section>
 
   <script>
-    // Reveal Observer
+    // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.2 });
