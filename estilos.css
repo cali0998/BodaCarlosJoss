@@ -32,14 +32,14 @@ body {
 
 /* 3. ASIGNACIÓN INDIVIDUAL DE FOTOS */
 /* Si una foto no sale, revisa que en GitHub se llame igual (ej: 0010.jpg) */
-.f1 { background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552'); }
-.f2 { background-image: url('0001.jpg'); }
-.f3 { background-image: url('0002.jpg'); }
-.f4 { background-image: url('0003.jpg'); }
-.f5 { background-image: url('0004.jpg'); }
-.f6 { background-image: url('0005.jpg'); }
-.f7 { background-image: url('0013.jpg'); }
-.f8 { background-image: url('0014.jpg'); }
+.f1 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0010.jpg'); }
+.f2 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0001.jpg'); }
+.f3 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0002.jpg'); }
+.f4 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0003.jpg'); }
+.f5 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0004.jpg'); }
+.f6 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0005.jpg'); }
+.f7 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0013.jpg'); }
+.f8 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0014.jpg'); }
 
 /* 4. DISEÑO DE TEXTOS */
 .contenido { position: relative; z-index: 10; text-align: center; width: 90%; }
