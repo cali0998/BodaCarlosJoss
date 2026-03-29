@@ -17,14 +17,12 @@
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      /* Fondo fijo para evitar líneas entre transiciones */
       background: url('Foto10.jpg') center/cover no-repeat fixed;
       color: white; 
       overflow-x: hidden; 
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -36,60 +34,53 @@
       background-position: center !important;
       background-repeat: no-repeat !important;
       
-      /* Solapamiento reforzado para evitar fugas de color */
       margin-top: -21vh; 
       
-      /* Máscara de desvanecimiento ultra-suave */
-      -webkit-mask-image: linear-gradient(to bottom, 
-        transparent 0%, 
-        black 15%, 
-        black 85%, 
-        transparent 100%);
-      mask-image: linear-gradient(to bottom, 
-        transparent 0%, 
-        black 15%, 
-        black 85%, 
-        transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
     .hero { 
       margin-top: 0; 
       z-index: 10; 
-      align-items: center; justify-content: center; /* Centrada */
+      align-items: center; justify-content: center;
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
 
-    /* Capas escalonadas para el scroll fluido (Zig-Zag total) */
-    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-final { z-index: 2; align-items: flex-start; justify-content: center; padding-left: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Izquierda */
+    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; }
+    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; }
+    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; }
+    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    
+    .seccion-final { 
+      z-index: 2; 
+      align-items: flex-start; 
+      justify-content: center; 
+      padding-left: 10%; 
+      -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); 
+    }
 
-    /* Velo mínimo para legibilidad */
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.15); 
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO (Esbeltas y Modernas) */
     .glass-card {
-      background: rgba(255, 255, 255, 0.05); /* Cristal etéreo */
+      background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 350px; /* Esbeltas */
+      width: 100%; max-width: 350px;
       position: relative; z-index: 5;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
-    /* --- MENSAJES FLOTANTES --- */
     .floating-text {
       position: absolute;
       font-family: 'Playfair Display', serif;
@@ -101,6 +92,7 @@
       z-index: 1;
       pointer-events: none;
     }
+
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
@@ -111,11 +103,10 @@
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text { left: 8%; text-align: left; }
 
-    /* --- CARRETE INFINITO TOTAL (SEAMLESS LOOP - JS Avanzado) --- */
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 600px; /* Compacto */
+      max-width: 600px;
       margin-top: 25px;
       overflow: hidden;
     }
@@ -128,17 +119,15 @@
     }
 
     .carousel-track img { 
-      /* Nítidas y sin estirar */
       width: auto; 
       max-width: 100%; 
-      height: 220px; /* Altura para ver fondo */
+      height: 220px; 
       object-fit: contain; 
       border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
       flex-shrink: 0;
     }
 
-    /* Botones de navegación */
     .carousel-btn {
       position: absolute;
       top: 50%;
@@ -152,40 +141,25 @@
       font-size: 1.6rem;
       cursor: pointer;
       z-index: 10;
-      transition: background 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .carousel-btn:hover {
-      background: rgba(197, 157, 95, 1);
-    }
-    .carousel-btn.prev { left: 10px; }
-    .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES FINALES CORREGIDOS --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
-
-    /* --- ENCUADRES CRÍTICOS (CORREGIDO) --- */
-    
-    /* MÚSICA FINAL: Usa Foto1.jpg con encuadre MUY BAJO (82%) para ver caras que estaban arriba */
     .seccion-musica { background: url('Foto1.jpg') center 82%; }
-    
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
-    
-    /* FINAL FINAL: Usa Foto14.jpg con encuadre CORREGIDO (75%). BAJAMOS LA FOTO PARA VER CARAS. */
     .seccion-final { background: url('Foto14.jpg') center 75%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
     h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
-    
     p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; }
 
     .btn {
@@ -197,13 +171,17 @@
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* Ajustes para pantallas grandes */
+    /* Ajustes para pantallas grandes (PC) */
     @media (min-width: 992px) {
-      section { background-attachment: fixed; } /* Parallax */
+      section { background-attachment: fixed; } 
       .glass-card { max-width: 400px; }
       h1 { font-size: 6.5rem !important; }
       h2 { font-size: 3.5rem !important; }
       p { font-size: 1.35rem; }
+      
+      /* ESTO BAJA LA FOTO EN PC */
+      .seccion-final { background-position: center 0% !important; }
+      .seccion-musica { background-position: center 0% !important; }
     }
 
     /* Ajustes para móviles */
@@ -212,7 +190,7 @@
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center; }
       h2 { font-size: 2.4rem; }
       p { font-size: 1.15rem; }
-      .carousel-track img { height: 180px; } /* Altura reducida en móvil */
+      .carousel-track img { height: 180px; }
     }
   </style>
 </head>
@@ -233,173 +211,34 @@
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
       <h3>Carlos & Joselyn</h3>
-      <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas. Tu presencia hará que esta celebración sea verdaderamente inolvidable.</p>
+      <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas.</p>
       <p style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
     </div>
-    <div class="floating-text reveal">"Contamos los días, las horas y los minutos para verte y compartir nuestra felicidad contigo..."</div>
-  </section>
-
-  <section class="seccion-lugar">
-    <div class="overlay"></div>
-    <div class="glass-card reveal">
-      <h2>Nuestra Cita</h2>
-      <h3>Salón de Eventos Luna Azul</h3>
-      <p>Bajo la luz de la luna y testigos de nuestro amor, uniremos nuestras vidas en este hermoso rincón de Costa Rica.</p>
-      <p><b>Ceremonia:</b> 3:00 PM</p>
-      <p><b>Recepción:</b> 4:00 PM</p>
-      <p style="font-size: 1rem; opacity: 0.8; font-style: italic;">La Rita, Pococí, Limón</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar con Waze 🚗</a>
-    </div>
-    <div class="floating-text reveal">"Bajo el cielo estrellado, seremos testigos del inicio de nuestro 'para siempre'..."</div>
-  </section>
-
-  <section class="seccion-nosotros">
-    <div class="overlay"></div>
-    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 650px;">
-      <h2 style="color:white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">Un Viaje de Amor</h2>
-      
-      <div class="carousel-container reveal">
-        <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
-        <div class="carousel-track" id="carouselTrack">
-          <img src="Foto1.jpg" alt="1">
-          <img src="Foto2.jpg" alt="2">
-          <img src="Foto3.jpg" alt="3">
-          <img src="Foto4.jpg" alt="4">
-          <img src="Foto5.jpg" alt="5">
-        </div>
-        <button class="carousel-btn next" id="nextBtn">&#10095;</button>
-      </div>
-
-    </div>
-    <div class="floating-text reveal">"Cada sonrisa, cada abrazo y cada mirada compartida es un tesoro que guardamos en nuestra memoria. Estos son los momentos que construyen nuestra historia..."</div>
-  </section>
-
-  <section class="seccion-vestimenta">
-    <div class="overlay"></div>
-    <div class="glass-card reveal">
-      <h2>Código de Gala</h2>
-      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
-      <p>Queremos que te sientas spectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
-      <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos los tonos Verde Jade y Vino para armonizar con nuestra paleta.<br>Agradecemos evitar el color blanco.</p>
-    </div>
-    <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio para nuestra celebración..."</div>
-  </section>
-
-  <section class="seccion-musica">
-    <div class="overlay"></div>
-    <div class="glass-card reveal">
-      <h2>¡A Bailar!</h2>
-      <p>La noche es joven y la felicidad es inmensa. Queremos asegurarnos de que la pista de baile nunca esté vacía y que todos disfruten al máximo.</p>
-      <p>Ayúdanos a elegir la banda sonora perfecta para nuestra boda.</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Para+la+boda,+sugiero+esta+canción:" target="_blank" class="btn">Sugerir Mi Canción Favorita 🎵</a>
-    </div>
-    <div class="floating-text reveal">"Que no falte el ritmo, la risa y la buena compañía. ¡Hagamos que esta noche sea legendaria en la pista de baile!"</div>
+    <div class="floating-text reveal">"Contamos los días para verte..."</div>
   </section>
 
   <section class="seccion-regalos">
-    <div class="overlay"></div>
-    <div class="glass-card reveal">
+    <div class="overlay"></div> <div class="glass-card reveal">
       <h2>Mesa de Regalos</h2>
-      <p>El mayor regalo que podemos recibir es tu presencia y tu cariño en este día tan especial.</p>
-      <p>Si deseas tener un detalle con nosotros para iniciar nuestro hogar, contaremos con la modalidad de <b>Lluvia de Sobres</b> en la recepción.</p>
-      <p style="font-size: 0.9rem; font-style: italic; margin-top: 15px;">Tu generosidad será el cimiento de nuestro futuro juntos. ¡Gracias!</p>
+      <p>Si deseas tener un detalle con nosotros, contaremos con la modalidad de <b>Lluvia de Sobres</b>.</p>
     </div>
-    <div class="floating-text reveal">"Tu presencia es el mayor regalo que podemos recibir. Si deseas tener un detalle adicional, agradecemos tu amor y generosidad..."</div>
-  </section>
-
-  <section class="seccion-qr">
-    <div class="overlay"></div>
-    <div class="glass-card reveal">
-      <h2>Tus Fotos</h2>
-      <p>Ayúdanos a inmortalizar cada momento de alegría, cada baile espontáneo y cada mirada de felicidad de nuestra boda.</p>
-      <p>Escanea este código QR y sube todas las fotos y videos que tomes durante la celebración. ¡Queremos ver la boda a través de tus ojos!</p>
-      <img src="qrphotos.png" alt="QR Photos" style="width: 150px; margin-top: 15px; background: white; padding: 12px; border-radius: 15px; border: 3px solid var(--gold);">
-    </div>
-    <div class="floating-text reveal">"Captura la magia, la emoción y la alegría de cada instante. Ayúdanos a crear un álbum de recuerdos inolvidables..."</div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2 style="font-size: 3.5rem;">¡Te Esperamos!</h2>
-      <p>Nuestro amor es fuerte, y nuestra felicidad es inmensa. Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
+      <p>Tu presencia completará este momento tan mágico.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Asistencia WhatsApp</a>
+      <a href="https://wa.me/50683484866" target="_blank" class="btn">Confirmar Asistencia WhatsApp</a>
     </div>
-    <div class="floating-text reveal">"Agradecemos tu amor, tu amistad y tu compañía. ¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
   </section>
 
   <script>
-    // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    // --- CARRETE INFINITO TOTAL (SEAMLESS LOOP - JS Avanzado) ---
-    const track = document.getElementById('carouselTrack');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
-    const images = track.querySelectorAll('img');
-    const totalImages = images.length;
-    let currentIndex = totalImages; // Empezamos en la primera imagen real
-    
-    // Clonar imágenes para el efecto infinito
-    for (let i = 0; i < totalImages; i++) {
-        const clone = images[i].cloneNode(true);
-        track.appendChild(clone); // Clones al final
-    }
-    for (let i = totalImages - 1; i >= 0; i--) {
-        const clone = images[i].cloneNode(true);
-        track.insertBefore(clone, track.firstChild); // Clones al principio
-    }
-
-    // Función para obtener el ancho de una imagen real (con gap)
-    function getImageWidth() {
-        return images[0].clientWidth + 15; // Ancho imagen + gap
-    }
-
-    // Posición inicial (centrada en la primera imagen real)
-    function initCarousel() {
-        track.style.transition = 'none'; // Sin animación para el salto inicial
-        track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
-    }
-
-    // Botón Siguiente
-    nextBtn.addEventListener('click', () => {
-        if (currentIndex >= totalImages * 2 - 1) return; // Evitar click rápido al final
-        currentIndex++;
-        track.style.transition = 'transform 0.5s ease-in-out';
-        track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
-    });
-
-    // Botón Anterior
-    prevBtn.addEventListener('click', () => {
-        if (currentIndex <= 0) return; // Evitar click rápido al principio
-        currentIndex--;
-        track.style.transition = 'transform 0.5s ease-in-out';
-        track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
-    });
-
-    // Escuchar el final de la animación para el "salto invisible"
-    track.addEventListener('transitionend', () => {
-        // Al llegar al final de los clones finales, saltar al principio real
-        if (currentIndex >= totalImages * 2) {
-            track.style.transition = 'none';
-            currentIndex = totalImages;
-            track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
-        }
-        // Al llegar al principio de los clones iniciales, saltar al final real
-        if (currentIndex <= 0) {
-            track.style.transition = 'none';
-            currentIndex = totalImages - 1;
-            track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
-        }
-    });
-
-    // Inicializar y ajustar en resize
-    window.addEventListener('load', initCarousel);
-    window.addEventListener('resize', initCarousel);
   </script>
 </body>
 </html>
