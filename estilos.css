@@ -38,9 +38,14 @@ body {
 .f4 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0003.jpg'); }
 .f5 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0004.jpg'); }
 .f6 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0005.jpg'); }
-.f7 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0013.jpg'); }
-.f8 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0014.jpg'); }
-
+.f7 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0006.jpg'); }
+.f8 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0007.jpg'); }
+.f9 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0008.jpg'); }
+.f10 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0009.jpg'); }
+.f11 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0011.jpg'); }
+.f12 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0012.jpg'); }
+.f13 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0013.jpg'); }
+.f14 { background-image: url('https://cali0998.github.io/BodaCarlosJoss/0014.jpg'); }
 /* 4. DISEÑO DE TEXTOS */
 .contenido { position: relative; z-index: 10; text-align: center; width: 90%; }
 .tarjeta-vidrio {
