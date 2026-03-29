@@ -16,7 +16,6 @@
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
 
-    /* Animaciones */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -40,28 +39,23 @@
     
     .btn-outline { background: transparent; border: 2px solid var(--gold); }
 
-    /* SECCIONES DE FONDOS */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
                   url('0001.jpg') center/cover no-repeat; 
     }
 
-    /* CARRETE AUTO-DESLIZABLE */
     .carousel-container {
       width: 100%; overflow: hidden; border-radius: 20px; border: 2px solid var(--gold); margin-top: 20px;
     }
     .carousel-track { display: flex; transition: transform 0.6s ease-in-out; }
     .carousel-track img { width: 100%; flex-shrink: 0; object-fit: cover; aspect-ratio: 4/5; }
 
-    /* QR */
     .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); cursor: pointer; }
     .qr-container img { width: 180px; display: block; }
     
-    /* CUENTA REGRESIVA */
     .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
     .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; min-width: 65px; border: 1px solid var(--gold); }
     
-    /* SEPARADOR */
     .divisor { width: 60px; height: 2px; background: var(--gold); margin: 20px auto; }
   </style>
 </head>
@@ -80,6 +74,8 @@
         <div class="unit"><span id="mins">00</span><br><small>Min</small></div>
         <div class="unit"><span id="secs">00</span><br><small>Seg</small></div>
       </div>
+
+      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z&details=¡Acompáñanos+a+celebrar!&location=Salón+de+Eventos+Luna+Azul" target="_blank" class="btn btn-outline" style="color: white; margin-top: 40px; border-color: rgba(255,255,255,0.5);">Agendar Celebración 📅</a>
     </div>
   </section>
 
@@ -96,11 +92,11 @@
   <section style="background: rgba(0,0,0,0.2);">
     <div class="glass-card reveal">
       <h2>¿Dónde será?</h2>
-      <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Linón</p>
+      <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
       <div class="divisor"></div>
       <p style="font-size: 1.1rem; margin-bottom: 5px;">Ceremonia: <b>3:00 PM</b></p>
       <p style="color: var(--gold); font-size: 1.3rem;">Recepción: <b>4:00 PM</b></p>
-      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
+      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
     </div>
   </section>
 
@@ -133,6 +129,14 @@
     </div>
   </section>
 
+  <section style="background: var(--jade);">
+    <div class="glass-card reveal">
+      <h2>¿Qué música quieres oír?</h2>
+      <p>¡Queremos que bailes toda la noche! Cuéntanos qué canción no puede faltar.</p>
+      <a href="https://wa.me/50683484866?text=¡Hola!%20Para%20la%20boda,%20sugiero%20la%20siguiente%20canción:" class="btn btn-outline" style="color: white; border-color: var(--gold);">Sugerir Canción 🎵</a>
+    </div>
+  </section>
+
   <section style="background: var(--wine);">
     <div class="glass-card reveal">
       <h2>Mesa de Regalos</h2>
@@ -145,7 +149,6 @@
     <div class="glass-card reveal">
       <h2>Captura la Magia</h2>
       <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
-      
       <div class="qr-container" onclick="window.location.href='index.html'">
         <img src="qrphotos.png" alt="QR Fotos">
       </div>
@@ -160,19 +163,13 @@
       <p style="font-style: italic; margin-bottom: 30px;">¡Esperamos celebrar contigo!</p>
       
       <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
-        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20CEREMONIA." class="btn" style="margin-top: 0;">Confirmar Ceremonia</a>
-        
-        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20RECEPCIÓN." class="btn" style="margin-top: 0;">Confirmar Celebración</a>
-        
-        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Para%20la%20boda,%20sugiero%20la%20siguiente%20canción:" class="btn btn-outline" style="margin-top: 0; color: white;">Sugerir Canción 🎵</a>
-        
-        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z&details=¡Acompáñanos+a+celebrar!&location=Salón+de+Eventos+Elegance" target="_blank" class="btn btn-outline" style="margin-top: 0; color: white;">Agendar Celebración 📅</a>
+        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20CEREMONIA." class="btn" style="margin-top: 0;">Confirmar Ceremonia</a>
+        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20RECEPCIÓN." class="btn" style="margin-top: 0;">Confirmar Celebración</a>
       </div>
     </div>
   </section>
 
   <script>
-    // Efecto Reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
@@ -180,7 +177,6 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Cuenta Regresiva (Añadidos los segundos)
     const target = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -193,7 +189,6 @@
       }
     }, 1000);
 
-    // Lógica del carrete de fotos (Desliza cada 3 segundos)
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
     let currentIndex = 0;
@@ -203,17 +198,14 @@
         currentIndex++;
         if (currentIndex >= images.length) {
           currentIndex = 0;
-          track.style.transition = 'none'; // Quita la animación al volver al inicio
+          track.style.transition = 'none';
           track.style.transform = `translateX(0)`;
-          setTimeout(() => {
-            track.style.transition = 'transform 0.6s ease-in-out';
-          }, 50);
+          setTimeout(() => { track.style.transition = 'transform 0.6s ease-in-out'; }, 50);
         } else {
           track.style.transform = `translateX(-${currentIndex * 100}%)`;
         }
       }, 3000);
     }
   </script>
-
 </body>
 </html>
