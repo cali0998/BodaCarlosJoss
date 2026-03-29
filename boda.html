@@ -24,7 +24,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA (RESTAURADOS) --- */
+    /* --- ESTILOS DE UNIÓN INFINITA --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -32,7 +32,6 @@
       position: relative;
       padding: 100px 20px;
       
-      /* IMPORTANTE: Volvemos al tamaño original de imagen (cover) */
       background-size: cover !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
@@ -95,7 +94,7 @@
       position: absolute;
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: 1.4rem;
+      font-size: 1.6rem; /* TEXTO MÁS GRANDE */
       color: rgba(255, 255, 255, 0.7);
       max-width: 250px;
       line-height: 1.2;
@@ -111,18 +110,82 @@
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text { left: 10%; text-align: left; }
 
-    /* --- SCROLLBAR PERSONALIZADA (MODERNIZADA) --- */
-    .carousel-track { 
-      display: flex; overflow-x: auto; padding: 20px 0; gap: 15px; 
-      scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+    /* --- CARRETE CON BOTONES (NUEVO) --- */
+    .carousel-container {
+      position: relative;
+      width: 100%;
+      max-width: 700px;
+      margin-top: 20px;
     }
-    .carousel-track::-webkit-scrollbar { height: 4px; }
-    .carousel-track::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
-    .carousel-track::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 10px; }
 
-    .carousel-track img { width: 85%; flex-shrink: 0; border-radius: 25px; border: 1px solid rgba(197, 157, 95, 0.3); }
+    .carousel-track { 
+      display: flex; 
+      overflow-x: auto; 
+      padding: 20px 0; 
+      gap: 15px; 
+      /* Ocultamos la barra de scroll */
+      scrollbar-width: none; 
+      -ms-overflow-style: none; 
+    }
+    .carousel-track::-webkit-scrollbar { display: none; }
 
-    /* --- FONDOS Y ENCUADRES (CORREGIDOS) --- */
+    .carousel-track img { 
+      width: 85%; 
+      flex-shrink: 0; 
+      border-radius: 25px; 
+      border: 2px solid rgba(197, 157, 95, 0.3); 
+      /* Para que los botones sepan cuánto medir al scrollear */
+      scroll-snap-align: center; 
+    }
+
+    /* Estilos para activar scroll-snap */
+    .carousel-track {
+      scroll-snap-type: x mandatory;
+    }
+
+    /* Botones de navegación */
+    .carousel-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(197, 157, 95, 0.8); /* Color oro con transparencia */
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 60px; /* BOTONES GRANDES */
+      height: 60px;
+      font-size: 2rem;
+      cursor: pointer;
+      z-index: 10;
+      transition: background 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .carousel-btn:hover {
+      background: rgba(197, 157, 95, 1);
+    }
+    .carousel-btn.prev { left: -70px; }
+    .carousel-btn.next { right: -70px; }
+
+    /* Ocultamos botones en móviles si hay poco espacio, o los ajustamos */
+    @media (max-width: 900px) {
+      .carousel-btn.prev { left: -30px; }
+      .carousel-btn.next { right: -30px; }
+    }
+     @media (max-width: 600px) {
+       /* En móviles muy pequeños, quizás sea mejor integrarlos ligeramente sobre la imagen o dejarlos afuera pero más pequeños */
+       .carousel-btn {
+         width: 50px;
+         height: 50px;
+         font-size: 1.8rem;
+       }
+       .carousel-btn.prev { left: -25px; }
+       .carousel-btn.next { right: -25px; }
+    }
+
+    /* --- FONDOS Y ENCUADRES --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
@@ -134,29 +197,35 @@
     .seccion-final { background: url('Foto1.jpg') center 25%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
+    h3 { font-size: 1.5rem; color: white; margin: 0; font-weight: 600; } /* H3 MÁS GRANDE */
     
+    p { font-size: 1.2rem; line-height: 1.6; margin: 10px 0; } /* TEXTO P MÁS GRANDE */
+
     .btn {
-      background: var(--gold); color: white; padding: 16px 32px; border-radius: 50px;
+      background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; /* BOTÓN MÁS GRANDE */
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
-      text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
     }
 
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* Ajustes para pantallas grandes (Zig-Zag más pronunciado) */
+    /* Ajustes para pantallas grandes */
     @media (min-width: 992px) {
       section { background-attachment: fixed; } /* Parallax */
       .glass-card { max-width: 450px; }
       h1 { font-size: 6rem !important; }
       h2 { font-size: 3.2rem !important; }
+      p { font-size: 1.3rem; }
     }
 
     /* Ajustes para móviles */
     @media (max-width: 600px) {
-      .floating-text { font-size: 1rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 80%; margin-top: 20px; }
+      .floating-text { font-size: 1.2rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 80%; margin-top: 20px; }
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr { padding-left: 15px; padding-right: 15px; align-items: center; }
+      h2 { font-size: 2.2rem; }
+      p { font-size: 1.1rem; }
     }
   </style>
 </head>
@@ -165,9 +234,9 @@
   <section class="hero">
     <div class="overlay"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; margin-bottom: 10px;">"Nuestra historia apenas comienza"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.4rem; margin-bottom: 10px;">"Nuestra historia apenas comienza"</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 13px;">19 • DICIEMBRE • 2026</p>
+      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 14px;">19 • DICIEMBRE • 2026</p>
       <a href="#" class="btn">Agendar Fecha 📅</a>
     </div>
   </section>
@@ -176,8 +245,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <p style="font-size: 1.2rem;">Carlos & Joselyn</p>
-      <p style="font-size: 1.6rem; color: var(--gold); font-weight: 600;">Pases: 2</p>
+      <h3>Carlos & Joselyn</h3>
+      <p style="font-size: 2rem; color: var(--gold); font-weight: 600; margin-top: 15px;">Pases: 2</p>
     </div>
     <div class="floating-text reveal">"Contamos los días para verte..."</div>
   </section>
@@ -186,7 +255,7 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Ubicación</h2>
-      <p style="font-size: 1.3rem; font-weight: 600;">Salón Luna Azul</p>
+      <h3>Salón Luna Azul</h3>
       <p>La Rita, Pococí</p>
       <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar 🚗</a>
     </div>
@@ -195,14 +264,20 @@
 
   <section class="seccion-nosotros">
     <div class="overlay"></div>
-    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none;">
+    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 700px;">
       <h2 style="color:white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">Nuestra Historia</h2>
-      <div class="carousel-track">
-        <img src="Foto1.jpg" alt="1">
-        <img src="Foto2.jpg" alt="2">
-        <img src="Foto3.jpg" alt="3">
-        <img src="Foto4.jpg" alt="4">
+      
+      <div class="carousel-container reveal">
+        <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
+        <div class="carousel-track" id="carouselTrack">
+          <img src="Foto1.jpg" alt="1">
+          <img src="Foto2.jpg" alt="2">
+          <img src="Foto3.jpg" alt="3">
+          <img src="Foto4.jpg" alt="4">
+        </div>
+        <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
+
     </div>
     <div class="floating-text reveal">"Cada foto guarda un suspiro."</div>
   </section>
@@ -211,8 +286,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Vestimenta</h2>
-      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold);">FORMAL / ELEGANTE</p>
-      <p style="font-size: 0.9rem; font-style: italic;">Verde Jade y Vino.</p>
+      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.3rem;">FORMAL / ELEGANTE</p>
+      <p style="font-size: 1rem; font-style: italic;">Verde Jade y Vino.</p>
     </div>
     <div class="floating-text reveal">"Vístete de gala y alegría."</div>
   </section>
@@ -221,6 +296,7 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Música</h2>
+      <p>¿Qué canción no puede faltar?</p>
       <a href="https://wa.me/50683484866" target="_blank" class="btn">Sugerir Canción 🎵</a>
     </div>
     <div class="floating-text reveal">"Que no falte el ritmo."</div>
@@ -239,7 +315,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
-      <img src="qrphotos.png" alt="QR" style="width: 120px; margin-top: 15px; background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--gold);">
+      <p>Comparte tus capturas de la boda</p>
+      <img src="qrphotos.png" alt="QR" style="width: 140px; margin-top: 15px; background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--gold);">
     </div>
     <div class="floating-text reveal">"Captura el momento."</div>
   </section>
@@ -247,8 +324,8 @@
   <section class="seccion-final">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2 style="font-size: 2.8rem;">¡Te Esperamos!</h2>
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold);">Carlos & Joselyn</p>
+      <h2 style="font-size: 3.2rem;">¡Te Esperamos!</h2>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.4rem;">Carlos & Joselyn</p>
       <a href="https://wa.me/50683484866" target="_blank" class="btn">Confirmar Asistencia</a>
     </div>
   </section>
@@ -259,6 +336,25 @@
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // Carrete con botones Script
+    const track = document.getElementById('carouselTrack');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    // Función para obtener el ancho de una imagen (incluyendo el gap)
+    function getImageWidth() {
+      const img = track.querySelector('img');
+      return img.clientWidth + 15; // Ancho de imagen + gap
+    }
+
+    nextBtn.addEventListener('click', () => {
+      track.scrollBy({ left: getImageWidth(), behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+      track.scrollBy({ left: -getImageWidth(), behavior: 'smooth' });
+    });
   </script>
 </body>
 </html>
