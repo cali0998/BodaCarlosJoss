@@ -8,19 +8,15 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
-    :root {
-      --gold: #c59d5f;
-    }
-
+    :root { --gold: #c59d5f; }
     * { scroll-behavior: smooth; box-sizing: border-box; }
     
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      background: url('Foto10.jpg') center/cover no-repeat fixed;
+      background: #000;
       color: white; 
       overflow-x: hidden; 
-      -webkit-font-smoothing: antialiased;
     }
 
     section { 
@@ -31,74 +27,62 @@
       padding: 100px 20px;
       background-size: cover !important;
       background-repeat: no-repeat !important;
-      margin-top: -21vh; 
-      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      margin-top: -15vh; 
+      mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
     }
 
-    .hero { 
-      margin-top: 0; 
-      z-index: 10; 
-      align-items: center; justify-content: center;
-      background: url('Foto10.jpg') center;
-      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
-    }
+    /* --- PORTADA Y SECCIONES --- */
+    .hero { margin-top: 0; align-items: center; justify-content: center; background: url('Foto10.jpg') center; }
+    .seccion-pase { align-items: flex-start; padding-left: 10%; background: url('Foto11.jpg') center; }
+    .seccion-nosotros { align-items: center; background: url('Foto2.jpg') center; }
 
-    /* Zig-Zag Config */
-    .seccion-pase { z-index: 9; align-items: flex-start; padding-left: 10%; background: url('Foto11.jpg') center; }
-    .seccion-lugar { z-index: 8; align-items: flex-end; padding-right: 10%; background: url('Foto12.jpg') center; }
-    .seccion-nosotros { z-index: 7; align-items: flex-start; padding-left: 10%; background: url('Foto2.jpg') center 40%; }
-    .seccion-vestimenta { z-index: 6; align-items: flex-end; padding-right: 10%; background: url('Foto13.jpg') center; }
+    /* --- CORRECCIÓN CRÍTICA: BAJAR FOTOS PARA VER CARAS --- */
     
-    /* --- SECCIONES CORREGIDAS (FOTOS BAJADAS) --- */
     .seccion-musica { 
-        z-index: 5; 
-        align-items: flex-start; 
-        padding-left: 10%; 
-        background: url('Foto1.jpg') center 5% !important; /* BAJADA AL MÁXIMO */
-    }
-    
-    .seccion-regalos { z-index: 4; align-items: flex-end; padding-right: 10%; background: url('Foto3.jpg') center 40%; }
-    .seccion-qr { z-index: 3; align-items: flex-start; padding-left: 10%; background: url('Foto4.jpg') center; }
-    
-    .seccion-final { 
-        z-index: 2; 
-        align-items: flex-start; 
-        padding-left: 10%; 
-        background: url('Foto14.jpg') center 5% !important; /* BAJADA AL MÁXIMO */
-        -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%);
+      align-items: flex-start; 
+      padding-left: 10%; 
+      /* 0% BAJA la foto al máximo para mostrar lo que está arriba (las caras) */
+      background: url('Foto1.jpg') center 0% !important; 
     }
 
-    .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.15); z-index: 1; }
+    .seccion-final { 
+      align-items: flex-start; 
+      padding-left: 10%; 
+      /* 0% BAJA la foto al máximo para mostrar lo que está arriba (las caras) */
+      background: url('Foto14.jpg') center 0% !important; 
+    }
+
+    .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); z-index: 1; }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.05);
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 35px;
-      padding: 30px 20px; 
-      width: 100%; max-width: 320px; /* Cuadros más pequeños */
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 35px; 
+      width: 100%; max-width: 350px;
       position: relative; z-index: 5;
       text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
-    .carousel-container { position: relative; width: 100%; max-width: 500px; margin-top: 25px; overflow: hidden; }
-    .carousel-track { display: flex; padding: 20px 0; gap: 15px; transition: transform 0.5s ease-in-out; }
-    .carousel-track img { width: auto; height: 200px; object-fit: contain; border-radius: 20px; flex-shrink: 0; }
-    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: var(--gold); color: white; border: none; border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 10; }
-    .carousel-btn.prev { left: 5px; }
-    .carousel-btn.next { right: 5px; }
-
     h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 15px; }
-    p { font-size: 1.1rem; line-height: 1.6; margin: 10px 0; }
-    .btn { background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px; text-decoration: none; font-weight: 600; display: inline-block; font-size: 12px; letter-spacing: 1px; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; }
+    p { font-size: 1.2rem; line-height: 1.6; }
+    
+    .btn { 
+      background: var(--gold); color: white; padding: 16px 32px; border-radius: 50px; 
+      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
+      text-transform: uppercase; font-size: 12px; letter-spacing: 2px;
+    }
 
-    .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     @media (max-width: 600px) {
-      .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding: 80px 15px; align-items: center !important; }
+      section { align-items: center !important; padding-left: 20px !important; text-align: center; }
+      h1 { font-size: 3rem; }
     }
   </style>
 </head>
@@ -117,22 +101,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <p>Pases Reservados: 2</p>
-    </div>
-  </section>
-
-  <section class="seccion-nosotros">
-    <div class="overlay"></div>
-    <div class="carousel-container reveal">
-        <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
-        <div class="carousel-track" id="carouselTrack">
-          <img src="Foto1.jpg" alt="1">
-          <img src="Foto2.jpg" alt="2">
-          <img src="Foto3.jpg" alt="3">
-          <img src="Foto4.jpg" alt="4">
-          <img src="Foto5.jpg" alt="5">
-        </div>
-        <button class="carousel-btn next" id="nextBtn">&#10095;</button>
+      <p>Nos encantaría que nos acompañes en este día.</p>
+      <p style="font-size: 2rem; color: var(--gold); font-weight: bold;">Pases: 2</p>
     </div>
   </section>
 
@@ -140,8 +110,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>¡A Bailar!</h2>
-      <p>Sugiérenos tu canción favorita para la fiesta.</p>
-      <a href="#" class="btn">Sugerir Canción 🎵</a>
+      <p>Queremos que la pista de baile esté llena. ¿Qué canción no puede faltar?</p>
+      <a href="https://wa.me/50683484866" class="btn">Sugerir Canción 🎵</a>
     </div>
   </section>
 
@@ -149,8 +119,9 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>¡Te Esperamos!</h2>
-      <p>Carlos & Joselyn</p>
-      <a href="#" class="btn">Confirmar WhatsApp</a>
+      <p>Tu presencia es nuestro mejor regalo.</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem;">Carlos & Joselyn</p>
+      <a href="https://wa.me/50683484866" class="btn">Confirmar Asistencia</a>
     </div>
   </section>
 
@@ -159,26 +130,6 @@
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-
-    const track = document.getElementById('carouselTrack');
-    const images = Array.from(track.children);
-    const total = images.length;
-    let index = 0;
-
-    function updateCarousel() {
-      const width = images[0].getBoundingClientRect().width + 15;
-      track.style.transform = `translateX(-${index * width}px)`;
-    }
-
-    document.getElementById('nextBtn').addEventListener('click', () => {
-      index = (index + 1) % total;
-      updateCarousel();
-    });
-
-    document.getElementById('prevBtn').addEventListener('click', () => {
-      index = (index - 1 + total) % total;
-      updateCarousel();
-    });
   </script>
 </body>
 </html>
