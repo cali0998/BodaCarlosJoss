@@ -16,6 +16,7 @@
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
 
+    /* Animaciones de entrada */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -34,23 +35,35 @@
       background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
-      width: 100%; max-width: 280px;
+      width: 100%; max-width: 280px; border: none; cursor: pointer;
     }
     
     .btn-outline { background: transparent; border: 2px solid var(--gold); }
 
+    /* Fondos */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
                   url('0001.jpg') center/cover no-repeat; 
     }
 
-    .carousel-container {
-      width: 100%; overflow: hidden; border-radius: 20px; border: 2px solid var(--gold); margin-top: 20px;
+    /* Estilos Carrusel */
+    .carousel-container { position: relative; width: 100%; margin-top: 20px; }
+    .carousel-track { 
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+      scroll-behavior: smooth; border-radius: 20px; border: 2px solid var(--gold);
     }
-    .carousel-track { display: flex; transition: transform 0.6s ease-in-out; }
-    .carousel-track img { width: 100%; flex-shrink: 0; object-fit: cover; aspect-ratio: 4/5; }
+    .carousel-track::-webkit-scrollbar { display: none; }
+    .carousel-track { -ms-overflow-style: none; scrollbar-width: none; }
+    .carousel-track img { width: 100%; flex-shrink: 0; scroll-snap-align: center; object-fit: cover; aspect-ratio: 4/5; }
 
-    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); cursor: pointer; }
+    .nav-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.5); color: white; border: 1px solid var(--gold);
+      border-radius: 50%; width: 40px; height: 40px; cursor: pointer; z-index: 5;
+    }
+
+    /* QR y Cuenta Regresiva */
+    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); }
     .qr-container img { width: 180px; display: block; }
     
     .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
@@ -75,7 +88,7 @@
         <div class="unit"><span id="secs">00</span><br><small>Seg</small></div>
       </div>
 
-      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z&details=¡Acompáñanos+a+celebrar!&location=Salón+de+Eventos+Luna+Azul" target="_blank" class="btn btn-outline" style="color: white; margin-top: 40px; border-color: rgba(255,255,255,0.5);">Agendar Celebración 📅</a>
+      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z&details=¡Acompáñanos+a+celebrar!&location=Salón+de+Eventos+Luna+Azul" target="_blank" class="btn btn-outline" style="color: white; margin-top: 40px;">Agendar Celebración 📅</a>
     </div>
   </section>
 
@@ -104,14 +117,17 @@
     <div class="glass-card reveal">
       <h2>Nosotros</h2>
       <p>Un pequeño vistazo a nuestra historia.</p>
+      
       <div class="carousel-container">
+        <button class="nav-btn" id="prevBtn" style="left: 10px;">&#10094;</button>
         <div class="carousel-track" id="track">
-          <img src="0001.jpg" alt="Retrato 1">
-          <img src="0002.jpg" alt="Retrato 2">
-          <img src="0003.jpg" alt="Retrato 3">
-          <img src="0004.jpg" alt="Retrato 4">
-          <img src="0005.jpg" alt="Retrato 5">
+          <img src="0001.jpg" alt="Foto 1">
+          <img src="0002.jpg" alt="Foto 2">
+          <img src="0003.jpg" alt="Foto 3">
+          <img src="0004.jpg" alt="Foto 4">
+          <img src="0005.jpg" alt="Foto 5">
         </div>
+        <button class="nav-btn" id="nextBtn" style="right: 10px;">&#10095;</button>
       </div>
     </div>
   </section>
@@ -132,8 +148,8 @@
   <section style="background: var(--jade);">
     <div class="glass-card reveal">
       <h2>¿Qué música quieres oír?</h2>
-      <p>¡Queremos que bailes toda la noche! Cuéntanos qué canción no puede faltar.</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!%20Para%20la%20boda,%20sugiero%20la%20siguiente%20canción:" class="btn btn-outline" style="color: white; border-color: var(--gold);">Sugerir Canción 🎵</a>
+      <p>¡Queremos que bailes toda la noche! Cuéntanos qué canción no puede faltar en la fiesta.</p>
+      <a href="https://wa.me/50683484866?text=¡Hola!%20Para%20la%20boda,%20sugiero%20la%20siguiente%20canción:" class="btn btn-outline" style="color: white;">Sugerir Canción 🎵</a>
     </div>
   </section>
 
@@ -150,7 +166,7 @@
       <h2>Captura la Magia</h2>
       <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
       <div class="qr-container" onclick="window.location.href='index.html'">
-        <img src="qrphotos.png" alt="QR Fotos">
+        <img src="qrphotos.png" alt="QR">
       </div>
       <br>
       <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
@@ -163,24 +179,24 @@
       <p style="font-style: italic; margin-bottom: 30px;">¡Esperamos celebrar contigo!</p>
       
       <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
-        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20CEREMONIA." class="btn" style="margin-top: 0;">Confirmar Ceremonia</a>
-        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20RECEPCIÓN." class="btn" style="margin-top: 0;">Confirmar Celebración</a>
+        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20CEREMONIA." class="btn">Confirmar Ceremonia</a>
+        <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20RECEPCIÓN." class="btn">Confirmar Celebración</a>
       </div>
     </div>
   </section>
 
   <script>
+    // 1. Reveal Animations
     const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
-      });
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    const target = new Date("Dec 19, 2026 15:00:00").getTime();
+    // 2. Countdown Timer
+    const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
-      const diff = target - now;
+      const diff = targetDate - now;
       if(diff > 0) {
         document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24)).toString().padStart(2, '0');
         document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2, '0');
@@ -189,23 +205,29 @@
       }
     }, 1000);
 
+    // 3. Carousel Logic (Manual & Auto)
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
-    let currentIndex = 0;
+    const nextBtn = document.getElementById('nextBtn');
+    const prevBtn = document.getElementById('prevBtn');
+    let index = 0;
 
-    if (images.length > 1) {
-      setInterval(() => {
-        currentIndex++;
-        if (currentIndex >= images.length) {
-          currentIndex = 0;
-          track.style.transition = 'none';
-          track.style.transform = `translateX(0)`;
-          setTimeout(() => { track.style.transition = 'transform 0.6s ease-in-out'; }, 50);
-        } else {
-          track.style.transform = `translateX(-${currentIndex * 100}%)`;
-        }
-      }, 3000);
+    function moveCarousel(newIndex) {
+      if (newIndex >= images.length) index = 0;
+      else if (newIndex < 0) index = images.length - 1;
+      else index = newIndex;
+      
+      const width = track.clientWidth;
+      track.scrollTo({ left: width * index, behavior: 'smooth' });
     }
+
+    nextBtn.addEventListener('click', () => moveCarousel(index + 1));
+    prevBtn.addEventListener('click', () => moveCarousel(index - 1));
+
+    // Auto move every 4 seconds
+    setInterval(() => moveCarousel(index + 1), 4000);
+    window.addEventListener('resize', () => moveCarousel(index));
   </script>
+
 </body>
 </html>
