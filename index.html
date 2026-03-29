@@ -4,150 +4,163 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boda Carlos & Joselyn 💍</title>
-  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
   <style>
     :root {
-      --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24;
+      --gold: #c59d5f; --gold-light: #e0c08d;
+      --wine: #4a0a16; --jade: #0a2e24;
       --glass: rgba(255, 255, 255, 0.08);
+      --glass-dark: rgba(0, 0, 0, 0.3);
     }
 
-    * { scroll-behavior: smooth; box-sizing: border-box; }
-    body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
+    body {
+      margin: 0; font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
+      background-attachment: fixed; color: white;
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px;
+    }
 
-    /* Animaciones */
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
-
-    section { min-height: 100vh; padding: 100px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    
     .glass-card {
-      background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-      border: 1px solid rgba(197, 157, 95, 0.3); border-radius: 40px;
-      padding: 50px 30px; width: 100%; max-width: 450px; box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+      background: var(--glass); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+      border: 1px solid rgba(197, 157, 95, 0.3); border-radius: 32px;
+      padding: 45px 30px; text-align: center; max-width: 400px; width: 100%;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.6); position: relative;
     }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 25px; }
-
-    .btn {
-      background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
-      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 30px;
-      text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
+    .glass-card::before {
+      content: "💍"; position: absolute; top: -22px; left: 50%; transform: translateX(-50%);
+      font-size: 28px; background: var(--jade); padding: 8px 18px; border-radius: 50px; border: 1px solid var(--gold);
     }
 
-    /* SECCIONES CON TUS FOTOS */
-    .hero { 
-      background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
-                  url('0001.jpg') center/cover no-repeat; 
-    }
-
-    .seccion-historia {
-      background: linear-gradient(rgba(10,46,36,0.8), rgba(10,46,36,0.9)), 
-                  url('0002.jpg') center/cover no-repeat;
-    }
-
-    /* GALERÍA MINIATURA */
-    .mini-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-    .mini-gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid var(--gold); }
-
-    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); }
-    .qr-container img { width: 180px; display: block; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold); margin: 10px 0 5px; }
+    .date-badge { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold-light); margin-bottom: 35px; display: block; }
     
-    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
-    .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; min-width: 65px; border: 1px solid var(--gold); }
+    .state-container { display: flex; flex-direction: column; gap: 15px; }
+    .hidden { display: none !important; }
+
+    /* ESTILO DE LOS BOTONES ELEGANTES */
+    .btn-action {
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      padding: 18px; border-radius: 16px; font-weight: 600; text-transform: uppercase;
+      cursor: pointer; border: none; transition: all 0.3s ease; font-size: 14px; color: white; width: 100%;
+      box-sizing: border-box;
+    }
+
+    .btn-camera { background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%); box-shadow: 0 8px 20px rgba(197, 157, 95, 0.2); }
+    .btn-gallery { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); }
+    
+    /* ESTO OCULTA EL BOTÓN GRIS FEO DEL NAVEGADOR */
+    input[type="file"] {
+      display: none !important;
+    }
+
+    .btn-confirm { background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%); flex: 2; }
+    .btn-cancel { background: rgba(255, 255, 255, 0.1); flex: 1; text-transform: none; font-weight: 400; border: 1px solid rgba(255,255,255,0.2); }
+
+    #preview-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 10px; margin-bottom: 25px; max-height: 220px; overflow-y: auto;
+      padding: 15px; background: var(--glass-dark); border-radius: 12px;
+    }
+
+    .preview-media { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 8px; border: 1px solid var(--gold); }
+    #status { margin-top: 10px; font-size: 14px; color: var(--gold-light); min-height: 60px; display: flex; flex-direction: column; align-items: center; }
   </style>
 </head>
 <body>
 
-  <section class="hero">
-    <div class="reveal active">
-      <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 14px;">Nuestra Boda</p>
-      <h1>Carlos &<br>Joselyn</h1>
-      <p style="margin-top: 30px; font-size: 1.2rem;">19 • Diciembre • 2026</p>
-      
-      <div class="countdown">
-        <div class="unit"><span id="days">00</span><br><small>Días</small></div>
-        <div class="unit"><span id="hours">00</span><br><small>Hrs</small></div>
-        <div class="unit"><span id="mins">00</span><br><small>Min</small></div>
-      </div>
+<div class="glass-card">
+  <span class="date-badge">19 • DIC • 2026</span>
+  <h1>Carlos & Joselyn</h1>
+  <p class="welcome-text" id="mainText" style="font-weight: 300; margin-bottom: 30px;">
+    Captura la magia de nuestra noche. ✨<br>
+    <small style="opacity:0.7">(Fotos y videos cortos)</small>
+  </p>
+  
+  <div class="state-container" id="actions-state">
+    <label for="cameraInput" class="btn-action btn-camera">Tomar Foto / Video 📸</label>
+    <input type="file" id="cameraInput" accept="image/*,video/*" capture="camera" onchange="handleFileSelection(this.files)">
+    
+    <label for="fileInput" class="btn-action btn-gallery">Elegir de Galería 📂</label>
+    <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
+  </div>
+
+  <div class="state-container hidden" id="preview-state">
+    <div id="preview-grid"></div>
+    <div style="display:flex; gap:10px;">
+      <button class="btn-action btn-cancel" onclick="cancelUpload()">Cancelar</button>
+      <button class="btn-action btn-confirm" onclick="confirmAndUpload()">Subir 💖</button>
     </div>
-  </section>
+  </div>
+  
+  <div id="status" class="hidden">
+    <div id="statusText"></div>
+  </div>
+</div>
 
-  <section class="seccion-historia">
-    <div class="glass-card reveal">
-      <h2>Un Nuevo Comienzo</h2>
-      <p>Nos hace muy felices compartir el inicio de nuestra vida juntos con las personas que más queremos.</p>
-      
-      <div class="mini-gallery">
-        <img src="0003.jpg" alt="Compromiso">
-        <img src="0004.jpg" alt="Compromiso">
-        <img src="0005.jpg" alt="Compromiso">
-      </div>
-    </div>
-  </section>
+<script>
+  const cloudName = "dhruy6ftj";
+  const uploadPreset = "boda_carlos_y_joss";
+  const MAX_SIZE = 20 * 1024 * 1024; // 20MB
+  let selectedFiles = [];
 
-  <section style="background: rgba(0,0,0,0.2);">
-    <div class="glass-card reveal">
-      <h2>¿Dónde será?</h2>
-      <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: 4:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
-    </div>
-  </section>
+  function handleFileSelection(files) {
+    if (files.length === 0) return;
+    const grid = document.getElementById('preview-grid');
+    grid.innerHTML = '';
+    selectedFiles = [];
 
-  <section style="background: linear-gradient(var(--jade), var(--wine));">
-    <div class="glass-card reveal">
-      <h2>Dress Code</h2>
-      <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
-      <p style="font-size: 14px; opacity: 0.8; margin-top: 15px;">
-        Agradecemos evitar el color blanco.<br>
-        Tonos sugeridos: Verde Jade y Vino.
-      </p>
-    </div>
-  </section>
+    Array.from(files).forEach(file => {
+      if (file.size > MAX_SIZE) {
+        alert(`El archivo "${file.name}" supera los 20MB.`);
+        return;
+      }
+      selectedFiles.push(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const el = document.createElement(file.type.startsWith('video/') ? 'video' : 'img');
+        el.src = e.target.result;
+        el.className = 'preview-media';
+        if (file.type.startsWith('video/')) { el.muted = true; el.autoplay = true; el.loop = true; }
+        grid.appendChild(el);
+      };
+      reader.readAsDataURL(file);
+    });
 
-  <section style="background: var(--wine);">
-    <div class="glass-card reveal">
-      <h2>Captura la Magia</h2>
-      <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
-      <div class="qr-container" onclick="window.location.href='index.html'">
-        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="QR">
-      </div>
-      <br>
-      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
-    </div>
-  </section>
+    if (selectedFiles.length > 0) setVisualState('preview');
+  }
 
-  <section style="background: url('0006.jpg') center/cover;">
-    <div class="glass-card reveal" style="background: rgba(10, 46, 36, 0.9);">
-      <h2>Confirmar Asistencia</h2>
-      <p>Esperamos contar con tu presencia.</p>
-      <p>Confírmanos antes del 01/12/2026</p>
-      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
-    </div>
-  </section>
+  async function confirmAndUpload() {
+    setVisualState('uploading');
+    const statusText = document.getElementById('statusText');
+    
+    for (let i = 0; i < selectedFiles.length; i++) {
+      statusText.innerText = `Subiendo recuerdo ${i+1} de ${selectedFiles.length}...`;
+      const formData = new FormData();
+      formData.append('file', selectedFiles[i]);
+      formData.append('upload_preset', uploadPreset);
+      formData.append('tags', 'boda_carlos_y_joss');
+      try {
+        await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, { method: 'POST', body: formData });
+      } catch (e) { statusText.innerText = "Error. Intenta de nuevo."; return; }
+    }
+    statusText.innerHTML = "<b>¡Gracias por este recuerdo! ❤️</b>";
+    setTimeout(cancelUpload, 4000);
+  }
 
-  <script>
-    // Efecto Reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add('active');
-      });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  function cancelUpload() {
+    selectedFiles = [];
+    document.getElementById('cameraInput').value = '';
+    document.getElementById('fileInput').value = '';
+    setVisualState('init');
+  }
 
-    // Cuenta Regresiva Exacta
-    const target = new Date("Dec 19, 2026 16:00:00").getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const diff = target - now;
-      document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
-      document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-      document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60));
-    }, 1000);
-  </script>
-
+  function setVisualState(state) {
+    document.getElementById('actions-state').className = (state === 'init') ? 'state-container' : 'state-container hidden';
+    document.getElementById('preview-state').className = (state === 'preview') ? 'state-container' : 'state-container hidden';
+    document.getElementById('status').className = (state === 'uploading') ? '' : 'hidden';
+    document.getElementById('mainText').style.opacity = (state === 'init') ? '1' : '0.3';
+  }
+</script>
 </body>
 </html>
