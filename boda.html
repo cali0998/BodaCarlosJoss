@@ -21,45 +21,47 @@
 
     section { min-height: 100vh; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
     
-    /* TARJETA GLASS - Ahora con ancho adaptable */
+    /* TARJETA GLASS */
     .glass-card {
       background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
       border: 1px solid rgba(197, 157, 95, 0.3); border-radius: 40px;
-      padding: 40px 30px; width: 95%; max-width: 500px; /* Base para móvil */
+      padding: 40px 25px; width: 100%; max-width: 480px;
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-      transition: max-width 0.5s ease;
     }
 
-    /* MEDIA QUERY PARA LAPTOPS/TABLETS */
-    @media (min-width: 768px) {
-      .glass-card { max-width: 900px; padding: 60px; }
-      .side-by-side { display: flex; align-items: center; justify-content: space-around; gap: 30px; text-align: left; }
-      .side-by-side .divisor { margin: 20px 0; }
-      .hero h1 { font-size: 5rem; }
+    /* ESTILO PORTADA (Arreglado para móvil) */
+    .hero { 
+      background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
+                  url('0001.jpg') center center / cover no-repeat;
+      background-attachment: scroll; /* Evita el zoom exagerado en móviles */
     }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold); margin: 0; line-height: 1.1; }
+    /* AJUSTES PARA PANTALLAS GRANDES (Laptop) */
+    @media (min-width: 992px) {
+      .glass-card { max-width: 950px; padding: 60px; }
+      .side-by-side { display: flex; align-items: center; justify-content: space-around; gap: 40px; text-align: left; }
+      .hero { background-attachment: fixed; } /* El efecto elegante solo en PC */
+      h1 { font-size: 5rem !important; }
+      .carousel-container { max-width: 450px; }
+    }
+
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.2rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; }
 
     .btn {
-      background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px;
+      background: var(--gold); color: white; padding: 16px 30px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 15px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
       width: 100%; max-width: 280px; border: none; cursor: pointer;
     }
-    .btn:hover { transform: scale(1.05); box-shadow: 0 5px 15px rgba(197, 157, 95, 0.4); }
+    .btn:hover { opacity: 0.9; transform: translateY(-2px); }
     .btn-outline { background: transparent; border: 2px solid var(--gold); }
 
-    .hero { 
-      background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
-                  url('0001.jpg') center/cover no-repeat fixed; 
-    }
-
     /* Carrusel */
-    .carousel-container { position: relative; width: 100%; max-width: 400px; margin: 20px auto; }
+    .carousel-container { position: relative; width: 100%; max-width: 380px; margin: 20px auto; }
     .carousel-track { 
       display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
-      scroll-behavior: smooth; border-radius: 20px; border: 2px solid var(--gold);
+      scroll-behavior: smooth; border-radius: 25px; border: 2px solid var(--gold);
     }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-track img { width: 100%; flex-shrink: 0; scroll-snap-align: center; object-fit: cover; aspect-ratio: 4/5; }
@@ -67,14 +69,14 @@
     .nav-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
       background: rgba(0,0,0,0.6); color: white; border: 1px solid var(--gold);
-      border-radius: 50%; width: 45px; height: 45px; cursor: pointer; z-index: 5; font-size: 1.2rem;
+      border-radius: 50%; width: 42px; height: 42px; cursor: pointer; z-index: 5;
     }
 
     .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 20px 0; border: 5px solid var(--gold); }
     .qr-container img { width: 160px; display: block; }
     
-    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
-    .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 15px; min-width: 70px; border: 1px solid var(--gold); }
+    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 25px; flex-wrap: wrap; }
+    .unit { background: rgba(255,255,255,0.1); padding: 12px; border-radius: 15px; min-width: 70px; border: 1px solid var(--gold); }
     
     .divisor { width: 60px; height: 2px; background: var(--gold); margin: 20px auto; }
   </style>
@@ -104,7 +106,7 @@
       <h2>Pase Especial</h2>
       <p>Hemos reservado un lugar muy especial para:</p>
       <div class="divisor"></div>
-      <h3 style="font-size: 2rem; color: var(--gold); margin: 15px 0;">[Nombre del Invitado]</h3>
+      <h3 style="font-size: 2.2rem; color: var(--gold); margin: 15px 0;">[Nombre del Invitado]</h3>
       <p style="font-size: 1.2rem;">Pases reservados: <b>2</b></p>
     </div>
   </section>
@@ -116,7 +118,7 @@
           <h2>¿Dónde será?</h2>
           <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
         </div>
-        <div class="divisor" style="height: 50px; width: 2px; background: var(--gold); display: none;"></div> <div>
+        <div>
           <p style="font-size: 1.1rem; margin-bottom: 5px;">Ceremonia: <b>3:00 PM</b></p>
           <p style="color: var(--gold); font-size: 1.3rem;">Recepción: <b>4:00 PM</b></p>
           <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
@@ -129,7 +131,7 @@
     <div class="glass-card reveal">
       <h2>Nosotros</h2>
       <div class="carousel-container">
-        <button class="nav-btn" id="prevBtn" style="left: -20px;">&#10094;</button>
+        <button class="nav-btn" id="prevBtn" style="left: -15px;">&#10094;</button>
         <div class="carousel-track" id="track">
           <img src="0001.jpg" alt="Foto 1">
           <img src="0002.jpg" alt="Foto 2">
@@ -137,7 +139,7 @@
           <img src="0004.jpg" alt="Foto 4">
           <img src="0005.jpg" alt="Foto 5">
         </div>
-        <button class="nav-btn" id="nextBtn" style="right: -20px;">&#10095;</button>
+        <button class="nav-btn" id="nextBtn" style="right: -15px;">&#10095;</button>
       </div>
     </div>
   </section>
@@ -181,7 +183,7 @@
     <div class="glass-card reveal">
       <h2 style="font-size: 3rem;">Carlos & Joselyn</h2>
       <p style="font-style: italic; margin-bottom: 25px;">¡Te esperamos!</p>
-      <div style="display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 15px;">
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
         <a href="https://wa.me/50683484866?text=Confirmación+Ceremonia" class="btn">Confirmar Ceremonia</a>
         <a href="https://wa.me/50683484866?text=Confirmación+Recepción" class="btn">Confirmar Recepción</a>
       </div>
@@ -189,13 +191,11 @@
   </section>
 
   <script>
-    // Reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Countdown
     const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -208,21 +208,18 @@
       }
     }, 1000);
 
-    // Carrusel
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
     let index = 0;
-
     function moveCarousel(newIndex) {
       if (newIndex >= images.length) index = 0;
       else if (newIndex < 0) index = images.length - 1;
       else index = newIndex;
       track.scrollTo({ left: track.clientWidth * index, behavior: 'smooth' });
     }
-
     document.getElementById('nextBtn').addEventListener('click', () => moveCarousel(index + 1));
     document.getElementById('prevBtn').addEventListener('click', () => moveCarousel(index - 1));
-    setInterval(() => moveCarousel(index + 1), 4500);
+    setInterval(() => moveCarousel(index + 1), 5000);
     window.addEventListener('resize', () => moveCarousel(index));
   </script>
 </body>
