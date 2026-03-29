@@ -24,7 +24,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA --- */
+    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -32,6 +32,7 @@
       position: relative;
       padding: 100px 20px;
       
+      /* IMPORTANTE: Volvemos al tamaño original de imagen (cover) */
       background-size: cover !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
@@ -59,7 +60,7 @@
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
 
-    /* Capas escalonadas para el scroll fluido */
+    /* Capas escalonadas para el scroll fluido (Zig-Zag total) */
     .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
@@ -67,7 +68,7 @@
     .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-final { z-index: 2; align-items: center; justify-content: center; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Centrada */
+    .seccion-final { z-index: 2; align-items: flex-start; justify-content: center; padding-left: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Izquierda */
 
     /* Velo mínimo para legibilidad */
     .overlay {
@@ -76,14 +77,14 @@
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO (Aero Glass Refinado) */
+    /* TARJETAS VIDRIO (Esbeltas y Modernas) */
     .glass-card {
       background: rgba(255, 255, 255, 0.05); /* Cristal etéreo */
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 400px; /* UN POCO MÁS ANCHAS PARA TEXTOS LARGOS */
+      width: 100%; max-width: 350px; /* MÁS ESTRECHAS Y ESBELTAS */
       position: relative; z-index: 5;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -96,7 +97,7 @@
       font-style: italic;
       font-size: 1.6rem; 
       color: rgba(255, 255, 255, 0.7);
-      max-width: 300px; /* MÁS ANCHO PARA FRASES LARGAS */
+      max-width: 300px;
       line-height: 1.3;
       z-index: 1;
       pointer-events: none;
@@ -104,38 +105,35 @@
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
-    .seccion-qr .floating-text { right: 8%; text-align: right; }
+    .seccion-qr .floating-text,
+    .seccion-final .floating-text { right: 8%; text-align: right; }
     
     .seccion-lugar .floating-text,
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text { left: 8%; text-align: left; }
 
-    /* --- CARRETE INFINITO (CORREGIDO) --- */
+    /* --- CARRETE INFINITO TOTAL (SEAMLESS LOOP) --- */
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 700px;
+      max-width: 600px; /* UN POCO MÁS PEQUEÑO */
       margin-top: 25px;
-      overflow: hidden; /* Para ocultar las imágenes clonadas */
+      overflow: hidden;
     }
 
     .carousel-track { 
       display: flex; 
       padding: 20px 0; 
       gap: 15px; 
-      /* Ocultamos la barra de scroll y activamos JS */
-      scrollbar-width: none; 
-      -ms-overflow-style: none; 
       transition: transform 0.5s ease-in-out; /* Animación suave */
     }
-    .carousel-track::-webkit-scrollbar { display: none; }
 
     .carousel-track img { 
-      /* CORRECCIÓN: Recuperan proporción original y nitidez */
+      /* CORRECCIÓN: Nítidas y sin estirar */
       width: auto; 
       max-width: 100%; 
-      height: 300px; /* Altura fija para uniformidad */
-      object-fit: contain; /* Ajuste perfecto sin estirar */
+      height: 220px; /* ALTURA REDUCIDA PARA VER FONDO */
+      object-fit: contain; 
       border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
       flex-shrink: 0;
@@ -150,9 +148,9 @@
       color: white;
       border: none;
       border-radius: 50%;
-      width: 55px; 
-      height: 55px;
-      font-size: 1.8rem;
+      width: 50px; 
+      height: 50px;
+      font-size: 1.6rem;
       cursor: pointer;
       z-index: 10;
       transition: background 0.3s ease;
@@ -167,22 +165,24 @@
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES --- */
+    /* --- FONDOS Y ENCUADRES CORREGIDOS --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
-    .seccion-musica { background: url('Foto14.jpg') center; }
+    /* MÚSICA CORREGIDO: Bajamos encuadre (65%) para ver caras */
+    .seccion-musica { background: url('Foto14.jpg') center 65%; }
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
-    .seccion-final { background: url('Foto1.jpg') center 25%; }
+    /* FINAL CORREGIDO: Subimos encuadre (20%) para ver caras */
+    .seccion-final { background: url('Foto1.jpg') center 20%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
     h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
     
-    p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; } /* TEXTO P UN POCO MÁS GRANDE Y ESPACIADO */
+    p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; }
 
     .btn {
       background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
@@ -196,7 +196,7 @@
     /* Ajustes para pantallas grandes */
     @media (min-width: 992px) {
       section { background-attachment: fixed; } /* Parallax */
-      .glass-card { max-width: 500px; }
+      .glass-card { max-width: 400px; }
       h1 { font-size: 6.5rem !important; }
       h2 { font-size: 3.5rem !important; }
       p { font-size: 1.35rem; }
@@ -205,10 +205,10 @@
     /* Ajustes para móviles */
     @media (max-width: 600px) {
       .floating-text { font-size: 1.3rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 90%; margin-top: 25px; margin-bottom: 10px;}
-      .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr { padding-left: 15px; padding-right: 15px; align-items: center; }
+      .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center; }
       h2 { font-size: 2.4rem; }
       p { font-size: 1.15rem; }
-      .carousel-track img { height: 200px; } /* Altura reducida en móvil */
+      .carousel-track img { height: 180px; } /* Altura reducida en móvil */
     }
   </style>
 </head>
@@ -251,7 +251,7 @@
 
   <section class="seccion-nosotros">
     <div class="overlay"></div>
-    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 750px;">
+    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 650px;">
       <h2 style="color:white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">Un Viaje de Amor</h2>
       
       <div class="carousel-container reveal">
@@ -275,7 +275,7 @@
     <div class="glass-card reveal">
       <h2>Código de Gala</h2>
       <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
-      <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
+      <p>Queremos que te sientas spectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
       <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos los tonos Verde Jade y Vino para armonizar con nuestra paleta.<br>Agradecemos evitar el color blanco.</p>
     </div>
     <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio para nuestra celebración..."</div>
@@ -293,7 +293,7 @@
   </section>
 
   <section class="seccion-regalos">
-    <div class="overlay",></div>
+    <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Mesa de Regalos</h2>
       <p>El mayor regalo que podemos recibir es tu presencia y tu cariño en este día tan especial.</p>
@@ -320,8 +320,9 @@
       <h2 style="font-size: 3.5rem;">¡Te Esperamos!</h2>
       <p>Nuestro amor es fuerte, y nuestra felicidad es inmensa. Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Mi Asistencia Por WhatsApp</a>
+      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Asistencia WhatsApp</a>
     </div>
+    <div class="floating-text reveal">"Agradecemos tu amor, tu amistad y tu compañía. ¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
   </section>
 
   <script>
@@ -331,35 +332,70 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Carrete Infinito Script (JS Avanzado)
+    // --- CARRETE INFINITO TOTAL (SEAMLESS LOOP - JS Avanzado) ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = track.querySelectorAll('img');
-    const imageCount = images.length;
-    let currentIndex = 0;
-
-    // Función para actualizar la posición del carrete
-    function updateCarousel() {
-      const imgWidth = images[0].clientWidth + 15; // Ancho de imagen + gap
-      track.style.transform = `translateX(-${currentIndex * imgWidth}px)`;
+    const totalImages = images.length;
+    let currentIndex = totalImages; // Empezamos en la primera imagen real (después de los clones)
+    
+    // Clonar imágenes para el efecto infinito
+    for (let i = 0; i < totalImages; i++) {
+        const clone = images[i].cloneNode(true);
+        track.appendChild(clone); // Clones al final
+    }
+    for (let i = totalImages - 1; i >= 0; i--) {
+        const clone = images[i].cloneNode(true);
+        track.insertBefore(clone, track.firstChild); // Clones al principio
     }
 
-    // Botón Siguiente (Bucle)
+    // Función para obtener el ancho de una imagen real (con gap)
+    function getImageWidth() {
+        return images[0].clientWidth + 15; // Ancho imagen + gap
+    }
+
+    // Posición inicial (centrada en la primera imagen real)
+    function initCarousel() {
+        track.style.transition = 'none'; // Sin animación para el salto inicial
+        track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
+    }
+
+    // Botón Siguiente
     nextBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex + 1) % imageCount; // Vuelve a 0 si llega al final
-      updateCarousel();
+        if (currentIndex >= totalImages * 2 - 1) return; // Evitar click rápido al final
+        currentIndex++;
+        track.style.transition = 'transform 0.5s ease-in-out';
+        track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
     });
 
-    // Botón Anterior (Bucle)
+    // Botón Anterior
     prevBtn.addEventListener('click', () => {
-      currentIndex = (currentIndex - 1 + imageCount) % imageCount; // Va al final si está en 0
-      updateCarousel();
+        if (currentIndex <= 0) return; // Evitar click rápido al principio
+        currentIndex--;
+        track.style.transition = 'transform 0.5s ease-in-out';
+        track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
     });
 
-    // Ajuste inicial y en cambio de tamaño de pantalla
-    updateCarousel();
-    window.addEventListener('resize', updateCarousel);
+    // Escuchar el final de la animación para el "salto invisible"
+    track.addEventListener('transitionend', () => {
+        // Al llegar al final de los clones finales, saltar al principio real
+        if (currentIndex >= totalImages * 2) {
+            track.style.transition = 'none';
+            currentIndex = totalImages;
+            track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
+        }
+        // Al llegar al principio de los clones iniciales, saltar al final real
+        if (currentIndex <= 0) {
+            track.style.transition = 'none';
+            currentIndex = totalImages - 1;
+            track.style.transform = `translateX(-${currentIndex * getImageWidth()}px)`;
+        }
+    });
+
+    // Inicializar y ajustar en resize
+    window.addEventListener('load', initCarousel);
+    window.addEventListener('resize', initCarousel);
   </script>
 </body>
 </html>
