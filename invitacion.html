@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Boda Carlos & Joselyn • Invitación Premium 💍</title>
+  <title>Boda Carlos & Joselyn • Invitación 💍</title>
   
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
@@ -12,53 +12,57 @@
       --vino: #7A2F3E; 
       --jade: #1A4D3E; 
       --oro: #C5A059; 
-      /* Vidrio más sutil y transparente */
-      --glass: rgba(255, 255, 255, 0.15);
-      --glass-border: rgba(255, 255, 255, 0.3);
+      /* Vidrio ultra transparente */
+      --glass: rgba(255, 255, 255, 0.12);
+      --glass-border: rgba(255, 255, 255, 0.2);
     }
 
     * { scroll-behavior: smooth; box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Poppins', sans-serif; background-color: #000; color: #fff; overflow-x: hidden; }
+    
+    /* ELIMINADO EL FONDO NEGRO DEL BODY */
+    body { 
+      font-family: 'Poppins', sans-serif; 
+      background-color: #fdfaf5; /* Color crema suave de respaldo, NUNCA NEGRO */
+      color: #fff; 
+      overflow-x: hidden; 
+    }
 
-    /* --- ESTILO SECCIONES FOTOGRÁFICAS --- */
     section { 
       position: relative;
       min-height: 100vh;
       width: 100%;
       display: flex; align-items: center; justify-content: center;
-      background-size: cover; background-position: center;
+      background-size: cover; 
+      background-position: center;
       background-repeat: no-repeat;
-      overflow: hidden;
     }
 
-    /* Velo oscuro estándar (excepto en la frase) */
+    /* Solo un velo muy fino para que el texto blanco se lea */
     section::before {
       content: "";
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.25);
+      background: rgba(0, 0, 0, 0.15); 
       z-index: 1;
     }
 
-    /* CORRECCIÓN ESPECÍFICA FRASE: SIN FONDO NEGRO Y SIN VELO */
-    .s-frase { background-image: url('0002.jpg') !important; }
+    /* SECCIÓN FRASE: PUREZA TOTAL (SIN VELO) */
     .s-frase::before { display: none !important; }
 
     .content { position: relative; z-index: 10; width: 90%; max-width: 500px; text-align: center; }
 
-    /* --- TARJETA ESTILO VIDRIO SUTIL --- */
+    /* TARJETA VIDRIO (GLASS) REFINADA */
     .glass-card {
       background: var(--glass);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      padding: 40px 20px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      padding: 40px 25px;
       border-radius: 20px;
-      color: #fff;
       border: 1px solid var(--glass-border);
-      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     }
 
-    /* --- CARRETE INTERACTIVO (13 FOTOS) --- */
+    /* CARRETE INTERACTIVO (13 FOTOS) */
     .slider-container {
       width: 100%;
       overflow-x: auto;
@@ -71,46 +75,48 @@
     .slider-container::-webkit-scrollbar { display: none; }
 
     .slide {
-      min-width: 85%;
+      min-width: 80%;
       height: 450px;
       border-radius: 15px;
       scroll-snap-align: center;
-      border: 5px solid #fff;
+      border: 4px solid #fff;
       object-fit: cover;
       flex-shrink: 0;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     }
 
-    /* --- TIPOGRAFÍA --- */
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 15px; color: #fff; }
-    p { font-size: 1.1rem; line-height: 1.6; text-shadow: 1px 1px 5px rgba(0,0,0,0.4); }
+    /* TIPOGRAFÍA */
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; text-shadow: 2px 2px 12px rgba(0,0,0,0.4); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; margin-bottom: 15px; }
+    p { font-size: 1.1rem; line-height: 1.6; text-shadow: 1px 1px 6px rgba(0,0,0,0.3); }
 
     .btn {
       display: inline-block;
-      margin-top: 20px;
-      padding: 12px 30px;
+      margin-top: 25px;
+      padding: 14px 35px;
       background: var(--oro);
       color: #000;
       text-decoration: none;
-      border-radius: 30px;
+      border-radius: 50px;
       font-weight: 600;
       font-size: 12px;
       letter-spacing: 1px;
       text-transform: uppercase;
     }
 
-    /* --- COUNTDOWN --- */
+    /* COUNTDOWN */
     .countdown { display: flex; justify-content: center; gap: 15px; margin-top: 20px; }
-    .unit span { font-size: 2.5rem; font-family: 'Playfair Display', serif; color: #fff; display: block; }
+    .unit span { font-size: 2.5rem; font-family: 'Playfair Display', serif; display: block; }
     .unit small { font-size: 10px; text-transform: uppercase; color: var(--oro); }
 
-    /* --- ASIGNACIÓN DE FONDOS --- */
+    /* --- MAPA DE FOTOS PARA EVITAR FONDOS VACÍOS --- */
     .s-portada { background-image: url('0010.jpg'); }
     .s-cuenta { background-image: url('0001.jpg'); }
-    .s-lugar { background-image: url('0004.jpg'); }
+    .s-frase { background-image: url('0002.jpg'); }
+    .s-lugar { background-image: url('0003.jpg'); }
+    .s-ubicacion { background-image: url('0004.jpg'); }
     .s-vestimenta { background-image: url('0005.jpg'); }
     .s-regalos { background-image: url('0006.jpg'); }
+    .s-slider-bg { background-image: url('0007.jpg'); }
     .s-galeria { background-image: url('0013.jpg'); }
     .s-confirmar { background-image: url('0014.jpg'); }
 
@@ -124,7 +130,7 @@
 
   <section class="s-portada">
     <div class="content">
-      <p style="letter-spacing: 8px; font-size: 12px;">NUESTRA BODA</p>
+      <p style="letter-spacing: 10px; font-size: 12px;">NUESTRA BODA</p>
       <h1>Carlos & Joselyn</h1>
       <p>19 de Diciembre, 2026</p>
     </div>
@@ -145,13 +151,34 @@
 
   <section class="s-frase">
     <div class="content">
-      <p style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-style: italic; color: white;">
+      <p style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-style: italic;">
         "Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."
       </p>
     </div>
   </section>
 
-  <section style="background-image: url('0012.jpg'); min-height: 80vh;">
+  <section class="s-lugar">
+    <div class="content">
+      <div class="glass-card">
+        <h2>La Recepción</h2>
+        <p><b>Luna Azul</b>, La Rita de Pococí</p>
+        <p>Sábado, 19 de Diciembre</p>
+        <p style="font-size: 1.5rem; color: var(--oro); font-weight: 600;">3:00 PM</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-ubicacion">
+    <div class="content">
+      <div class="glass-card">
+        <h2>Ubicación</h2>
+        <p>Haz clic para ver cómo llegar</p>
+        <a href="https://waze.com/ul?ll=10.2794,-83.7845&navigate=yes" target="_blank" class="btn">VER EN WAZE</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="s-slider-bg" style="min-height: 80vh;">
     <div class="content" style="max-width: 100%;">
       <h2 style="text-shadow: 2px 2px 10px rgba(0,0,0,0.5);">Nuestros Momentos</h2>
       <div class="slider-container">
@@ -172,23 +199,12 @@
     </div>
   </section>
 
-  <section class="s-lugar">
-    <div class="content">
-      <div class="glass-card">
-        <h2>La Recepción</h2>
-        <p><b>Luna Azul</b>, La Rita de Pococí</p>
-        <p>Sábado, 19 de Dic | <b>3:00 PM</b></p>
-        <a href="https://waze.com/ul?ll=10.2794,-83.7845&navigate=yes" class="btn">VER UBICACIÓN</a>
-      </div>
-    </div>
-  </section>
-
   <section class="s-vestimenta">
     <div class="content">
       <div class="glass-card">
         <h2>Dress Code</h2>
-        <p style="letter-spacing: 3px; font-weight: 600;">FORMAL / ELEGANTE</p>
-        <p style="font-size: 14px;">Agradecemos evitar el color blanco.</p>
+        <p style="letter-spacing: 4px; font-weight: 600; color: #fff;">FORMAL / ELEGANTE</p>
+        <p style="font-size: 14px; margin-top: 10px;">Agradecemos evitar el color blanco.</p>
       </div>
     </div>
   </section>
@@ -196,8 +212,8 @@
   <section class="s-regalos">
     <div class="content">
       <div class="glass-card">
-        <h2>Lluvia de Sobres</h2>
-        <p>Tu presencia es nuestro mejor regalo. Si deseas tener un detalle, tendremos lluvia de sobres el día del evento.</p>
+        <h2>Un Detalle</h2>
+        <p>Tu presencia es nuestro mejor regalo. Si deseas obsequiarnos algo, tendremos lluvia de sobres.</p>
       </div>
     </div>
   </section>
@@ -205,8 +221,9 @@
   <section class="s-galeria">
     <div class="content">
       <div class="glass-card">
-        <h2>Comparte tus Fotos</h2>
-        <div style="background: #fff; padding: 8px; display: inline-block; border-radius: 12px; margin: 15px 0;">
+        <h2>Galería</h2>
+        <p>Sube tus fotos aquí:</p>
+        <div style="background: #fff; padding: 10px; display: inline-block; border-radius: 12px; margin: 15px 0;">
           <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://cali0998.github.io/BodaCarlosJoss/index.html" style="width: 130px; display:block;">
         </div><br>
         <a href="index.html" class="btn">SUBIR FOTOS 📸</a>
@@ -219,26 +236,26 @@
       <div class="glass-card">
         <h2>¿Nos acompañas?</h2>
         <p>Confirma antes del 1 de Diciembre.</p>
-        <a href="https://wa.me/50683484866?text=Confirmo%20asistencia" class="btn" style="background: var(--jade); color: white;">CONFIRMAR ASISTENCIA</a>
+        <a href="https://wa.me/50683484866?text=Confirmo%20asistencia" class="btn" style="background: var(--jade); color: white;">WHATSAPP ✅</a>
       </div>
     </div>
   </section>
 
   <script>
     // --- CUENTA REGRESIVA 19 DIC 3:00 PM ---
-    const target = new Date("Dec 19, 2026 15:00:00").getTime();
+    const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     
-    function updateCountdown() {
+    function updateTimer() {
       const now = new Date().getTime();
-      const diff = target - now;
+      const diff = targetDate - now;
       if (diff > 0) {
         document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24)).toString().padStart(2, '0');
         document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2, '0');
         document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60)).toString().padStart(2, '0');
       }
     }
-    setInterval(updateCountdown, 1000);
-    updateCountdown();
+    setInterval(updateTimer, 1000);
+    updateTimer();
   </script>
 
 </body>
