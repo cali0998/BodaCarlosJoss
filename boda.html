@@ -10,24 +10,22 @@
   <style>
     :root {
       --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24;
-      /* Colores de fundido ultra-suaves para armonía (con mucha transparencia) */
-      --fade-jade: rgba(10, 46, 36, 0.95); 
-      --fade-wine: rgba(74, 10, 22, 0.95);
+      --deep-bg: #050505; /* Negro profundo para fundir secciones */
     }
 
     /* Reset y Estilos Base */
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { 
       margin: 0; font-family: 'Poppins', sans-serif; 
-      background-color: var(--fade-jade); /* Fondo base armonizado */
+      background-color: var(--deep-bg); /* Fondo base profundo */
       color: white; overflow-x: hidden; 
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- EFECTO DE FUNDIDO ARMÓNICO (Adiós al Negro Duro) --- */
+    /* --- EFECTO DE NIEBLA PROFUNDA (Fundido Perfecto) --- */
     section { 
       min-height: 100vh; 
-      padding: 100px 20px; 
+      padding: 120px 20px; 
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       position: relative;
       background-size: cover !important;
@@ -36,101 +34,121 @@
       overflow: hidden;
     }
 
-    /* Esta capa crea el desvanecimiento suave a los colores de la paleta */
+    /* Esta es la clave: el degradado ahora va de negro profundo a transparente y a negro otra vez */
     .overlay-vignette {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        transparent 15%, /* Se funde a transparente muy rápido */
+        transparent 85%, 
+        var(--deep-bg) 100%);
       z-index: 0;
     }
 
-    /* --- TARJETAS VIDRIO (Glassmorphism) SUAVES --- */
+    /* --- TARJETAS VIDRIO (Glassmorphism) ETÉREAS --- */
     .glass-card {
-      background: rgba(255, 255, 255, 0.02); 
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(197, 157, 95, 0.1);
+      background: rgba(255, 255, 255, 0.015); /* Vidrio casi invisible */
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(197, 157, 95, 0.08);
       border-radius: 40px;
       padding: 50px 25px; 
       width: 100%; max-width: 500px;
       position: relative; z-index: 1;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
     }
 
-    /* --- FOTOS DE FONDO ARMÓNICAS EN TODAS LAS SECCIONES --- */
+    /* --- FOTOS DE FONDO EN TODAS LAS SECCIONES CON MATIZ DE COLOR CENTRADO --- */
     
-    /* 1. Portada: Foto10 + Fundido Mixto Suave */
+    /* 1. Portada: Foto10 + Matiz Jade Suave */
     .hero { background-image: url('Foto10.jpg'); }
     .hero .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-jade) 0%, 
-        rgba(10,46,36,0.3) 20%, /* Tinte Jade suave */
-        rgba(74,10,22,0.4) 80%, /* Tinte Vino suave */
-        var(--fade-wine) 100%);
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.2) 20%, /* Tinte Jade ultra suave en el centro */
+        rgba(10,46,36,0.3) 80%, 
+        var(--deep-bg) 100%);
     }
 
-    /* 2. Pase Especial: Foto11 + Fundido Jade */
+    /* 2. Pase Especial: Foto11 + Matiz Vino Suave */
     .seccion-pase { background-image: url('Foto11.jpg'); }
     .seccion-pase .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-wine) 0%, /* Transición suave desde arriba */
-        rgba(10,46,36,0.5) 20%, /* Tinte Jade */
-        var(--fade-jade) 100%);
+        var(--deep-bg) 0%, 
+        rgba(74,10,22,0.3) 20%, /* Tinte Vino ultra suave en el centro */
+        var(--deep-bg) 100%);
     }
 
-    /* 3. Lugar: Foto12 + Fundido Neutro Oscuro */
+    /* 3. Lugar: Foto12 + Matiz Neutro Oscuro (para claridad de Waze) */
     .seccion-lugar { background-image: url('Foto12.jpg'); }
     .seccion-lugar .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-jade) 0%, 
-        rgba(0,0,0,0.6) 20%, /* Oscuro para legibilidad Waze */
-        rgba(0,0,0,0.6) 80%, 
-        var(--fade-jade) 100%);
+        var(--deep-bg) 0%, 
+        rgba(0,0,0,0.7) 20%, 
+        rgba(0,0,0,0.7) 80%, 
+        var(--deep-bg) 100%);
     }
 
-    /* 4. Carrete (Nosotros): Fondo Jade sólido (sin foto de fondo) */
-    .seccion-nosotros { background: var(--jade); padding: 80px 20px; }
+    /* 4. Carrete (Nosotros): Foto2 (Del Carrete) + Matiz Jade (NUEVO FONDO) */
+    .seccion-nosotros { background-image: url('Foto2.jpg'); } /* <--- USANDO FOTO DEL CARRETE PARA FONDO */
+    .seccion-nosotros .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.4) 20%, 
+        var(--deep-bg) 100%);
+    }
 
-    /* 5. Vestimenta: Foto13 + Fundido Vino */
+    /* 5. Vestimenta: Foto13 + Matiz Vino */
     .seccion-vestimenta { background-image: url('Foto13.jpg'); }
     .seccion-vestimenta .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-jade) 0%, 
-        rgba(74,10,22,0.5) 20%, /* Tinte Vino */
-        var(--fade-wine) 100%);
+        var(--deep-bg) 0%, 
+        rgba(74,10,22,0.4) 20%, 
+        var(--deep-bg) 100%);
     }
 
-    /* 6. Música: Foto14 (Reutilizada) + Fundido Jade */
+    /* 6. Música: Foto14 + Matiz Jade */
     .seccion-musica { background-image: url('Foto14.jpg'); }
     .seccion-musica .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-wine) 0%, 
-        rgba(10,46,36,0.5) 20%, 
-        var(--fade-jade) 100%);
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.4) 20%, 
+        var(--deep-bg) 100%);
     }
 
-    /* 7. Regalos: Foto3 (Del Carrete) + Fundido Vino */
+    /* 7. Regalos: Foto3 (Del Carrete) + Matiz Vino */
     .seccion-regalos { background-image: url('Foto3.jpg'); } /* <--- USANDO FOTO DEL CARRETE */
     .seccion-regalos .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-jade) 0%, 
-        rgba(74,10,22,0.5) 20%, 
-        var(--fade-wine) 100%);
+        var(--deep-bg) 0%, 
+        rgba(74,10,22,0.4) 20%, 
+        var(--deep-bg) 100%);
     }
 
-    /* 8. QR / Fotos: Foto4 (Del Carrete) + Fundido Mixto Final */
+    /* 8. QR / Fotos: Foto4 (Del Carrete) + Matiz Mixto Final */
     .seccion-qr { background-image: url('Foto4.jpg'); } /* <--- USANDO FOTO DEL CARRETE */
     .seccion-qr .overlay-vignette {
       background: linear-gradient(to bottom, 
-        var(--fade-wine) 0%, 
-        rgba(10,46,36,0.4) 20%, 
-        rgba(74,10,22,0.5) 80%, 
-        var(--fade-jade) 100%);
+        var(--deep-bg) 0%, 
+        rgba(10,46,36,0.3) 20%, 
+        rgba(74,10,22,0.4) 80%, 
+        var(--deep-bg) 100%);
+    }
+
+    /* 9. Despedida y Confirmación: Foto1 (Del Carrete) + Matiz Vino (NUEVO FONDO) */
+    .seccion-final { background-image: url('Foto1.jpg'); } /* <--- USANDO FOTO DEL CARRETE */
+    .seccion-final .overlay-vignette {
+      background: linear-gradient(to bottom, 
+        var(--deep-bg) 0%, 
+        rgba(74,10,22,0.5) 20%, 
+        var(--deep-bg) 100%);
     }
 
     /* Animaciones y Tipografía */
-    .reveal { opacity: 0; transform: translateY(30px); transition: 1.2s ease; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1.5s ease; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 25px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.3rem; color: var(--gold); margin-bottom: 25px; font-weight: 600; text-shadow: 0 2px 4px rgba(0,0,0,0.3); }
     h3 { font-family: 'Poppins', sans-serif; font-weight: 600; color: white; margin: 0; }
     p { font-size: 1.1rem; line-height: 1.7; opacity: 0.95; margin: 10px 0; }
 
@@ -160,7 +178,7 @@
       section { background-attachment: fixed; }
       .glass-card { max-width: 600px; padding: 60px; }
       h1 { font-size: 6rem !important; }
-      h2 { font-size: 3.2rem !important; }
+      h2 { font-size: 3rem !important; }
     }
   </style>
 </head>
@@ -206,7 +224,8 @@
   </section>
 
   <section class="seccion-nosotros">
-    <div class="glass-card reveal" style="max-width: 700px; background: rgba(255,255,255,0.01); border:none; box-shadow:none;">
+    <div class="overlay-vignette"></div>
+    <div class="glass-card reveal" style="max-width: 700px; background: rgba(255,255,255,0.015); border:none; box-shadow:none;">
       <h2 style="color: white;">Nuestra Historia</h2>
       <div class="carousel-track" id="track">
         <img src="Foto1.jpg" alt="Foto 1" class="active-img">
@@ -260,7 +279,8 @@
     </div>
   </section>
 
-  <section style="background-image: linear-gradient(to bottom, var(--fade-jade) 0%, var(--fade-wine) 100%); padding: 80px 20px;">
+  <section class="seccion-final">
+    <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2 style="font-size: 3.2rem; color: white;">Te Esperamos</h2>
       <p style="font-style: italic; margin-bottom: 30px; color: var(--gold);">Carlos & Joselyn</p>
