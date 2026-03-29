@@ -17,13 +17,14 @@
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      /* Usamos una de tus fotos de fondo fijo para que nunca se vea un color sólido */
+      /* Fondo fijo para evitar líneas entre transiciones */
       background: url('Foto10.jpg') center/cover no-repeat fixed;
       color: white; 
       overflow-x: hidden; 
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* --- ELIMINACIÓN TOTAL DE BORDES Y LÍNEAS --- */
+    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -33,13 +34,12 @@
       position: relative;
       padding: 100px 20px;
       background-size: cover !important;
-      background-position: center !important;
       background-repeat: no-repeat !important;
       
       /* Solapamiento reforzado para evitar fugas de color */
       margin-top: -21vh; 
       
-      /* Máscara de desvanecimiento orgánica */
+      /* Máscara de desvanecimiento ultra-suave */
       -webkit-mask-image: linear-gradient(to bottom, 
         transparent 0%, 
         black 15%, 
@@ -58,7 +58,7 @@
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
 
-    /* Capas escalonadas */
+    /* Capas escalonadas para el scroll fluido */
     .seccion-pase { z-index: 9; }
     .seccion-lugar { z-index: 8; }
     .seccion-nosotros { z-index: 7; }
@@ -68,6 +68,7 @@
     .seccion-qr { z-index: 3; }
     .seccion-final { z-index: 2; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); }
 
+    /* Velo mínimo para legibilidad */
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.15); 
@@ -85,35 +86,57 @@
       text-align: center;
     }
 
-    /* --- ASIGNACIÓN DE IMÁGENES --- */
-    .hero { background-image: url('Foto10.jpg'); }
-    .seccion-pase { background-image: url('Foto11.jpg'); }
-    .seccion-lugar { background-image: url('Foto12.jpg'); }
-    .seccion-nosotros { background-image: url('Foto2.jpg'); }
-    .seccion-vestimenta { background-image: url('Foto13.jpg'); }
-    .seccion-musica { background-image: url('Foto14.jpg'); }
-    .seccion-regalos { background-image: url('Foto3.jpg'); }
-    .seccion-qr { background-image: url('Foto4.jpg'); }
-    .seccion-final { background-image: url('Foto1.jpg'); }
+    /* --- ASIGNACIÓN DE IMÁGENES Y ENCUADRE DE CARAS --- */
+    
+    /* Portada: Centrada por defecto */
+    .hero { background-image: url('Foto10.jpg'); background-position: center; }
+    
+    /* Pase: Bajamos un poco el encuadre (60%) para ver caras si están altas */
+    .seccion-pase { background-image: url('Foto11.jpg'); background-position: center 60%; }
+    
+    /* Lugar: Centrada (es paisaje) */
+    .seccion-lugar { background-image: url('Foto12.jpg'); background-position: center; }
+    
+    /* Nosotros (Fondo): Subimos un poco (40%) para evitar cortes de cuerpo */
+    .seccion-nosotros { background-image: url('Foto2.jpg'); background-position: center 40%; }
+    
+    /* Vestimenta: Centrada */
+    .seccion-vestimenta { background-image: url('Foto13.jpg'); background-position: center; }
+    
+    /* Música: Centrada */
+    .seccion-musica { background-image: url('Foto14.jpg'); background-position: center; }
+    
+    /* Regalos: Subimos encuadre (40%) */
+    .seccion-regalos { background-image: url('Foto3.jpg'); background-position: center 40%; }
+    
+    /* QR: Centrada */
+    .seccion-qr { background-image: url('Foto4.jpg'); background-position: center; }
+    
+    /* ¡FINAL!: AJUSTE CRÍTICO. Bajamos mucho el encuadre (80%) para ver las caras que estaban muy arriba */
+    .seccion-final { background-image: url('Foto1.jpg'); background-position: center 80%; }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; text-shadow: 2px 2px 8px rgba(0,0,0,0.2); }
     
     .btn {
       background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
-      text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase; font-size: 11px; letter-spacing: 2px; transition: 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
     }
+    .btn:hover { background: #d4a76a; transform: translateY(-1px); }
 
     .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
+    /* Carrete Modernizado */
     .carousel-track { display: flex; overflow-x: auto; padding: 20px 0; gap: 15px; }
-    .carousel-track img { width: 80%; flex-shrink: 0; border-radius: 20px; border: 2px solid var(--gold); }
+    .carousel-track img { width: 80%; flex-shrink: 0; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
     @media (min-width: 992px) {
-      section { background-attachment: fixed; }
+      section { background-attachment: fixed; } /* Efecto parallax en PC */
       h1 { font-size: 6rem !important; }
+      h2 { font-size: 3.2rem !important; }
     }
   </style>
 </head>
@@ -122,9 +145,9 @@
   <section class="hero">
     <div class="overlay"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic;">"Toda aventura comienza con un sí"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; margin-bottom: 10px;">"Toda aventura comienza con un sí"</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600;">19 • DICIEMBRE • 2026</p>
+      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 13px;">19 • DICIEMBRE • 2026</p>
       <a href="#" class="btn">Agendar Fecha 📅</a>
     </div>
   </section>
@@ -133,6 +156,7 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
+      <p style="font-size: 1.2rem;">Carlos & Joselyn</p>
       <p style="font-size: 1.6rem; color: var(--gold); font-weight: 600;">Pases: 2</p>
     </div>
   </section>
@@ -141,8 +165,9 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Ubicación</h2>
-      <p><b>Salón Luna Azul</b><br>La Rita, Pococí</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" class="btn">Waze 🚗</a>
+      <p style="font-size: 1.3rem; font-weight: 600;">Salón Luna Azul</p>
+      <p>La Rita, Pococí</p>
+      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar 🚗</a>
     </div>
   </section>
 
@@ -154,6 +179,8 @@
         <img src="Foto1.jpg" alt="1">
         <img src="Foto2.jpg" alt="2">
         <img src="Foto3.jpg" alt="3">
+        <img src="Foto4.jpg" alt="4">
+        <img src="Foto5.jpg" alt="5">
       </div>
     </div>
   </section>
@@ -162,8 +189,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Vestimenta</h2>
-      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold);">FORMAL / ELEGANTE</p>
-      <p style="font-size: 0.9rem; font-style: italic;">Verde Jade y Vino.</p>
+      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.1rem;">FORMAL / ELEGANTE</p>
+      <p style="font-size: 0.9rem; font-style: italic;">Sugerimos Verde Jade y Vino.<br>Evitar el color blanco.</p>
     </div>
   </section>
 
@@ -171,7 +198,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Música</h2>
-      <a href="https://wa.me/50683484866" class="btn">Sugerir Canción 🎵</a>
+      <p>¿Qué canción no puede faltar?</p>
+      <a href="https://wa.me/50683484866?text=Sugerencia+música:" target="_blank" class="btn">Sugerir Canción 🎵</a>
     </div>
   </section>
 
@@ -187,20 +215,22 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
-      <img src="qrphotos.png" alt="QR" style="width: 130px; margin: 20px 0; background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--gold);">
+      <p>Comparte tus capturas de la boda</p>
+      <img src="qrphotos.png" alt="QR" style="width: 130px; margin: 20px 0; background: white; padding: 10px; border-radius: 15px; border: 3px solid var(--gold);">
     </div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>¡Te Esperamos!</h2>
+      <h2 style="font-size: 2.8rem;">¡Te Esperamos!</h2>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold);">Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866" class="btn">Confirmar</a>
+      <a href="https://wa.me/50683484866?text=Confirmo+mi+asistencia" target="_blank" class="btn">Confirmar</a>
     </div>
   </section>
 
   <script>
+    // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
