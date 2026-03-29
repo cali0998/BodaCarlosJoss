@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Boda Carlos & Joselyn 💍</title>
+    
+    <link rel="stylesheet" href="estilos.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
 
+    <section class="seccion-foto f1">
+        <div class="contenido">
+            <p style="letter-spacing: 5px;">NUESTRA BODA</p>
+            <h1>Carlos & Joselyn</h1>
+            <p>19 DE DICIEMBRE, 2026</p>
+        </div>
+    </section>
+
+    <section class="seccion-foto f2">
+        <div class="contenido">
+            <div class="tarjeta-vidrio">
+                <h2>Faltan...</h2>
+                <div id="countdown" style="font-size: 2rem; font-weight: 600;">--:--:--</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion-foto f3">
+        <div class="contenido">
+            <p style="font-family: 'Playfair Display', serif; font-size: 1.6rem; font-style: italic;">
+                "Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."
+            </p>
+        </div>
+    </section>
+
+    <section class="seccion-foto f5">
+        <div class="contenido">
+            <div class="tarjeta-vidrio">
+                <h2>¿Cómo llegar?</h2>
+                <p>Luna Azul, La Rita de Pococí</p>
+                <a href="https://waze.com/ul?ll=10.2794,-83.7845&navigate=yes" target="_blank" class="boton">ABRIR WAZE ✅</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="seccion-foto f8">
+        <div class="contenido">
+            <div class="tarjeta-vidrio">
+                <h2>Confirmación</h2>
+                <p>Confirma antes del 1 de Diciembre</p>
+                <a href="https://wa.me/50683484866?text=Confirmo%20asistencia" target="_blank" class="boton">WHATSAPP ✅</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Lógica sencilla del reloj
+        const weddingDate = new Date("Dec 19, 2026 15:00:00").getTime();
+        setInterval(() => {
+            const now = new Date().getTime();
+            const diff = weddingDate - now;
+            if (diff > 0) {
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                document.getElementById('countdown').innerHTML = days + "d " + hours + "h " + mins + "m";
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
