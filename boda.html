@@ -10,51 +10,65 @@
   <style>
     :root {
       --gold: #c59d5f;
-      --deep-bg: #050505; /* El negro base para el fundido invisible */
+      --bg-base: #0a2e24; /* Color de fondo muy profundo que armoniza con el jade */
     }
 
     * { scroll-behavior: smooth; box-sizing: border-box; }
+    
     body { 
-      margin: 0; font-family: 'Poppins', sans-serif; 
-      background-color: var(--deep-bg); 
-      color: white; overflow-x: hidden; 
+      margin: 0; 
+      font-family: 'Poppins', sans-serif; 
+      background-color: var(--bg-base); 
+      color: white; 
+      overflow-x: hidden; 
     }
 
-    /* --- TRANSICIÓN TRANSPARENTE / FUNDIDO NEGRO --- */
+    /* --- TRANSICIÓN TRANSPARENTE REAL (MASKING) --- */
     section { 
       min-height: 100vh; 
-      padding: 120px 20px; 
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center;
       position: relative;
+      padding: 80px 20px;
       background-size: cover !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
+      
+      /* Esta es la magia: desvanece la sección misma en los extremos */
+      mask-image: linear-gradient(to bottom, 
+        transparent 0%, 
+        black 10%, 
+        black 90%, 
+        transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, 
+        transparent 0%, 
+        black 10%, 
+        black 90%, 
+        transparent 100%);
     }
 
-    /* Capa de "niebla" negra para que las fotos se fundan con el fondo de la página */
+    /* Quitamos el overlay negro que molestaba */
     .overlay-vignette {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: linear-gradient(to bottom, 
-        var(--deep-bg) 0%, 
-        transparent 15%, 
-        transparent 85%, 
-        var(--deep-bg) 100%);
+      background: rgba(0,0,0,0.2); /* Un velo mínimo para legibilidad */
       z-index: 0;
     }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.02); 
-      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(197, 157, 95, 0.1);
-      border-radius: 40px;
-      padding: 50px 25px; 
-      width: 100%; max-width: 500px;
+      background: rgba(255, 255, 255, 0.05); 
+      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(197, 157, 95, 0.2);
+      border-radius: 35px;
+      padding: 40px 25px; 
+      width: 100%; max-width: 450px;
       position: relative; z-index: 1;
-      box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+      text-align: center;
     }
 
-    /* --- ASIGNACIÓN DE FOTOS (Sin tintes de color) --- */
-    .hero { background-image: url('Foto10.jpg'); }
+    /* --- FONDOS --- */
+    .hero { background-image: url('Foto10.jpg'); mask-image: none; -webkit-mask-image: none; } /* La portada no necesita máscara arriba */
     .seccion-pase { background-image: url('Foto11.jpg'); }
     .seccion-lugar { background-image: url('Foto12.jpg'); }
     .seccion-nosotros { background-image: url('Foto2.jpg'); }
@@ -64,39 +78,37 @@
     .seccion-qr { background-image: url('Foto4.jpg'); }
     .seccion-final { background-image: url('Foto1.jpg'); }
 
-    /* Estética de Texto y Botones */
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.3rem; color: var(--gold); margin-bottom: 25px; }
+    /* Estilos de Texto */
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; }
     
     .btn {
-      background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
-      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
-      text-transform: uppercase; font-size: 13px; letter-spacing: 2px; transition: 0.3s;
-      width: 100%; max-width: 280px; border: none; cursor: pointer;
+      background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px;
+      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
+      text-transform: uppercase; font-size: 12px; letter-spacing: 2px;
     }
 
-    .reveal { opacity: 0; transform: translateY(20px); transition: 1.5s ease; }
+    /* Animación de aparición suave */
+    .reveal { opacity: 0; transform: translateY(20px); transition: 1.2s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; padding: 20px 0; gap: 15px; }
+    .carousel-track { display: flex; overflow-x: auto; padding: 20px 0; gap: 15px; scroll-snap-type: x mandatory; }
     .carousel-track::-webkit-scrollbar { display: none; }
-    .carousel-track img { width: 75%; flex-shrink: 0; scroll-snap-align: center; border-radius: 25px; border: 2px solid var(--gold); opacity: 0.5; transition: 0.5s; }
-    .carousel-track img.active-img { opacity: 1; transform: scale(1.03); }
+    .carousel-track img { width: 80%; flex-shrink: 0; border-radius: 20px; scroll-snap-align: center; border: 2px solid var(--gold); }
 
     @media (min-width: 992px) {
-      section { background-attachment: fixed; } /* Efecto Parallax en PC */
-      h1 { font-size: 5.5rem !important; }
+      section { background-attachment: fixed; }
+      h1 { font-size: 5rem !important; }
     }
   </style>
 </head>
 <body>
 
   <section class="hero">
-    <div class="overlay-vignette"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem;">"Toda aventura comienza con un sí"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic;">"Toda aventura comienza con un sí"</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 20px;">19 • DICIEMBRE • 2026</p>
+      <p style="letter-spacing: 4px; margin-top: 15px;">19 • DIC • 2026</p>
       <a href="#" class="btn">Agendar Fecha 📅</a>
     </div>
   </section>
@@ -105,7 +117,8 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <p>Pases reservados: <b>2</b></p>
+      <p>Te esperamos con mucha alegría.</p>
+      <p style="font-size: 1.5rem; color: var(--gold);">Pases: 2</p>
     </div>
   </section>
 
@@ -113,21 +126,19 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>¿Dónde será?</h2>
-      <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Ver en Waze 🚗</a>
+      <p><b>Salón Luna Azul</b><br>La Rita, Pococí</p>
+      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" class="btn">Waze 🚗</a>
     </div>
   </section>
 
   <section class="seccion-nosotros">
     <div class="overlay-vignette"></div>
-    <div class="glass-card reveal" style="background: transparent; border:none; box-shadow:none;">
-      <h2 style="color: white;">Nuestra Historia</h2>
-      <div class="carousel-track" id="track">
-        <img src="Foto1.jpg" alt="1" class="active-img">
+    <div class="glass-card reveal" style="background:transparent; border:none;">
+      <h2 style="color:white">Nuestra Historia</h2>
+      <div class="carousel-track">
+        <img src="Foto1.jpg" alt="1">
         <img src="Foto2.jpg" alt="2">
         <img src="Foto3.jpg" alt="3">
-        <img src="Foto4.jpg" alt="4">
-        <img src="Foto5.jpg" alt="5">
       </div>
     </div>
   </section>
@@ -136,8 +147,8 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Vestimenta</h2>
-      <p style="color: var(--gold); font-weight: 600;">FORMAL / ELEGANTE</p>
-      <p style="font-size: 0.9rem; opacity: 0.8;">Sugerimos Verde Jade y Vino.<br>Evitar el color blanco.</p>
+      <p>Formal / Elegante</p>
+      <p style="font-size: 0.9rem;">Sugerimos Verde Jade y Vino.</p>
     </div>
   </section>
 
@@ -145,8 +156,7 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Música</h2>
-      <p>¿Qué canción no puede faltar?</p>
-      <a href="https://wa.me/50683484866?text=Sugerencia+música:" class="btn">Sugerir Canción 🎵</a>
+      <a href="https://wa.me/50683484866" class="btn">Sugerir Canción 🎵</a>
     </div>
   </section>
 
@@ -154,7 +164,7 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Regalos</h2>
-      <p>Contaremos con <b>Lluvia de Sobres</b>.</p>
+      <p>Lluvia de Sobres</p>
     </div>
   </section>
 
@@ -162,27 +172,23 @@
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
-      <div style="background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 20px 0;">
-        <img src="qrphotos.png" alt="QR" style="width: 140px; display: block;">
-      </div>
-      <br>
-      <a href="index.html" class="btn" style="background: white; color: black;">Subir Fotos 📸</a>
+      <img src="qrphotos.png" alt="QR" style="width: 140px; margin: 15px 0; background: white; padding: 10px; border-radius: 15px;">
     </div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay-vignette"></div>
     <div class="glass-card reveal">
-      <h2 style="font-size: 3rem;">Te Esperamos</h2>
-      <p style="font-style: italic;">Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866?text=Confirmo+mi+asistencia" class="btn">Confirmar Asistencia</a>
+      <h2>¡Te Esperamos!</h2>
+      <p>Carlos & Joselyn</p>
+      <a href="https://wa.me/50683484866" class="btn">Confirmar</a>
     </div>
   </section>
 
   <script>
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-    }, { threshold: 0.2 });
+    }, { threshold: 0.15 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
