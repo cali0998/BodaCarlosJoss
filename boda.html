@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -32,7 +33,6 @@
       position: relative;
       padding: 100px 20px;
       
-      /* IMPORTANTE: Volvemos al tamaño original de imagen (cover) */
       background-size: cover !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
@@ -84,7 +84,7 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 350px; /* MÁS ESTRECHAS Y ESBELTAS */
+      width: 100%; max-width: 350px; /* MÁS ESTRECHAS */
       position: relative; z-index: 5;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -112,7 +112,7 @@
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text { left: 8%; text-align: left; }
 
-    /* --- CARRETE INFINITO TOTAL (SEAMLESS LOOP) --- */
+    /* --- CARRETE INFINITO TOTAL (SEAMLESS LOOP - JS Avanzado) --- */
     .carousel-container {
       position: relative;
       width: 100%;
@@ -171,12 +171,12 @@
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
-    /* MÚSICA CORREGIDO: Bajamos encuadre (65%) para ver caras */
-    .seccion-musica { background: url('Foto14.jpg') center 65%; }
+    /* MÚSICA CORREGIDO: Bajamos encuadre (70%) para ver caras */
+    .seccion-musica { background: url('Foto14.jpg') center 70%; }
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
-    /* FINAL CORREGIDO: Subimos encuadre (20%) para ver caras */
-    .seccion-final { background: url('Foto1.jpg') center 20%; }
+    /* FINAL CORREGIDO: Subimos encuadre (30%) para ver caras */
+    .seccion-final { background: url('Foto1.jpg') center 30%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
@@ -306,7 +306,7 @@
   <section class="seccion-qr">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>Captura la Magia</h2>
+      <h2>Tus Fotos</h2>
       <p>Ayúdanos a inmortalizar cada momento de alegría, cada baile espontáneo y cada mirada de felicidad de nuestra boda.</p>
       <p>Escanea este código QR y sube todas las fotos y videos que tomes durante la celebración. ¡Queremos ver la boda a través de tus ojos!</p>
       <img src="qrphotos.png" alt="QR Photos" style="width: 150px; margin-top: 15px; background: white; padding: 12px; border-radius: 15px; border: 3px solid var(--gold);">
