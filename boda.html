@@ -29,8 +29,6 @@
       min-height: 100vh; 
       display: flex; 
       flex-direction: column; 
-      align-items: center; 
-      justify-content: center;
       position: relative;
       padding: 100px 20px;
       background-size: cover !important;
@@ -55,18 +53,19 @@
     .hero { 
       margin-top: 0; 
       z-index: 10; 
+      align-items: center; justify-content: center; /* Centrada */
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
 
     /* Capas escalonadas para el scroll fluido */
-    .seccion-pase { z-index: 9; }
-    .seccion-lugar { z-index: 8; }
-    .seccion-nosotros { z-index: 7; }
-    .seccion-vestimenta { z-index: 6; }
-    .seccion-musica { z-index: 5; }
-    .seccion-regalos { z-index: 4; }
-    .seccion-qr { z-index: 3; }
-    .seccion-final { z-index: 2; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); }
+    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
+    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
+    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
+    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-final { z-index: 2; align-items: center; justify-content: center; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Centrada */
 
     /* Velo mínimo para legibilidad */
     .overlay {
@@ -75,45 +74,47 @@
       z-index: 1;
     }
 
+    /* TARJETAS MÁS ESTILIZADAS PARA EL ZIG-ZAG */
     .glass-card {
-      background: rgba(255, 255, 255, 0.07); 
+      background: rgba(255, 255, 255, 0.08); 
       backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 420px;
+      width: 100%; max-width: 380px; /* Un poco más estrechas */
       position: relative; z-index: 2;
       text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
     /* --- ASIGNACIÓN DE IMÁGENES Y ENCUADRE DE CARAS --- */
     
-    /* Portada: Centrada por defecto */
+    /* Portada: Centrada */
     .hero { background-image: url('Foto10.jpg'); background-position: center; }
     
-    /* Pase: Bajamos un poco el encuadre (60%) para ver caras si están altas */
-    .seccion-pase { background-image: url('Foto11.jpg'); background-position: center 60%; }
+    /* Pase: Izquierda. Encuadre Jade sutil (center) */
+    .seccion-pase { background-image: url('Foto11.jpg'); background-position: center; }
     
-    /* Lugar: Centrada (es paisaje) */
+    /* Lugar: Derecha. Encuadre center */
     .seccion-lugar { background-image: url('Foto12.jpg'); background-position: center; }
     
-    /* Nosotros (Fondo): Subimos un poco (40%) para evitar cortes de cuerpo */
+    /* Nosotros (Fondo): Izquierda. Subimos encuadre (40%) */
     .seccion-nosotros { background-image: url('Foto2.jpg'); background-position: center 40%; }
     
-    /* Vestimenta: Centrada */
+    /* Vestimenta: Derecha. Encuadre Vino (center) */
     .seccion-vestimenta { background-image: url('Foto13.jpg'); background-position: center; }
     
-    /* Música: Centrada */
+    /* Música: Izquierda. Encuadre Jade (center) */
     .seccion-musica { background-image: url('Foto14.jpg'); background-position: center; }
     
-    /* Regalos: Subimos encuadre (40%) */
+    /* Regalos: Derecha. Subimos encuadre (40%) */
     .seccion-regalos { background-image: url('Foto3.jpg'); background-position: center 40%; }
     
-    /* QR: Centrada */
+    /* QR: Izquierda. Encuadre center */
     .seccion-qr { background-image: url('Foto4.jpg'); background-position: center; }
     
-    /* ¡FINAL!: AJUSTE CRÍTICO. Bajamos mucho el encuadre (80%) para ver las caras que estaban muy arriba */
-    .seccion-final { background-image: url('Foto1.jpg'); background-position: center 80%; }
+    /* ¡FINAL!: AJUSTE CRÍTICO CORREGIDO. Subimos encuadre (20%) para ver caras que estaban muy arriba */
+    .seccion-final { background-image: url('Foto1.jpg'); background-position: center 20%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; text-shadow: 2px 2px 8px rgba(0,0,0,0.2); }
@@ -133,8 +134,12 @@
     .carousel-track { display: flex; overflow-x: auto; padding: 20px 0; gap: 15px; }
     .carousel-track img { width: 80%; flex-shrink: 0; border-radius: 20px; border: 2px solid var(--gold); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
+    /* Ajustes para pantallas grandes (Zig-Zag más pronunciado) */
     @media (min-width: 992px) {
-      section { background-attachment: fixed; } /* Efecto parallax en PC */
+      section { background-attachment: fixed; } /* Parallax */
+      .glass-card { max-width: 450px; }
+      .seccion-pase, .seccion-nosotros, .seccion-musica, .seccion-qr { padding-left: 15%; }
+      .seccion-lugar, .seccion-vestimenta, .seccion-regalos { padding-right: 15%; }
       h1 { font-size: 6rem !important; }
       h2 { font-size: 3.2rem !important; }
     }
@@ -190,7 +195,7 @@
     <div class="glass-card reveal">
       <h2>Vestimenta</h2>
       <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.1rem;">FORMAL / ELEGANTE</p>
-      <p style="font-size: 0.9rem; font-style: italic;">Sugerimos Verde Jade y Vino.<br>Evitar el color blanco.</p>
+      <p style="font-size: 0.9rem; font-style: italic;">Sugerimos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
     </div>
   </section>
 
