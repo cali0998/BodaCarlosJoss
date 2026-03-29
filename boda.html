@@ -19,7 +19,13 @@
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    section { min-height: 100vh; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    section { 
+      min-height: 100vh; padding: 60px 20px; 
+      display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center;
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+    }
     
     .glass-card {
       background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -28,16 +34,31 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
+    /* --- CONFIGURACIÓN DE FOTOS DE FONDO --- */
+    
+    /* 1. Portada Principal */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
-                  url('Foto10.jpg') center center / cover no-repeat;
+                  url('Foto10.jpg');
       background-attachment: scroll;
+    }
+
+    /* 2. Sección Pase Especial */
+    .seccion-pase {
+      background: linear-gradient(rgba(10,46,36,0.8), rgba(74,10,22,0.8)), 
+                  url('Foto11.jpg'); /* <--- CAMBIA ESTA FOTO */
+    }
+
+    /* 3. Sección Ubicación */
+    .seccion-lugar {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
+                  url('Foto12.jpg'); /* <--- CAMBIA ESTA FOTO */
     }
 
     @media (min-width: 992px) {
       .glass-card { max-width: 950px; padding: 60px; }
       .side-by-side { display: flex; align-items: center; justify-content: space-around; gap: 40px; text-align: left; }
-      .hero { background-attachment: fixed; }
+      .hero, .seccion-pase, .seccion-lugar { background-attachment: fixed; }
       h1 { font-size: 5rem !important; }
     }
 
@@ -51,36 +72,16 @@
       width: 100%; max-width: 280px; border: none; cursor: pointer;
     }
 
-    /* --- NUEVO ESTILO CARRETE "ASOMADO" --- */
-    .carousel-container { 
-      position: relative; 
-      width: 100%; 
-      margin: 20px auto;
-      overflow: hidden;
-    }
-    .carousel-track { 
-      display: flex; 
-      overflow-x: auto; 
-      scroll-snap-type: x mandatory; 
-      scroll-behavior: smooth;
-      padding: 0 10%; /* Crea el espacio para que asomen las de los lados */
-      gap: 15px;
-    }
+    /* --- CARRETE --- */
+    .carousel-container { position: relative; width: 100%; margin: 20px auto; overflow: hidden; }
+    .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; padding: 0 10%; gap: 15px; }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-track img { 
-      width: 80%; /* La foto principal no ocupa todo el ancho */
-      flex-shrink: 0; 
-      scroll-snap-align: center; 
-      object-fit: cover; 
-      aspect-ratio: 4/5; 
-      border-radius: 20px; 
-      border: 2px solid var(--gold);
-      opacity: 0.4; /* Fotos laterales más claras */
-      transition: opacity 0.5s ease;
+      width: 80%; flex-shrink: 0; scroll-snap-align: center; object-fit: cover; 
+      aspect-ratio: 4/5; border-radius: 20px; border: 2px solid var(--gold);
+      opacity: 0.4; transition: opacity 0.5s ease;
     }
-    .carousel-track img.active-img {
-      opacity: 1; /* Foto central nítida */
-    }
+    .carousel-track img.active-img { opacity: 1; }
 
     .nav-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
@@ -117,7 +118,7 @@
     </div>
   </section>
 
-  <section style="background: linear-gradient(var(--jade), var(--wine));">
+  <section class="seccion-pase">
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
       <p>Hemos reservado un lugar muy especial para:</p>
@@ -127,7 +128,7 @@
     </div>
   </section>
 
-  <section style="background: rgba(0,0,0,0.2);">
+  <section class="seccion-lugar">
     <div class="glass-card reveal">
       <div class="side-by-side">
         <div>
@@ -152,7 +153,8 @@
           <img src="Foto1.jpg" alt="Foto 1" class="active-img">
           <img src="Foto2.jpg" alt="Foto 2">
           <img src="Foto3.jpg" alt="Foto 3">
-          <img src="Foto4.jpg" alt="Foto 4"> <img src="Foto5.jpg" alt="Foto 5">
+          <img src="Foto4.jpg" alt="Foto 4">
+          <img src="Foto5.jpg" alt="Foto 5">
         </div>
         <button class="nav-btn" id="nextBtn" style="right: 5px;">&#10095;</button>
       </div>
@@ -206,13 +208,13 @@
   </section>
 
   <script>
-    // 1. Reveal Animations
+    // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // 2. Countdown Timer
+    // Countdown Timer (Fecha: 19 de Dic, 2026)
     const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -225,7 +227,7 @@
       }
     }, 1000);
 
-    // 3. Carousel Logic (Efecto "Asomado")
+    // Carousel Logic
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
     let index = 0;
@@ -233,12 +235,9 @@
     function updateCarousel() {
       const scrollPos = track.scrollLeft;
       const trackWidth = track.clientWidth;
-      
       images.forEach((img, i) => {
         const imgCenter = img.offsetLeft + (img.clientWidth / 2);
         const trackCenter = scrollPos + (trackWidth / 2);
-        
-        // Si la foto está cerca del centro del contenedor, la iluminamos
         if (Math.abs(imgCenter - trackCenter) < img.clientWidth / 2) {
           img.classList.add('active-img');
           index = i;
@@ -251,7 +250,6 @@
     function moveCarousel(newIndex) {
       if (newIndex >= images.length) newIndex = 0;
       else if (newIndex < 0) newIndex = images.length - 1;
-      
       const imgToScroll = images[newIndex];
       const offset = imgToScroll.offsetLeft - (track.clientWidth / 2) + (imgToScroll.clientWidth / 2);
       track.scrollTo({ left: offset, behavior: 'smooth' });
@@ -260,8 +258,6 @@
     track.addEventListener('scroll', updateCarousel);
     document.getElementById('nextBtn').addEventListener('click', () => moveCarousel(index + 1));
     document.getElementById('prevBtn').addEventListener('click', () => moveCarousel(index - 1));
-
-    // Auto move cada 5 segundos
     setInterval(() => moveCarousel(index + 1), 5000);
     window.addEventListener('resize', () => moveCarousel(index));
   </script>
