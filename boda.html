@@ -20,7 +20,7 @@
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    section { min-height: 100vh; padding: 100px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+    section { min-height: 100vh; padding: 80px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
     
     .glass-card {
       background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -32,37 +32,44 @@
     h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 25px; }
 
     .btn {
-      background: var(--gold); color: white; padding: 18px 35px; border-radius: 50px;
-      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 30px;
+      background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px;
+      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
+      width: 100%; max-width: 280px;
     }
+    
+    .btn-outline { background: transparent; border: 2px solid var(--gold); }
 
-    /* SECCIONES CON TUS FOTOS */
+    /* SECCIONES DE FONDOS */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
                   url('0001.jpg') center/cover no-repeat; 
     }
 
-    .seccion-historia {
-      background: linear-gradient(rgba(10,46,36,0.8), rgba(10,46,36,0.9)), 
-                  url('0002.jpg') center/cover no-repeat;
+    /* CARRETE AUTO-DESLIZABLE */
+    .carousel-container {
+      width: 100%; overflow: hidden; border-radius: 20px; border: 2px solid var(--gold); margin-top: 20px;
     }
+    .carousel-track { display: flex; transition: transform 0.6s ease-in-out; }
+    .carousel-track img { width: 100%; flex-shrink: 0; object-fit: cover; aspect-ratio: 4/5; }
 
-    /* GALERÍA MINIATURA */
-    .mini-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-    .mini-gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid var(--gold); }
-
-    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); }
+    /* QR */
+    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); cursor: pointer; }
     .qr-container img { width: 180px; display: block; }
     
-    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
+    /* CUENTA REGRESIVA */
+    .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
     .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; min-width: 65px; border: 1px solid var(--gold); }
+    
+    /* SEPARADOR */
+    .divisor { width: 60px; height: 2px; background: var(--gold); margin: 20px auto; }
   </style>
 </head>
 <body>
 
   <section class="hero">
     <div class="reveal active">
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; margin-bottom: 10px;">"Toda aventura comienza con un sí"</p>
       <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 14px;">Nuestra Boda</p>
       <h1>Carlos &<br>Joselyn</h1>
       <p style="margin-top: 30px; font-size: 1.2rem;">19 • Diciembre • 2026</p>
@@ -71,20 +78,18 @@
         <div class="unit"><span id="days">00</span><br><small>Días</small></div>
         <div class="unit"><span id="hours">00</span><br><small>Hrs</small></div>
         <div class="unit"><span id="mins">00</span><br><small>Min</small></div>
+        <div class="unit"><span id="secs">00</span><br><small>Seg</small></div>
       </div>
     </div>
   </section>
 
-  <section class="seccion-historia">
+  <section style="background: linear-gradient(var(--jade), var(--wine));">
     <div class="glass-card reveal">
-      <h2>Un Nuevo Comienzo</h2>
-      <p>Nos hace muy felices compartir el inicio de nuestra vida juntos con las personas que más queremos.</p>
-      
-      <div class="mini-gallery">
-        <img src="0003.jpg" alt="Compromiso">
-        <img src="0004.jpg" alt="Compromiso">
-        <img src="0005.jpg" alt="Compromiso">
-      </div>
+      <h2>Pase Especial</h2>
+      <p>Hemos reservado un lugar muy especial en nuestra celebración para:</p>
+      <div class="divisor"></div>
+      <h3 style="font-size: 1.5rem; color: var(--gold); margin: 15px 0;">[Nombre del Invitado]</h3>
+      <p style="font-size: 1.1rem;">Tienes <b>[ 2 ]</b> pases reservados</p>
     </div>
   </section>
 
@@ -92,40 +97,77 @@
     <div class="glass-card reveal">
       <h2>¿Dónde será?</h2>
       <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
-      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: 4:00 PM</p>
+      <div class="divisor"></div>
+      <p style="font-size: 1.1rem; margin-bottom: 5px;">Ceremonia: <b>3:00 PM</b></p>
+      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: <b>4:00 PM</b></p>
       <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
+    </div>
+  </section>
+
+  <section style="background: var(--jade);">
+    <div class="glass-card reveal">
+      <h2>Nosotros</h2>
+      <p>Un pequeño vistazo a nuestra historia.</p>
+      <div class="carousel-container">
+        <div class="carousel-track" id="track">
+          <img src="0001.jpg" alt="Retrato 1">
+          <img src="0002.jpg" alt="Retrato 2">
+          <img src="0003.jpg" alt="Retrato 3">
+          <img src="0004.jpg" alt="Retrato 4">
+          <img src="0005.jpg" alt="Retrato 5">
+        </div>
+      </div>
     </div>
   </section>
 
   <section style="background: linear-gradient(var(--jade), var(--wine));">
     <div class="glass-card reveal">
-      <h2>Dress Code</h2>
-      <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
-      <p style="font-size: 14px; opacity: 0.8; margin-top: 15px;">
+      <h2>Detalles</h2>
+      <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold); margin-top: 15px;">FORMAL / ELEGANTE</p>
+      <p style="font-size: 14px; opacity: 0.9; margin-top: 10px;">
         Agradecemos evitar el color blanco.<br>
         Tonos sugeridos: Verde Jade y Vino.
       </p>
+      <div class="divisor"></div>
+      <p style="font-size: 14px; opacity: 0.9;"><b>Nota:</b> Evento exclusivo para adultos.</p>
     </div>
   </section>
 
   <section style="background: var(--wine);">
     <div class="glass-card reveal">
+      <h2>Mesa de Regalos</h2>
+      <p style="font-size: 2rem; margin: 10px 0;">✉️</p>
+      <p style="font-size: 0.95rem; line-height: 1.6;">Su presencia es nuestro mayor regalo. Sin embargo, si desean tener un detalle con nosotros, contaremos con la modalidad de <b>Lluvia de Sobres</b> en la recepción.</p>
+    </div>
+  </section>
+
+  <section style="background: rgba(0,0,0,0.2);">
+    <div class="glass-card reveal">
       <h2>Captura la Magia</h2>
       <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
+      
       <div class="qr-container" onclick="window.location.href='index.html'">
-        <img src="qrphotos.png" alt="QR">
+        <img src="qr-nuevo.png" alt="QR Fotos">
       </div>
       <br>
       <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
     </div>
   </section>
 
-  <section style="background: url('0006.jpg') center/cover;">
-    <div class="glass-card reveal" style="background: rgba(10, 46, 36, 0.9);">
-      <h2>Confirmar Asistencia</h2>
-      <p>Esperamos contar con tu presencia.</p>
-      <p>Confírmanos antes del 01/12/2026</p>
-      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
+  <section style="background: linear-gradient(var(--wine), var(--jade));">
+    <div class="glass-card reveal" style="padding: 40px 20px;">
+      <h2 style="font-size: 2.8rem; margin-bottom: 5px;">Carlos & Joselyn</h2>
+      <p style="font-style: italic; margin-bottom: 30px;">¡Esperamos celebrar contigo!</p>
+      
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
+        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20CEREMONIA." class="btn" style="margin-top: 0;">Confirmar Ceremonia</a>
+        
+        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20RECEPCIÓN." class="btn" style="margin-top: 0;">Confirmar Celebración</a>
+        
+        <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Para%20la%20boda,%20sugiero%20la%20siguiente%20canción:" class="btn btn-outline" style="margin-top: 0; color: white;">Sugerir Canción 🎵</a>
+        
+        <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z&details=¡Acompáñanos+a+celebrar!&location=Salón+de+Eventos+Elegance" target="_blank" class="btn btn-outline" style="margin-top: 0; color: white;">Agendar Celebración 📅</a>
+      </div>
     </div>
   </section>
 
@@ -138,15 +180,39 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Cuenta Regresiva Exacta
-    const target = new Date("Dec 19, 2026 16:00:00").getTime();
+    // Cuenta Regresiva (Añadidos los segundos)
+    const target = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
       const diff = target - now;
-      document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
-      document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-      document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60));
+      if(diff > 0) {
+        document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24)).toString().padStart(2, '0');
+        document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60)).toString().padStart(2, '0');
+        document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60)).toString().padStart(2, '0');
+        document.getElementById('secs').innerText = Math.floor((diff % (1000*60)) / 1000).toString().padStart(2, '0');
+      }
     }, 1000);
+
+    // Lógica del carrete de fotos (Desliza cada 3 segundos)
+    const track = document.getElementById('track');
+    const images = track.querySelectorAll('img');
+    let currentIndex = 0;
+
+    if (images.length > 1) {
+      setInterval(() => {
+        currentIndex++;
+        if (currentIndex >= images.length) {
+          currentIndex = 0;
+          track.style.transition = 'none'; // Quita la animación al volver al inicio
+          track.style.transform = `translateX(0)`;
+          setTimeout(() => {
+            track.style.transition = 'transform 0.6s ease-in-out';
+          }, 50);
+        } else {
+          track.style.transform = `translateX(-${currentIndex * 100}%)`;
+        }
+      }, 3000);
+    }
   </script>
 
 </body>
