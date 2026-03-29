@@ -16,6 +16,7 @@
     * { scroll-behavior: smooth; box-sizing: border-box; }
     body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
 
+    /* Animaciones */
     .reveal { opacity: 0; transform: translateY(30px); transition: all 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -36,6 +37,7 @@
       text-transform: uppercase; font-size: 13px; letter-spacing: 1px; transition: 0.3s;
     }
 
+    /* SECCIONES CON TUS FOTOS */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
                   url('0001.jpg') center/cover no-repeat; 
@@ -46,10 +48,11 @@
                   url('0002.jpg') center/cover no-repeat;
     }
 
+    /* GALERÍA MINIATURA */
     .mini-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
     .mini-gallery img { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid var(--gold); }
 
-    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); cursor: pointer; }
+    .qr-container { background: white; padding: 15px; border-radius: 20px; display: inline-block; margin: 30px 0; border: 5px solid var(--gold); }
     .qr-container img { width: 180px; display: block; }
     
     .countdown { display: flex; justify-content: center; gap: 10px; margin-top: 20px; }
@@ -75,7 +78,7 @@
   <section class="seccion-historia">
     <div class="glass-card reveal">
       <h2>Un Nuevo Comienzo</h2>
-      <p>Nos hace muy felices compartir el inicio de nuestra vida juntos.</p>
+      <p>Nos hace muy felices compartir el inicio de nuestra vida juntos con las personas que más queremos.</p>
       
       <div class="mini-gallery">
         <img src="0003.jpg" alt="Compromiso">
@@ -88,9 +91,9 @@
   <section style="background: rgba(0,0,0,0.2);">
     <div class="glass-card reveal">
       <h2>¿Dónde será?</h2>
-      <p><b>Luna Azul</b><br>La Rita de Pococí</p>
-      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: 3:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.2794,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
+      <p><b>Salón de Eventos Elegance</b><br>Guápiles, Limón</p>
+      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: 4:00 PM</p>
+      <a href="https://waze.com/ul?ll=10.2114,-83.7845&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
     </div>
   </section>
 
@@ -108,9 +111,9 @@
   <section style="background: var(--wine);">
     <div class="glass-card reveal">
       <h2>Captura la Magia</h2>
-      <p>Escanea o toca el botón para subir tus recuerdos.</p>
+      <p>Escanea o toca el botón para subir tus recuerdos a nuestra galería en vivo.</p>
       <div class="qr-container" onclick="window.location.href='index.html'">
-        <img src="QR%20Drobe%20~28-marzo-21-07.png" alt="QR Fotos">
+        <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https://cali0998.github.io/BodaCarlosJoss/index.html" alt="QR">
       </div>
       <br>
       <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
@@ -120,12 +123,14 @@
   <section style="background: url('0006.jpg') center/cover;">
     <div class="glass-card reveal" style="background: rgba(10, 46, 36, 0.9);">
       <h2>Confirmar Asistencia</h2>
+      <p>Esperamos contar con tu presencia.</p>
       <p>Confírmanos antes del 01/12/2026</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!%20Confirmo%20mi%20asistencia." class="btn">Confirmar WhatsApp ✅</a>
+      <a href="https://wa.me/506XXXXXXXX?text=¡Hola!%20Confirmo%20mi%20asistencia%20a%20la%20boda." class="btn">Confirmar WhatsApp ✅</a>
     </div>
   </section>
 
   <script>
+    // Efecto Reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) entry.target.classList.add('active');
@@ -133,16 +138,16 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    const target = new Date("Dec 19, 2026 15:00:00").getTime();
+    // Cuenta Regresiva Exacta
+    const target = new Date("Dec 19, 2026 16:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
       const diff = target - now;
-      if(diff > 0) {
-        document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
-        document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60));
-      }
+      document.getElementById('days').innerText = Math.floor(diff / (1000*60*60*24));
+      document.getElementById('hours').innerText = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      document.getElementById('mins').innerText = Math.floor((diff % (1000*60*60)) / (1000*60));
     }, 1000);
   </script>
+
 </body>
 </html>
