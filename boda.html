@@ -83,7 +83,7 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 380px;
+      width: 100%; max-width: 400px; /* UN POCO MÁS ANCHAS PARA TEXTOS LARGOS */
       position: relative; z-index: 5;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -94,53 +94,51 @@
       position: absolute;
       font-family: 'Playfair Display', serif;
       font-style: italic;
-      font-size: 1.6rem; /* TEXTO MÁS GRANDE */
+      font-size: 1.6rem; 
       color: rgba(255, 255, 255, 0.7);
-      max-width: 250px;
-      line-height: 1.2;
+      max-width: 300px; /* MÁS ANCHO PARA FRASES LARGAS */
+      line-height: 1.3;
       z-index: 1;
       pointer-events: none;
     }
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
-    .seccion-qr .floating-text { right: 10%; text-align: right; }
+    .seccion-qr .floating-text { right: 8%; text-align: right; }
     
     .seccion-lugar .floating-text,
     .seccion-vestimenta .floating-text,
-    .seccion-regalos .floating-text { left: 10%; text-align: left; }
+    .seccion-regalos .floating-text { left: 8%; text-align: left; }
 
-    /* --- CARRETE CON BOTONES (NUEVO) --- */
+    /* --- CARRETE INFINITO (CORREGIDO) --- */
     .carousel-container {
       position: relative;
       width: 100%;
       max-width: 700px;
-      margin-top: 20px;
+      margin-top: 25px;
+      overflow: hidden; /* Para ocultar las imágenes clonadas */
     }
 
     .carousel-track { 
       display: flex; 
-      overflow-x: auto; 
       padding: 20px 0; 
       gap: 15px; 
-      /* Ocultamos la barra de scroll */
+      /* Ocultamos la barra de scroll y activamos JS */
       scrollbar-width: none; 
       -ms-overflow-style: none; 
+      transition: transform 0.5s ease-in-out; /* Animación suave */
     }
     .carousel-track::-webkit-scrollbar { display: none; }
 
     .carousel-track img { 
-      width: 85%; 
-      flex-shrink: 0; 
+      /* CORRECCIÓN: Recuperan proporción original y nitidez */
+      width: auto; 
+      max-width: 100%; 
+      height: 300px; /* Altura fija para uniformidad */
+      object-fit: contain; /* Ajuste perfecto sin estirar */
       border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
-      /* Para que los botones sepan cuánto medir al scrollear */
-      scroll-snap-align: center; 
-    }
-
-    /* Estilos para activar scroll-snap */
-    .carousel-track {
-      scroll-snap-type: x mandatory;
+      flex-shrink: 0;
     }
 
     /* Botones de navegación */
@@ -148,13 +146,13 @@
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(197, 157, 95, 0.8); /* Color oro con transparencia */
+      background: rgba(197, 157, 95, 0.8); 
       color: white;
       border: none;
       border-radius: 50%;
-      width: 60px; /* BOTONES GRANDES */
-      height: 60px;
-      font-size: 2rem;
+      width: 55px; 
+      height: 55px;
+      font-size: 1.8rem;
       cursor: pointer;
       z-index: 10;
       transition: background 0.3s ease;
@@ -166,24 +164,8 @@
     .carousel-btn:hover {
       background: rgba(197, 157, 95, 1);
     }
-    .carousel-btn.prev { left: -70px; }
-    .carousel-btn.next { right: -70px; }
-
-    /* Ocultamos botones en móviles si hay poco espacio, o los ajustamos */
-    @media (max-width: 900px) {
-      .carousel-btn.prev { left: -30px; }
-      .carousel-btn.next { right: -30px; }
-    }
-     @media (max-width: 600px) {
-       /* En móviles muy pequeños, quizás sea mejor integrarlos ligeramente sobre la imagen o dejarlos afuera pero más pequeños */
-       .carousel-btn {
-         width: 50px;
-         height: 50px;
-         font-size: 1.8rem;
-       }
-       .carousel-btn.prev { left: -25px; }
-       .carousel-btn.next { right: -25px; }
-    }
+    .carousel-btn.prev { left: 10px; }
+    .carousel-btn.next { right: 10px; }
 
     /* --- FONDOS Y ENCUADRES --- */
     .hero { background: url('Foto10.jpg') center; }
@@ -196,14 +178,14 @@
     .seccion-qr { background: url('Foto4.jpg') center; }
     .seccion-final { background: url('Foto1.jpg') center 25%; }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1.1; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
-    h3 { font-size: 1.5rem; color: white; margin: 0; font-weight: 600; } /* H3 MÁS GRANDE */
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
+    h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
     
-    p { font-size: 1.2rem; line-height: 1.6; margin: 10px 0; } /* TEXTO P MÁS GRANDE */
+    p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; } /* TEXTO P UN POCO MÁS GRANDE Y ESPACIADO */
 
     .btn {
-      background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; /* BOTÓN MÁS GRANDE */
+      background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
     }
@@ -214,18 +196,19 @@
     /* Ajustes para pantallas grandes */
     @media (min-width: 992px) {
       section { background-attachment: fixed; } /* Parallax */
-      .glass-card { max-width: 450px; }
-      h1 { font-size: 6rem !important; }
-      h2 { font-size: 3.2rem !important; }
-      p { font-size: 1.3rem; }
+      .glass-card { max-width: 500px; }
+      h1 { font-size: 6.5rem !important; }
+      h2 { font-size: 3.5rem !important; }
+      p { font-size: 1.35rem; }
     }
 
     /* Ajustes para móviles */
     @media (max-width: 600px) {
-      .floating-text { font-size: 1.2rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 80%; margin-top: 20px; }
+      .floating-text { font-size: 1.3rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 90%; margin-top: 25px; margin-bottom: 10px;}
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr { padding-left: 15px; padding-right: 15px; align-items: center; }
-      h2 { font-size: 2.2rem; }
-      p { font-size: 1.1rem; }
+      h2 { font-size: 2.4rem; }
+      p { font-size: 1.15rem; }
+      .carousel-track img { height: 200px; } /* Altura reducida en móvil */
     }
   </style>
 </head>
@@ -234,10 +217,10 @@
   <section class="hero">
     <div class="overlay"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.4rem; margin-bottom: 10px;">"Nuestra historia apenas comienza"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">"Nuestra historia de amor apenas comienza, y queremos que seas parte de ella"</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 14px;">19 • DICIEMBRE • 2026</p>
-      <a href="#" class="btn">Agendar Fecha 📅</a>
+      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 15px;">19 DE DICIEMBRE DE 2026</p>
+      <a href="#" class="btn">Agendar Nuestra Fecha 📅</a>
     </div>
   </section>
 
@@ -246,26 +229,30 @@
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
       <h3>Carlos & Joselyn</h3>
-      <p style="font-size: 2rem; color: var(--gold); font-weight: 600; margin-top: 15px;">Pases: 2</p>
+      <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas. Tu presencia hará que esta celebración sea verdaderamente inolvidable.</p>
+      <p style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
     </div>
-    <div class="floating-text reveal">"Contamos los días para verte..."</div>
+    <div class="floating-text reveal">"Contamos los días, las horas y los minutos para verte y compartir nuestra felicidad contigo..."</div>
   </section>
 
   <section class="seccion-lugar">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>Ubicación</h2>
-      <h3>Salón Luna Azul</h3>
-      <p>La Rita, Pococí</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar 🚗</a>
+      <h2>Nuestra Cita</h2>
+      <h3>Salón de Eventos Luna Azul</h3>
+      <p>Bajo la luz de la luna y testigos de nuestro amor, uniremos nuestras vidas en este hermoso rincón de Costa Rica.</p>
+      <p><b>Ceremonia:</b> 3:00 PM</p>
+      <p><b>Recepción:</b> 4:00 PM</p>
+      <p style="font-size: 1rem; opacity: 0.8; font-style: italic;">La Rita, Pococí, Limón</p>
+      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar con Waze 🚗</a>
     </div>
-    <div class="floating-text reveal">"Bajo la luna, seremos testigos..."</div>
+    <div class="floating-text reveal">"Bajo el cielo estrellado, seremos testigos del inicio de nuestro 'para siempre'..."</div>
   </section>
 
   <section class="seccion-nosotros">
     <div class="overlay"></div>
-    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 700px;">
-      <h2 style="color:white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">Nuestra Historia</h2>
+    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 750px;">
+      <h2 style="color:white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">Un Viaje de Amor</h2>
       
       <div class="carousel-container reveal">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
@@ -274,59 +261,66 @@
           <img src="Foto2.jpg" alt="2">
           <img src="Foto3.jpg" alt="3">
           <img src="Foto4.jpg" alt="4">
+          <img src="Foto5.jpg" alt="5">
         </div>
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
 
     </div>
-    <div class="floating-text reveal">"Cada foto guarda un suspiro."</div>
+    <div class="floating-text reveal">"Cada sonrisa, cada abrazo y cada mirada compartida es un tesoro que guardamos en nuestra memoria. Estos son los momentos que construyen nuestra historia..."</div>
   </section>
 
   <section class="seccion-vestimenta">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>Vestimenta</h2>
-      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.3rem;">FORMAL / ELEGANTE</p>
-      <p style="font-size: 1rem; font-style: italic;">Verde Jade y Vino.</p>
+      <h2>Código de Gala</h2>
+      <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
+      <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
+      <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos los tonos Verde Jade y Vino para armonizar con nuestra paleta.<br>Agradecemos evitar el color blanco.</p>
     </div>
-    <div class="floating-text reveal">"Vístete de gala y alegría."</div>
+    <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio para nuestra celebración..."</div>
   </section>
 
   <section class="seccion-musica">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>Música</h2>
-      <p>¿Qué canción no puede faltar?</p>
-      <a href="https://wa.me/50683484866" target="_blank" class="btn">Sugerir Canción 🎵</a>
+      <h2>¡A Bailar!</h2>
+      <p>La noche es joven y la felicidad es inmensa. Queremos asegurarnos de que la pista de baile nunca esté vacía y que todos disfruten al máximo.</p>
+      <p>Ayúdanos a elegir la banda sonora perfecta para nuestra boda.</p>
+      <a href="https://wa.me/50683484866?text=¡Hola!+Para+la+boda,+sugiero+esta+canción:" target="_blank" class="btn">Sugerir Mi Canción Favorita 🎵</a>
     </div>
-    <div class="floating-text reveal">"Que no falte el ritmo."</div>
+    <div class="floating-text reveal">"Que no falte el ritmo, la risa y la buena compañía. ¡Hagamos que esta noche sea legendaria en la pista de baile!"</div>
   </section>
 
   <section class="seccion-regalos">
-    <div class="overlay"></div>
+    <div class="overlay",></div>
     <div class="glass-card reveal">
-      <h2>Regalos</h2>
-      <p>Lluvia de Sobres</p>
+      <h2>Mesa de Regalos</h2>
+      <p>El mayor regalo que podemos recibir es tu presencia y tu cariño en este día tan especial.</p>
+      <p>Si deseas tener un detalle con nosotros para iniciar nuestro hogar, contaremos con la modalidad de <b>Lluvia de Sobres</b> en la recepción.</p>
+      <p style="font-size: 0.9rem; font-style: italic; margin-top: 15px;">Tu generosidad será el cimiento de nuestro futuro juntos. ¡Gracias!</p>
     </div>
-    <div class="floating-text reveal">"Tu presencia es el mayor regalo."</div>
+    <div class="floating-text reveal">"Tu presencia es el mayor regalo que podemos recibir. Si deseas tener un detalle adicional, agradecemos tu amor y generosidad..."</div>
   </section>
 
   <section class="seccion-qr">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>Tus Fotos</h2>
-      <p>Comparte tus capturas de la boda</p>
-      <img src="qrphotos.png" alt="QR" style="width: 140px; margin-top: 15px; background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--gold);">
+      <h2>Captura la Magia</h2>
+      <p>Ayúdanos a inmortalizar cada momento de alegría, cada baile espontáneo y cada mirada de felicidad de nuestra boda.</p>
+      <p>Escanea este código QR y sube todas las fotos y videos que tomes durante la celebración. ¡Queremos ver la boda a través de tus ojos!</p>
+      <img src="qrphotos.png" alt="QR Photos" style="width: 150px; margin-top: 15px; background: white; padding: 12px; border-radius: 15px; border: 3px solid var(--gold);">
     </div>
-    <div class="floating-text reveal">"Captura el momento."</div>
+    <div class="floating-text reveal">"Captura la magia, la emoción y la alegría de cada instante. Ayúdanos a crear un álbum de recuerdos inolvidables..."</div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2 style="font-size: 3.2rem;">¡Te Esperamos!</h2>
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.4rem;">Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866" target="_blank" class="btn">Confirmar Asistencia</a>
+      <h2 style="font-size: 3.5rem;">¡Te Esperamos!</h2>
+      <p>Nuestro amor es fuerte, y nuestra felicidad es inmensa. Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
+      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Mi Asistencia Por WhatsApp</a>
     </div>
   </section>
 
@@ -337,24 +331,35 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Carrete con botones Script
+    // Carrete Infinito Script (JS Avanzado)
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
+    const images = track.querySelectorAll('img');
+    const imageCount = images.length;
+    let currentIndex = 0;
 
-    // Función para obtener el ancho de una imagen (incluyendo el gap)
-    function getImageWidth() {
-      const img = track.querySelector('img');
-      return img.clientWidth + 15; // Ancho de imagen + gap
+    // Función para actualizar la posición del carrete
+    function updateCarousel() {
+      const imgWidth = images[0].clientWidth + 15; // Ancho de imagen + gap
+      track.style.transform = `translateX(-${currentIndex * imgWidth}px)`;
     }
 
+    // Botón Siguiente (Bucle)
     nextBtn.addEventListener('click', () => {
-      track.scrollBy({ left: getImageWidth(), behavior: 'smooth' });
+      currentIndex = (currentIndex + 1) % imageCount; // Vuelve a 0 si llega al final
+      updateCarousel();
     });
 
+    // Botón Anterior (Bucle)
     prevBtn.addEventListener('click', () => {
-      track.scrollBy({ left: -getImageWidth(), behavior: 'smooth' });
+      currentIndex = (currentIndex - 1 + imageCount) % imageCount; // Va al final si está en 0
+      updateCarousel();
     });
+
+    // Ajuste inicial y en cambio de tamaño de pantalla
+    updateCarousel();
+    window.addEventListener('resize', updateCarousel);
   </script>
 </body>
 </html>
