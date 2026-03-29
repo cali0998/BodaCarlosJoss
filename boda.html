@@ -34,31 +34,33 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
-    /* --- CONFIGURACIÓN DE FOTOS DE FONDO --- */
+    /* --- CONFIGURACIÓN DE FOTOS DE FONDO INDIVIDUALES --- */
     
-    /* 1. Portada Principal */
     .hero { 
-      background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
-                  url('Foto10.jpg');
-      background-attachment: scroll;
+      background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), url('Foto10.jpg');
     }
-
-    /* 2. Sección Pase Especial */
     .seccion-pase {
-      background: linear-gradient(rgba(10,46,36,0.8), rgba(74,10,22,0.8)), 
-                  url('Foto11.jpg'); /* <--- CAMBIA ESTA FOTO */
+      background: linear-gradient(rgba(10,46,36,0.8), rgba(74,10,22,0.8)), url('Foto11.jpg');
     }
-
-    /* 3. Sección Ubicación */
     .seccion-lugar {
-      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                  url('Foto12.jpg'); /* <--- CAMBIA ESTA FOTO */
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('Foto12.jpg');
+    }
+    .seccion-vestimenta {
+      background: linear-gradient(var(--jade), rgba(10,46,36,0.85)), url('Foto13.jpg');
+    }
+    .seccion-musica {
+      background: linear-gradient(var(--wine), rgba(74,10,22,0.85)), url('Foto14.jpg');
+    }
+    .seccion-regalos {
+      background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('Foto15.jpg');
+    }
+    .seccion-qr {
+      background: linear-gradient(var(--jade), var(--wine)), url('Foto16.jpg');
     }
 
     @media (min-width: 992px) {
-      .glass-card { max-width: 950px; padding: 60px; }
-      .side-by-side { display: flex; align-items: center; justify-content: space-around; gap: 40px; text-align: left; }
-      .hero, .seccion-pase, .seccion-lugar { background-attachment: fixed; }
+      .glass-card { max-width: 600px; padding: 60px; }
+      section { background-attachment: fixed; }
       h1 { font-size: 5rem !important; }
     }
 
@@ -114,7 +116,7 @@
         <div class="unit"><span id="secs">00</span><br><small>Seg</small></div>
       </div>
 
-      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z&details=¡Acompáñanos+a+celebrar!&location=Salón+de+Eventos+Luna+Azul" target="_blank" class="btn btn-outline" style="color: white; margin-top: 40px;">Agendar Celebración 📅</a>
+      <a href="https://www.google.com/calendar/render?action=TEMPLATE&text=Boda+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T040000Z" target="_blank" class="btn" style="margin-top: 40px;">Agendar Celebración 📅</a>
     </div>
   </section>
 
@@ -130,17 +132,11 @@
 
   <section class="seccion-lugar">
     <div class="glass-card reveal">
-      <div class="side-by-side">
-        <div>
-          <h2>¿Dónde será?</h2>
-          <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
-        </div>
-        <div>
-          <p style="font-size: 1.1rem; margin-bottom: 5px;">Ceremonia: <b>3:00 PM</b></p>
-          <p style="color: var(--gold); font-size: 1.3rem;">Recepción: <b>4:00 PM</b></p>
-          <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
-        </div>
-      </div>
+      <h2>¿Dónde será?</h2>
+      <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
+      <p style="font-size: 1.1rem; margin-top: 15px;">Ceremonia: <b>3:00 PM</b></p>
+      <p style="color: var(--gold); font-size: 1.3rem;">Recepción: <b>4:00 PM</b></p>
+      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
     </div>
   </section>
 
@@ -161,38 +157,39 @@
     </div>
   </section>
 
-  <section style="background: linear-gradient(var(--jade), var(--wine));">
+  <section class="seccion-vestimenta">
     <div class="glass-card reveal">
-      <div class="side-by-side">
-        <div>
-          <h2>Código de Vestimenta</h2>
-          <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
-          <p style="font-size: 14px; opacity: 0.9;">Evitar color blanco. Sugeridos: Verde Jade y Vino.</p>
-        </div>
-        <div>
-          <h2>Música</h2>
-          <p>¿Qué canción no puede faltar?</p>
-          <a href="https://wa.me/50683484866?text=Sugerencia+música:" class="btn btn-outline" style="color: white;">Sugerir Canción 🎵</a>
-        </div>
-      </div>
+      <h2>Código de Vestimenta</h2>
+      <p style="font-size: 1.2rem; letter-spacing: 2px; color: var(--gold);">FORMAL / ELEGANTE</p>
+      <p style="font-size: 14px; opacity: 0.9; margin-top: 10px;">Evitar color blanco.<br>Sugeridos: Verde Jade y Vino.</p>
     </div>
   </section>
 
-  <section style="background: var(--wine);">
+  <section class="seccion-musica">
     <div class="glass-card reveal">
-      <div class="side-by-side">
-        <div style="max-width: 400px;">
-          <h2>Mesa de Regalos</h2>
-          <p>Su presencia es nuestro regalo. Si desean tener un detalle, tendremos <b>Lluvia de Sobres</b>.</p>
-        </div>
-        <div>
-          <div class="qr-container" onclick="window.location.href='index.html'">
-            <img src="qrphotos.png" alt="QR">
-          </div>
-          <br>
-          <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
-        </div>
+      <h2>Música</h2>
+      <p>¿Qué canción no puede faltar en la fiesta?</p>
+      <a href="https://wa.me/50683484866?text=Sugerencia+música:" class="btn">Sugerir Canción 🎵</a>
+    </div>
+  </section>
+
+  <section class="seccion-regalos">
+    <div class="glass-card reveal">
+      <h2>Mesa de Regalos</h2>
+      <p>Su presencia es nuestro regalo más grande. Si desean tener un detalle con nosotros, tendremos:</p>
+      <h3 style="color: var(--gold); font-size: 1.8rem; margin: 20px 0;">Lluvia de Sobres</h3>
+    </div>
+  </section>
+
+  <section class="seccion-qr">
+    <div class="glass-card reveal">
+      <h2>Comparte tus Fotos</h2>
+      <p>Ayúdanos a capturar cada momento del evento.</p>
+      <div class="qr-container" onclick="window.location.href='index.html'">
+        <img src="qrphotos.png" alt="QR">
       </div>
+      <br>
+      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
     </div>
   </section>
 
@@ -200,7 +197,7 @@
     <div class="glass-card reveal">
       <h2 style="font-size: 3rem;">Carlos & Joselyn</h2>
       <p style="font-style: italic; margin-bottom: 25px;">¡Te esperamos!</p>
-      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 15px;">
         <a href="https://wa.me/50683484866?text=Confirmación+Ceremonia" class="btn">Confirmar Ceremonia</a>
         <a href="https://wa.me/50683484866?text=Confirmación+Recepción" class="btn">Confirmar Recepción</a>
       </div>
@@ -208,13 +205,13 @@
   </section>
 
   <script>
-    // Reveal Animations
+    // Animación Reveal
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Countdown Timer (Fecha: 19 de Dic, 2026)
+    // Contador
     const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -227,7 +224,7 @@
       }
     }, 1000);
 
-    // Carousel Logic
+    // Carrete
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
     let index = 0;
@@ -259,7 +256,6 @@
     document.getElementById('nextBtn').addEventListener('click', () => moveCarousel(index + 1));
     document.getElementById('prevBtn').addEventListener('click', () => moveCarousel(index - 1));
     setInterval(() => moveCarousel(index + 1), 5000);
-    window.addEventListener('resize', () => moveCarousel(index));
   </script>
 </body>
 </html>
