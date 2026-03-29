@@ -8,75 +8,189 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
-    :root { --gold: #c59d5f; }
+    :root {
+      --gold: #c59d5f;
+    }
+
     * { scroll-behavior: smooth; box-sizing: border-box; }
     
     body { 
-      margin: 0; font-family: 'Poppins', sans-serif; 
-      background: #000; color: white; overflow-x: hidden; 
+      margin: 0; 
+      font-family: 'Poppins', sans-serif; 
+      background: url('Foto10.jpg') center/cover no-repeat fixed;
+      color: white; 
+      overflow-x: hidden; 
+      -webkit-font-smoothing: antialiased;
     }
 
     section { 
-      min-height: 100vh; display: flex; flex-direction: column; position: relative;
-      padding: 100px 20px; background-size: cover !important;
-      background-position: center !important; background-repeat: no-repeat !important;
-      margin-top: -21vh;
-      -webkit-mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
-      mask-image: linear-gradient(to bottom, transparent, black 15%, black 85%, transparent);
+      min-height: 100vh; 
+      display: flex; 
+      flex-direction: column; 
+      position: relative;
+      padding: 100px 20px;
+      
+      background-size: cover !important;
+      background-position: center !important;
+      background-repeat: no-repeat !important;
+      
+      margin-top: -21vh; 
+      
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
-    /* --- FONDOS --- */
-    .hero { margin-top: 0; align-items: center; justify-content: center; background: url('Foto10.jpg') center; }
-    .seccion-pase { background: url('Foto11.jpg') center; align-items: flex-start; padding-left: 10%; }
-    .seccion-nosotros { background: url('Foto2.jpg') center; align-items: center; }
-    .seccion-musica { background: url('Foto1.jpg') center 82%; align-items: flex-start; padding-left: 10%; }
-    .seccion-final { background: url('Foto14.jpg') center 75%; align-items: flex-start; padding-left: 10%; }
+    .hero { 
+      margin-top: 0; 
+      z-index: 10; 
+      align-items: center; justify-content: center;
+      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+    }
 
-    .overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.2); z-index: 1; }
+    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; }
+    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; }
+    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; }
+    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; }
+    
+    .seccion-final { 
+      z-index: 2; 
+      align-items: flex-start; 
+      justify-content: center; 
+      padding-left: 10%; 
+      -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); 
+    }
+
+    .overlay {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.15); 
+      z-index: 1;
+    }
 
     .glass-card {
-      background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px);
-      border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 30px;
-      padding: 35px; width: 100%; max-width: 350px;
-      position: relative; z-index: 5; text-align: center;
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 35px;
+      padding: 40px 25px; 
+      width: 100%; max-width: 350px;
+      position: relative; z-index: 5;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
     }
 
-    /* --- CARRETE INFINITO MEJORADO --- */
+    .floating-text {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: 1.6rem; 
+      color: rgba(255, 255, 255, 0.7);
+      max-width: 300px;
+      line-height: 1.3;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .seccion-pase .floating-text,
+    .seccion-nosotros .floating-text,
+    .seccion-musica .floating-text,
+    .seccion-qr .floating-text,
+    .seccion-final .floating-text { right: 8%; text-align: right; }
+    
+    .seccion-lugar .floating-text,
+    .seccion-vestimenta .floating-text,
+    .seccion-regalos .floating-text { left: 8%; text-align: left; }
+
     .carousel-container {
-      position: relative; width: 100%; max-width: 500px;
-      margin-top: 25px; overflow: hidden; z-index: 10;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin-top: 25px;
+      overflow: hidden;
     }
 
     .carousel-track { 
-      display: flex; gap: 15px; 
-      transition: transform 0.4s ease-out;
-      will-change: transform;
+      display: flex; 
+      padding: 20px 0; 
+      gap: 15px; 
+      transition: transform 0.5s ease-in-out; 
     }
 
     .carousel-track img { 
-      width: 250px; height: 350px; object-fit: cover;
-      border-radius: 20px; border: 2px solid var(--gold);
+      width: auto; 
+      max-width: 100%; 
+      height: 220px; 
+      object-fit: contain; 
+      border-radius: 25px; 
+      border: 2px solid rgba(197, 157, 95, 0.3); 
       flex-shrink: 0;
     }
 
     .carousel-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: var(--gold); color: white; border: none;
-      width: 45px; height: 45px; border-radius: 50%;
-      cursor: pointer; z-index: 20; font-size: 1.2rem;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(197, 157, 95, 0.8); 
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px; 
+      height: 50px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .prev { left: 10px; }
-    .next { right: 10px; }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; }
-    .btn { 
-      background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px; 
-      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
+    .hero { background: url('Foto10.jpg') center; }
+    .seccion-pase { background: url('Foto11.jpg') center; }
+    .seccion-lugar { background: url('Foto12.jpg') center; }
+    .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
+    .seccion-vestimenta { background: url('Foto13.jpg') center; }
+    .seccion-musica { background: url('Foto1.jpg') center 82%; }
+    .seccion-regalos { background: url('Foto3.jpg') center 40%; }
+    .seccion-qr { background: url('Foto4.jpg') center; }
+    .seccion-final { background: url('Foto14.jpg') center 75%; }
+
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
+    h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
+    p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; }
+
+    .btn {
+      background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
+      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
+      text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
     }
 
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+
+    /* Ajustes para pantallas grandes (PC) */
     @media (min-width: 992px) {
-      section { background-attachment: fixed; }
-      .seccion-final, .seccion-musica { background-position: center 0% !important; }
+      section { background-attachment: fixed; } 
+      .glass-card { max-width: 400px; }
+      h1 { font-size: 6.5rem !important; }
+      h2 { font-size: 3.5rem !important; }
+      p { font-size: 1.35rem; }
+      
+      /* ESTO BAJA LA FOTO EN PC */
+      .seccion-final { background-position: center 0% !important; }
+      .seccion-musica { background-position: center 0% !important; }
+    }
+
+    /* Ajustes para móviles */
+    @media (max-width: 600px) {
+      .floating-text { font-size: 1.3rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 90%; margin-top: 25px; margin-bottom: 10px;}
+      .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center; }
+      h2 { font-size: 2.4rem; }
+      p { font-size: 1.15rem; }
+      .carousel-track img { height: 180px; }
     }
   </style>
 </head>
@@ -84,85 +198,47 @@
 
   <section class="hero">
     <div class="overlay"></div>
-    <h1>Carlos & Joselyn</h1>
-    <p>19 DE DICIEMBRE DE 2026</p>
+    <div class="reveal active">
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">"Nuestra historia de amor apenas comienza, y queremos que seas parte de ella"</p>
+      <h1>Carlos &<br>Joselyn</h1>
+      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 15px;">19 DE DICIEMBRE DE 2026</p>
+      <a href="#" class="btn">Agendar Nuestra Fecha 📅</a>
+    </div>
   </section>
 
-  <section class="seccion-nosotros">
+  <section class="seccion-pase">
     <div class="overlay"></div>
-    <div class="glass-card">
-      <h2>Nuestra Historia</h2>
-      <div class="carousel-container">
-        <button class="carousel-btn prev" id="prevBtn">❮</button>
-        <div class="carousel-track" id="carouselTrack">
-          <img src="Foto1.jpg">
-          <img src="Foto2.jpg">
-          <img src="Foto3.jpg">
-          <img src="Foto4.jpg">
-          <img src="Foto5.jpg">
-        </div>
-        <button class="carousel-btn next" id="nextBtn">❯</button>
-      </div>
+    <div class="glass-card reveal">
+      <h2>Pase Especial</h2>
+      <h3>Carlos & Joselyn</h3>
+      <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas.</p>
+      <p style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
+    </div>
+    <div class="floating-text reveal">"Contamos los días para verte..."</div>
+  </section>
+
+  <section class="seccion-regalos">
+    <div class="overlay"></div> <div class="glass-card reveal">
+      <h2>Mesa de Regalos</h2>
+      <p>Si deseas tener un detalle con nosotros, contaremos con la modalidad de <b>Lluvia de Sobres</b>.</p>
     </div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay"></div>
-    <div class="glass-card">
-      <h2>¡Te Esperamos!</h2>
-      <a href="https://wa.me/50683484866" class="btn">Confirmar Asistencia</a>
+    <div class="glass-card reveal">
+      <h2 style="font-size: 3.5rem;">¡Te Esperamos!</h2>
+      <p>Tu presencia completará este momento tan mágico.</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
+      <a href="https://wa.me/50683484866" target="_blank" class="btn">Confirmar Asistencia WhatsApp</a>
     </div>
   </section>
 
   <script>
-    const track = document.getElementById('carouselTrack');
-    const slides = Array.from(track.children);
-    const nextBtn = document.getElementById('nextBtn');
-    const prevBtn = document.getElementById('prevBtn');
-    
-    // Clonar la primera y última imagen para el efecto infinito
-    const firstClone = slides[0].cloneNode(true);
-    const lastClone = slides[slides.length - 1].cloneNode(true);
-    
-    track.appendChild(firstClone);
-    track.insertBefore(lastClone, slides[0]);
-
-    let index = 1; // Empezamos en la 1 porque la 0 es el clon de la última
-    const slideWidth = 265; // Ancho imagen (250) + gap (15)
-
-    // Posición inicial
-    track.style.transform = `translateX(${-index * slideWidth}px)`;
-
-    function updateCarousel() {
-      track.style.transition = "transform 0.4s ease-out";
-      track.style.transform = `translateX(${-index * slideWidth}px)`;
-    }
-
-    nextBtn.addEventListener('click', () => {
-      if (index >= track.children.length - 1) return;
-      index++;
-      updateCarousel();
-    });
-
-    prevBtn.addEventListener('click', () => {
-      if (index <= 0) return;
-      index--;
-      updateCarousel();
-    });
-
-    // El truco de la "teletransportación" invisible
-    track.addEventListener('transitionend', () => {
-      if (track.children[index] === firstClone) {
-        track.style.transition = "none";
-        index = 1;
-        track.style.transform = `translateX(${-index * slideWidth}px)`;
-      }
-      if (track.children[index] === lastClone) {
-        track.style.transition = "none";
-        index = track.children.length - 2;
-        track.style.transform = `translateX(${-index * slideWidth}px)`;
-      }
-    });
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
   </script>
 </body>
 </html>
