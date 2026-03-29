@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -84,7 +83,7 @@
       border: 1px solid rgba(255, 255, 255, 0.15);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 350px; /* MÁS ESTRECHAS */
+      width: 100%; max-width: 350px; /* Esbeltas */
       position: relative; z-index: 5;
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.15);
@@ -116,7 +115,7 @@
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 600px; /* UN POCO MÁS PEQUEÑO */
+      max-width: 600px; /* Compacto */
       margin-top: 25px;
       overflow: hidden;
     }
@@ -125,14 +124,14 @@
       display: flex; 
       padding: 20px 0; 
       gap: 15px; 
-      transition: transform 0.5s ease-in-out; /* Animación suave */
+      transition: transform 0.5s ease-in-out; 
     }
 
     .carousel-track img { 
-      /* CORRECCIÓN: Nítidas y sin estirar */
+      /* Nítidas y sin estirar */
       width: auto; 
       max-width: 100%; 
-      height: 220px; /* ALTURA REDUCIDA PARA VER FONDO */
+      height: 220px; /* Altura para ver fondo */
       object-fit: contain; 
       border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
@@ -165,18 +164,23 @@
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES CORREGIDOS --- */
+    /* --- FONDOS Y ENCUADRES --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
-    /* MÚSICA CORREGIDO: Bajamos encuadre (70%) para ver caras */
-    .seccion-musica { background: url('Foto14.jpg') center 70%; }
+
+    /* --- CAMBIO DE IMÁGENES SOLICITADO --- */
+    
+    /* MÚSICA CORREGIDO: Ahora usa Foto1.jpg con encuadre bajo (70%) */
+    .seccion-musica { background: url('Foto1.jpg') center 70%; }
+    
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
-    /* FINAL CORREGIDO: Subimos encuadre (30%) para ver caras */
-    .seccion-final { background: url('Foto1.jpg') center 30%; }
+    
+    /* FINAL CORREGIDO: Ahora usa Foto14.jpg con encuadre alto (30%) */
+    .seccion-final { background: url('Foto14.jpg') center 30%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
@@ -338,7 +342,7 @@
     const nextBtn = document.getElementById('nextBtn');
     const images = track.querySelectorAll('img');
     const totalImages = images.length;
-    let currentIndex = totalImages; // Empezamos en la primera imagen real (después de los clones)
+    let currentIndex = totalImages; // Empezamos en la primera imagen real
     
     // Clonar imágenes para el efecto infinito
     for (let i = 0; i < totalImages; i++) {
