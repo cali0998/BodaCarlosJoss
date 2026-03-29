@@ -28,9 +28,10 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
+    /* --- PORTADA CON NUEVA FOTO --- */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
-                  url('0001.jpg') center center / cover no-repeat;
+                  url('Foto1.jpg') center center / cover no-repeat;
       background-attachment: scroll;
     }
 
@@ -51,7 +52,7 @@
       width: 100%; max-width: 280px; border: none; cursor: pointer;
     }
 
-    /* --- NUEVO ESTILO CARRETE "ASOMADO" --- */
+    /* --- CARRETE CON NUEVAS FOTOS --- */
     .carousel-container { 
       position: relative; 
       width: 100%; 
@@ -63,23 +64,23 @@
       overflow-x: auto; 
       scroll-snap-type: x mandatory; 
       scroll-behavior: smooth;
-      padding: 0 10%; /* Crea el espacio para que asomen las de los lados */
+      padding: 0 10%; 
       gap: 15px;
     }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-track img { 
-      width: 80%; /* La foto principal no ocupa todo el ancho */
+      width: 80%; 
       flex-shrink: 0; 
       scroll-snap-align: center; 
       object-fit: cover; 
       aspect-ratio: 4/5; 
       border-radius: 20px; 
       border: 2px solid var(--gold);
-      opacity: 0.4; /* Fotos laterales más claras */
+      opacity: 0.4; 
       transition: opacity 0.5s ease;
     }
     .carousel-track img.active-img {
-      opacity: 1; /* Foto central nítida */
+      opacity: 1; 
     }
 
     .nav-btn {
@@ -149,10 +150,11 @@
       <div class="carousel-container">
         <button class="nav-btn" id="prevBtn" style="left: 5px;">&#10094;</button>
         <div class="carousel-track" id="track">
-          <img src="0001.jpg" alt="Foto 1" class="active-img">
-          <img src="0002.jpg" alt="Foto 2">
-          <img src="0003.jpg" alt="Foto 3">
-          <img src="0004.jpg" alt="Foto 4"> <img src="0005.jpg" alt="Foto 5">
+          <img src="Foto2.jpg" alt="Foto 2" class="active-img">
+          <img src="Foto3.jpg" alt="Foto 3">
+          <img src="Foto4.jpg" alt="Foto 4">
+          <img src="Foto5.jpg" alt="Foto 5">
+          <img src="Foto6.jpg" alt="Foto 6">
         </div>
         <button class="nav-btn" id="nextBtn" style="right: 5px;">&#10095;</button>
       </div>
@@ -206,13 +208,13 @@
   </section>
 
   <script>
-    // 1. Reveal Animations
+    // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // 2. Countdown Timer
+    // Countdown Timer
     const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -225,7 +227,7 @@
       }
     }, 1000);
 
-    // 3. Carousel Logic (Efecto "Asomado")
+    // Carousel Logic (Efecto "Asomado")
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
     let index = 0;
@@ -238,7 +240,6 @@
         const imgCenter = img.offsetLeft + (img.clientWidth / 2);
         const trackCenter = scrollPos + (trackWidth / 2);
         
-        // Si la foto está cerca del centro del contenedor, la iluminamos
         if (Math.abs(imgCenter - trackCenter) < img.clientWidth / 2) {
           img.classList.add('active-img');
           index = i;
