@@ -17,31 +17,32 @@
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      background: #fdfdfd; /* Fondo claro para evitar el "tajo negro" */
+      background: #fdfdfd; /* Fondo claro de seguridad */
       color: white; 
       overflow-x: hidden; 
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* --- EFECTO DE UNIÓN TOTAL (NO-DIVISIONS) --- */
+    /* --- UNIÓN INFINITA CON NITIDEZ --- */
     section { 
-      min-height: 120vh; /* Secciones más altas para el traslape */
+      min-height: 100vh; /* Secciones a pantalla completa */
       display: flex; 
       flex-direction: column; 
       align-items: center; 
       justify-content: center;
       position: relative;
-      padding: 150px 20px;
+      padding: 100px 20px;
       background-size: cover !important;
       background-position: center !important;
       background-repeat: no-repeat !important;
       
-      /* ELIMINAMOS LAS DIVISIONES: Solapamiento masivo */
-      margin-top: -50vh; 
+      /* Solapamiento para eliminar divisiones (20vh es el equilibrio perfecto) */
+      margin-top: -20vh; 
       
-      /* DIFUMINADO REAL: Borra los bordes para que se vea la foto de abajo */
+      /* DIFUMINADO SUAVE: El centro es 100% nítido, los bordes transicionan */
       -webkit-mask-image: linear-gradient(to bottom, 
         transparent 0%, 
-        black 20%, 
+        black 20%, /* Nitidez total en el centro */
         black 80%, 
         transparent 100%);
       mask-image: linear-gradient(to bottom, 
@@ -51,14 +52,15 @@
         transparent 100%);
     }
 
-    /* La primera sección no se solapa arriba */
+    /* Primera sección sin solapamiento arriba */
     .hero { 
       margin-top: 0; 
       z-index: 10; 
-      -webkit-mask-image: linear-gradient(to bottom, black 80%, transparent 100%);
+      min-height: 110vh;
+      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
 
-    /* Capas para que el scroll se sienta natural */
+    /* Orden de capas para el scroll fluido */
     .seccion-pase { z-index: 9; }
     .seccion-lugar { z-index: 8; }
     .seccion-nosotros { z-index: 7; }
@@ -66,25 +68,26 @@
     .seccion-musica { z-index: 5; }
     .seccion-regalos { z-index: 4; }
     .seccion-qr { z-index: 3; }
-    .seccion-final { z-index: 2; -webkit-mask-image: linear-gradient(to top, black 80%, transparent 100%); }
+    .seccion-final { z-index: 2; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); }
 
-    /* Oscurecimiento mínimo para lectura */
+    /* Velo mínimo para legibilidad sin opacar la foto */
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.15); 
+      background: rgba(0,0,0,0.12); 
       z-index: 1;
     }
 
+    /* TARJETAS MÁS CLARAS PARA LUCIR LA FOTO */
     .glass-card {
-      background: rgba(255, 255, 255, 0.08); 
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(197, 157, 95, 0.4);
-      border-radius: 40px;
+      background: rgba(255, 255, 255, 0.05); /* Cristal etéreo */
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(197, 157, 95, 0.2);
+      border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 450px;
+      width: 100%; max-width: 420px;
       position: relative; z-index: 2;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
     }
 
     /* --- FONDOS --- */
@@ -98,24 +101,27 @@
     .seccion-qr { background-image: url('Foto4.jpg'); }
     .seccion-final { background-image: url('Foto1.jpg'); }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1; text-shadow: 2px 2px 8px rgba(0,0,0,0.4); }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; }
+    /* Tipografía y Interfaz */
+    h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--gold); margin: 0; line-height: 1; text-shadow: 2px 2px 8px rgba(0,0,0,0.3); }
+    h2 { font-family: 'Playfair Display', serif; font-size: 2.2rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
     
     .btn {
-      background: var(--gold); color: white; padding: 16px 32px; border-radius: 50px;
+      background: var(--gold); color: white; padding: 15px 30px; border-radius: 50px;
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
-      text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase; font-size: 11px; letter-spacing: 2px; transition: 0.3s ease;
     }
+    .btn:hover { background: #d4a76a; }
 
-    .reveal { opacity: 0; transform: translateY(20px); transition: 0.8s ease-out; }
+    .reveal { opacity: 0; transform: translateY(20px); transition: 0.7s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     .carousel-track { display: flex; overflow-x: auto; padding: 20px 0; gap: 15px; }
     .carousel-track img { width: 80%; flex-shrink: 0; border-radius: 20px; border: 2px solid var(--gold); }
 
     @media (min-width: 992px) {
-      section { background-attachment: fixed; }
-      h1 { font-size: 6rem !important; }
+      section { background-attachment: fixed; } /* Efecto parallax en PC */
+      h1 { font-size: 5.5rem !important; }
+      h2 { font-size: 3rem !important; }
     }
   </style>
 </head>
@@ -124,9 +130,9 @@
   <section class="hero">
     <div class="overlay"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem;">"Toda aventura comienza con un sí"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; margin-bottom: 10px;">"Toda aventura comienza con un sí"</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600;">19 • DICIEMBRE • 2026</p>
+      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 13px;">19 • DICIEMBRE • 2026</p>
       <a href="#" class="btn">Agendar Fecha 📅</a>
     </div>
   </section>
@@ -135,7 +141,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <p>Pases: 2</p>
+      <p style="font-size: 1.2rem;">Carlos & Joselyn</p>
+      <p style="font-size: 1.6rem; color: var(--gold); font-weight: 600;">Pases: 2</p>
     </div>
   </section>
 
@@ -143,8 +150,9 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Ubicación</h2>
-      <p><b>Salón Luna Azul</b><br>La Rita, Pococí</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" class="btn">Cómo llegar 🚗</a>
+      <p style="font-size: 1.3rem; font-weight: 600;">Salón Luna Azul</p>
+      <p>La Rita, Pococí</p>
+      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar 🚗</a>
     </div>
   </section>
 
@@ -164,8 +172,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Vestimenta</h2>
-      <p style="letter-spacing: 2px; font-weight: 600;">FORMAL / ELEGANTE</p>
-      <p style="font-size: 0.9rem; font-style: italic;">Sugerimos Verde Jade y Vino.</p>
+      <p style="letter-spacing: 2px; font-weight: 600; font-size: 1.1rem; color: var(--gold);">FORMAL / ELEGANTE</p>
+      <p style="font-size: 0.9rem; font-style: italic;">Sugerimos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
     </div>
   </section>
 
@@ -173,7 +181,8 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Música</h2>
-      <a href="https://wa.me/50683484866" class="btn">Sugerir Canción 🎵</a>
+      <p>¿Qué canción no puede faltar?</p>
+      <a href="https://wa.me/50683484866?text=Sugerencia+música:" target="_blank" class="btn">Sugerir Canción 🎵</a>
     </div>
   </section>
 
@@ -189,16 +198,17 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
-      <img src="qrphotos.png" alt="QR" style="width: 140px; margin: 15px 0; background: white; padding: 10px; border-radius: 15px; border: 2px solid var(--gold);">
+      <p>Comparte tus capturas de la boda</p>
+      <img src="qrphotos.png" alt="QR" style="width: 130px; margin: 20px 0; background: white; padding: 10px; border-radius: 15px; border: 3px solid var(--gold);">
     </div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay"></div>
     <div class="glass-card reveal">
-      <h2>¡Te Esperamos!</h2>
+      <h2 style="font-size: 2.8rem;">¡Te Esperamos!</h2>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold);">Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866" class="btn">Confirmar Asistencia</a>
+      <a href="https://wa.me/50683484866?text=Confirmo+mi+asistencia" target="_blank" class="btn">Confirmar</a>
     </div>
   </section>
 
