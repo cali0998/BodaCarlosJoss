@@ -1,157 +1,91 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Boda Carlos & Joselyn 💍</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24;
-      --glass: rgba(255, 255, 255, 0.1);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boda Carlos & Joselyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; text-align: center; }
 
-    * { scroll-behavior: smooth; box-sizing: border-box; }
-    body { margin: 0; font-family: 'Poppins', sans-serif; background-color: var(--jade); color: white; overflow-x: hidden; }
+        section { min-height: 100vh; padding: 40px 20px; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        
+        /* PORTADA SEGURA */
+        .hero { 
+            background: linear-gradient(rgba(10,46,36,0.5), rgba(74,10,22,0.6)), url('Foto10.jpg');
+            background-size: cover; background-position: center;
+        }
 
-    .reveal { opacity: 0; transform: translateY(20px); transition: all 0.8s ease-out; }
-    .reveal.active { opacity: 1; transform: translateY(0); }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold); margin: 15px 0; }
+        h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); margin-bottom: 10px; }
 
-    section { min-height: 100vh; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-    
-    .glass-card {
-      background: var(--glass); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(197, 157, 95, 0.3); border-radius: 30px;
-      padding: 30px 20px; width: 100%; max-width: 450px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    }
+        .card {
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            border: 1px solid var(--gold); border-radius: 20px;
+            padding: 30px 20px; width: 100%; max-width: 400px;
+        }
 
-    /* PORTADA - Foto10.jpg */
-    .hero { 
-      background: linear-gradient(rgba(10,46,36,0.5), rgba(74,10,22,0.6)), 
-                  url('Foto10.jpg') center center / cover no-repeat;
-    }
+        /* CARRETE QUE NO FALLA (Scroll Nativo) */
+        .carrete-wrap { width: 100%; max-width: 320px; overflow: hidden; border-radius: 15px; border: 2px solid var(--gold); margin: 20px 0; }
+        .carrete { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; }
+        .carrete::-webkit-scrollbar { display: none; }
+        .carrete img { width: 100%; flex-shrink: 0; scroll-snap-align: start; object-fit: cover; aspect-ratio: 4/5; }
 
-    @media (min-width: 992px) {
-      .glass-card { max-width: 900px; padding: 50px; }
-      .side-by-side { display: flex; align-items: center; justify-content: space-around; gap: 30px; }
-      h1 { font-size: 4.5rem !important; }
-    }
+        .btn {
+            background: var(--gold); color: white; padding: 15px 25px; border-radius: 50px;
+            text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
+            text-transform: uppercase; font-size: 13px; width: 250px;
+        }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--gold); margin: 10px 0; }
-    h2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--gold); }
-
-    .btn {
-      background: var(--gold); color: white; padding: 15px 25px; border-radius: 50px;
-      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 15px;
-      text-transform: uppercase; font-size: 13px; border: none; cursor: pointer; width: 100%; max-width: 250px;
-    }
-    .btn-outline { background: transparent; border: 2px solid var(--gold); }
-
-    /* CARRETE SIMPLIFICADO (Sin fallos) */
-    .carousel-container { position: relative; width: 100%; max-width: 350px; margin: 20px auto; overflow: hidden; border-radius: 20px; border: 2px solid var(--gold); }
-    .carousel-track { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; }
-    .carousel-track::-webkit-scrollbar { display: none; }
-    .carousel-track img { width: 100%; flex-shrink: 0; scroll-snap-align: center; aspect-ratio: 4/5; object-fit: cover; }
-
-    .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 35px; height: 35px; cursor: pointer; z-index: 5; }
-
-    .qr-container { background: white; padding: 10px; border-radius: 15px; display: inline-block; margin-top: 15px; }
-    .qr-container img { width: 140px; display: block; }
-    
-    .countdown { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
-    .unit { background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; min-width: 65px; border: 1px solid var(--gold); }
-  </style>
+        .qr-box { background: white; padding: 10px; border-radius: 10px; margin-top: 15px; display: inline-block; }
+        .qr-box img { width: 150px; display: block; }
+    </style>
 </head>
 <body>
 
-  <section class="hero">
-    <div class="reveal active">
-      <p style="letter-spacing: 4px; text-transform: uppercase; font-size: 12px;">Nuestra Boda</p>
-      <h1>Carlos &<br>Joselyn</h1>
-      <p style="font-size: 1.1rem;">19 • Diciembre • 2026</p>
-      <div class="countdown">
-        <div class="unit"><span id="days">00</span><br><small>Días</small></div>
-        <div class="unit"><span id="hours">00</span><br><small>Hrs</small></div>
-        <div class="unit"><span id="mins">00</span><br><small>Min</small></div>
-      </div>
-    </div>
-  </section>
+    <section class="hero">
+        <p style="letter-spacing: 3px; text-transform: uppercase;">Nuestra Boda</p>
+        <h1>Carlos &<br>Joselyn</h1>
+        <p>19 • Diciembre • 2026</p>
+    </section>
 
-  <section style="background: linear-gradient(var(--jade), var(--wine));">
-    <div class="glass-card reveal">
-      <h2>Pase Especial</h2>
-      <p>Lugar reservado para:</p>
-      <h3 style="font-size: 2rem; color: var(--gold);">[Nombre del Invitado]</h3>
-      <p>Pases: <b>2</b></p>
-    </div>
-  </section>
-
-  <section style="background: rgba(0,0,0,0.2);">
-    <div class="glass-card reveal">
-      <h2>¿Dónde será?</h2>
-      <p><b>Salón de Eventos Luna Azul</b><br>La Rita, Pococí, Limón</p>
-      <p>Ceremonia: 3:00 PM | Recepción: 4:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Abrir Waze 🚗</a>
-    </div>
-  </section>
-
-  <section>
-    <div class="glass-card reveal">
-      <h2>Nosotros</h2>
-      <div class="carousel-container">
-        <button class="nav-btn" onclick="moveCarousel(-1)" style="left: 10px;">&#10094;</button>
-        <div class="carousel-track" id="track">
-          <img src="Foto1.jpg">
-          <img src="Foto2.jpg">
-          <img src="Foto3.jpg">
-          <img src="Foto4.jpg">
-          <img src="Foto5.jpg">
+    <section style="background: linear-gradient(var(--jade), var(--wine));">
+        <div class="card">
+            <h2>Pase Especial</h2>
+            <p>Invitado: <b>[Nombre]</b></p>
+            <p>Pases: <b>2</b></p>
+            <hr style="border: 0; border-top: 1px solid var(--gold); margin: 15px 0;">
+            <p><b>Lugar:</b> Salón Luna Azul, La Rita</p>
+            <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" class="btn">Cómo llegar 🚗</a>
         </div>
-        <button class="nav-btn" onclick="moveCarousel(1)" style="right: 10px;">&#10095;</button>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section style="background: var(--wine);">
-    <div class="glass-card reveal">
-      <h2>Mesa de Regalos</h2>
-      <p>Su presencia es nuestro mejor regalo. Tendremos <b>Lluvia de Sobres</b>.</p>
-      <div class="qr-container" onclick="window.location.href='index.html'">
-        <img src="qrphotos.png">
-      </div>
-      <br>
-      <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir mis Fotos 📸</a>
-    </div>
-  </section>
+    <section>
+        <h2>Nosotros</h2>
+        <p>Desliza para ver las fotos →</p>
+        <div class="carrete-wrap">
+            <div class="carrete">
+                <img src="Foto1.jpg">
+                <img src="Foto2.jpg">
+                <img src="Foto3.jpg">
+                <img src="Foto4.jpg">
+                <img src="Foto5.jpg">
+            </div>
+        </div>
+    </section>
 
-  <script>
-    // Animación de entrada
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-    }, { threshold: 0.1 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    <section style="background: var(--wine);">
+        <div class="card">
+            <h2>Regalos</h2>
+            <p>Tendremos lluvia de sobres. Si deseas compartir fotos del evento, escanea aquí:</p>
+            <div class="qr-box">
+                <img src="qrphotos.png">
+            </div>
+            <a href="index.html" class="btn" style="background: white; color: var(--wine);">Subir Fotos 📸</a>
+        </div>
+    </section>
 
-    // Carrusel
-    const track = document.getElementById('track');
-    function moveCarousel(direction) {
-      const width = track.clientWidth;
-      track.scrollBy({ left: width * direction, behavior: 'smooth' });
-    }
-
-    // Cuenta regresiva
-    const target = new Date("Dec 19, 2026 15:00:00").getTime();
-    setInterval(() => {
-      const now = new Date().getTime();
-      const d = target - now;
-      if (d > 0) {
-        document.getElementById('days').innerText = Math.floor(d / (1000*60*60*24));
-        document.getElementById('hours').innerText = Math.floor((d % (1000*60*60*24)) / (1000*60*60));
-        document.getElementById('mins').innerText = Math.floor((d % (1000*60*60)) / (1000*60));
-      }
-    }, 1000);
-  </script>
 </body>
 </html>
