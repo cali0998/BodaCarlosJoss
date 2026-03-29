@@ -28,10 +28,10 @@
       box-shadow: 0 20px 40px rgba(0,0,0,0.4);
     }
 
-    /* --- PORTADA CON NUEVA FOTO --- */
+    /* --- PORTADA CON Foto10.jpg --- */
     .hero { 
       background: linear-gradient(rgba(10,46,36,0.6), rgba(74,10,22,0.7)), 
-                  url('Foto1.jpg') center center / cover no-repeat;
+                  url('Foto10.jpg') center center / cover no-repeat;
       background-attachment: scroll;
     }
 
@@ -52,36 +52,19 @@
       width: 100%; max-width: 280px; border: none; cursor: pointer;
     }
 
-    /* --- CARRETE CON NUEVAS FOTOS --- */
-    .carousel-container { 
-      position: relative; 
-      width: 100%; 
-      margin: 20px auto;
-      overflow: hidden;
-    }
+    /* --- CARRETE ASOMADO --- */
+    .carousel-container { position: relative; width: 100%; margin: 20px auto; overflow: hidden; }
     .carousel-track { 
-      display: flex; 
-      overflow-x: auto; 
-      scroll-snap-type: x mandatory; 
-      scroll-behavior: smooth;
-      padding: 0 10%; 
-      gap: 15px;
+      display: flex; overflow-x: auto; scroll-snap-type: x mandatory; 
+      scroll-behavior: smooth; padding: 0 10%; gap: 15px;
     }
     .carousel-track::-webkit-scrollbar { display: none; }
     .carousel-track img { 
-      width: 80%; 
-      flex-shrink: 0; 
-      scroll-snap-align: center; 
-      object-fit: cover; 
-      aspect-ratio: 4/5; 
-      border-radius: 20px; 
-      border: 2px solid var(--gold);
-      opacity: 0.4; 
-      transition: opacity 0.5s ease;
+      width: 80%; flex-shrink: 0; scroll-snap-align: center; object-fit: cover; 
+      aspect-ratio: 4/5; border-radius: 20px; border: 2px solid var(--gold);
+      opacity: 0.4; transition: opacity 0.5s ease;
     }
-    .carousel-track img.active-img {
-      opacity: 1; 
-    }
+    .carousel-track img.active-img { opacity: 1; }
 
     .nav-btn {
       position: absolute; top: 50%; transform: translateY(-50%);
@@ -208,13 +191,11 @@
   </section>
 
   <script>
-    // Reveal Animations
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // Countdown Timer
     const targetDate = new Date("Dec 19, 2026 15:00:00").getTime();
     setInterval(() => {
       const now = new Date().getTime();
@@ -227,19 +208,15 @@
       }
     }, 1000);
 
-    // Carousel Logic (Efecto "Asomado")
     const track = document.getElementById('track');
     const images = track.querySelectorAll('img');
     let index = 0;
-
     function updateCarousel() {
       const scrollPos = track.scrollLeft;
       const trackWidth = track.clientWidth;
-      
       images.forEach((img, i) => {
         const imgCenter = img.offsetLeft + (img.clientWidth / 2);
         const trackCenter = scrollPos + (trackWidth / 2);
-        
         if (Math.abs(imgCenter - trackCenter) < img.clientWidth / 2) {
           img.classList.add('active-img');
           index = i;
@@ -248,21 +225,16 @@
         }
       });
     }
-
     function moveCarousel(newIndex) {
       if (newIndex >= images.length) newIndex = 0;
       else if (newIndex < 0) newIndex = images.length - 1;
-      
       const imgToScroll = images[newIndex];
       const offset = imgToScroll.offsetLeft - (track.clientWidth / 2) + (imgToScroll.clientWidth / 2);
       track.scrollTo({ left: offset, behavior: 'smooth' });
     }
-
     track.addEventListener('scroll', updateCarousel);
     document.getElementById('nextBtn').addEventListener('click', () => moveCarousel(index + 1));
     document.getElementById('prevBtn').addEventListener('click', () => moveCarousel(index - 1));
-
-    // Auto move cada 5 segundos
     setInterval(() => moveCarousel(index + 1), 5000);
     window.addEventListener('resize', () => moveCarousel(index));
   </script>
