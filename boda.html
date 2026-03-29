@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invitación Carlos & Joselyn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vino: #630d16; /* Color Marsala */
+            --dorado: #c5a059;
+            --blanco: #ffffff;
+        }
+
+        body, html { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background-color: #f9f9f9; color: #333; }
+
+        /* SECCIONES DE FOTO */
+        .seccion {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* Efecto elegante al hacer scroll */
+        }
+
+        /* Capa oscura sobre la foto para que el texto resalte */
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+        }
+
+        .contenido { position: relative; z-index: 2; color: var(--blanco); padding: 20px; }
+
+        h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; margin: 0; }
+        h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--dorado); }
+
+        .boton {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 15px 30px;
+            background-color: var(--vino);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            border: 1px solid var(--dorado);
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        /* SECCIÓN DE DATOS (Fondo Blanco) */
+        .detalles { padding: 80px 20px; text-align: center; background: white; }
+        .contador { font-size: 2rem; font-weight: bold; color: var(--vino); margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <section class="seccion" style="background-image: url('0010.jpg');">
+        <div class="overlay"></div>
+        <div class="contenido">
+            <p style="letter-spacing: 4px;">NUESTRA BODA</p>
+            <h1>Carlos & Joselyn</h1>
+            <p style="font-size: 1.2rem; margin-top: 10px;">19 . DICIEMBRE . 2026</p>
+        </div>
+    </section>
+
+    <section class="detalles">
+        <h2>Faltan...</h2>
+        <div id="reloj" class="contador">Cargando...</div>
+        <p>Para nuestro gran día</p>
+    </section>
+
+    <section class="seccion" style="background-image: url('0002.jpg');">
+        <div class="overlay"></div>
+        <div class="contenido">
+            <p style="font-family: 'Playfair Display', serif; font-size: 1.8rem; font-style: italic;">
+                "Andábamos sin buscarnos, pero sabiendo que andábamos para encontrarnos."
+            </p>
+        </div>
+    </section>
+
+    <section class="detalles">
+        <h2>Ceremonia y Recepción</h2>
+        <p><strong>Luna Azul</strong></p>
+        <p>La Rita de Pococí</p>
+        <a href="https://waze.com/ul?ll=10.2794,-83.7845&navigate=yes" class="boton">VER EN WAZE</a>
+    </section>
+
+    <section class="seccion" style="background-image: url('0014.jpg');">
+        <div class="overlay"></div>
+        <div class="contenido">
+            <h2>¿Nos acompañas?</h2>
+            <p>Por favor, confirma tu asistencia antes del 1 de diciembre.</p>
+            <a href="https://wa.me/50683484866?text=Hola!%20Confirmo%20mi%20asistencia" class="boton">CONFIRMAR POR WHATSAPP</a>
+        </div>
+    </section>
+
+    <script>
+        // Lógica del Reloj
+        const fechaBoda = new Date("Dec 19, 2026 15:00:00").getTime();
+        setInterval(function() {
+            const ahora = new Date().getTime();
+            const distancia = fechaBoda - ahora;
+            const dias = Math.floor(distancia / (1000 * 60 * 60 * 24));
+            const horas = Math.floor((distancia % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutos = Math.floor((distancia % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("reloj").innerHTML = dias + "d " + horas + "h " + minutos + "m ";
+        }, 1000);
+    </script>
+
+</body>
+</html>
