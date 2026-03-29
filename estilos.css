@@ -32,7 +32,7 @@ body {
 
 /* 3. ASIGNACIÓN INDIVIDUAL DE FOTOS */
 /* Si una foto no sale, revisa que en GitHub se llame igual (ej: 0010.jpg) */
-.f1 { background-image: url('0010.jpg'); }
+.f1 { background-image: url('https://images.unsplash.com/photo-1519741497674-611481863552'); }
 .f2 { background-image: url('0001.jpg'); }
 .f3 { background-image: url('0002.jpg'); }
 .f4 { background-image: url('0003.jpg'); }
