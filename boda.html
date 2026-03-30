@@ -229,36 +229,23 @@
        MAGIA PARA MÓVILES
        ============================================================== */
     @media (max-width: 600px) {
-      
       section:not(.hero) {
         justify-content: flex-end !important;
         padding-top: 55vh !important; 
         padding-bottom: 5vh !important; 
       }
-
       section:not(.hero) .overlay {
         background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 90%) !important;
       }
-
       .floating-text { 
-        position: relative !important; 
-        top: 0 !important; 
-        right: auto !important; 
-        left: auto !important; 
-        text-align: center !important; 
-        max-width: 90%; 
-        margin-top: 20px; 
-        margin-bottom: 10px;
+        position: relative !important; top: 0 !important; right: auto !important; left: auto !important; text-align: center !important; 
+        max-width: 90%; margin-top: 20px; margin-bottom: 10px;
       }
       .floating-text.reveal { transform: translateY(30px) !important; }
       .floating-text.reveal.active { transform: translateY(0) !important; }
-      
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { 
-        padding-left: 15px; 
-        padding-right: 15px; 
-        align-items: center; 
+        padding-left: 15px; padding-right: 15px; align-items: center; 
       }
-      
       h2 { font-size: 2.4rem; } p { font-size: 1.15rem; }
       .carousel-track img { width: 220px !important; height: 280px !important; } 
     }
@@ -288,9 +275,9 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <h3 id="nombre-invitado">Carlos & Joselyn</h3>
+      <h3 id="nombre-invitado">Cargando invitación...</h3>
       <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas.</p>
-      <p id="pases-invitado" style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
+      <p id="pases-invitado" style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;"></p>
     </div>
     <div class="floating-text reveal">"Contamos los días, las horas y los minutos para verte y compartir nuestra felicidad contigo..."</div>
   </section>
@@ -363,11 +350,9 @@
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
       <p>Escanea este código QR o toca el botón para subir todas las fotos y videos que tomes durante la celebración.</p>
-      
       <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="qr-link">
         <img src="QRNUEVO.png" alt="QR Photos">
       </a>
-      
       <br>
       <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="btn">Subir Fotos Directamente 📷</a>
     </div>
@@ -381,7 +366,7 @@
       <p>Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
       
-      <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn">Confirmar Asistencia ✅</button>
+      <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn" style="display: none;">Confirmar Asistencia ✅</button>
 
     </div>
     <div class="floating-text reveal">"¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
@@ -392,39 +377,70 @@
     const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
 
-    // --- LEER DATOS DE LA URL ---
+    // BUSCAMOS EL CÓDIGO SECRETO EN EL LINK (ejemplo: ?c=gomez-8x2p)
     const urlParams = new URLSearchParams(window.location.search);
-    const nombreInvitado = urlParams.get('n') || 'Invitado sin nombre';
-    const pasesInvitado = urlParams.get('p') || '0';
+    const codigoInvitado = urlParams.get('c'); 
 
-    if (urlParams.get('n')) document.getElementById('nombre-invitado').innerText = nombreInvitado;
-    if (urlParams.get('p')) document.getElementById('pases-invitado').innerText = `Pases Reservados: ${pasesInvitado}`;
+    // --- AL CARGAR LA PÁGINA: TRAER DATOS DE SUPABASE ---
+    window.addEventListener('load', async () => {
+        if (!codigoInvitado) {
+            document.getElementById('nombre-invitado').innerText = "Invitado Especial";
+            return; 
+        }
 
-    // --- ENVIAR A SUPABASE ---
+        try {
+            // Buscamos a este invitado por su código secreto
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}&select=*`, {
+                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+            });
+            const data = await response.json();
+
+            if (data && data.length > 0) {
+                // Si el código existe, mostramos sus datos
+                document.getElementById('nombre-invitado').innerText = data[0].nombre;
+                document.getElementById('pases-invitado').innerText = `Pases Reservados: ${data[0].pases}`;
+                
+                // Mostramos el botón de confirmar y vemos si ya había confirmado antes
+                const btn = document.getElementById('btn-confirmar');
+                btn.style.display = 'inline-block';
+                if(data[0].estado.includes('Confirmado')) {
+                    btn.innerText = "¡Ya Confirmaste! 🎉";
+                    btn.style.background = "#2ecc71";
+                    btn.style.pointerEvents = "none";
+                }
+            } else {
+                document.getElementById('nombre-invitado').innerText = "Invitación no encontrada";
+            }
+        } catch (e) {
+            document.getElementById('nombre-invitado').innerText = "Error cargando invitado";
+        }
+    });
+
+    // --- AL TOCAR BOTÓN: ACTUALIZAR SUPABASE ---
     async function confirmarAsistenciaSupabase() {
+        if(!codigoInvitado) return;
+        
         const btn = document.getElementById('btn-confirmar');
         btn.innerText = "Confirmando...";
         btn.style.pointerEvents = "none";
         btn.style.opacity = "0.7";
 
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/confirmaciones`, {
-                method: 'POST',
+            // Actualizamos usando el código secreto
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, {
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                     'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({
-                    nombre: nombreInvitado,
-                    pases: pasesInvitado,
-                    estado: 'Confirmado ✅'
-                })
+                body: JSON.stringify({ estado: 'Confirmado ✅' })
             });
 
             if(response.ok) {
                 btn.innerText = "¡Asistencia Confirmada! 🎉";
-                btn.style.background = "#2ecc71"; // Se pone verde de éxito
+                btn.style.background = "#2ecc71"; 
                 btn.style.opacity = "1";
             } else {
                 btn.innerText = "Error. Toca para reintentar";
@@ -438,7 +454,7 @@
         }
     }
 
-    // --- AGENDAR FECHA (ICS / GOOGLE CALENDAR) ---
+    // --- AGENDAR FECHA (ICS) ---
     function agendarFecha(e) {
       e.preventDefault();
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
@@ -459,13 +475,12 @@
       }
     }
 
-    // --- ANIMACIONES ---
+    // --- ANIMACIONES Y CONTROLES ---
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // --- CONTADOR ---
     const countDownDate = new Date("Dec 19, 2026 15:00:00").getTime();
     const x = setInterval(function() {
       const now = new Date().getTime();
@@ -481,7 +496,6 @@
       document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 
-    // --- CARRETE ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
