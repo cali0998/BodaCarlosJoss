@@ -51,9 +51,9 @@
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
     
-    .hero .reveal { margin: 0 auto; }
+    .hero .reveal { margin: 0 auto; position: relative; z-index: 20; } /* Asegura que el botón sea clickeable */
 
-    /* --- ZIG-ZAG PERFECTO --- */
+    /* --- ZIG-ZAG DE TARJETAS --- */
     .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
@@ -77,7 +77,7 @@
       border-radius: 35px;
       padding: 40px 25px; 
       width: 100%; max-width: 350px; 
-      position: relative; z-index: 5;
+      position: relative; z-index: 20; /* Tarjetas por encima del velo */
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
@@ -111,9 +111,10 @@
     .time-box span { font-size: 1.8rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
     .time-box p { font-size: 0.7rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; }
 
-    /* --- MENSAJES FLOTANTES --- */
+    /* --- MENSAJES FLOTANTES CORREGIDOS (LADO OPUESTO) --- */
     .floating-text {
-      position: absolute;
+      position: absolute !important; /* Fuerza a que floten libremente en la sección */
+      top: 50%; /* Centra el texto verticalmente al lado de la tarjeta */
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.6rem; 
@@ -123,11 +124,18 @@
       z-index: 5; 
       pointer-events: none;
     }
+    
+    /* Animación del texto para que no pierda su centrado al aparecer */
+    .floating-text.reveal { transform: translateY(calc(-50% + 30px)); }
+    .floating-text.reveal.active { transform: translateY(-50%); }
+
+    /* Lógica: Si tarjeta a la izquierda -> Texto a la derecha */
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
     .seccion-qr .floating-text { right: 8%; text-align: right; }
     
+    /* Lógica: Si tarjeta a la derecha -> Texto a la izquierda */
     .seccion-lugar .floating-text,
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text,
@@ -161,30 +169,14 @@
     .carousel-btn.prev { left: 5px; }
     .carousel-btn.next { right: 5px; }
 
-    /* --- FONDOS Y ENCUADRES CORREGIDOS --- */
+    /* --- FONDOS Y ENCUADRES --- */
     .hero { background-image: url('Foto10.jpg'); background-position: center; }
     .seccion-pase { background-image: url('Foto11.jpg'); background-position: center; }
-    
-    .seccion-lugar { 
-      background-image: url('Foto1.jpg'); 
-      background-position: center 35% !important; 
-    }
-    
+    .seccion-lugar { background-image: url('Foto1.jpg'); background-position: center 35% !important; }
     .seccion-nosotros { background-image: url('Foto2.jpg'); background-position: center 40%; }
     .seccion-vestimenta { background-image: url('Foto13.jpg'); background-position: center; }
-    
-    /* CAMBIO APLICADO AQUÍ: Se ajustó a 35% para bajarla solo un poquito */
-    .seccion-musica { 
-      background-image: url('Foto5.jpg') !important; 
-      background-size: cover !important; 
-      background-position: center 35% !important; 
-    } 
-    .seccion-final { 
-      background-image: url('Foto14.jpg') !important; 
-      background-size: cover !important; 
-      background-position: center 20% !important; 
-    }
-
+    .seccion-musica { background-image: url('Foto5.jpg') !important; background-size: cover !important; background-position: center 35% !important; } 
+    .seccion-final { background-image: url('Foto14.jpg') !important; background-size: cover !important; background-position: center 20% !important; }
     .seccion-regalos { background-image: url('Foto3.jpg'); background-position: center 40%; }
     .seccion-qr { background-image: url('Foto4.jpg'); background-position: center; }
 
@@ -200,12 +192,25 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
     }
 
-    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; position: relative; z-index: 20; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* Ajustes móviles */
+    /* --- Ajustes móviles --- */
     @media (max-width: 600px) {
-      .floating-text { font-size: 1.3rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 90%; margin-top: 25px; margin-bottom: 10px;}
+      .floating-text { 
+        position: relative !important; 
+        top: 0 !important; 
+        right: auto !important; 
+        left: auto !important; 
+        text-align: center !important; 
+        max-width: 90%; 
+        margin-top: 25px; 
+        margin-bottom: 10px;
+      }
+      /* En móvil no aplicamos el centrado vertical para que caiga debajo de la tarjeta naturalmente */
+      .floating-text.reveal { transform: translateY(30px) !important; }
+      .floating-text.reveal.active { transform: translateY(0) !important; }
+      
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center; }
       h2 { font-size: 2.4rem; } p { font-size: 1.15rem; }
       .carousel-track img { width: 220px !important; height: 280px !important; } 
@@ -259,7 +264,7 @@
   <section class="seccion-nosotros">
     <div class="overlay"></div>
     <div class="glass-card glass-card-wide reveal">
-      <h2>Un Viaje de Amor</h2>
+      <h2 style="color:white;">Un Viaje de Amor</h2>
       <div class="carousel-container">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
         <div class="carousel-track" id="carouselTrack">
