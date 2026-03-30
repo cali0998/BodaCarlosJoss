@@ -37,26 +37,30 @@
       
       margin-top: -21vh; 
       
-      -webkit-mask-image: linear-gradient(to bottom, 
-        transparent 0%, 
-        black 15%, 
-        black 85%, 
-        transparent 100%);
-      mask-image: linear-gradient(to bottom, 
-        transparent 0%, 
-        black 15%, 
-        black 85%, 
-        transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
+    /* --- PORTADA CENTRADA TOTALMENTE --- */
     .hero { 
       margin-top: 0; 
       z-index: 10; 
-      align-items: center; justify-content: center; 
+      align-items: center; 
+      justify-content: center; 
+      text-align: center;
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
+    
+    /* Fuerza el centrado absoluto del contenido de la portada */
+    .hero .reveal {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
 
-    /* --- ORDEN ZIG-ZAG PERFECTO --- */
+    /* Capas escalonadas para el scroll fluido (Zig-Zag Total) */
     .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
@@ -64,9 +68,7 @@
     .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    
-    /* CORRECCIÓN: La última sección ahora es Derecha para seguir el patrón */
-    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
+    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Derecha */
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -74,7 +76,7 @@
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO (Esbeltas y Modernas) */
+    /* TARJETAS VIDRIO AHUMADO (Aplicado a TODAS las tarjetas) */
     .glass-card {
       background: rgba(0, 0, 0, 0.25); 
       backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
@@ -88,8 +90,41 @@
     }
 
     /* --- SOMBRAS EN TEXTOS --- */
-    h1, h2, h3, p, .floating-text {
-      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8), 0px 0px 3px rgba(0, 0, 0, 0.5);
+    h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
+      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.6);
+    }
+
+    /* --- CONTADOR --- */
+    .countdown {
+      display: flex;
+      gap: 15px;
+      margin: 25px 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .time-box {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(197, 157, 95, 0.5); /* Borde dorado suave */
+      border-radius: 12px;
+      padding: 10px 15px;
+      min-width: 75px;
+      text-align: center;
+      backdrop-filter: blur(4px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .time-box span {
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--gold);
+      display: block;
+      line-height: 1.2;
+    }
+    .time-box p {
+      font-size: 0.75rem;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: white;
     }
 
     /* --- MENSAJES FLOTANTES --- */
@@ -104,14 +139,11 @@
       z-index: 1;
       pointer-events: none;
     }
-    
-    /* Orden del texto flotante invertido respecto a la tarjeta */
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
     .seccion-qr .floating-text { right: 8%; text-align: right; }
     
-    /* CORRECCIÓN: Al ser la tarjeta final a la derecha, el texto flotante va a la izquierda */
     .seccion-lugar .floating-text,
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text,
@@ -165,7 +197,7 @@
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES FINALES --- */
+    /* --- FONDOS Y ENCUADRES --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
@@ -179,12 +211,11 @@
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
     h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
-    
     p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; }
 
     .btn {
       background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
-      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
+      text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.4); 
     }
@@ -208,6 +239,8 @@
       h2 { font-size: 2.4rem; }
       p { font-size: 1.15rem; }
       .carousel-track img { height: 180px; } 
+      .time-box span { font-size: 1.5rem; }
+      .time-box { min-width: 60px; padding: 8px 10px; }
     }
   </style>
 </head>
@@ -216,11 +249,18 @@
   <section class="hero">
     <div class="overlay"></div>
     <div class="reveal active">
-      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">"Nuestra historia de amor apenas comienza, y queremos que seas parte de ella"</p>
+      <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">"Nuestra historia de amor apenas comienza..."</p>
       <h1>Carlos &<br>Joselyn</h1>
-      <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 15px;">19 DE DICIEMBRE DE 2026</p>
+      <p style="letter-spacing: 4px; font-weight: 600;">19 DE DICIEMBRE DE 2026</p>
       
-      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T150000/20261219T230000&details=Nos%20llena%20de%20inmensa%20alegr%C3%ADa%20invitarte%20a%20nuestra%20boda.&location=Sal%C3%B3n%20de%20Eventos%20Luna%20Azul%2C%20La%20Rita%2C%20Pococ%C3%AD" target="_blank" class="btn">Agendar Nuestra Fecha 📅</a>
+      <div id="countdown" class="countdown">
+        <div class="time-box"><span id="days">00</span><p>Días</p></div>
+        <div class="time-box"><span id="hours">00</span><p>Hrs</p></div>
+        <div class="time-box"><span id="minutes">00</span><p>Min</p></div>
+        <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
+      </div>
+
+      <a href="https://calendar.google.com/calendar/r/eventedit?text=Boda+de+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T080000Z&details=Celebremos+juntos+el+inicio+de+nuestro+viaje+de+amor.&location=Salón+de+Eventos+Luna+Azul,+La+Rita,+Pococí" target="_blank" rel="noopener noreferrer" class="btn">Agendar Nuestra Fecha 📅</a>
     </div>
   </section>
 
@@ -229,7 +269,7 @@
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
       <h3>Carlos & Joselyn</h3>
-      <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas. Tu presencia hará que esta celebración sea verdaderamente inolvidable.</p>
+      <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas.</p>
       <p style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
     </div>
     <div class="floating-text reveal">"Contamos los días, las horas y los minutos para verte y compartir nuestra felicidad contigo..."</div>
@@ -243,7 +283,6 @@
       <p>Bajo la luz de la luna y testigos de nuestro amor, uniremos nuestras vidas en este hermoso rincón de Costa Rica.</p>
       <p><b>Ceremonia:</b> 3:00 PM</p>
       <p><b>Recepción:</b> 4:00 PM</p>
-      <p style="font-size: 1rem; opacity: 0.8; font-style: italic;">La Rita, Pococí, Limón</p>
       <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar con Waze 🚗</a>
     </div>
     <div class="floating-text reveal">"Bajo el cielo estrellado, seremos testigos del inicio de nuestro 'para siempre'..."</div>
@@ -251,7 +290,7 @@
 
   <section class="seccion-nosotros">
     <div class="overlay"></div>
-    <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 650px;">
+    <div class="glass-card reveal" style="max-width: 650px;">
       <h2 style="color:white;">Un Viaje de Amor</h2>
       
       <div class="carousel-container reveal">
@@ -267,7 +306,7 @@
       </div>
 
     </div>
-    <div class="floating-text reveal">"Cada sonrisa, cada abrazo y cada mirada compartida es un tesoro que guardamos en nuestra memoria. Estos son los momentos que construyen nuestra historia..."</div>
+    <div class="floating-text reveal">"Cada sonrisa y cada mirada compartida es un tesoro que guardamos en nuestra memoria..."</div>
   </section>
 
   <section class="seccion-vestimenta">
@@ -275,85 +314,106 @@
     <div class="glass-card reveal">
       <h2>Código de Gala</h2>
       <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
-      <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
-      <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos los tonos Verde Jade y Vino para armonizar con nuestra paleta.<br>Agradecemos evitar el color blanco.</p>
+      <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta.</p>
+      <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
     </div>
-    <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio para nuestra celebración..."</div>
+    <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio..."</div>
   </section>
 
   <section class="seccion-musica">
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>¡A Bailar!</h2>
-      <p>La noche es joven y la felicidad es inmensa. Queremos asegurarnos de que la pista de baile nunca esté vacía y que todos disfruten al máximo.</p>
-      <p>Ayúdanos a elegir la banda sonora perfecta para nuestra boda.</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Para+la+boda,+sugiero+esta+canción:" target="_blank" class="btn">Sugerir Mi Canción Favorita 🎵</a>
+      <p>Queremos asegurarnos de que la pista de baile nunca esté vacía y que todos disfruten al máximo.</p>
+      <a href="https://wa.me/50683484866?text=¡Hola!+Para+la+boda,+sugiero+esta+canción:" target="_blank" class="btn">Sugerir Canción 🎵</a>
     </div>
-    <div class="floating-text reveal">"Que no falte el ritmo, la risa y la buena compañía. ¡Hagamos que esta noche sea legendaria en la pista de baile!"</div>
+    <div class="floating-text reveal">"Que no falte el ritmo, la risa y la buena compañía..."</div>
   </section>
 
   <section class="seccion-regalos">
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Mesa de Regalos</h2>
-      <p>El mayor regalo que podemos recibir es tu presencia y tu cariño en este día tan especial.</p>
-      <p>Si deseas tener un detalle con nosotros para iniciar nuestro hogar, contaremos con la modalidad de <b>Lluvia de Sobres</b> en la recepción.</p>
-      <p style="font-size: 0.9rem; font-style: italic; margin-top: 15px;">Tu generosidad será el cimiento de nuestro futuro juntos. ¡Gracias!</p>
+      <p>El mayor regalo que podemos recibir es tu presencia en este día tan especial.</p>
+      <p>Si deseas tener un detalle con nosotros, contaremos con la modalidad de <b>Lluvia de Sobres</b>.</p>
     </div>
-    <div class="floating-text reveal">"Tu presencia es el mayor regalo que podemos recibir. Si deseas tener un detalle adicional, agradecemos tu amor y generosidad..."</div>
+    <div class="floating-text reveal">"Si deseas tener un detalle adicional, agradecemos tu amor y generosidad..."</div>
   </section>
 
   <section class="seccion-qr">
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
-      <p>Ayúdanos a inmortalizar cada momento de alegría, cada baile espontáneo y cada mirada de felicidad de nuestra boda.</p>
-      <p>Escanea este código QR y sube todas las fotos y videos que tomes durante la celebración. ¡Queremos ver la boda a través de tus ojos!</p>
+      <p>Escanea este código QR y sube todas las fotos y videos que tomes durante la celebración.</p>
       <img src="qrphotos.png" alt="QR Photos" style="width: 150px; margin-top: 15px; background: white; padding: 12px; border-radius: 15px; border: 3px solid var(--gold);">
     </div>
-    <div class="floating-text reveal">"Captura la magia, la emoción y la alegría de cada instante. Ayúdanos a crear un álbum de recuerdos inolvidables..."</div>
+    <div class="floating-text reveal">"Ayúdanos a crear un álbum de recuerdos inolvidables..."</div>
   </section>
 
   <section class="seccion-final">
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2 style="font-size: 3.5rem;">¡Te Esperamos!</h2>
-      <p>Nuestro amor es fuerte, y nuestra felicidad es inmensa. Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
+      <p>Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Asistencia WhatsApp</a>
+      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Asistencia</a>
     </div>
-    <div class="floating-text reveal">"Agradecemos tu amor, tu amistad y tu compañía. ¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
+    <div class="floating-text reveal">"¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
   </section>
 
   <script>
-    // Animaciones de Aparición (Reveal)
+    // --- ANIMACIÓN AL HACER SCROLL ---
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // --- CARRETE INFINITO (SIN SALTOS VISIBLES) ---
+    // --- LÓGICA DEL CONTADOR DE TIEMPO ---
+    // Fecha límite: 19 de Diciembre de 2026 a las 15:00:00 (3:00 PM)
+    const countDownDate = new Date("Dec 19, 2026 15:00:00").getTime();
+
+    const x = setInterval(function() {
+      const now = new Date().getTime();
+      const distance = countDownDate - now;
+
+      // Cálculos de tiempo
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      // Inyectar en el HTML
+      document.getElementById("days").innerHTML = days < 10 ? '0' + days : days;
+      document.getElementById("hours").innerHTML = hours < 10 ? '0' + hours : hours;
+      document.getElementById("minutes").innerHTML = minutes < 10 ? '0' + minutes : minutes;
+      document.getElementById("seconds").innerHTML = seconds < 10 ? '0' + seconds : seconds;
+
+      // Si el evento ya pasó
+      if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>¡Llegó el gran día!</p>";
+      }
+    }, 1000);
+
+    // --- CARRETE INFINITO ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
     
-    // Clonamos la primera y última imagen para el efecto infinito
     const firstClone = images[0].cloneNode(true);
     const lastClone = images[images.length - 1].cloneNode(true);
     
     track.appendChild(firstClone);
     track.insertBefore(lastClone, track.firstElementChild);
     
-    let currentIndex = 1; // Empezamos en la primera imagen real (índice 1)
+    let currentIndex = 1; 
     let isTransitioning = false;
     
     function getSlideWidth() {
-        // Obtenemos el ancho de la imagen más el espacio (gap) de 15px
         return track.firstElementChild.clientWidth + 15; 
     }
     
-    // Posición inicial sin animación
     track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     
     nextBtn.addEventListener('click', () => {
@@ -372,27 +432,23 @@
         track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
     
-    // Escuchamos el final de la transición para hacer el salto "invisible"
     track.addEventListener('transitionend', () => {
         isTransitioning = false;
         const currentSlides = track.querySelectorAll('img');
         
-        // Si llegamos al clon de la primera imagen (al final)
         if (currentIndex === currentSlides.length - 1) {
-            track.style.transition = 'none'; // Quitamos la animación
-            currentIndex = 1; // Saltamos a la primera imagen real
+            track.style.transition = 'none'; 
+            currentIndex = 1; 
             track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
         }
         
-        // Si llegamos al clon de la última imagen (al principio)
         if (currentIndex === 0) {
-            track.style.transition = 'none'; // Quitamos la animación
-            currentIndex = currentSlides.length - 2; // Saltamos a la última imagen real
+            track.style.transition = 'none'; 
+            currentIndex = currentSlides.length - 2; 
             track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
         }
     });
     
-    // Mantenemos todo encuadrado si rotan la pantalla del celular
     window.addEventListener('resize', () => {
         track.style.transition = 'none';
         track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
