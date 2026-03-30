@@ -50,7 +50,7 @@
     .btn-video { background: linear-gradient(135deg, #a67b45 0%, #7a582f 100%); box-shadow: 0 8px 20px rgba(197, 157, 95, 0.2); }
     .btn-gallery { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); }
     
-    /* OCULTA LOS BOTONES GRISES FEOS DE INPUT */
+    /* ESTO OCULTA LOS INPUTS NATIVOS DEL NAVEGADOR */
     input[type="file"] {
       display: none !important;
     }
@@ -88,6 +88,7 @@
     
     <label for="fileInput" class="btn-action btn-gallery">Elegir de Galería 📂</label>
     <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
+    
   </div>
 
   <div class="state-container hidden" id="preview-state">
@@ -170,3 +171,4 @@
 </script>
 </body>
 </html>
+
