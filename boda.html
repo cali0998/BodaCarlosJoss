@@ -31,7 +31,7 @@
       position: relative;
       padding: 100px 20px;
       
-      background-size: cover !important; /* ESTO MANTIENE EL TAMAÑO SIN ZOOM EXTREMO */
+      background-size: cover !important; /* Mantenemos el tamaño original sin zoom extremo */
       background-position: center !important;
       background-repeat: no-repeat !important;
       
@@ -166,11 +166,13 @@
     .seccion-nosotros { background-image: url('Foto2.jpg'); background-position: center 40%; }
     .seccion-vestimenta { background-image: url('Foto13.jpg'); background-position: center; }
     
-    /* Al usar background-image y background-position por separado, NO se borra el tamaño original. El 20% centra sus caras perfecto. */
+    /* --- AJUSTE SOLICITADO AQUÍ: SE SUBIÓ DE 20% A 10% --- */
     .seccion-musica { 
       background-image: url('Foto1.jpg') !important; 
-      background-position: center 20% !important; 
+      background-position: center 10% !important; /* Sube la foto un poco más hacia arriba */
     } 
+    
+    /* Esta se mantiene en 20% que ya se veía bien */
     .seccion-final { 
       background-image: url('Foto14.jpg') !important; 
       background-position: center 20% !important; 
@@ -250,7 +252,7 @@
   <section class="seccion-nosotros">
     <div class="overlay"></div>
     <div class="glass-card glass-card-wide reveal">
-      <h2 style="color:white;">Un Viaje de Amor</h2>
+      <h2>Un Viaje de Amor</h2>
       <div class="carousel-container reveal">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
         <div class="carousel-track" id="carouselTrack">
