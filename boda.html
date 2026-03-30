@@ -17,7 +17,6 @@
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      /* Fondo fijo para evitar líneas entre transiciones */
       background: url('Foto10.jpg') center/cover no-repeat fixed;
       color: white; 
       overflow-x: hidden; 
@@ -36,10 +35,8 @@
       background-position: center !important;
       background-repeat: no-repeat !important;
       
-      /* Solapamiento reforzado para evitar fugas de color */
       margin-top: -21vh; 
       
-      /* Máscara de desvanecimiento ultra-suave */
       -webkit-mask-image: linear-gradient(to bottom, 
         transparent 0%, 
         black 15%, 
@@ -55,11 +52,11 @@
     .hero { 
       margin-top: 0; 
       z-index: 10; 
-      align-items: center; justify-content: center; /* Centrada */
+      align-items: center; justify-content: center; 
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
 
-    /* Capas escalonadas para el scroll fluido (Zig-Zag total) */
+    /* --- ORDEN ZIG-ZAG PERFECTO --- */
     .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
@@ -67,19 +64,20 @@
     .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-final { z-index: 2; align-items: flex-start; justify-content: center; padding-left: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Izquierda */
+    
+    /* CORRECCIÓN: La última sección ahora es Derecha para seguir el patrón */
+    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
 
-    /* Velo mínimo para legibilidad */
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.15); 
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO (Modificadas para más transparencia y menos estorbo) */
+    /* TARJETAS VIDRIO (Esbeltas y Modernas) */
     .glass-card {
-      background: rgba(0, 0, 0, 0.25); /* Cristal oscuro sutil en lugar de blanco para contraste */
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); /* Menos desenfoque para ver más el fondo */
+      background: rgba(0, 0, 0, 0.25); 
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 35px;
       padding: 40px 25px; 
@@ -89,7 +87,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.2);
     }
 
-    /* --- SOMBRAS EN TEXTOS PARA MÁXIMA LEGIBILIDAD --- */
+    /* --- SOMBRAS EN TEXTOS --- */
     h1, h2, h3, p, .floating-text {
       text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8), 0px 0px 3px rgba(0, 0, 0, 0.5);
     }
@@ -100,27 +98,30 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.6rem; 
-      color: rgba(255, 255, 255, 0.9); /* Un poco más blancos para destacar */
+      color: rgba(255, 255, 255, 0.9); 
       max-width: 300px;
       line-height: 1.3;
       z-index: 1;
       pointer-events: none;
     }
+    
+    /* Orden del texto flotante invertido respecto a la tarjeta */
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
-    .seccion-qr .floating-text,
-    .seccion-final .floating-text { right: 8%; text-align: right; }
+    .seccion-qr .floating-text { right: 8%; text-align: right; }
     
+    /* CORRECCIÓN: Al ser la tarjeta final a la derecha, el texto flotante va a la izquierda */
     .seccion-lugar .floating-text,
     .seccion-vestimenta .floating-text,
-    .seccion-regalos .floating-text { left: 8%; text-align: left; }
+    .seccion-regalos .floating-text,
+    .seccion-final .floating-text { left: 8%; text-align: left; }
 
-    /* --- CARRETE INFINITO TOTAL --- */
+    /* --- CARRETE INFINITO --- */
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 600px; /* Compacto */
+      max-width: 600px; 
       margin-top: 25px;
       overflow: hidden;
     }
@@ -129,7 +130,6 @@
       display: flex; 
       padding: 20px 0; 
       gap: 15px; 
-      transition: transform 0.5s ease-in-out; 
     }
 
     .carousel-track img { 
@@ -142,7 +142,6 @@
       flex-shrink: 0;
     }
 
-    /* Botones de navegación */
     .carousel-btn {
       position: absolute;
       top: 50%;
@@ -166,7 +165,7 @@
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES FINALES CORREGIDOS --- */
+    /* --- FONDOS Y ENCUADRES FINALES --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
@@ -187,7 +186,7 @@
       background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Sombra al botón para destacar */
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4); 
     }
 
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
@@ -195,7 +194,7 @@
 
     /* Ajustes para pantallas grandes */
     @media (min-width: 992px) {
-      section { background-attachment: fixed; } /* Parallax */
+      section { background-attachment: fixed; } 
       .glass-card { max-width: 400px; }
       h1 { font-size: 6.5rem !important; }
       h2 { font-size: 3.5rem !important; }
@@ -220,7 +219,8 @@
       <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">"Nuestra historia de amor apenas comienza, y queremos que seas parte de ella"</p>
       <h1>Carlos &<br>Joselyn</h1>
       <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 15px;">19 DE DICIEMBRE DE 2026</p>
-      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Carlos+y+Joselyn&dates=20261219T150000/20261219T230000&details=Celebremos+juntos+el+inicio+de+nuestro+viaje+de+amor.&location=Sal%C3%B3n+de+Eventos+Luna+Azul,+La+Rita,+Pococ%C3%AD,+Lim%C3%B3n" target="_blank" class="btn">Agendar Nuestra Fecha 📅</a>
+      
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T150000/20261219T230000&details=Nos%20llena%20de%20inmensa%20alegr%C3%ADa%20invitarte%20a%20nuestra%20boda.&location=Sal%C3%B3n%20de%20Eventos%20Luna%20Azul%2C%20La%20Rita%2C%20Pococ%C3%AD" target="_blank" class="btn">Agendar Nuestra Fecha 📅</a>
     </div>
   </section>
 
@@ -326,58 +326,76 @@
   </section>
 
   <script>
-    // Reveal Animations
+    // Animaciones de Aparición (Reveal)
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // --- CARRETE INFINITO TOTAL ---
+    // --- CARRETE INFINITO (SIN SALTOS VISIBLES) ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
-    let isAnimating = false;
-
+    const images = Array.from(track.querySelectorAll('img'));
+    
+    // Clonamos la primera y última imagen para el efecto infinito
+    const firstClone = images[0].cloneNode(true);
+    const lastClone = images[images.length - 1].cloneNode(true);
+    
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, track.firstElementChild);
+    
+    let currentIndex = 1; // Empezamos en la primera imagen real (índice 1)
+    let isTransitioning = false;
+    
+    function getSlideWidth() {
+        // Obtenemos el ancho de la imagen más el espacio (gap) de 15px
+        return track.firstElementChild.clientWidth + 15; 
+    }
+    
+    // Posición inicial sin animación
+    track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+    
     nextBtn.addEventListener('click', () => {
-        if (isAnimating) return; 
-        isAnimating = true;
-        
-        const firstImg = track.firstElementChild;
-        const width = firstImg.clientWidth + 15; 
-        
-        track.style.transition = 'transform 0.5s ease-in-out';
-        track.style.transform = `translateX(-${width}px)`;
-        
-        track.addEventListener('transitionend', function handleNext() {
-            track.removeEventListener('transitionend', handleNext);
-            track.style.transition = 'none'; 
-            track.style.transform = 'translateX(0)'; 
-            track.appendChild(firstImg); 
-            isAnimating = false;
-        });
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentIndex++;
+        track.style.transition = 'transform 0.4s ease-in-out';
+        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
-
+    
     prevBtn.addEventListener('click', () => {
-        if (isAnimating) return;
-        isAnimating = true;
+        if (isTransitioning) return;
+        isTransitioning = true;
+        currentIndex--;
+        track.style.transition = 'transform 0.4s ease-in-out';
+        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+    });
+    
+    // Escuchamos el final de la transición para hacer el salto "invisible"
+    track.addEventListener('transitionend', () => {
+        isTransitioning = false;
+        const currentSlides = track.querySelectorAll('img');
         
-        const lastImg = track.lastElementChild;
+        // Si llegamos al clon de la primera imagen (al final)
+        if (currentIndex === currentSlides.length - 1) {
+            track.style.transition = 'none'; // Quitamos la animación
+            currentIndex = 1; // Saltamos a la primera imagen real
+            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+        }
         
+        // Si llegamos al clon de la última imagen (al principio)
+        if (currentIndex === 0) {
+            track.style.transition = 'none'; // Quitamos la animación
+            currentIndex = currentSlides.length - 2; // Saltamos a la última imagen real
+            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+        }
+    });
+    
+    // Mantenemos todo encuadrado si rotan la pantalla del celular
+    window.addEventListener('resize', () => {
         track.style.transition = 'none';
-        track.insertBefore(lastImg, track.firstElementChild);
-        
-        const width = lastImg.clientWidth + 15; 
-        track.style.transform = `translateX(-${width}px)`;
-        
-        void track.offsetWidth;
-        
-        track.style.transition = 'transform 0.5s ease-in-out';
-        track.style.transform = 'translateX(0)';
-        
-        track.addEventListener('transitionend', function handlePrev() {
-            track.removeEventListener('transitionend', handlePrev);
-            isAnimating = false;
-        });
+        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
   </script>
 </body>
