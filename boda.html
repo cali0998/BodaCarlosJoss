@@ -51,17 +51,17 @@
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
     
-    .hero .reveal { margin: 0 auto; position: relative; z-index: 20; } /* Asegura que el botón sea clickeable */
+    .hero .reveal { margin: 0 auto; position: relative; z-index: 20; } 
 
     /* --- ZIG-ZAG DE TARJETAS --- */
-    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Derecha */
+    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } 
+    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } 
+    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } 
+    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -77,14 +77,12 @@
       border-radius: 35px;
       padding: 40px 25px; 
       width: 100%; max-width: 350px; 
-      position: relative; z-index: 20; /* Tarjetas por encima del velo */
+      position: relative; z-index: 20; 
       text-align: center;
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
     
-    .glass-card-wide {
-      max-width: 550px; 
-    }
+    .glass-card-wide { max-width: 550px; }
 
     /* --- SOMBRAS PARA LEGIBILIDAD --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
@@ -111,10 +109,10 @@
     .time-box span { font-size: 1.8rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
     .time-box p { font-size: 0.7rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; }
 
-    /* --- MENSAJES FLOTANTES CORREGIDOS (LADO OPUESTO) --- */
+    /* --- MENSAJES FLOTANTES --- */
     .floating-text {
-      position: absolute !important; /* Fuerza a que floten libremente en la sección */
-      top: 50%; /* Centra el texto verticalmente al lado de la tarjeta */
+      position: absolute !important; 
+      top: 50%; 
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.6rem; 
@@ -125,17 +123,14 @@
       pointer-events: none;
     }
     
-    /* Animación del texto para que no pierda su centrado al aparecer */
     .floating-text.reveal { transform: translateY(calc(-50% + 30px)); }
     .floating-text.reveal.active { transform: translateY(-50%); }
 
-    /* Lógica: Si tarjeta a la izquierda -> Texto a la derecha */
     .seccion-pase .floating-text,
     .seccion-nosotros .floating-text,
     .seccion-musica .floating-text,
     .seccion-qr .floating-text { right: 8%; text-align: right; }
     
-    /* Lógica: Si tarjeta a la derecha -> Texto a la izquierda */
     .seccion-lugar .floating-text,
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text,
@@ -207,7 +202,6 @@
         margin-top: 25px; 
         margin-bottom: 10px;
       }
-      /* En móvil no aplicamos el centrado vertical para que caiga debajo de la tarjeta naturalmente */
       .floating-text.reveal { transform: translateY(30px) !important; }
       .floating-text.reveal.active { transform: translateY(0) !important; }
       
@@ -358,14 +352,14 @@
       document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 
-    // --- CARRETE INFINITO FLUIDO ---
+    // --- CARRETE INFINITO FLUIDO Y AUTOMÁTICO ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
     const totalImages = images.length; 
 
-    // Clonar las fotos para que dé la vuelta perfecta
+    // Clonar las fotos
     images.forEach(img => {
         track.appendChild(img.cloneNode(true));
     });
@@ -375,9 +369,10 @@
 
     let currentIndex = totalImages; 
     let isTransitioning = false;
+    let autoPlayTimer; 
 
     function getSlideWidth() {
-        return track.children[0].offsetWidth + 15; // Obtiene el ancho EXACTO incluyendo el gap
+        return track.children[0].offsetWidth + 15; 
     }
 
     function updateCarousel(animate = true) {
@@ -385,14 +380,33 @@
         track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
     }
 
-    window.addEventListener('load', () => updateCarousel(false));
-    window.addEventListener('resize', () => updateCarousel(false));
+    // Funciones para reproducción automática
+    function startAutoPlay() {
+        autoPlayTimer = setInterval(() => {
+            nextBtn.click();
+        }, 3000); // Cambia cada 3 segundos
+    }
+
+    function resetAutoPlay() {
+        clearInterval(autoPlayTimer);
+        startAutoPlay();
+    }
+
+    window.addEventListener('load', () => {
+        updateCarousel(false);
+        startAutoPlay(); // Arranca al cargar
+    });
+    
+    window.addEventListener('resize', () => {
+        updateCarousel(false);
+    });
 
     nextBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex++;
         updateCarousel(true);
+        resetAutoPlay(); // Reinicia el tiempo si das clic manual
     });
 
     prevBtn.addEventListener('click', () => {
@@ -400,20 +414,19 @@
         isTransitioning = true;
         currentIndex--;
         updateCarousel(true);
+        resetAutoPlay(); // Reinicia el tiempo
     });
 
     track.addEventListener('transitionend', () => {
         isTransitioning = false;
-        const totalElements = track.children.length; // Originales + clones
+        const totalElements = track.children.length; 
         
-        // Si estamos en el último grupo de clones (el clon del inicio)
         if (currentIndex >= totalImages * 2) {
             track.style.transition = 'none'; 
             currentIndex = totalImages; 
             track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
         }
         
-        // Si estamos en el primer grupo de clones (el clon del final)
         if (currentIndex <= totalImages - 1) {
             track.style.transition = 'none'; 
             currentIndex = (totalImages * 2) - 1; 
