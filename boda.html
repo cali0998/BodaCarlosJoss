@@ -23,6 +23,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
+    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -40,7 +41,7 @@
       mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
-    /* --- PORTADA CENTRADA TOTALMENTE --- */
+    /* --- PORTADA TOTALMENTE CENTRADA --- */
     .hero { 
       margin-top: 0; 
       z-index: 10; 
@@ -50,15 +51,9 @@
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
     
-    .hero .reveal {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
+    .hero .reveal { margin: 0 auto; }
 
-    /* --- ZIG-ZAG CORREGIDO --- */
+    /* --- ZIG-ZAG PERFECTO --- */
     .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
     .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
     .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
@@ -74,10 +69,10 @@
       z-index: 1;
     }
 
-    /* --- TARJETAS VIDRIO AHUMADO UNIFORME --- */
+    /* --- TARJETAS VIDRIO AHUMADO UNIFORMES --- */
     .glass-card {
-      background: rgba(0, 0, 0, 0.35); /* Fondo oscuro semitransparente */
-      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); 
+      background: rgba(0, 0, 0, 0.25); 
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 35px;
       padding: 40px 25px; 
@@ -87,12 +82,11 @@
       box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
     
-    /* Variante ancha para el carrete sin perder el estilo */
-    .glass-card.wide {
-      max-width: 650px;
+    .glass-card-wide {
+      max-width: 600px; /* Clase especial para que el carrete herede diseño pero sea más ancho */
     }
 
-    /* --- SOMBRAS EN TEXTOS PARA LEGIBILIDAD --- */
+    /* --- SOMBRAS PARA LEGIBILIDAD --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
       text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.6);
     }
@@ -100,43 +94,30 @@
     /* --- CONTADOR --- */
     .countdown {
       display: flex;
-      gap: 15px;
-      margin: 25px 0;
+      gap: 12px;
+      margin: 20px auto;
       justify-content: center;
       flex-wrap: wrap;
     }
     .time-box {
-      background: rgba(0, 0, 0, 0.4);
+      background: rgba(0, 0, 0, 0.3);
       border: 1px solid rgba(197, 157, 95, 0.5); 
       border-radius: 12px;
       padding: 10px 15px;
-      min-width: 75px;
+      min-width: 70px;
       text-align: center;
       backdrop-filter: blur(4px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .time-box span {
-      font-size: 2rem;
-      font-weight: 600;
-      color: var(--gold);
-      display: block;
-      line-height: 1.2;
-    }
-    .time-box p {
-      font-size: 0.75rem;
-      margin: 0;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: white;
-    }
+    .time-box span { font-size: 1.8rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
+    .time-box p { font-size: 0.7rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; }
 
-    /* --- MENSAJES FLOTANTES --- */
+    /* --- MENSAJES FLOTANTES (AJUSTADOS AL ZIG-ZAG) --- */
     .floating-text {
       position: absolute;
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.6rem; 
-      color: rgba(255, 255, 255, 0.95); 
+      color: rgba(255, 255, 255, 0.9); 
       max-width: 300px;
       line-height: 1.3;
       z-index: 1;
@@ -156,59 +137,36 @@
     .carousel-container {
       position: relative;
       width: 100%;
-      max-width: 600px; 
       margin-top: 25px;
       overflow: hidden;
     }
 
-    .carousel-track { 
-      display: flex; 
-      padding: 20px 0; 
-      gap: 15px; 
-    }
+    .carousel-track { display: flex; padding: 20px 0; gap: 15px; }
 
     .carousel-track img { 
-      width: auto; 
-      max-width: 100%; 
-      height: 220px; 
-      object-fit: contain; 
-      border-radius: 25px; 
+      width: auto; max-width: 100%; height: 220px; 
+      object-fit: contain; border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
       flex-shrink: 0;
-      display: block;
     }
 
     .carousel-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(197, 157, 95, 0.9); 
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px; 
-      height: 50px;
-      font-size: 1.6rem;
-      cursor: pointer;
-      z-index: 10;
-      transition: background 0.3s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(197, 157, 95, 0.8); color: white; border: none;
+      border-radius: 50%; width: 50px; height: 50px; font-size: 1.6rem;
+      cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
     }
-    .carousel-btn:hover { background: rgba(197, 157, 95, 1); }
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES CORREGIDOS --- */
+    /* --- FONDOS Y ENCUADRES (CORREGIDO PARA BAJAR FOTOS) --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
     
-    /* ¡AQUÍ ESTÁ LA CORRECCIÓN CRÍTICA! 'center top' obliga a mostrar las caras */
+    /* "center top" amarra la foto al techo para que las caras bajen y se vean */
     .seccion-musica { background: url('Foto1.jpg') center top !important; } 
     .seccion-final { background: url('Foto14.jpg') center top !important; }
 
@@ -230,25 +188,12 @@
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* Ajustes para pantallas grandes */
-    @media (min-width: 992px) {
-      section { background-attachment: fixed; } 
-      .glass-card { max-width: 400px; }
-      .glass-card.wide { max-width: 650px; }
-      h1 { font-size: 6.5rem !important; }
-      h2 { font-size: 3.5rem !important; }
-      p { font-size: 1.35rem; }
-    }
-
-    /* Ajustes para móviles */
+    /* Ajustes móviles */
     @media (max-width: 600px) {
       .floating-text { font-size: 1.3rem; position: relative; right: auto !important; left: auto !important; text-align: center !important; max-width: 90%; margin-top: 25px; margin-bottom: 10px;}
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center; }
-      h2 { font-size: 2.4rem; }
-      p { font-size: 1.15rem; }
+      h2 { font-size: 2.4rem; } p { font-size: 1.15rem; }
       .carousel-track img { height: 180px; } 
-      .time-box span { font-size: 1.5rem; }
-      .time-box { min-width: 60px; padding: 8px 10px; }
     }
   </style>
 </head>
@@ -268,7 +213,7 @@
         <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
       </div>
 
-      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T210000Z/20261220T080000Z&details=Celebremos%20juntos%20el%20inicio%20de%20nuestro%20viaje%20de%20amor.&location=Sal%C3%B3n%20de%20Eventos%20Luna%20Azul%2C%20La%20Rita%2C%20Pococ%C3%AD" target="_blank" rel="noopener noreferrer" class="btn">Agendar Nuestra Fecha 📅</a>
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T150000/20261219T230000&details=Celebremos%20juntos%20el%20inicio%20de%20nuestro%20viaje%20de%20amor.&location=Sal%C3%B3n%20de%20Eventos%20Luna%20Azul%2C%20La%20Rita%2C%20Pococ%C3%AD%2C%20Lim%C3%B3n" target="_blank" class="btn">Agendar Nuestra Fecha 📅</a>
     </div>
   </section>
 
@@ -298,9 +243,8 @@
 
   <section class="seccion-nosotros">
     <div class="overlay"></div>
-    <div class="glass-card wide reveal">
+    <div class="glass-card glass-card-wide reveal">
       <h2 style="color:white;">Un Viaje de Amor</h2>
-      
       <div class="carousel-container reveal">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
         <div class="carousel-track" id="carouselTrack">
@@ -312,7 +256,6 @@
         </div>
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
-
     </div>
     <div class="floating-text reveal">"Cada sonrisa y cada mirada compartida es un tesoro que guardamos en nuestra memoria..."</div>
   </section>
@@ -383,85 +326,78 @@
       const now = new Date().getTime();
       const distance = countDownDate - now;
 
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      document.getElementById("days").innerHTML = days < 10 ? '0' + days : days;
-      document.getElementById("hours").innerHTML = hours < 10 ? '0' + hours : hours;
-      document.getElementById("minutes").innerHTML = minutes < 10 ? '0' + minutes : minutes;
-      document.getElementById("seconds").innerHTML = seconds < 10 ? '0' + seconds : seconds;
-
       if (distance < 0) {
         clearInterval(x);
         document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>¡Llegó el gran día!</p>";
+        return;
       }
+
+      document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
+      document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 
-    // --- CARRETE INFINITO TOTALMENTE CORREGIDO (SIN SALTOS) ---
+    // --- CARRETE INFINITO MATEMÁTICAMENTE PERFECTO ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
-    
-    // Clonación para ambos lados
-    const firstClone = images[0].cloneNode(true);
-    const lastClone = images[images.length - 1].cloneNode(true);
-    
-    track.appendChild(firstClone);
-    track.insertBefore(lastClone, track.firstElementChild);
-    
-    let currentIndex = 1; 
-    let isTransitioning = false;
-    
-    function getSlideWidth() {
-        // Usa getBoundingClientRect para exactitud absoluta con subpíxeles
-        return track.firstElementChild.getBoundingClientRect().width + 15; 
+    const totalImages = images.length; // 5 imágenes reales
+
+    // Clonar TODAS las imágenes al final
+    images.forEach(img => {
+        track.appendChild(img.cloneNode(true));
+    });
+    // Clonar TODAS las imágenes al principio
+    for (let i = totalImages - 1; i >= 0; i--) {
+        track.insertBefore(images[i].cloneNode(true), track.firstChild);
     }
-    
-    track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-    
+
+    let currentIndex = totalImages; // Empezamos en la primera imagen real (índice 5)
+    let isTransitioning = false;
+
+    function getSlideWidth() {
+        return track.children[0].clientWidth + 15; // Ancho + espacio
+    }
+
+    function updateCarousel(animate = true) {
+        track.style.transition = animate ? 'transform 0.4s ease-in-out' : 'none';
+        track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
+    }
+
+    // Ubicar en la posición inicial sin animar
+    window.addEventListener('load', () => updateCarousel(false));
+    window.addEventListener('resize', () => updateCarousel(false));
+
     nextBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex++;
-        track.style.transition = 'transform 0.4s ease-in-out';
-        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+        updateCarousel(true);
     });
-    
+
     prevBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex--;
-        track.style.transition = 'transform 0.4s ease-in-out';
-        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+        updateCarousel(true);
     });
-    
+
     track.addEventListener('transitionend', () => {
         isTransitioning = false;
-        const currentSlides = track.querySelectorAll('img');
         
-        // Salto invisible cuando llega al clon final
-        if (currentIndex >= currentSlides.length - 1) {
-            track.style.transition = 'none'; 
-            currentIndex = 1; 
-            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-            void track.offsetWidth; // Fuerza al navegador a registrar el cambio inmediatamente (evita brincos)
+        // Si avanzamos más allá de la última imagen real (al grupo final de clones)
+        if (currentIndex >= totalImages * 2) {
+            currentIndex = totalImages; // Devolver a la primera imagen real sin animar
+            updateCarousel(false);
         }
         
-        // Salto invisible cuando llega al clon inicial
-        if (currentIndex <= 0) {
-            track.style.transition = 'none'; 
-            currentIndex = currentSlides.length - 2; 
-            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-            void track.offsetWidth; // Fuerza al navegador a registrar el cambio inmediatamente (evita brincos)
+        // Si retrocedemos más allá de la primera imagen real (al grupo inicial de clones)
+        if (currentIndex <= totalImages - 1) {
+            currentIndex = (totalImages * 2) - 1; // Devolver a la última imagen real sin animar
+            updateCarousel(false);
         }
-    });
-    
-    window.addEventListener('resize', () => {
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
   </script>
 </body>
