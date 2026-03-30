@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boda Carlos & Joselyn 💍</title>
   
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght=0,600;1,600&family=Poppins:wght=300;400;600&display=swap" rel="stylesheet">
   
   <style>
     :root {
@@ -69,29 +69,45 @@
       z-index: 1; 
     }
 
-    /* --- NUBE AHUMADA PERFECTA (SIN CRISTAL, SIN CÍRCULOS) --- */
+    /* --- NUBE DIFUMINADA EXTREMA (SIN BORDES FÍSICOS) --- */
     .glass-card {
-      /* El fondo y la sombra tienen el mismo color, creando un difuminado expansivo sin bordes */
-      background: rgba(0, 0, 0, 0.6); 
-      box-shadow: 0 0 45px 35px rgba(0, 0, 0, 0.6); 
-      border-radius: 25px; /* Redondeo suave que se pierde en la sombra */
+      background: transparent; /* Totalmente transparente */
       border: none; 
+      box-shadow: none; 
+      padding: 60px 40px; /* Más padding para el difuminado */
+      width: 100%; 
+      max-width: 450px; /* Un poco más ancha para el desvanecimiento */
+      position: relative; 
+      z-index: 20; 
+      text-align: center;
       
       /* CERO CRISTAL (BLUR) */
       backdrop-filter: none !important; 
       -webkit-backdrop-filter: none !important; 
-      
-      padding: 40px 25px; 
-      width: 100%; 
-      max-width: 380px; 
-      position: relative; 
-      z-index: 20; 
-      text-align: center;
     }
     
-    .glass-card-wide { max-width: 600px; }
+    /* Esta es la capa que crea el oscurecimiento difuminado */
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.7); /* Color oscuro de base */
+      
+      /* --- LA MAGIA: Máscara radial con desvanecimiento larguísimo --- */
+      -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+      mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
+      
+      z-index: -1; 
+      pointer-events: none;
+    }
+    
+    .glass-card-wide { max-width: 650px; }
+    .glass-card-wide::before {
+      -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+      mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
+    }
 
-    /* --- SOMBRAS PARA LEGIBILIDAD (Texto sobre fondo oscuro) --- */
+    /* --- SOMBRAS PARA LEGIBILIDAD (Texto sobre fondo oscuro nítido) --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
       text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.95), 0px 0px 5px rgba(0, 0, 0, 0.8);
     }
@@ -197,11 +213,10 @@
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* ==============================================================
-       MAGIA PARA MÓVILES (CADA COSA EN SU LUGAR)
+       MAGIA PARA MÓVILES (CARAS VISIBLES ARRIBA, TEXTOS ABAJO)
        ============================================================== */
     @media (max-width: 600px) {
       
-      /* ESTO ES LO QUE EMPUJA LOS CUADROS HACIA ABAJO */
       section:not(.hero) {
         justify-content: flex-end !important;
         padding-top: 55vh !important; /* Fuerza a que haya un 55% de espacio vacío arriba para la foto */
@@ -385,6 +400,7 @@
     const images = Array.from(track.querySelectorAll('img'));
     const totalImages = images.length; 
 
+    // Clonar las fotos
     images.forEach(img => {
         track.appendChild(img.cloneNode(true));
     });
@@ -405,10 +421,11 @@
         track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
     }
 
+    // Funciones para reproducción automática
     function startAutoPlay() {
         autoPlayTimer = setInterval(() => {
             nextBtn.click();
-        }, 3000); 
+        }, 3000); // Cambia cada 3 segundos
     }
 
     function resetAutoPlay() {
@@ -418,7 +435,7 @@
 
     window.addEventListener('load', () => {
         updateCarousel(false);
-        startAutoPlay(); 
+        startAutoPlay(); // Arranca al cargar
     });
     
     window.addEventListener('resize', () => {
@@ -430,7 +447,7 @@
         isTransitioning = true;
         currentIndex++;
         updateCarousel(true);
-        resetAutoPlay(); 
+        resetAutoPlay(); // Reinicia el tiempo si das clic manual
     });
 
     prevBtn.addEventListener('click', () => {
@@ -438,7 +455,7 @@
         isTransitioning = true;
         currentIndex--;
         updateCarousel(true);
-        resetAutoPlay(); 
+        resetAutoPlay(); // Reinicia el tiempo
     });
 
     track.addEventListener('transitionend', () => {
