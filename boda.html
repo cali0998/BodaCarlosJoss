@@ -65,11 +65,11 @@
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.15); /* Velo muy ligero para no apagar la foto */
+      background: rgba(0,0,0,0.15); 
       z-index: 1; 
     }
 
-    /* --- NUBE DIFUMINADA EXTREMA (SIN BORDES FÍSICOS) --- */
+    /* --- NUBE DIFUMINADA EXTREMA --- */
     .glass-card {
       background: transparent; 
       border: none; 
@@ -80,8 +80,6 @@
       position: relative; 
       z-index: 20; 
       text-align: center;
-      
-      /* CERO CRISTAL (BLUR) */
       backdrop-filter: none !important; 
       -webkit-backdrop-filter: none !important; 
     }
@@ -200,7 +198,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     }
 
-    /* --- FONDOS Y ENCUADRES CORREGIDOS --- */
+    /* --- FONDOS Y ENCUADRES --- */
     .hero { background-image: url('Foto10.jpg'); background-position: center; }
     .seccion-pase { background-image: url('Foto11.jpg'); background-position: center; }
     .seccion-lugar { background-image: url('Foto1.jpg'); background-position: center 35% !important; }
@@ -228,7 +226,7 @@
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* ==============================================================
-       MAGIA PARA MÓVILES (CARAS VISIBLES ARRIBA, TEXTOS ABAJO)
+       MAGIA PARA MÓVILES
        ============================================================== */
     @media (max-width: 600px) {
       
@@ -305,7 +303,7 @@
       <p>Bajo la luz de la luna y testigos de nuestro amor, uniremos nuestras vidas en este hermoso rincón de Costa Rica.</p>
       <p><b>Ceremonia:</b> 3:00 PM</p>
       <p><b>Recepción:</b> 4:00 PM</p>
-      <a href="https://waze.com/ul?ll=10.27941,-83.78455&navigate=yes" target="_blank" class="btn">Cómo llegar con Waze 🚗</a>
+      <a href="https://waze.com/ul?ll=10.283417,-83.776611&navigate=yes" target="_blank" class="btn">Cómo llegar con Waze 🚗</a>
     </div>
     <div class="floating-text reveal">"Bajo el cielo estrellado, seremos testigos del inicio de nuestro 'para siempre'..."</div>
   </section>
@@ -388,16 +386,13 @@
   </section>
 
   <script>
-    // --- FUNCIÓN INTELIGENTE PARA AGENDAR FECHA (iOS vs Android) ---
+    // --- AGENDAR FECHA CON COORDENADAS PRECISAS ---
     function agendarFecha(e) {
       e.preventDefault();
-      
-      // Detecta si es un dispositivo Apple (iPhone, iPad, iPod)
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
       if (isIOS) {
-        // En iOS funciona perfecto descargar el archivo .ics, abre Calendario de inmediato
-        const icsMSG = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Boda Carlos y Joselyn//ES\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nSUMMARY:Boda de Carlos y Joselyn\nDTSTART:20261219T210000Z\nDTEND:20261220T050000Z\nLOCATION:Salón de Eventos Luna Azul\\, La Rita\\, Pococí\nDESCRIPTION:Nos llena de inmensa alegría invitarte a celebrar el inicio de nuestro viaje de amor.\nEND:VEVENT\nEND:VCALENDAR";
+        const icsMSG = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Boda Carlos y Joselyn//ES\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nSUMMARY:Boda de Carlos y Joselyn\nDTSTART:20261219T210000Z\nDTEND:20261220T050000Z\nLOCATION:10.283417\\, -83.776611 (Salón Luna Azul)\nDESCRIPTION:Nos llena de inmensa alegría invitarte a celebrar el inicio de nuestro viaje de amor.\nEND:VEVENT\nEND:VCALENDAR";
         const blob = new Blob([icsMSG], { type: 'text/calendar;charset=utf-8' });
         const url = window.URL.createObjectURL(blob);
         const link = document.createElement('a');
@@ -407,115 +402,59 @@
         link.click();
         document.body.removeChild(link);
       } else {
-        // En Android y PC, redirige al link directo de Google Calendar para que la app lo intercepte sin descargas raras
-        const googleCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T150000/20261219T230000&details=Celebremos%20juntos%20el%20inicio%20de%20nuestro%20viaje%20de%20amor.&location=Sal%C3%B3n%20de%20Eventos%20Luna%20Azul%2C%20La%20Rita%2C%20Pococ%C3%AD";
+        const googleCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T150000/20261219T230000&details=Celebremos%20juntos%20el%20inicio%20de%20nuestro%20viaje%20de%20amor.&location=10.283417,-83.776611";
         window.open(googleCalUrl, '_blank');
       }
     }
 
-    // --- ANIMACIÓN AL HACER SCROLL ---
+    // --- ANIMACIONES ---
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // --- LÓGICA DEL CONTADOR DE TIEMPO ---
+    // --- CONTADOR ---
     const countDownDate = new Date("Dec 19, 2026 15:00:00").getTime();
-
     const x = setInterval(function() {
       const now = new Date().getTime();
       const distance = countDownDate - now;
-
       if (distance < 0) {
         clearInterval(x);
         document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>¡Llegó el gran día!</p>";
         return;
       }
-
       document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
       document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
       document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
       document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 
-    // --- CARRETE INFINITO FLUIDO Y AUTOMÁTICO ---
+    // --- CARRETE ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
     const totalImages = images.length; 
-
-    images.forEach(img => {
-        track.appendChild(img.cloneNode(true));
-    });
-    for (let i = totalImages - 1; i >= 0; i--) {
-        track.insertBefore(images[i].cloneNode(true), track.firstChild);
-    }
-
+    images.forEach(img => track.appendChild(img.cloneNode(true)));
+    for (let i = totalImages - 1; i >= 0; i--) track.insertBefore(images[i].cloneNode(true), track.firstChild);
     let currentIndex = totalImages; 
     let isTransitioning = false;
     let autoPlayTimer; 
-
-    function getSlideWidth() {
-        return track.children[0].offsetWidth + 15; 
-    }
-
+    function getSlideWidth() { return track.children[0].offsetWidth + 15; }
     function updateCarousel(animate = true) {
         track.style.transition = animate ? 'transform 0.4s ease-in-out' : 'none';
         track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
     }
-
-    function startAutoPlay() {
-        autoPlayTimer = setInterval(() => {
-            nextBtn.click();
-        }, 3000); 
-    }
-
-    function resetAutoPlay() {
-        clearInterval(autoPlayTimer);
-        startAutoPlay();
-    }
-
-    window.addEventListener('load', () => {
-        updateCarousel(false);
-        startAutoPlay(); 
-    });
-    
-    window.addEventListener('resize', () => {
-        updateCarousel(false);
-    });
-
-    nextBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        currentIndex++;
-        updateCarousel(true);
-        resetAutoPlay(); 
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (isTransitioning) return;
-        isTransitioning = true;
-        currentIndex--;
-        updateCarousel(true);
-        resetAutoPlay(); 
-    });
-
+    function startAutoPlay() { autoPlayTimer = setInterval(() => { nextBtn.click(); }, 3000); }
+    function resetAutoPlay() { clearInterval(autoPlayTimer); startAutoPlay(); }
+    window.addEventListener('load', () => { updateCarousel(false); startAutoPlay(); });
+    window.addEventListener('resize', () => updateCarousel(false));
+    nextBtn.addEventListener('click', () => { if (isTransitioning) return; isTransitioning = true; currentIndex++; updateCarousel(true); resetAutoPlay(); });
+    prevBtn.addEventListener('click', () => { if (isTransitioning) return; isTransitioning = true; currentIndex--; updateCarousel(true); resetAutoPlay(); });
     track.addEventListener('transitionend', () => {
         isTransitioning = false;
-        const totalElements = track.children.length; 
-        
-        if (currentIndex >= totalImages * 2) {
-            track.style.transition = 'none'; 
-            currentIndex = totalImages; 
-            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-        }
-        
-        if (currentIndex <= totalImages - 1) {
-            track.style.transition = 'none'; 
-            currentIndex = (totalImages * 2) - 1; 
-            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-        }
+        if (currentIndex >= totalImages * 2) { track.style.transition = 'none'; currentIndex = totalImages; track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`; }
+        if (currentIndex <= totalImages - 1) { track.style.transition = 'none'; currentIndex = (totalImages * 2) - 1; track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`; }
     });
   </script>
 </body>
