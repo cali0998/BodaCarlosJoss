@@ -23,7 +23,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
+    /* --- ESTILOS DE SECCIÓN --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -31,7 +31,7 @@
       position: relative;
       padding: 100px 20px;
       
-      background-size: cover !important; /* Mantenemos el tamaño original sin zoom extremo */
+      background-size: cover !important; /* ESTO MANTIENE EL TAMAÑO SIN ZOOM EXTREMO */
       background-position: center !important;
       background-repeat: no-repeat !important;
       
@@ -41,7 +41,7 @@
       mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
     }
 
-    /* --- PORTADA TOTALMENTE CENTRADA --- */
+    /* --- PORTADA CENTRADA --- */
     .hero { 
       margin-top: 0; 
       z-index: 10; 
@@ -83,7 +83,7 @@
     }
     
     .glass-card-wide {
-      max-width: 600px; 
+      max-width: 600px; /* Para que el carrete no se encoja */
     }
 
     /* --- SOMBRAS PARA LEGIBILIDAD --- */
@@ -159,21 +159,25 @@
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES --- */
-    .hero { background: url('Foto10.jpg') center; }
-    .seccion-pase { background: url('Foto11.jpg') center; }
-    .seccion-lugar { background: url('Foto12.jpg') center; }
-    .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
-    .seccion-vestimenta { background: url('Foto13.jpg') center; }
+    /* --- FONDOS Y ENCUADRES (CORRECCIÓN DEFINITIVA DE TAMAÑO Y CARAS) --- */
+    .hero { background-image: url('Foto10.jpg'); background-position: center; }
+    .seccion-pase { background-image: url('Foto11.jpg'); background-position: center; }
+    .seccion-lugar { background-image: url('Foto12.jpg'); background-position: center; }
+    .seccion-nosotros { background-image: url('Foto2.jpg'); background-position: center 40%; }
+    .seccion-vestimenta { background-image: url('Foto13.jpg'); background-position: center; }
     
-    /* --- SOLUCIÓN APLICADA AQUÍ --- */
-    /* Eliminamos el zoom extremo devolviendo a 'cover' (heredado de arriba) 
-       y ajustamos la posición vertical matemáticamente para bajar la foto y ver las caras */
-    .seccion-musica { background: url('Foto1.jpg') center 15% !important; } 
-    .seccion-final { background: url('Foto14.jpg') center 10% !important; }
+    /* Al usar background-image y background-position por separado, NO se borra el tamaño original. El 20% centra sus caras perfecto. */
+    .seccion-musica { 
+      background-image: url('Foto1.jpg') !important; 
+      background-position: center 20% !important; 
+    } 
+    .seccion-final { 
+      background-image: url('Foto14.jpg') !important; 
+      background-position: center 20% !important; 
+    }
 
-    .seccion-regalos { background: url('Foto3.jpg') center 40%; }
-    .seccion-qr { background: url('Foto4.jpg') center; }
+    .seccion-regalos { background-image: url('Foto3.jpg'); background-position: center 40%; }
+    .seccion-qr { background-image: url('Foto4.jpg'); background-position: center; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
@@ -288,7 +292,7 @@
     <div class="glass-card reveal">
       <h2>Mesa de Regalos</h2>
       <p>El mayor regalo que podemos recibir es tu presencia en este día tan especial.</p>
-      <p>Si deseas tener un detalle con nosotros, contaremos con la modalida de <b>Lluvia de Sobres</b>.</p>
+      <p>Si deseas tener un detalle con nosotros, contaremos con la modalidad de <b>Lluvia de Sobres</b>.</p>
     </div>
     <div class="floating-text reveal">"Si deseas tener un detalle adicional, agradecemos tu amor y generosidad..."</div>
   </section>
@@ -340,66 +344,62 @@
       document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 
-    // --- CARRETE INFINITO TOTALMENTE CORREGIDO (SIN SALTOS) ---
+    // --- CARRETE INFINITO FLUIDO ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
-    
-    // Clonación para ambos lados
-    const firstClone = images[0].cloneNode(true);
-    const lastClone = images[images.length - 1].cloneNode(true);
-    
-    track.appendChild(firstClone);
-    track.insertBefore(lastClone, track.firstElementChild);
-    
-    let currentIndex = 1; 
-    let isTransitioning = false;
-    
-    function getSlideWidth() {
-        return track.firstElementChild.getBoundingClientRect().width + 15; 
+    const totalImages = images.length; 
+
+    // Clonar las fotos para que dé la vuelta perfecta
+    images.forEach(img => {
+        track.appendChild(img.cloneNode(true));
+    });
+    for (let i = totalImages - 1; i >= 0; i--) {
+        track.insertBefore(images[i].cloneNode(true), track.firstChild);
     }
-    
-    track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-    
+
+    let currentIndex = totalImages; 
+    let isTransitioning = false;
+
+    function getSlideWidth() {
+        return track.children[0].clientWidth + 15; 
+    }
+
+    function updateCarousel(animate = true) {
+        track.style.transition = animate ? 'transform 0.4s ease-in-out' : 'none';
+        track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
+    }
+
+    window.addEventListener('load', () => updateCarousel(false));
+    window.addEventListener('resize', () => updateCarousel(false));
+
     nextBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex++;
-        track.style.transition = 'transform 0.4s ease-in-out';
-        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+        updateCarousel(true);
     });
-    
+
     prevBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex--;
-        track.style.transition = 'transform 0.4s ease-in-out';
-        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+        updateCarousel(true);
     });
-    
+
     track.addEventListener('transitionend', () => {
         isTransitioning = false;
-        const currentSlides = track.querySelectorAll('img');
         
-        if (currentIndex >= currentSlides.length - 1) {
-            track.style.transition = 'none'; 
-            currentIndex = 1; 
-            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-            void track.offsetWidth; 
+        if (currentIndex >= totalImages * 2) {
+            currentIndex = totalImages; 
+            updateCarousel(false);
         }
         
-        if (currentIndex <= 0) {
-            track.style.transition = 'none'; 
-            currentIndex = currentSlides.length - 2; 
-            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
-            void track.offsetWidth; 
+        if (currentIndex <= totalImages - 1) {
+            currentIndex = (totalImages * 2) - 1; 
+            updateCarousel(false);
         }
-    });
-    
-    window.addEventListener('resize', () => {
-        track.style.transition = 'none';
-        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
   </script>
 </body>
