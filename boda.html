@@ -69,17 +69,19 @@
       z-index: 1; 
     }
 
-    /* --- TARJETAS VIDRIO AHUMADO UNIFORMES --- */
+    /* --- TARJETAS VIDRIO AHUMADO MINIMALISTAS (BORDES SUAVIZADOS) --- */
     .glass-card {
       background: rgba(0, 0, 0, 0.25); 
       backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      /* CAMBIO AQUÍ: Eliminado el borde sólido */
+      border: none; 
       border-radius: 35px;
       padding: 40px 25px; 
       width: 100%; max-width: 350px; 
       position: relative; z-index: 20; 
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      /* CAMBIO AQUÍ: Sombra sutilmente más fuerte para definir sin borde */
+      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
     }
     
     .glass-card-wide { max-width: 550px; }
