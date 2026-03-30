@@ -76,17 +76,22 @@
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO (Esbeltas y Modernas) */
+    /* TARJETAS VIDRIO (Modificadas para más transparencia y menos estorbo) */
     .glass-card {
-      background: rgba(255, 255, 255, 0.05); /* Cristal etéreo */
-      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.25); /* Cristal oscuro sutil en lugar de blanco para contraste */
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); /* Menos desenfoque para ver más el fondo */
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 35px;
       padding: 40px 25px; 
-      width: 100%; max-width: 350px; /* Esbeltas */
+      width: 100%; max-width: 350px; 
       position: relative; z-index: 5;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+
+    /* --- SOMBRAS EN TEXTOS PARA MÁXIMA LEGIBILIDAD --- */
+    h1, h2, h3, p, .floating-text {
+      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.8), 0px 0px 3px rgba(0, 0, 0, 0.5);
     }
 
     /* --- MENSAJES FLOTANTES --- */
@@ -95,7 +100,7 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.6rem; 
-      color: rgba(255, 255, 255, 0.7);
+      color: rgba(255, 255, 255, 0.9); /* Un poco más blancos para destacar */
       max-width: 300px;
       line-height: 1.3;
       z-index: 1;
@@ -111,7 +116,7 @@
     .seccion-vestimenta .floating-text,
     .seccion-regalos .floating-text { left: 8%; text-align: left; }
 
-    /* --- CARRETE INFINITO TOTAL (SEAMLESS LOOP - JS Avanzado) --- */
+    /* --- CARRETE INFINITO TOTAL --- */
     .carousel-container {
       position: relative;
       width: 100%;
@@ -128,10 +133,9 @@
     }
 
     .carousel-track img { 
-      /* Nítidas y sin estirar */
       width: auto; 
       max-width: 100%; 
-      height: 220px; /* Altura para ver fondo */
+      height: 220px; 
       object-fit: contain; 
       border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
@@ -158,9 +162,7 @@
       justify-content: center;
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
     }
-    .carousel-btn:hover {
-      background: rgba(197, 157, 95, 1);
-    }
+    .carousel-btn:hover { background: rgba(197, 157, 95, 1); }
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
@@ -170,16 +172,9 @@
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
-
-    /* --- ENCUADRES CRÍTICOS (CORREGIDO) --- */
-    
-    /* MÚSICA FINAL: Usa Foto1.jpg con encuadre MUY BAJO (82%) para ver caras que estaban arriba */
     .seccion-musica { background: url('Foto1.jpg') center 82%; }
-    
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
-    
-    /* FINAL FINAL: Usa Foto14.jpg con encuadre CORREGIDO (75%). BAJAMOS LA FOTO PARA VER CARAS. */
     .seccion-final { background: url('Foto14.jpg') center 75%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
@@ -192,6 +187,7 @@
       background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 25px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4); /* Sombra al botón para destacar */
     }
 
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
@@ -212,7 +208,7 @@
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center; }
       h2 { font-size: 2.4rem; }
       p { font-size: 1.15rem; }
-      .carousel-track img { height: 180px; } /* Altura reducida en móvil */
+      .carousel-track img { height: 180px; } 
     }
   </style>
 </head>
@@ -224,7 +220,7 @@
       <p style="font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; margin-bottom: 10px;">"Nuestra historia de amor apenas comienza, y queremos que seas parte de ella"</p>
       <h1>Carlos &<br>Joselyn</h1>
       <p style="letter-spacing: 4px; margin-top: 15px; font-weight: 600; font-size: 15px;">19 DE DICIEMBRE DE 2026</p>
-      <a href="#" class="btn">Agendar Nuestra Fecha 📅</a>
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda+de+Carlos+y+Joselyn&dates=20261219T150000/20261219T230000&details=Celebremos+juntos+el+inicio+de+nuestro+viaje+de+amor.&location=Sal%C3%B3n+de+Eventos+Luna+Azul,+La+Rita,+Pococ%C3%AD,+Lim%C3%B3n" target="_blank" class="btn">Agendar Nuestra Fecha 📅</a>
     </div>
   </section>
 
@@ -256,7 +252,7 @@
   <section class="seccion-nosotros">
     <div class="overlay"></div>
     <div class="glass-card reveal" style="background:transparent; border:none; box-shadow:none; max-width: 650px;">
-      <h2 style="color:white; text-shadow: 2px 2px 10px rgba(0,0,0,0.8);">Un Viaje de Amor</h2>
+      <h2 style="color:white;">Un Viaje de Amor</h2>
       
       <div class="carousel-container reveal">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
@@ -279,7 +275,7 @@
     <div class="glass-card reveal">
       <h2>Código de Gala</h2>
       <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
-      <p>Queremos que te sientas spectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
+      <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta. Tu elegancia completará la magia de esta noche.</p>
       <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos los tonos Verde Jade y Vino para armonizar con nuestra paleta.<br>Agradecemos evitar el color blanco.</p>
     </div>
     <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio para nuestra celebración..."</div>
@@ -336,53 +332,45 @@
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // --- CARRETE INFINITO TOTAL (SEAMLESS LOOP - JS Avanzado) ---
+    // --- CARRETE INFINITO TOTAL ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     let isAnimating = false;
 
-    // Botón Siguiente (Mueve la pista a la izquierda, luego pasa la primera imagen al final)
     nextBtn.addEventListener('click', () => {
-        if (isAnimating) return; // Evita que se rompa si se hace clic muy rápido
+        if (isAnimating) return; 
         isAnimating = true;
         
         const firstImg = track.firstElementChild;
-        const width = firstImg.clientWidth + 15; // Ancho de la imagen + gap
+        const width = firstImg.clientWidth + 15; 
         
-        // Animamos el track hacia la izquierda
         track.style.transition = 'transform 0.5s ease-in-out';
         track.style.transform = `translateX(-${width}px)`;
         
-        // Al terminar la animación, reubicamos los elementos invisiblemente
         track.addEventListener('transitionend', function handleNext() {
             track.removeEventListener('transitionend', handleNext);
-            track.style.transition = 'none'; // Quitamos transición para el salto invisible
-            track.style.transform = 'translateX(0)'; // Devolvemos el track a su posición 0
-            track.appendChild(firstImg); // Movemos físicamente la primera imagen al final
+            track.style.transition = 'none'; 
+            track.style.transform = 'translateX(0)'; 
+            track.appendChild(firstImg); 
             isAnimating = false;
         });
     });
 
-    // Botón Anterior (Pasa la última imagen al principio invisiblemente, luego anima el track)
     prevBtn.addEventListener('click', () => {
         if (isAnimating) return;
         isAnimating = true;
         
         const lastImg = track.lastElementChild;
         
-        // Quitamos la transición y movemos la última imagen al inicio
         track.style.transition = 'none';
         track.insertBefore(lastImg, track.firstElementChild);
         
-        // Compensamos el movimiento desplazando el track a la izquierda sin que el usuario lo note
         const width = lastImg.clientWidth + 15; 
         track.style.transform = `translateX(-${width}px)`;
         
-        // Forzamos un 'reflow' para que el navegador registre el cambio inmediato
         void track.offsetWidth;
         
-        // Ahora sí, animamos el track de vuelta al 0 (movimiento hacia la derecha)
         track.style.transition = 'transform 0.5s ease-in-out';
         track.style.transform = 'translateX(0)';
         
