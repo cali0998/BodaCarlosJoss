@@ -23,7 +23,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -59,15 +58,15 @@
       width: 100%;
     }
 
-    /* Capas escalonadas para el scroll fluido (Zig-Zag Total) */
-    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } 
-    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } 
-    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } 
-    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } 
-    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } 
-    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } 
-    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } 
-    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
+    /* --- ZIG-ZAG CORREGIDO --- */
+    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
+    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
+    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
+    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
+    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Derecha */
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -75,22 +74,27 @@
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO AHUMADO */
+    /* --- TARJETAS VIDRIO AHUMADO UNIFORME --- */
     .glass-card {
-      background: rgba(0, 0, 0, 0.25); 
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
+      background: rgba(0, 0, 0, 0.35); /* Fondo oscuro semitransparente */
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); 
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 35px;
       padding: 40px 25px; 
       width: 100%; max-width: 350px; 
       position: relative; z-index: 5;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+    
+    /* Variante ancha para el carrete sin perder el estilo */
+    .glass-card.wide {
+      max-width: 650px;
     }
 
-    /* --- SOMBRAS EN TEXTOS --- */
+    /* --- SOMBRAS EN TEXTOS PARA LEGIBILIDAD --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
-      text-shadow: 1px 1px 8px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.6);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.6);
     }
 
     /* --- CONTADOR --- */
@@ -132,7 +136,7 @@
       font-family: 'Playfair Display', serif;
       font-style: italic;
       font-size: 1.6rem; 
-      color: rgba(255, 255, 255, 0.9); 
+      color: rgba(255, 255, 255, 0.95); 
       max-width: 300px;
       line-height: 1.3;
       z-index: 1;
@@ -171,13 +175,14 @@
       border-radius: 25px; 
       border: 2px solid rgba(197, 157, 95, 0.3); 
       flex-shrink: 0;
+      display: block;
     }
 
     .carousel-btn {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      background: rgba(197, 157, 95, 0.8); 
+      background: rgba(197, 157, 95, 0.9); 
       color: white;
       border: none;
       border-radius: 50%;
@@ -190,25 +195,25 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
     .carousel-btn:hover { background: rgba(197, 157, 95, 1); }
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES --- */
+    /* --- FONDOS Y ENCUADRES CORREGIDOS --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
     
-    /* CORRECCIÓN: Se cambió de 82% a 0% para bajar la foto de A Bailar y ver las caras */
-    .seccion-musica { background: url('Foto1.jpg') center 0%; } 
-    
+    /* ¡AQUÍ ESTÁ LA CORRECCIÓN CRÍTICA! 'center top' obliga a mostrar las caras */
+    .seccion-musica { background: url('Foto1.jpg') center top !important; } 
+    .seccion-final { background: url('Foto14.jpg') center top !important; }
+
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
-    .seccion-final { background: url('Foto14.jpg') center 75%; }
 
     h1 { font-family: 'Playfair Display', serif; font-size: 3.8rem; color: var(--gold); margin: 0; line-height: 1.1; }
     h2 { font-family: 'Playfair Display', serif; font-size: 2.6rem; color: var(--gold); margin-bottom: 20px; font-weight: 600; }
@@ -219,7 +224,7 @@
       background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4); 
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
     }
 
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
@@ -229,6 +234,7 @@
     @media (min-width: 992px) {
       section { background-attachment: fixed; } 
       .glass-card { max-width: 400px; }
+      .glass-card.wide { max-width: 650px; }
       h1 { font-size: 6.5rem !important; }
       h2 { font-size: 3.5rem !important; }
       p { font-size: 1.35rem; }
@@ -262,7 +268,7 @@
         <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
       </div>
 
-      <a href="https://calendar.google.com/calendar/r/eventedit?text=Boda+de+Carlos+y+Joselyn&dates=20261219T210000Z/20261220T080000Z&details=Celebremos+juntos+el+inicio+de+nuestro+viaje+de+amor.&location=Salón+de+Eventos+Luna+Azul,+La+Rita,+Pococí" target="_blank" rel="noopener noreferrer" class="btn">Agendar Nuestra Fecha 📅</a>
+      <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=Boda%20de%20Carlos%20y%20Joselyn&dates=20261219T210000Z/20261220T080000Z&details=Celebremos%20juntos%20el%20inicio%20de%20nuestro%20viaje%20de%20amor.&location=Sal%C3%B3n%20de%20Eventos%20Luna%20Azul%2C%20La%20Rita%2C%20Pococ%C3%AD" target="_blank" rel="noopener noreferrer" class="btn">Agendar Nuestra Fecha 📅</a>
     </div>
   </section>
 
@@ -292,7 +298,7 @@
 
   <section class="seccion-nosotros">
     <div class="overlay"></div>
-    <div class="glass-card reveal" style="max-width: 650px;">
+    <div class="glass-card wide reveal">
       <h2 style="color:white;">Un Viaje de Amor</h2>
       
       <div class="carousel-container reveal">
@@ -393,12 +399,13 @@
       }
     }, 1000);
 
-    // --- CARRETE INFINITO ---
+    // --- CARRETE INFINITO TOTALMENTE CORREGIDO (SIN SALTOS) ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
     
+    // Clonación para ambos lados
     const firstClone = images[0].cloneNode(true);
     const lastClone = images[images.length - 1].cloneNode(true);
     
@@ -409,7 +416,8 @@
     let isTransitioning = false;
     
     function getSlideWidth() {
-        return track.firstElementChild.clientWidth + 15; 
+        // Usa getBoundingClientRect para exactitud absoluta con subpíxeles
+        return track.firstElementChild.getBoundingClientRect().width + 15; 
     }
     
     track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
@@ -434,16 +442,20 @@
         isTransitioning = false;
         const currentSlides = track.querySelectorAll('img');
         
-        if (currentIndex === currentSlides.length - 1) {
+        // Salto invisible cuando llega al clon final
+        if (currentIndex >= currentSlides.length - 1) {
             track.style.transition = 'none'; 
             currentIndex = 1; 
             track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+            void track.offsetWidth; // Fuerza al navegador a registrar el cambio inmediatamente (evita brincos)
         }
         
-        if (currentIndex === 0) {
+        // Salto invisible cuando llega al clon inicial
+        if (currentIndex <= 0) {
             track.style.transition = 'none'; 
             currentIndex = currentSlides.length - 2; 
             track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+            void track.offsetWidth; // Fuerza al navegador a registrar el cambio inmediatamente (evita brincos)
         }
     });
     
