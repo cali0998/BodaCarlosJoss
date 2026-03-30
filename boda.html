@@ -69,26 +69,24 @@
       z-index: 1; 
     }
 
-    /* --- TARJETAS VIDRIO AHUMADO MINIMALISTAS (BORDES SUAVIZADOS) --- */
+    /* --- TARJETAS VIDRIO AHUMADO FLOTANTES (CERO BORDES, CERO SOMBRAS) --- */
     .glass-card {
-      background: rgba(0, 0, 0, 0.25); 
-      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
-      /* CAMBIO AQUÍ: Eliminado el borde sólido */
+      background: rgba(0, 0, 0, 0.2); /* Aún más transparente */
+      backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); /* Mayor desenfoque para suavizar */
       border: none; 
       border-radius: 35px;
       padding: 40px 25px; 
       width: 100%; max-width: 350px; 
       position: relative; z-index: 20; 
       text-align: center;
-      /* CAMBIO AQUÍ: Sombra sutilmente más fuerte para definir sin borde */
-      box-shadow: 0 10px 40px rgba(0,0,0,0.4);
+      box-shadow: none; /* Quitamos la sombra para que no parezca un borde marcado */
     }
     
     .glass-card-wide { max-width: 550px; }
 
-    /* --- SOMBRAS PARA LEGIBILIDAD --- */
+    /* --- SOMBRAS PARA LEGIBILIDAD (Para que el texto no se pierda al quitar las sombras de los cuadros) --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
-      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.6);
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.9), 0px 0px 3px rgba(0, 0, 0, 0.7);
     }
 
     /* --- CONTADOR --- */
@@ -100,8 +98,8 @@
       flex-wrap: wrap;
     }
     .time-box {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(197, 157, 95, 0.5); 
+      background: rgba(0, 0, 0, 0.2);
+      border: none; /* Cero bordes en el contador */
       border-radius: 12px;
       padding: 10px 15px;
       min-width: 70px;
@@ -153,7 +151,7 @@
       height: 300px !important; 
       object-fit: cover !important; 
       border-radius: 25px; 
-      border: 2px solid rgba(197, 157, 95, 0.3); 
+      border: none; /* Cero bordes en las fotos */
       flex-shrink: 0;
     }
 
@@ -189,7 +187,7 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
     }
 
-    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; position: relative; z-index: 20; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* --- Ajustes móviles --- */
@@ -273,7 +271,7 @@
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
     </div>
-    <div class="floating-text reveal">"Cada sonrisa y cada mirada compartida es un tesoro que guardamos en nuestra memory..."</div>
+    <div class="floating-text reveal">"Cada sonrisa y cada mirada compartida es un tesoro que guardamos en nuestra memoria..."</div>
   </section>
 
   <section class="seccion-vestimenta">
@@ -312,7 +310,7 @@
     <div class="glass-card reveal">
       <h2>Tus Fotos</h2>
       <p>Escanea este código QR y sube todas las fotos y videos que tomes durante la celebración.</p>
-      <img src="qrphotos.png" alt="QR Photos" style="width: 150px; margin-top: 15px; background: white; padding: 12px; border-radius: 15px; border: 3px solid var(--gold);">
+      <img src="qrphotos.png" alt="QR Photos" style="width: 150px; margin-top: 15px; background: white; padding: 12px; border-radius: 15px; border: none;">
     </div>
     <div class="floating-text reveal">"Ayúdanos a crear un álbum de recuerdos inolvidables..."</div>
   </section>
@@ -361,7 +359,6 @@
     const images = Array.from(track.querySelectorAll('img'));
     const totalImages = images.length; 
 
-    // Clonar las fotos
     images.forEach(img => {
         track.appendChild(img.cloneNode(true));
     });
@@ -382,11 +379,10 @@
         track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
     }
 
-    // Funciones para reproducción automática
     function startAutoPlay() {
         autoPlayTimer = setInterval(() => {
             nextBtn.click();
-        }, 3000); // Cambia cada 3 segundos
+        }, 3000); 
     }
 
     function resetAutoPlay() {
@@ -396,7 +392,7 @@
 
     window.addEventListener('load', () => {
         updateCarousel(false);
-        startAutoPlay(); // Arranca al cargar
+        startAutoPlay(); 
     });
     
     window.addEventListener('resize', () => {
@@ -408,7 +404,7 @@
         isTransitioning = true;
         currentIndex++;
         updateCarousel(true);
-        resetAutoPlay(); // Reinicia el tiempo si das clic manual
+        resetAutoPlay(); 
     });
 
     prevBtn.addEventListener('click', () => {
@@ -416,7 +412,7 @@
         isTransitioning = true;
         currentIndex--;
         updateCarousel(true);
-        resetAutoPlay(); // Reinicia el tiempo
+        resetAutoPlay(); 
     });
 
     track.addEventListener('transitionend', () => {
