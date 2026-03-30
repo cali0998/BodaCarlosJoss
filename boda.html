@@ -35,7 +35,7 @@
       background-position: center !important;
       background-repeat: no-repeat !important;
       
-      margin-top: -21vh; /* Solapamiento de secciones */
+      margin-top: -21vh; 
       
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
@@ -69,7 +69,7 @@
       z-index: 1; 
     }
 
-    /* --- NUBE DIFUMINADA EXTREMA --- */
+    /* --- NUBE DIFUMINADA EXTREMA (SIN BORDES FÍSICOS) --- */
     .glass-card {
       background: transparent; 
       border: none; 
@@ -180,7 +180,6 @@
     .carousel-btn.prev { left: 5px; }
     .carousel-btn.next { right: 5px; }
 
-    /* --- ESTILOS DEL QR INTERACTIVO --- */
     .qr-link {
       display: inline-block;
       margin-top: 15px;
@@ -220,6 +219,7 @@
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
       cursor: pointer; 
+      border: none; 
     }
 
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; position: relative; z-index: 20; }
@@ -280,7 +280,7 @@
         <div class="time-box"><span id="seconds">00</span><p>Seg</p></div>
       </div>
 
-      <a href="#" onclick="agendarFecha(event)" class="btn">Agendar Nuestra Fecha 📅</a>
+      <button onclick="agendarFecha(event)" class="btn">Agendar Nuestra Fecha 📅</button>
     </div>
   </section>
 
@@ -288,9 +288,9 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Pase Especial</h2>
-      <h3>Carlos & Joselyn</h3>
+      <h3 id="nombre-invitado">Carlos & Joselyn</h3>
       <p>Nos llena de inmensa alegría invitarte a compartir con nosotros el día más importante de nuestras vidas.</p>
-      <p style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
+      <p id="pases-invitado" style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px;">Pases Reservados: 2</p>
     </div>
     <div class="floating-text reveal">"Contamos los días, las horas y los minutos para verte y compartir nuestra felicidad contigo..."</div>
   </section>
@@ -380,13 +380,65 @@
       <h2 style="font-size: 3.5rem;">¡Te Esperamos!</h2>
       <p>Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Confirmo+mi+asistencia+a+la+boda+de+Carlos+y+Joselyn:" target="_blank" class="btn">Confirmar Asistencia</a>
+      
+      <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn">Confirmar Asistencia ✅</button>
+
     </div>
     <div class="floating-text reveal">"¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
   </section>
 
   <script>
-    // --- AGENDAR FECHA CON COORDENADAS PRECISAS ---
+    // --- VARIABLES DE SUPABASE INYECTADAS ---
+    const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
+
+    // --- LEER DATOS DE LA URL ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const nombreInvitado = urlParams.get('n') || 'Invitado sin nombre';
+    const pasesInvitado = urlParams.get('p') || '0';
+
+    if (urlParams.get('n')) document.getElementById('nombre-invitado').innerText = nombreInvitado;
+    if (urlParams.get('p')) document.getElementById('pases-invitado').innerText = `Pases Reservados: ${pasesInvitado}`;
+
+    // --- ENVIAR A SUPABASE ---
+    async function confirmarAsistenciaSupabase() {
+        const btn = document.getElementById('btn-confirmar');
+        btn.innerText = "Confirmando...";
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.7";
+
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/confirmaciones`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`
+                },
+                body: JSON.stringify({
+                    nombre: nombreInvitado,
+                    pases: pasesInvitado,
+                    estado: 'Confirmado ✅'
+                })
+            });
+
+            if(response.ok) {
+                btn.innerText = "¡Asistencia Confirmada! 🎉";
+                btn.style.background = "#2ecc71"; // Se pone verde de éxito
+                btn.style.opacity = "1";
+            } else {
+                btn.innerText = "Error. Toca para reintentar";
+                btn.style.pointerEvents = "auto";
+                btn.style.opacity = "1";
+            }
+        } catch (error) {
+            btn.innerText = "Error de conexión. Reintentar";
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
+        }
+    }
+
+    // --- AGENDAR FECHA (ICS / GOOGLE CALENDAR) ---
     function agendarFecha(e) {
       e.preventDefault();
       const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
