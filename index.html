@@ -35,21 +35,22 @@
     h1 { font-family: 'Playfair Display', serif; font-size: 34px; color: var(--gold); margin: 10px 0 5px; }
     .date-badge { font-size: 11px; letter-spacing: 5px; text-transform: uppercase; color: var(--gold-light); margin-bottom: 35px; display: block; }
     
-    .state-container { display: flex; flex-direction: column; gap: 15px; }
+    .state-container { display: flex; flex-direction: column; gap: 12px; }
     .hidden { display: none !important; }
 
     /* ESTILO DE LOS BOTONES ELEGANTES */
     .btn-action {
       display: flex; align-items: center; justify-content: center; gap: 12px;
-      padding: 18px; border-radius: 16px; font-weight: 600; text-transform: uppercase;
+      padding: 16px; border-radius: 16px; font-weight: 600; text-transform: uppercase;
       cursor: pointer; border: none; transition: all 0.3s ease; font-size: 14px; color: white; width: 100%;
       box-sizing: border-box;
     }
 
     .btn-camera { background: linear-gradient(135deg, var(--gold) 0%, #8c6d3f 100%); box-shadow: 0 8px 20px rgba(197, 157, 95, 0.2); }
+    .btn-video { background: linear-gradient(135deg, #a67b45 0%, #7a582f 100%); box-shadow: 0 8px 20px rgba(197, 157, 95, 0.2); }
     .btn-gallery { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.2); }
     
-    /* ESTO OCULTA EL BOTÓN GRIS FEO DEL NAVEGADOR */
+    /* OCULTA LOS BOTONES GRISES FEOS DE INPUT */
     input[type="file"] {
       display: none !important;
     }
@@ -78,8 +79,12 @@
   </p>
   
   <div class="state-container" id="actions-state">
-    <label for="cameraInput" class="btn-action btn-camera">Tomar Foto / Video 📸</label>
-    <input type="file" id="cameraInput" accept="image/*,video/*" onchange="handleFileSelection(this.files)">
+    
+    <label for="cameraPhotoInput" class="btn-action btn-camera">Tomar Foto 📸</label>
+    <input type="file" id="cameraPhotoInput" accept="image/*" capture="environment" onchange="handleFileSelection(this.files)">
+    
+    <label for="cameraVideoInput" class="btn-action btn-video">Grabar Video 🎥</label>
+    <input type="file" id="cameraVideoInput" accept="video/*" capture="environment" onchange="handleFileSelection(this.files)">
     
     <label for="fileInput" class="btn-action btn-gallery">Elegir de Galería 📂</label>
     <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
@@ -150,7 +155,8 @@
 
   function cancelUpload() {
     selectedFiles = [];
-    document.getElementById('cameraInput').value = '';
+    document.getElementById('cameraPhotoInput').value = '';
+    document.getElementById('cameraVideoInput').value = '';
     document.getElementById('fileInput').value = '';
     setVisualState('init');
   }
