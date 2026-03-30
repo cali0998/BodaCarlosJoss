@@ -65,51 +65,35 @@
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.25); 
+      background: rgba(0,0,0,0.15); /* Velo muy ligero para no apagar la foto */
       z-index: 1; 
     }
 
-    /* --- EFECTO NUBE MEJORADO: OSCURECIMIENTO GENERAL, SIN FORMA CIRCULAR MARCARA (PC) --- */
+    /* --- NUBE AHUMADA PERFECTA (SIN CRISTAL, SIN CÍRCULOS) --- */
     .glass-card {
-      background: transparent; 
-      border: none;
-      padding: 50px 20px; 
+      /* El fondo y la sombra tienen el mismo color, creando un difuminado expansivo sin bordes */
+      background: rgba(0, 0, 0, 0.6); 
+      box-shadow: 0 0 45px 35px rgba(0, 0, 0, 0.6); 
+      border-radius: 25px; /* Redondeo suave que se pierde en la sombra */
+      border: none; 
+      
+      /* CERO CRISTAL (BLUR) */
+      backdrop-filter: none !important; 
+      -webkit-backdrop-filter: none !important; 
+      
+      padding: 40px 25px; 
       width: 100%; 
       max-width: 380px; 
-      text-align: center;
       position: relative; 
       z-index: 20; 
-      box-shadow: none;
-    }
-
-    /* Aquí creamos el destello ahumado que se desvanece sutilmente */
-    .glass-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -10px; right: -10px; bottom: 0;
-      background: rgba(0, 0, 0, 0.5); 
-      backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); 
-      /* --- CORRECCIÓN PC: Se suavizó mucho más la elipse para que parezca shapeless --- */
-      -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 95%);
-      mask-image: radial-gradient(ellipse at center, black 10%, transparent 95%);
-      z-index: -1; 
-      pointer-events: none;
+      text-align: center;
     }
     
-    .glass-card-wide {
-      max-width: 600px; 
-    }
-    
-    /* El carrete necesita una nube un poco más ancha */
-    .glass-card-wide::before {
-      left: -20px; right: -20px;
-      -webkit-mask-image: radial-gradient(ellipse at center, black 10%, transparent 95%);
-      mask-image: radial-gradient(ellipse at center, black 10%, transparent 95%);
-    }
+    .glass-card-wide { max-width: 600px; }
 
-    /* --- SOMBRAS PARA LEGIBILIDAD --- */
+    /* --- SOMBRAS PARA LEGIBILIDAD (Texto sobre fondo oscuro) --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0px 0px 5px rgba(0, 0, 0, 0.7);
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.95), 0px 0px 5px rgba(0, 0, 0, 0.8);
     }
 
     /* --- CONTADOR --- */
@@ -121,16 +105,14 @@
       flex-wrap: wrap;
     }
     .time-box {
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(197, 157, 95, 0.5); 
-      border-radius: 12px;
+      background: transparent;
+      border: none; 
       padding: 10px 15px;
       min-width: 70px;
       text-align: center;
-      backdrop-filter: blur(4px);
     }
-    .time-box span { font-size: 1.8rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
-    .time-box p { font-size: 0.7rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; }
+    .time-box span { font-size: 2rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
+    .time-box p { font-size: 0.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; font-weight: bold;}
 
     /* --- MENSAJES FLOTANTES --- */
     .floating-text {
@@ -174,8 +156,9 @@
       height: 300px !important; 
       object-fit: cover !important; 
       border-radius: 25px; 
-      border: 2px solid rgba(197, 157, 95, 0.3); 
+      border: none; 
       flex-shrink: 0;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
     }
 
     .carousel-btn {
@@ -214,19 +197,20 @@
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* ==============================================================
-       MAGIA PARA MÓVILES (FOTOS LIBRES ARRIBA, TEXTOS ABAJO)
+       MAGIA PARA MÓVILES (CADA COSA EN SU LUGAR)
        ============================================================== */
     @media (max-width: 600px) {
-      /* Mueve las secciones para que el contenido caiga hacia la parte de abajo */
+      
+      /* ESTO ES LO QUE EMPUJA LOS CUADROS HACIA ABAJO */
       section:not(.hero) {
         justify-content: flex-end !important;
-        padding-top: 10vh !important;
-        padding-bottom: 2vh !important; /* Coloca el cuadro justo encima de la transición a la siguiente foto */
+        padding-top: 55vh !important; /* Fuerza a que haya un 55% de espacio vacío arriba para la foto */
+        padding-bottom: 5vh !important; /* Mantiene la tarjeta pegada a la zona oscura inferior */
       }
-      
-      /* Velo degradado en móvil: Más transparente arriba para ver las caras, oscuro abajo para leer */
+
+      /* Velo degradado en móvil: Transparente en las caras (arriba), oscuro en el texto (abajo) */
       section:not(.hero) .overlay {
-        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.6) 80%) !important;
+        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 90%) !important;
       }
 
       .floating-text { 
@@ -236,7 +220,7 @@
         left: auto !important; 
         text-align: center !important; 
         max-width: 90%; 
-        margin-top: 25px; 
+        margin-top: 20px; 
         margin-bottom: 10px;
       }
       .floating-text.reveal { transform: translateY(30px) !important; }
@@ -247,6 +231,7 @@
         padding-right: 15px; 
         align-items: center; 
       }
+      
       h2 { font-size: 2.4rem; } p { font-size: 1.15rem; }
       .carousel-track img { width: 220px !important; height: 280px !important; } 
     }
@@ -312,7 +297,7 @@
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
     </div>
-    <div class="floating-text reveal">"Cada sonrisa y cada mirada compartida es un tesoro que guardamos en nuestra memory..."</div>
+    <div class="floating-text reveal">"Cada sonrisa y cada mirada compartida es un tesoro que guardamos en nuestra memoria..."</div>
   </section>
 
   <section class="seccion-vestimenta">
@@ -400,7 +385,6 @@
     const images = Array.from(track.querySelectorAll('img'));
     const totalImages = images.length; 
 
-    // Clonar las fotos
     images.forEach(img => {
         track.appendChild(img.cloneNode(true));
     });
