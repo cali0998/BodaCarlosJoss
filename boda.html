@@ -31,7 +31,7 @@
       position: relative;
       padding: 100px 20px;
       
-      background-size: cover !important;
+      background-size: cover !important; /* Mantenemos el tamaño original sin zoom extremo */
       background-position: center !important;
       background-repeat: no-repeat !important;
       
@@ -83,7 +83,7 @@
     }
     
     .glass-card-wide {
-      max-width: 600px; /* Clase especial para que el carrete herede diseño pero sea más ancho */
+      max-width: 600px; 
     }
 
     /* --- SOMBRAS PARA LEGIBILIDAD --- */
@@ -111,7 +111,7 @@
     .time-box span { font-size: 1.8rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
     .time-box p { font-size: 0.7rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; }
 
-    /* --- MENSAJES FLOTANTES (AJUSTADOS AL ZIG-ZAG) --- */
+    /* --- MENSAJES FLOTANTES --- */
     .floating-text {
       position: absolute;
       font-family: 'Playfair Display', serif;
@@ -159,16 +159,18 @@
     .carousel-btn.prev { left: 10px; }
     .carousel-btn.next { right: 10px; }
 
-    /* --- FONDOS Y ENCUADRES (CORREGIDO PARA BAJAR FOTOS) --- */
+    /* --- FONDOS Y ENCUADRES --- */
     .hero { background: url('Foto10.jpg') center; }
     .seccion-pase { background: url('Foto11.jpg') center; }
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
     
-    /* "center top" amarra la foto al techo para que las caras bajen y se vean */
-    .seccion-musica { background: url('Foto1.jpg') center top !important; } 
-    .seccion-final { background: url('Foto14.jpg') center top !important; }
+    /* --- SOLUCIÓN APLICADA AQUÍ --- */
+    /* Eliminamos el zoom extremo devolviendo a 'cover' (heredado de arriba) 
+       y ajustamos la posición vertical matemáticamente para bajar la foto y ver las caras */
+    .seccion-musica { background: url('Foto1.jpg') center 15% !important; } 
+    .seccion-final { background: url('Foto14.jpg') center 10% !important; }
 
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
@@ -286,7 +288,7 @@
     <div class="glass-card reveal">
       <h2>Mesa de Regalos</h2>
       <p>El mayor regalo que podemos recibir es tu presencia en este día tan especial.</p>
-      <p>Si deseas tener un detalle con nosotros, contaremos con la modalidad de <b>Lluvia de Sobres</b>.</p>
+      <p>Si deseas tener un detalle con nosotros, contaremos con la modalida de <b>Lluvia de Sobres</b>.</p>
     </div>
     <div class="floating-text reveal">"Si deseas tener un detalle adicional, agradecemos tu amor y generosidad..."</div>
   </section>
@@ -338,66 +340,66 @@
       document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
     }, 1000);
 
-    // --- CARRETE INFINITO MATEMÁTICAMENTE PERFECTO ---
+    // --- CARRETE INFINITO TOTALMENTE CORREGIDO (SIN SALTOS) ---
     const track = document.getElementById('carouselTrack');
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
-    const totalImages = images.length; // 5 imágenes reales
-
-    // Clonar TODAS las imágenes al final
-    images.forEach(img => {
-        track.appendChild(img.cloneNode(true));
-    });
-    // Clonar TODAS las imágenes al principio
-    for (let i = totalImages - 1; i >= 0; i--) {
-        track.insertBefore(images[i].cloneNode(true), track.firstChild);
-    }
-
-    let currentIndex = totalImages; // Empezamos en la primera imagen real (índice 5)
+    
+    // Clonación para ambos lados
+    const firstClone = images[0].cloneNode(true);
+    const lastClone = images[images.length - 1].cloneNode(true);
+    
+    track.appendChild(firstClone);
+    track.insertBefore(lastClone, track.firstElementChild);
+    
+    let currentIndex = 1; 
     let isTransitioning = false;
-
+    
     function getSlideWidth() {
-        return track.children[0].clientWidth + 15; // Ancho + espacio
+        return track.firstElementChild.getBoundingClientRect().width + 15; 
     }
-
-    function updateCarousel(animate = true) {
-        track.style.transition = animate ? 'transform 0.4s ease-in-out' : 'none';
-        track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
-    }
-
-    // Ubicar en la posición inicial sin animar
-    window.addEventListener('load', () => updateCarousel(false));
-    window.addEventListener('resize', () => updateCarousel(false));
-
+    
+    track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+    
     nextBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex++;
-        updateCarousel(true);
+        track.style.transition = 'transform 0.4s ease-in-out';
+        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
-
+    
     prevBtn.addEventListener('click', () => {
         if (isTransitioning) return;
         isTransitioning = true;
         currentIndex--;
-        updateCarousel(true);
+        track.style.transition = 'transform 0.4s ease-in-out';
+        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
-
+    
     track.addEventListener('transitionend', () => {
         isTransitioning = false;
+        const currentSlides = track.querySelectorAll('img');
         
-        // Si avanzamos más allá de la última imagen real (al grupo final de clones)
-        if (currentIndex >= totalImages * 2) {
-            currentIndex = totalImages; // Devolver a la primera imagen real sin animar
-            updateCarousel(false);
+        if (currentIndex >= currentSlides.length - 1) {
+            track.style.transition = 'none'; 
+            currentIndex = 1; 
+            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+            void track.offsetWidth; 
         }
         
-        // Si retrocedemos más allá de la primera imagen real (al grupo inicial de clones)
-        if (currentIndex <= totalImages - 1) {
-            currentIndex = (totalImages * 2) - 1; // Devolver a la última imagen real sin animar
-            updateCarousel(false);
+        if (currentIndex <= 0) {
+            track.style.transition = 'none'; 
+            currentIndex = currentSlides.length - 2; 
+            track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
+            void track.offsetWidth; 
         }
+    });
+    
+    window.addEventListener('resize', () => {
+        track.style.transition = 'none';
+        track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`;
     });
   </script>
 </body>
