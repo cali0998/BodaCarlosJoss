@@ -51,7 +51,6 @@
       -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
     
-    /* Fuerza el centrado absoluto del contenido de la portada */
     .hero .reveal {
       display: flex;
       flex-direction: column;
@@ -61,14 +60,14 @@
     }
 
     /* Capas escalonadas para el scroll fluido (Zig-Zag Total) */
-    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } /* Derecha */
-    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } /* Izquierda */
-    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } /* Derecha */
+    .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } 
+    .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-vestimenta { z-index: 6; align-items: flex-end; justify-content: center; padding-right: 10%; } 
+    .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } 
+    .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } 
+    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -76,7 +75,7 @@
       z-index: 1;
     }
 
-    /* TARJETAS VIDRIO AHUMADO (Aplicado a TODAS las tarjetas) */
+    /* TARJETAS VIDRIO AHUMADO */
     .glass-card {
       background: rgba(0, 0, 0, 0.25); 
       backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); 
@@ -104,7 +103,7 @@
     }
     .time-box {
       background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(197, 157, 95, 0.5); /* Borde dorado suave */
+      border: 1px solid rgba(197, 157, 95, 0.5); 
       border-radius: 12px;
       padding: 10px 15px;
       min-width: 75px;
@@ -203,7 +202,10 @@
     .seccion-lugar { background: url('Foto12.jpg') center; }
     .seccion-nosotros { background: url('Foto2.jpg') center 40%; }
     .seccion-vestimenta { background: url('Foto13.jpg') center; }
-    .seccion-musica { background: url('Foto1.jpg') center 82%; }
+    
+    /* CORRECCIÓN: Se cambió de 82% a 0% para bajar la foto de A Bailar y ver las caras */
+    .seccion-musica { background: url('Foto1.jpg') center 0%; } 
+    
     .seccion-regalos { background: url('Foto3.jpg') center 40%; }
     .seccion-qr { background: url('Foto4.jpg') center; }
     .seccion-final { background: url('Foto14.jpg') center 75%; }
@@ -369,26 +371,22 @@
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     // --- LÓGICA DEL CONTADOR DE TIEMPO ---
-    // Fecha límite: 19 de Diciembre de 2026 a las 15:00:00 (3:00 PM)
     const countDownDate = new Date("Dec 19, 2026 15:00:00").getTime();
 
     const x = setInterval(function() {
       const now = new Date().getTime();
       const distance = countDownDate - now;
 
-      // Cálculos de tiempo
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      // Inyectar en el HTML
       document.getElementById("days").innerHTML = days < 10 ? '0' + days : days;
       document.getElementById("hours").innerHTML = hours < 10 ? '0' + hours : hours;
       document.getElementById("minutes").innerHTML = minutes < 10 ? '0' + minutes : minutes;
       document.getElementById("seconds").innerHTML = seconds < 10 ? '0' + seconds : seconds;
 
-      // Si el evento ya pasó
       if (distance < 0) {
         clearInterval(x);
         document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>¡Llegó el gran día!</p>";
