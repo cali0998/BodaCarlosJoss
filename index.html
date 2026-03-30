@@ -79,7 +79,7 @@
   
   <div class="state-container" id="actions-state">
     <label for="cameraInput" class="btn-action btn-camera">Tomar Foto / Video 📸</label>
-    <input type="file" id="cameraInput" accept="image/*,video/*" capture="camera" onchange="handleFileSelection(this.files)">
+    <input type="file" id="cameraInput" accept="image/*,video/*" capture="environment" onchange="handleFileSelection(this.files)">
     
     <label for="fileInput" class="btn-action btn-gallery">Elegir de Galería 📂</label>
     <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
