@@ -14,14 +14,18 @@
   <style>
     :root {
       --gold: #c59d5f;
+      --wine: #4a0a16;
+      --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.08);
     }
 
-    * { scroll-behavior: smooth; box-sizing: border-box; }
+    * { scroll-behavior: smooth; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
     body { 
       margin: 0; 
       font-family: 'Poppins', sans-serif; 
-      background: #111; 
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); 
+      background-attachment: fixed;
       color: white; 
       overflow-x: hidden; 
       -webkit-font-smoothing: antialiased;
@@ -35,18 +39,14 @@
       flex-direction: column; 
       position: relative;
       padding: 100px 20px;
-      
       background-size: cover !important; 
       background-position: center !important;
       background-repeat: no-repeat !important;
-      
       margin-top: -21vh; 
-      
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
     }
 
-    /* --- PORTADA CENTRADA TOTALMENTE --- */
     .hero { 
       margin-top: 0; 
       z-index: 10; 
@@ -59,7 +59,6 @@
     
     .hero .reveal { margin: 0 auto; position: relative; z-index: 20; } 
 
-    /* --- ZIG-ZAG PERFECTO EN PC --- */
     .seccion-pase { z-index: 9; align-items: flex-start; justify-content: center; padding-left: 10%; } 
     .seccion-lugar { z-index: 8; align-items: flex-end; justify-content: center; padding-right: 10%; } 
     .seccion-nosotros { z-index: 7; align-items: flex-start; justify-content: center; padding-left: 10%; } 
@@ -75,7 +74,7 @@
       z-index: 1; 
     }
 
-    /* --- NUBE DIFUMINADA EXTREMA --- */
+    /* --- NUBE DIFUMINADA (ESTÉTICA UNIFICADA) --- */
     .glass-card {
       background: transparent; 
       border: none; 
@@ -86,15 +85,13 @@
       position: relative; 
       z-index: 20; 
       text-align: center;
-      backdrop-filter: none !important; 
-      -webkit-backdrop-filter: none !important; 
     }
     
     .glass-card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.7); 
+      background: rgba(0, 0, 0, 0.65); 
       -webkit-mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
       mask-image: radial-gradient(ellipse at center, black 20%, transparent 80%);
       z-index: -1; 
@@ -107,28 +104,18 @@
       mask-image: radial-gradient(ellipse at center, black 30%, transparent 85%);
     }
 
-    /* --- SOMBRAS GENERALES PARA LEGIBILIDAD --- */
     h1, h2, h3, p, .floating-text, .time-box span, .time-box p {
-      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.95), 0px 0px 5px rgba(0, 0, 0, 0.8);
+      text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9), 0px 0px 5px rgba(0, 0, 0, 0.7);
     }
 
-    /* --- EFECTO DE CONTRASTE EXTRA PARA CITAS BÍBLICAS --- */
     .cita-biblica {
       font-family: 'Playfair Display', serif; 
       font-style: italic; 
       color: white;
-      text-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 1),    
-        -2px -2px 5px rgba(0, 0, 0, 1),  
-        0px 0px 15px rgba(0, 0, 0, 0.8); 
       line-height: 1.6;
       max-width: 90%;
       margin-left: auto;
       margin-right: auto;
-      background: transparent !important;
-      border: none !important;
-      outline: none !important;
-      box-shadow: none !important;
     }
     
     .cita-biblica .referencia {
@@ -138,7 +125,6 @@
       letter-spacing: 1px;
     }
 
-    /* --- MENSAJE ADULTOS --- */
     .mensaje-adultos {
       font-size: 0.9rem;
       font-style: italic;
@@ -149,25 +135,11 @@
       display: none; 
     }
 
-    /* --- CONTADOR --- */
-    .countdown {
-      display: flex;
-      gap: 12px;
-      margin: 20px auto;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
-    .time-box {
-      background: transparent;
-      border: none; 
-      padding: 10px 15px;
-      min-width: 70px;
-      text-align: center;
-    }
+    .countdown { display: flex; gap: 12px; margin: 20px auto; justify-content: center; flex-wrap: wrap; }
+    .time-box { background: transparent; border: none; padding: 10px 15px; min-width: 70px; text-align: center; }
     .time-box span { font-size: 2rem; font-weight: 600; color: var(--gold); display: block; line-height: 1.2; }
     .time-box p { font-size: 0.8rem; margin: 0; text-transform: uppercase; letter-spacing: 2px; color: white; font-weight: bold;}
 
-    /* --- MENSAJES FLOTANTES --- */
     .floating-text {
       position: absolute !important; 
       top: 50%; 
@@ -184,180 +156,35 @@
     .floating-text.reveal { transform: translateY(calc(-50% + 30px)); }
     .floating-text.reveal.active { transform: translateY(-50%); }
 
-    .seccion-pase .floating-text,
-    .seccion-nosotros .floating-text,
-    .seccion-musica .floating-text,
-    .seccion-qr .floating-text { right: 8%; text-align: right; }
-    
-    .seccion-lugar .floating-text,
-    .seccion-regalos .floating-text,
-    .seccion-final .floating-text { left: 8%; text-align: left; }
+    .seccion-pase .floating-text, .seccion-nosotros .floating-text, .seccion-musica .floating-text, .seccion-qr .floating-text { right: 8%; text-align: right; }
+    .seccion-lugar .floating-text, .seccion-regalos .floating-text, .seccion-final .floating-text { left: 8%; text-align: left; }
 
-    /* --- NUEVOS ESTILOS VESTIMENTA (DOS COLUMNAS) --- */
-    .vestimenta-wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      gap: 50px;
-      width: 100%;
-      max-width: 1100px;
-      z-index: 20;
-    }
+    .vestimenta-wrapper { display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 50px; width: 100%; max-width: 1100px; z-index: 20; }
+    .vestimenta-col-left { flex: 1; display: flex; flex-direction: column; align-items: center; max-width: 400px; }
+    .vestimenta-col-right { flex: 1; display: flex; justify-content: center; max-width: 450px; }
+    .vestimenta-quote { position: relative !important; top: 0 !important; left: 0 !important; transform: none !important; text-align: center !important; margin-bottom: 25px; }
+    .vestimenta-img { width: 100%; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); cursor: pointer; }
+    .paleta-img { width: 100%; max-width: 350px; margin-top: 20px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.3); cursor: pointer; }
 
-    .vestimenta-col-left {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      max-width: 400px;
-    }
-
-    .vestimenta-col-right {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      max-width: 450px;
-    }
-
-    .vestimenta-quote {
-      position: relative !important;
-      top: 0 !important;
-      left: 0 !important;
-      transform: none !important;
-      text-align: center !important;
-      margin-bottom: 25px;
-    }
-
-    .vestimenta-img {
-      width: 100%;
-      border-radius: 15px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      cursor: pointer;
-    }
-
-    .paleta-img {
-      width: 100%;
-      max-width: 350px;
-      margin-top: 20px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-      cursor: pointer;
-    }
-
-    /* --- CARRETE INFINITO --- */
-    .carousel-container {
-      position: relative;
-      width: 100%;
-      margin-top: 25px;
-      overflow: hidden;
-    }
-
+    .carousel-container { position: relative; width: 100%; margin-top: 25px; overflow: hidden; }
     .carousel-track { display: flex; padding: 20px 0; gap: 15px; }
-
-    .carousel-track img { 
-      width: 250px !important; 
-      height: 300px !important; 
-      object-fit: cover !important; 
-      border-radius: 25px; 
-      border: none; 
-      flex-shrink: 0;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
-      cursor: pointer;
-    }
-
-    .carousel-btn {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      background: rgba(197, 157, 95, 0.8); color: white; border: none;
-      border-radius: 50%; width: 50px; height: 50px; font-size: 1.6rem;
-      cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center;
-    }
+    .carousel-track img { width: 250px !important; height: 300px !important; object-fit: cover !important; border-radius: 25px; border: none; flex-shrink: 0; box-shadow: 0 5px 15px rgba(0,0,0,0.5); cursor: pointer; }
+    .carousel-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(197, 157, 95, 0.8); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.6rem; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; }
     .carousel-btn.prev { left: 5px; }
     .carousel-btn.next { right: 5px; }
 
-    .qr-link {
-      display: inline-block;
-      margin-top: 15px;
-      transition: transform 0.3s ease; 
-    }
-    .qr-link:hover {
-      transform: scale(1.05); 
-    }
-    .qr-link img {
-      width: 150px; 
-      background: white; 
-      padding: 12px; 
-      border-radius: 15px; 
-      border: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-    }
+    .qr-link { display: inline-block; margin-top: 15px; transition: transform 0.3s ease; }
+    .qr-link:hover { transform: scale(1.05); }
+    .qr-link img { width: 150px; background: white; padding: 12px; border-radius: 15px; border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
 
-    /* --- MODAL / LIGHTBOX DE IMÁGENES --- */
-    .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-    }
+    .modal { display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); opacity: 0; transition: opacity 0.3s ease; align-items: center; justify-content: center; flex-direction: column; }
     .modal.show { opacity: 1; }
-    .modal-content {
-      max-width: 90%;
-      max-height: 85vh;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-      transform: scale(0.8);
-      transition: transform 0.3s ease;
-      object-fit: contain;
-    }
+    .modal-content { max-width: 90%; max-height: 85vh; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); transform: scale(0.8); transition: transform 0.3s ease; object-fit: contain; }
     .modal.show .modal-content { transform: scale(1); }
-    .close-modal {
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 40px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: color 0.3s;
-      z-index: 10000;
-    }
+    .close-modal { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 40px; font-weight: bold; cursor: pointer; transition: color 0.3s; z-index: 10000; }
     .close-modal:hover { color: var(--gold); }
-    
-    /* Flechas del Modal */
-    .modal-nav {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(197, 157, 95, 0.8);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 1.6rem;
-      cursor: pointer;
-      z-index: 10001;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.3s ease;
-    }
-    .modal-nav:hover { background: rgba(197, 157, 95, 1); }
-    .modal-nav.prev { left: 20px; }
-    .modal-nav.next { right: 20px; }
+    .modal-nav { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(197, 157, 95, 0.8); color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 1.6rem; cursor: pointer; z-index: 10001; display: none; align-items: center; justify-content: center; transition: background 0.3s ease; }
 
-    /* --- FONDOS Y ENCUADRES (Fotos a WebP) --- */
     .hero { background-image: url('Foto10.webp'); background-position: center; }
     .seccion-pase { background-image: url('Foto11.webp'); background-position: center; }
     .seccion-lugar { background-image: url('Foto1.webp'); background-position: center 35% !important; }
@@ -373,155 +200,41 @@
     h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
     p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; }
 
+    /* BOTONES ESTILO PREMIUM */
     .btn {
-      background: var(--gold); color: white; padding: 18px 36px; border-radius: 50px; 
+      background: var(--gold); color: white; padding: 18px 36px; border-radius: 15px; 
       text-decoration: none; font-weight: 600; display: inline-block; margin-top: 20px;
       text-transform: uppercase; font-size: 13px; letter-spacing: 2px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
-      cursor: pointer; 
-      border: none; 
-      transition: background 0.3s, transform 0.2s;
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      cursor: pointer; transition: all 0.3s ease;
     }
-    
-    .btn:active {
-      transform: scale(0.95);
-    }
+    .btn:active { transform: scale(0.95); }
 
-    .reveal { 
-      opacity: 0; 
-      transform: translateY(30px); 
-      transition: 1s ease-out; 
-      position: relative; 
-      z-index: 20; 
-      will-change: opacity, transform; 
-    }
+    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; position: relative; z-index: 20; will-change: opacity, transform; }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
-    /* ==============================================================
-       MAGIA PARA MÓVILES (REESTRUCTURADO Y BALANCEADO)
-       ============================================================== */
-    @media (max-width: 800px) {
-      .vestimenta-wrapper {
-        flex-direction: column;
-        gap: 30px;
-      }
-    }
+    @media (max-width: 800px) { .vestimenta-wrapper { flex-direction: column; gap: 30px; } }
 
     @media (max-width: 600px) {
-      /* Altura adaptativa perfecta para móviles */
-      section {
-        min-height: 100svh !important; 
-        padding-top: 80px;
-        padding-bottom: 80px;
-      }
-      
-      /* Centrado simétrico de las tarjetas */
-      section:not(.hero) {
-        justify-content: center !important;
-        padding-top: 15vh !important; 
-        padding-bottom: 10vh !important; 
-      }
-      
-      section:not(.hero) .overlay {
-        background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 90%) !important;
-      }
-      
-      /* Tarjetas más proporcionadas y con más respiro lateral */
-      .glass-card {
-        padding: 40px 20px; 
-        width: 100%;
-        max-width: 95%; /* Evita que choque con los bordes */
-      }
-      
-      /* Textos flotantes integrados limpiamente */
-      .floating-text { 
-        position: relative !important; 
-        top: 0 !important; 
-        right: auto !important; 
-        left: auto !important; 
-        text-align: center !important; 
-        max-width: 100%; 
-        margin-top: 25px; 
-        margin-bottom: 0px;
-        font-size: 1.35rem; /* Letra un poco más moderada */
-      }
-      .floating-text.reveal { transform: translateY(20px) !important; }
-      .floating-text.reveal.active { transform: translateY(0) !important; }
-      
-      /* Alineación general al centro */
-      .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { 
-        padding-left: 15px; padding-right: 15px; align-items: center !important; 
-      }
-      
-      /* TAMAÑOS DE TEXTO ADAPTADOS A PANTALLAS PEQUEÑAS */
-      h1 { font-size: 3.2rem; }
-      h2 { font-size: 2.2rem; margin-bottom: 15px; } 
-      h3 { font-size: 1.4rem; }
-      p { font-size: 1.05rem; line-height: 1.6; margin: 10px 0; }
-      
-      /* Contador mejor distribuido */
-      .time-box span { font-size: 1.6rem; }
-      .time-box { padding: 8px 10px; min-width: 60px; }
-      
-      .carousel-track img { width: 220px !important; height: 280px !important; } 
-      
-      .modal-nav { width: 40px; height: 40px; font-size: 1.2rem; }
-      .modal-nav.prev { left: 10px; }
-      .modal-nav.next { right: 10px; }
-
-      .cita-biblica {
-          padding: 0;
-          background: transparent !important;
-          border: none !important;
-          font-size: 1.1rem !important; /* Ajuste para versículos largos */
-      }
+      section { min-height: 100svh !important; padding-top: 80px; padding-bottom: 80px; }
+      section:not(.hero) { justify-content: center !important; padding-top: 15vh !important; padding-bottom: 10vh !important; }
+      section:not(.hero) .overlay { background: linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.4) 40%, rgba(0,0,0,0.7) 90%) !important; }
+      .glass-card { padding: 40px 20px; width: 100%; max-width: 95%; }
+      .floating-text { position: relative !important; top: 0 !important; text-align: center !important; max-width: 100%; margin-top: 25px; font-size: 1.35rem; }
+      .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { padding-left: 15px; padding-right: 15px; align-items: center !important; }
+      h1 { font-size: 3.2rem; } h2 { font-size: 2.2rem; } h3 { font-size: 1.4rem; } p { font-size: 1.05rem; }
     }
 
-    /* --- BOTÓN DE MÚSICA FLOTANTE --- */
-    .music-btn {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      background: var(--gold);
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 55px;
-      height: 55px;
-      font-size: 25px;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.3s ease, background 0.3s;
-    }
-    .music-btn.playing {
-      animation: spin 4s linear infinite;
-    }
-    @keyframes spin {
-      100% { transform: rotate(360deg); }
-    }
-    @media (max-width: 600px) {
-      .music-btn {
-        bottom: 20px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-        font-size: 20px;
-      }
-    }
+    .music-btn { position: fixed; bottom: 25px; right: 25px; background: var(--gold); color: white; border: none; border-radius: 50%; width: 55px; height: 55px; font-size: 25px; cursor: pointer; z-index: 9999; box-shadow: 0 4px 15px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; transition: transform 0.3s ease, background 0.3s; }
+    .music-btn.playing { animation: spin 4s linear infinite; }
+    @keyframes spin { 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <audio id="bg-music" loop>
-    <source src="musica.mp3.mp3" type="audio/mpeg">
-  </audio>
-  <button id="music-btn" class="music-btn" onclick="toggleMusic()">
-    🎵
-  </button>
+  <audio id="bg-music" loop><source src="musica.mp3.mp3" type="audio/mpeg"></audio>
+  <button id="music-btn" class="music-btn" onclick="toggleMusic()">🎵</button>
 
   <section class="hero">
     <div class="overlay"></div>
@@ -530,17 +243,14 @@
         "And over all these virtues put on love, which binds them all together in perfect unity."<br>
         <span class="referencia">— Colossians 3:14</span>
       </p>
-      
       <h1>Carlos &<br>Joselyn</h1>
       <p style="letter-spacing: 4px; font-weight: 600;">DECEMBER 19, 2026</p>
-      
       <div id="countdown" class="countdown">
         <div class="time-box"><span id="days">00</span><p>Days</p></div>
         <div class="time-box"><span id="hours">00</span><p>Hrs</p></div>
         <div class="time-box"><span id="minutes">00</span><p>Min</p></div>
         <div class="time-box"><span id="seconds">00</span><p>Sec</p></div>
       </div>
-
       <button onclick="agendarFecha(event)" class="btn">Save Our Date</button>
     </div>
   </section>
@@ -552,12 +262,10 @@
       <h3 id="nombre-invitado">Loading invitation...</h3>
       <p>It fills us with immense joy to invite you to share the most important day of our lives with us.</p>
       <p id="pases-invitado" style="font-size: 2.2rem; color: var(--gold); font-weight: bold; margin-top: 15px; margin-bottom: 5px;"></p>
-      
       <p id="mensaje-ninos" class="mensaje-adultos">
         * We want you to relax and enjoy the celebration to the fullest, so we have decided to make our wedding an adults-only event.<br><br>
         <b style="color: var(--gold); font-size: 1.05rem; letter-spacing: 1px;">PLEASE, NO CHILDREN.</b>
       </p>
-
     </div>
     <div class="floating-text reveal">"We are counting the days, hours, and minutes to see you and share our happiness with you..."</div>
   </section>
@@ -582,11 +290,7 @@
       <div class="carousel-container">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
         <div class="carousel-track" id="carouselTrack">
-          <img src="Foto1.webp" alt="1">
-          <img src="Foto2.webp" alt="2">
-          <img src="Foto3.webp" alt="3">
-          <img src="Foto4.webp" alt="4">
-          <img src="Foto5.webp" alt="5">
+          <img src="Foto1.webp" alt="1"><img src="Foto2.webp" alt="2"><img src="Foto3.webp" alt="3"><img src="Foto4.webp" alt="4"><img src="Foto5.webp" alt="5">
         </div>
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
@@ -596,14 +300,11 @@
 
   <section class="seccion-vestimenta">
     <div class="overlay"></div>
-    
     <div class="vestimenta-wrapper reveal">
-      
       <div class="vestimenta-col-left">
         <div class="floating-text vestimenta-quote">"Dress up in joy and love. Your presence is the best accessory..."</div>
         <img src="vestimenta1.jpeg" alt="Dress Code Examples" class="vestimenta-img">
       </div>
-      
       <div class="vestimenta-col-right">
         <div class="glass-card" style="margin: 0; width: 100%;">
           <h2>Dress Code</h2>
@@ -613,7 +314,6 @@
           <img src="paleta.png" alt="Color Palette" class="paleta-img">
         </div>
       </div>
-
     </div>
   </section>
 
@@ -621,15 +321,12 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Let's Dance</h2>
-      <p>We want to make sure the dance floor is never empty and that everyone enjoys to the fullest.</p>
-      
+      <p>We want to make sure the dance floor is never empty.</p>
       <div id="form-musica" style="margin-top: 20px; width: 100%;">
-        <input type="text" id="input-cancion" placeholder="e.g., Danza Kuduro - Don Omar" style="width: 100%; padding: 15px; border-radius: 10px; border: none; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1rem; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); outline: none;">
-        <br>
-        <button onclick="enviarCancionSupabase()" class="btn" id="btn-cancion" style="margin-top: 0; width: 100%;">Send Suggestion</button>
+        <input type="text" id="input-cancion" placeholder="e.g., Danza Kuduro - Don Omar" style="width: 100%; padding: 15px; border-radius: 10px; border: none; margin-bottom: 15px; text-align: center; background: rgba(255,255,255,0.05); color: white; border: 1px solid var(--gold);">
+        <br><button onclick="enviarCancionSupabase()" class="btn" id="btn-cancion">Send Suggestion</button>
       </div>
       <p id="mensaje-cancion" style="display:none; color: #2ecc71; font-weight: bold; margin-top: 15px; font-size: 1.2rem;"></p>
-
     </div>
     <div class="floating-text reveal">"May there be no shortage of rhythm, laughter, and good company..."</div>
   </section>
@@ -639,7 +336,7 @@
     <div class="glass-card reveal">
       <h2>Gift Registry</h2>
       <p>The greatest gift we can receive is your presence on this special day.</p>
-      <p>If you wish to bless us with a gift, a <b>Wishing Well</b> (box for envelopes) will be available at the reception.</p>
+      <p>If you wish to bless us with a gift, a <b>Wishing Well</b> will be available.</p>
     </div>
     <div class="floating-text reveal">"If you wish to give an additional gift, we appreciate your love and generosity..."</div>
   </section>
@@ -648,12 +345,9 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2>Your Photos</h2>
-      <p>Scan this QR code or tap the button to upload all the photos and videos you take during the celebration.</p>
-      <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="qr-link">
-        <img src="QRNUEVO.png" alt="QR Photos">
-      </a>
-      <br>
-      <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="btn">Upload Photos Directly</a>
+      <p>Scan this QR code or tap the button to upload all the photos and videos you take.</p>
+      <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="qr-link"><img src="QRNUEVO.png" alt="QR Photos"></a>
+      <br><a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="btn">Upload Photos</a>
     </div>
     <div class="floating-text reveal">"Help us create an album of unforgettable memories..."</div>
   </section>
@@ -662,382 +356,102 @@
     <div class="overlay"></div>
     <div class="glass-card reveal">
       <h2 style="font-size: 3.5rem;">We Wait For You</h2>
-      <p>Your presence will complete this magical and meaningful moment in our lives.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">With all our love,<br>Carlos & Joselyn</p>
-      
       <div id="contenedor-botones" style="display: none; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
-        <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn" style="margin-top: 0;">Confirm Attendance</button>
-        <button id="btn-declinar" onclick="declinarAsistenciaSupabase()" class="btn" style="margin-top: 0; background: #e74c3c;">I will not be able to attend</button>
+        <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn">Confirm Attendance</button>
+        <button id="btn-declinar" onclick="declinarAsistenciaSupabase()" class="btn" style="background: #e74c3c;">I will not be able to attend</button>
       </div>
-
     </div>
-    <div class="floating-text cita-biblica reveal" style="margin: 0; font-size: 1.3rem;">
-      "So they are no longer two, but one flesh. Therefore what God has joined together, let no one separate."<br><br>
-      <span class="referencia" style="font-size: 1rem;">— Matthew 19:6</span>
-    </div>
+    <div class="floating-text cita-biblica reveal" style="margin: 0; font-size: 1.3rem;">"So they are no longer two, but one flesh..."<br><br><span class="referencia">— Matthew 19:6</span></div>
   </section>
 
-  <div id="imageModal" class="modal">
-    <span class="close-modal" id="closeModal">&times;</span>
-    <button class="modal-nav prev" id="modalPrev">&#10094;</button>
-    <img class="modal-content" id="expandedImg">
-    <button class="modal-nav next" id="modalNext">&#10095;</button>
-  </div>
+  <div id="imageModal" class="modal"><span class="close-modal" id="closeModal">&times;</span><button class="modal-nav prev" id="modalPrev">&#10094;</button><img class="modal-content" id="expandedImg"><button class="modal-nav next" id="modalNext">&#10095;</button></div>
 
   <script>
-    // --- VARIABLES DE SUPABASE INYECTADAS ---
     const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
-
     const urlParams = new URLSearchParams(window.location.search);
-    const codigoInvitado = urlParams.get('c'); 
+    const codigoInvitado = urlParams.get('c');
 
     document.addEventListener('DOMContentLoaded', async () => {
-        if (!codigoInvitado) {
-            document.getElementById('nombre-invitado').innerText = "Special Guest";
-            return; 
-        }
-
+        if (!codigoInvitado) { document.getElementById('nombre-invitado').innerText = "Special Guest"; return; }
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}&select=*`, {
-                headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-            });
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}&select=*`, { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } });
             const data = await response.json();
-
             if (data && data.length > 0) {
                 document.getElementById('nombre-invitado').innerText = data[0].nombre;
                 document.getElementById('pases-invitado').innerText = `Reserved Seats: ${data[0].pases}`;
-                
-                if(data[0].excepcion_ninos !== true) {
-                    document.getElementById('mensaje-ninos').style.display = 'block';
-                }
-
-                const contenedorBotones = document.getElementById('contenedor-botones');
-                const btnConfirmar = document.getElementById('btn-confirmar');
-                const btnDeclinar = document.getElementById('btn-declinar');
-                
-                contenedorBotones.style.display = 'flex';
-                
-                // Keep 'Confirmado' and 'Declinado' in Spanish so it matches your Supabase filters
-                if(data[0].estado && data[0].estado.includes('Confirmado')) {
-                    btnConfirmar.innerText = "Attendance Confirmed";
-                    btnConfirmar.style.background = "#2ecc71";
-                    btnConfirmar.style.pointerEvents = "none";
-                    btnDeclinar.style.display = "none"; 
-                } else if (data[0].estado && data[0].estado.includes('Declinado')) {
-                    btnDeclinar.innerText = "Attendance Declined";
-                    btnDeclinar.style.background = "#95a5a6"; 
-                    btnDeclinar.style.pointerEvents = "none";
-                    btnConfirmar.style.display = "none"; 
-                }
-            } else {
-                document.getElementById('nombre-invitado').innerText = "Invitation not found";
+                if(data[0].excepcion_ninos !== true) document.getElementById('mensaje-ninos').style.display = 'block';
+                document.getElementById('contenedor-botones').style.display = 'flex';
+                if(data[0].estado?.includes('Confirmado')) { document.getElementById('btn-confirmar').innerText = "Attendance Confirmed"; document.getElementById('btn-confirmar').style.background = "#2ecc71"; document.getElementById('btn-confirmar').style.pointerEvents = "none"; document.getElementById('btn-declinar').style.display = "none"; }
+                else if (data[0].estado?.includes('Declinado')) { document.getElementById('btn-declinar').innerText = "Attendance Declined"; document.getElementById('btn-declinar').style.background = "#95a5a6"; document.getElementById('btn-declinar').style.pointerEvents = "none"; document.getElementById('btn-confirmar').style.display = "none"; }
             }
-        } catch (e) {
-            document.getElementById('nombre-invitado').innerText = "Error loading guest";
-        }
+        } catch (e) { console.log(e); }
     });
 
     async function confirmarAsistenciaSupabase() {
         if(!codigoInvitado) return;
-        
-        const btnConfirmar = document.getElementById('btn-confirmar');
-        const btnDeclinar = document.getElementById('btn-declinar');
-        
-        btnConfirmar.innerText = "Confirming...";
-        btnConfirmar.style.pointerEvents = "none";
-        btnConfirmar.style.opacity = "0.7";
-        btnDeclinar.style.pointerEvents = "none";
-
+        const btn = document.getElementById('btn-confirmar');
+        btn.innerText = "Confirming...";
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify({ estado: 'Confirmado' }) 
-            });
-
-            if(response.ok) {
-                btnConfirmar.innerText = "Attendance Confirmed";
-                btnConfirmar.style.background = "#2ecc71"; 
-                btnConfirmar.style.opacity = "1";
-                btnDeclinar.style.display = "none"; 
-            } else {
-                btnConfirmar.innerText = "Error. Tap to retry";
-                btnConfirmar.style.pointerEvents = "auto";
-                btnConfirmar.style.opacity = "1";
-                btnDeclinar.style.pointerEvents = "auto";
-            }
-        } catch (error) {
-            btnConfirmar.innerText = "Connection error. Retry";
-            btnConfirmar.style.pointerEvents = "auto";
-            btnConfirmar.style.opacity = "1";
-            btnDeclinar.style.pointerEvents = "auto";
-        }
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' }, body: JSON.stringify({ estado: 'Confirmado' }) });
+            if(response.ok) { btn.innerText = "Attendance Confirmed"; btn.style.background = "#2ecc71"; document.getElementById('btn-declinar').style.display = "none"; }
+        } catch (error) { btn.innerText = "Error"; }
     }
 
     async function declinarAsistenciaSupabase() {
         if(!codigoInvitado) return;
-        
-        const btnConfirmar = document.getElementById('btn-confirmar');
-        const btnDeclinar = document.getElementById('btn-declinar');
-        
-        btnDeclinar.innerText = "Processing...";
-        btnDeclinar.style.pointerEvents = "none";
-        btnDeclinar.style.opacity = "0.7";
-        btnConfirmar.style.pointerEvents = "none"; 
-
+        const btn = document.getElementById('btn-declinar');
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify({ estado: 'Declinado' }) 
-            });
-
-            if(response.ok) {
-                btnDeclinar.innerText = "Attendance Declined";
-                btnDeclinar.style.background = "#95a5a6"; 
-                btnDeclinar.style.opacity = "1";
-                btnConfirmar.style.display = "none"; 
-            } else {
-                btnDeclinar.innerText = "Error. Tap to retry";
-                btnDeclinar.style.pointerEvents = "auto";
-                btnDeclinar.style.opacity = "1";
-                btnConfirmar.style.pointerEvents = "auto";
-            }
-        } catch (error) {
-            btnDeclinar.innerText = "Connection error. Retry";
-            btnDeclinar.style.pointerEvents = "auto";
-            btnDeclinar.style.opacity = "1";
-            btnConfirmar.style.pointerEvents = "auto";
-        }
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' }, body: JSON.stringify({ estado: 'Declinado' }) });
+            if(response.ok) { btn.innerText = "Attendance Declined"; btn.style.background = "#95a5a6"; document.getElementById('btn-confirmar').style.display = "none"; }
+        } catch (error) { btn.innerText = "Error"; }
     }
 
-    // NUEVA FUNCIÓN PARA ENVIAR CANCIONES MÚLTIPLES
     async function enviarCancionSupabase() {
-        const inputField = document.getElementById('input-cancion');
-        const cancion = inputField.value;
-        if (!cancion) return; 
-
+        const input = document.getElementById('input-cancion');
+        if (!input.value) return;
         const btn = document.getElementById('btn-cancion');
-        const mensaje = document.getElementById('mensaje-cancion');
-        const nombre = document.getElementById('nombre-invitado').innerText; 
-
         btn.innerText = "Sending...";
-        btn.style.pointerEvents = "none";
-        btn.style.opacity = "0.7";
-
         try {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/canciones`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'apikey': SUPABASE_KEY,
-                    'Authorization': `Bearer ${SUPABASE_KEY}`,
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify({ nombre_invitado: nombre, cancion: cancion }) 
-            });
-
-            if(response.ok) {
-                inputField.value = '';
-                btn.innerText = "Send another song";
-                btn.style.pointerEvents = "auto";
-                btn.style.opacity = "1";
-                
-                mensaje.innerText = "Song noted! You can suggest another 🎵";
-                mensaje.style.display = 'block';
-                
-                setTimeout(() => {
-                    mensaje.style.display = 'none';
-                }, 4000);
-
-            } else {
-                btn.innerText = "Error. Try again";
-                btn.style.pointerEvents = "auto";
-                btn.style.opacity = "1";
-            }
-        } catch (error) {
-            btn.innerText = "Connection error";
-            btn.style.pointerEvents = "auto";
-            btn.style.opacity = "1";
-        }
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/canciones`, { method: 'POST', headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' }, body: JSON.stringify({ nombre_invitado: document.getElementById('nombre-invitado').innerText, cancion: input.value }) });
+            if(response.ok) { input.value = ''; btn.innerText = "Send another"; document.getElementById('mensaje-cancion').innerText = "Song noted! 🎵"; document.getElementById('mensaje-cancion').style.display = 'block'; setTimeout(() => document.getElementById('mensaje-cancion').style.display = 'none', 4000); }
+        } catch (error) { btn.innerText = "Error"; }
     }
 
     function agendarFecha(e) {
       e.preventDefault();
-      const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
-
-      if (isIOS) {
-        const icsMSG = "BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:-//Carlos & Joselyn's Wedding//EN\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nSUMMARY:Carlos & Joselyn's Wedding\nDTSTART:20261219T210000Z\nDTEND:20261220T050000Z\nLOCATION:10.283417\\, -83.776611 (Luna Azul Event Hall)\nDESCRIPTION:It fills us with immense joy to invite you to celebrate the beginning of our love journey.\nEND:VEVENT\nEND:VCALENDAR";
-        const blob = new Blob([icsMSG], { type: 'text/calendar;charset=utf-8' });
-        const url = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.setAttribute('download', 'Carlos_and_Joselyn_Wedding.ics');
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } else {
-        const googleCalUrl = "https://calendar.google.com/calendar/render?action=TEMPLATE&text=Carlos%20%26%20Joselyn's%20Wedding&dates=20261219T150000/20261219T230000&details=Let's%20celebrate%20the%20beginning%20of%20our%20love%20journey%20together.&location=10.283417,-83.776611";
-        window.open(googleCalUrl, '_blank');
-      }
+      window.open("https://calendar.google.com/calendar/render?action=TEMPLATE&text=Carlos%20%26%20Joselyn's%20Wedding&dates=20261219T150000/20261219T230000&location=Luna%20Azul%20Event%20Hall", '_blank');
     }
 
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
-    }, { threshold: 0.1 });
+    const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); }); }, { threshold: 0.1 });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     const countDownDate = new Date("Dec 19, 2026 15:00:00").getTime();
-    const x = setInterval(function() {
-      const now = new Date().getTime();
-      const distance = countDownDate - now;
-      if (distance < 0) {
-        clearInterval(x);
-        document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>The big day is here!</p>";
-        return;
-      }
-      document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
-      document.getElementById("hours").innerText = String(Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-      document.getElementById("minutes").innerText = String(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-      document.getElementById("seconds").innerText = String(Math.floor((distance % (1000 * 60)) / 1000)).padStart(2, '0');
+    setInterval(function() {
+      const distance = countDownDate - new Date().getTime();
+      if (distance < 0) return;
+      document.getElementById("days").innerText = String(Math.floor(distance / 86400000)).padStart(2, '0');
+      document.getElementById("hours").innerText = String(Math.floor((distance % 86400000) / 3600000)).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(Math.floor((distance % 3600000) / 60000)).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(Math.floor((distance % 60000) / 1000)).padStart(2, '0');
     }, 1000);
 
     const track = document.getElementById('carouselTrack');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
-    
-    const gallerySources = images.map(img => img.src);
-    
-    const totalImages = images.length; 
     images.forEach(img => track.appendChild(img.cloneNode(true)));
-    for (let i = totalImages - 1; i >= 0; i--) track.insertBefore(images[i].cloneNode(true), track.firstChild);
-    let currentIndex = totalImages; 
-    let isTransitioning = false;
-    let autoPlayTimer; 
-    function getSlideWidth() { return track.children[0].offsetWidth + 15; }
-    function updateCarousel(animate = true) {
-        track.style.transition = animate ? 'transform 0.4s ease-in-out' : 'none';
-        track.style.transform = `translateX(-${currentIndex * getSlideWidth()}px)`;
-    }
-    function startAutoPlay() { autoPlayTimer = setInterval(() => { nextBtn.click(); }, 3000); }
-    function resetAutoPlay() { clearInterval(autoPlayTimer); startAutoPlay(); }
-    window.addEventListener('load', () => { updateCarousel(false); startAutoPlay(); });
-    window.addEventListener('resize', () => updateCarousel(false));
-    nextBtn.addEventListener('click', () => { if (isTransitioning) return; isTransitioning = true; currentIndex++; updateCarousel(true); resetAutoPlay(); });
-    prevBtn.addEventListener('click', () => { if (isTransitioning) return; isTransitioning = true; currentIndex--; updateCarousel(true); resetAutoPlay(); });
-    track.addEventListener('transitionend', () => {
-        isTransitioning = false;
-        if (currentIndex >= totalImages * 2) { track.style.transition = 'none'; currentIndex = totalImages; track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`; }
-        if (currentIndex <= totalImages - 1) { track.style.transition = 'none'; currentIndex = (totalImages * 2) - 1; track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`; }
-    });
+    let currentIdx = images.length;
+    setInterval(() => { currentIdx++; track.style.transition = 'transform 0.5s ease'; track.style.transform = `translateX(-${currentIdx * (track.children[0].offsetWidth + 15)}px)`; }, 3000);
+    track.addEventListener('transitionend', () => { if (currentIdx >= images.length * 2) { track.style.transition = 'none'; currentIdx = images.length; track.style.transform = `translateX(-${currentIdx * (track.children[0].offsetWidth + 15)}px)`; } });
 
     const modal = document.getElementById('imageModal');
-    const expandedImg = document.getElementById('expandedImg');
-    const closeModalBtn = document.getElementById('closeModal');
-    const modalPrevBtn = document.getElementById('modalPrev');
-    const modalNextBtn = document.getElementById('modalNext');
-    let currentModalGalleryIndex = -1;
+    function openModal(src) { document.getElementById('expandedImg').src = src; modal.style.display = 'flex'; setTimeout(() => modal.classList.add('show'), 10); }
+    document.getElementById('closeModal').onclick = () => { modal.classList.remove('show'); setTimeout(() => modal.style.display = 'none', 300); };
+    document.querySelectorAll('.vestimenta-img, .paleta-img').forEach(img => img.onclick = () => openModal(img.src));
 
-    function openModal(src, isGallery) {
-      expandedImg.src = src;
-      modal.style.display = 'flex';
-      
-      if (isGallery) {
-        currentModalGalleryIndex = gallerySources.findIndex(url => url === src || url.endsWith(src.substring(src.lastIndexOf('/'))));
-        modalPrevBtn.style.display = 'flex';
-        modalNextBtn.style.display = 'flex';
-      } else {
-        currentModalGalleryIndex = -1;
-        modalPrevBtn.style.display = 'none';
-        modalNextBtn.style.display = 'none';
-      }
-
-      setTimeout(() => {
-        modal.classList.add('show');
-      }, 10);
-    }
-
-    function hideModal() {
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.style.display = 'none';
-        expandedImg.src = '';
-      }, 300);
-    }
-
-    modalPrevBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (currentModalGalleryIndex > -1) {
-        currentModalGalleryIndex = (currentModalGalleryIndex - 1 + gallerySources.length) % gallerySources.length;
-        expandedImg.src = gallerySources[currentModalGalleryIndex];
-      }
-    });
-
-    modalNextBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      if (currentModalGalleryIndex > -1) {
-        currentModalGalleryIndex = (currentModalGalleryIndex + 1) % gallerySources.length;
-        expandedImg.src = gallerySources[currentModalGalleryIndex];
-      }
-    });
-
-    document.querySelectorAll('.vestimenta-img, .paleta-img').forEach(img => {
-      img.addEventListener('click', function() {
-        openModal(this.src, false);
-      });
-    });
-
-    document.getElementById('carouselTrack').addEventListener('click', function(e) {
-      if(e.target.tagName === 'IMG') {
-        openModal(e.target.src, true);
-      }
-    });
-
-    closeModalBtn.addEventListener('click', hideModal);
-
-    modal.addEventListener('click', function(e) {
-      if (e.target === modal) {
-        hideModal();
-      }
-    });
-
-    // --- CONTROL DE MÚSICA ---
     const bgMusic = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('music-btn');
-    let isMusicPlaying = false;
-
-    function toggleMusic() {
-      if (isMusicPlaying) {
-        bgMusic.pause();
-        musicBtn.classList.remove('playing');
-        musicBtn.innerText = '🔇'; 
-      } else {
-        bgMusic.play().catch(error => console.log("Interacción necesaria para reproducir"));
-        musicBtn.classList.add('playing');
-        musicBtn.innerText = '🎵'; 
-      }
-      isMusicPlaying = !isMusicPlaying;
-    }
-
-    // Reproducir automáticamente cuando el usuario haga el PRIMER clic en cualquier parte de la pantalla
-    document.body.addEventListener('click', function() {
-      if(!isMusicPlaying && bgMusic.paused) {
-        toggleMusic();
-      }
-    }, { once: true });
-
+    function toggleMusic() { if (bgMusic.paused) { bgMusic.play(); document.getElementById('music-btn').classList.add('playing'); } else { bgMusic.pause(); document.getElementById('music-btn').classList.remove('playing'); } }
+    document.body.addEventListener('click', () => { if(bgMusic.paused) toggleMusic(); }, { once: true });
   </script>
 </body>
 </html>
