@@ -179,14 +179,14 @@
           resources = resources.concat(vidData.resources || []);
       }
 
-      // Limpiamos la lista global y la armamos estructurada
+      // Limpiamos la lista global y la armamos con los parámetros de optimización (q_auto, f_auto, c_limit)
       globalMediaList = resources.sort((a,b) => b.version - a.version).map(m => {
         const isVideo = m.format && ['mp4','mov','webm','avi'].includes(m.format.toLowerCase());
         const resourceType = isVideo ? 'video' : 'image';
         return {
           isVideo: isVideo,
-          thumbUrl: `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/c_fill,w_400,h_400,g_auto/v${m.version}/${m.public_id}.${m.format}`,
-          fullUrl: `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/v${m.version}/${m.public_id}.${m.format}`
+          thumbUrl: `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/c_fill,w_400,h_400,g_auto,q_auto,f_auto/v${m.version}/${m.public_id}.${m.format}`,
+          fullUrl: `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/c_limit,w_1920,h_1920,q_auto,f_auto/v${m.version}/${m.public_id}.${m.format}`
         };
       });
 
