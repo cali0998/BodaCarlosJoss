@@ -251,9 +251,10 @@
       width: 100%;
       margin-top: 25px;
       overflow: hidden;
+      transform: translateZ(0);
     }
 
-    .carousel-track { display: flex; padding: 20px 0; gap: 15px; }
+    .carousel-track { display: flex; padding: 20px 0; gap: 15px; will-change: transform; }
 
     .carousel-track img { 
       width: 250px !important; 
@@ -393,6 +394,7 @@
       transition: 1s ease-out; 
       position: relative; 
       z-index: 20; 
+      will-change: opacity, transform; 
     }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -516,7 +518,7 @@
 <body>
 
   <audio id="bg-music" loop>
-    <source src="musica.mp3" type="audio/mpeg">
+    <source src="musica.mp3.mp3" type="audio/mpeg">
   </audio>
   <button id="music-btn" class="music-btn" onclick="toggleMusic()">
     🎵
