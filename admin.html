@@ -7,55 +7,163 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root { --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24; --glass: rgba(255, 255, 255, 0.08); }
-    body { margin: 0; font-family: 'Poppins', sans-serif; background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); background-attachment: fixed; color: white; min-height: 100vh; display: flex; flex-direction: column; align-items: center; }
-    header { width: 100%; padding: 40px 20px; text-align: center; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(15px); border-bottom: 1px solid var(--gold); position: sticky; top: 0; z-index: 1000; }
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); margin: 0; }
     
-    #gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 20px; width: 100%; max-width: 600px; }
-    .media-card { position: relative; aspect-ratio: 1/1; background: var(--glass); border-radius: 12px; overflow: hidden; border: 1px solid rgba(197, 157, 95, 0.2); cursor: pointer; transition: transform 0.2s; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    
+    body { 
+      margin: 0; font-family: 'Poppins', sans-serif; 
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); 
+      background-attachment: fixed; color: white; min-height: 100vh; 
+      display: flex; flex-direction: column; align-items: center; 
+    }
+    
+    header { 
+      width: 100%; padding: 30px 20px; text-align: center; 
+      background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(197, 157, 95, 0.3); position: sticky; top: 0; z-index: 1000; 
+    }
+    
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); margin: 0; font-size: 2.2rem; text-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+    
+    /* --- CUADRÍCULA DE FOTOS --- */
+    #gallery { 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
+      gap: 12px; padding: 25px 15px; width: 100%; max-width: 800px; 
+    }
+    
+    .media-card { 
+      position: relative; aspect-ratio: 1/1; background: var(--glass); 
+      border-radius: 16px; overflow: hidden; border: 1px solid rgba(197, 157, 95, 0.15); 
+      cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease; 
+    }
+    
+    @media (hover: hover) {
+      .media-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 2; border-color: rgba(197, 157, 95, 0.5); }
+    }
     .media-card:active { transform: scale(0.95); }
-    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
     
-    .play-icon { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(0,0,0,0.5); border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+    .media-card img, .media-card video { 
+      width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: opacity 0.3s ease;
+    }
     
-    .refresh-btn { position: fixed; bottom: 30px; right: 30px; background: var(--gold); border: none; width: 55px; height: 55px; border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.5); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 1000; }
+    .play-icon { 
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+      background: rgba(0,0,0,0.6); border-radius: 50%; width: 45px; height: 45px; 
+      display: flex; align-items: center; justify-content: center; pointer-events: none; 
+      backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.2);
+    }
+    
+    .refresh-btn { 
+      position: fixed; bottom: 30px; right: 30px; background: var(--gold); border: none; 
+      width: 60px; height: 60px; border-radius: 50%; box-shadow: 0 10px 25px rgba(0,0,0,0.6); 
+      cursor: pointer; display: flex; align-items: center; justify-content: center; 
+      z-index: 1000; transition: transform 0.3s ease, background 0.3s ease; 
+    }
+    .refresh-btn:active { transform: scale(0.9) rotate(180deg); }
 
-    /* --- MODAL PARA VER EN GRANDE --- */
+    /* --- MODAL Y NAVEGACIÓN (LIGHTBOX) --- */
     .modal {
       display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+      background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease;
     }
     .modal.show { opacity: 1; }
-    .modal-content { max-width: 95%; max-height: 85vh; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); object-fit: contain; }
-    .close-modal { position: absolute; top: 20px; right: 30px; color: white; font-size: 45px; cursor: pointer; z-index: 10000; }
+    
+    .modal-content-wrapper {
+      position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    }
+
+    .modal-media { 
+      max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); 
+      object-fit: contain; animation: fadeIn 0.4s ease forwards;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .close-modal { 
+      position: absolute; top: 20px; right: 25px; color: white; font-size: 40px; 
+      cursor: pointer; z-index: 10000; text-shadow: 0 2px 10px rgba(0,0,0,0.8); 
+      transition: color 0.3s; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;
+    }
+    .close-modal:hover { color: var(--gold); }
+
+    .nav-btn {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      background: rgba(0,0,0,0.4); color: white; border: none; font-size: 2rem;
+      width: 55px; height: 55px; border-radius: 50%; cursor: pointer; z-index: 10001;
+      display: flex; align-items: center; justify-content: center;
+      backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.1);
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    .nav-btn:hover { background: rgba(197, 157, 95, 0.8); transform: translateY(-50%) scale(1.1); }
+    .nav-btn:active { transform: translateY(-50%) scale(0.9); }
+    
+    .nav-prev { left: 15px; }
+    .nav-next { right: 15px; }
+
+    /* Ocultar botones laterales en pantallas muy pequeñas (celulares) para priorizar el deslizamiento */
+    @media (max-width: 600px) {
+      .nav-btn { display: none; }
+      .modal-media { max-width: 100vw; border-radius: 0; }
+    }
+    
+    /* Contador de posición en la galería */
+    .media-counter {
+      position: absolute; bottom: 25px; left: 50%; transform: translateX(-50%);
+      color: white; font-size: 0.9rem; letter-spacing: 2px;
+      background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px;
+      backdrop-filter: blur(5px); z-index: 10001;
+    }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Nuestros Recuerdos ❤️</h1>
-  <div id="counter" style="font-size:12px; margin-top:10px; opacity:0.8">Sincronizando...</div>
+  <h1>Nuestros Recuerdos</h1>
+  <div id="counter" style="font-size:12px; margin-top:5px; letter-spacing: 1px; opacity:0.8; text-transform: uppercase;">Sincronizando la magia...</div>
 </header>
 
 <div id="gallery"></div>
 
 <button class="refresh-btn" onclick="loadGallery()">
-  <svg viewBox="0 0 24 24" fill="white" width="24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+  <svg viewBox="0 0 24 24" fill="white" width="28"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
 </button>
 
-<div id="mediaModal" class="modal" onclick="closeModal(event)">
-  <span class="close-modal" onclick="closeModal(event)">&times;</span>
-  <div id="modal-body" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;"></div>
+<div id="mediaModal" class="modal">
+  <span class="close-modal" onclick="closeModal()">&times;</span>
+  
+  <button class="nav-btn nav-prev" onclick="changeMedia(-1, event)">&#10094;</button>
+  
+  <div class="modal-content-wrapper" id="modal-wrapper">
+    <div id="modal-body" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%;"></div>
+  </div>
+  
+  <button class="nav-btn nav-next" onclick="changeMedia(1, event)">&#10095;</button>
+  
+  <div id="media-position" class="media-counter">1 / 1</div>
 </div>
 
 <script>
   const cloudName = "dhruy6ftj";
   const tagBoda = "boda_carlos_y_joss";
+  
+  // Variables globales para la fluidez
+  let globalMediaList = [];
+  let currentMediaIndex = 0;
+
+  // Variables para deslizar (swipe)
+  let touchStartX = 0;
+  let touchEndX = 0;
 
   async function loadGallery() {
     try {
-      // 1. Buscamos imágenes y videos de Cloudinary por separado para que no se pierda ninguno
+      const btn = document.querySelector('.refresh-btn');
+      btn.style.transform = "rotate(180deg)";
+      
       const [imgRes, vidRes] = await Promise.all([
         fetch(`https://res.cloudinary.com/${cloudName}/image/list/v${Date.now()}/${tagBoda}.json`).catch(() => null),
         fetch(`https://res.cloudinary.com/${cloudName}/video/list/v${Date.now()}/${tagBoda}.json`).catch(() => null)
@@ -71,70 +179,138 @@
           resources = resources.concat(vidData.resources || []);
       }
 
+      // Limpiamos la lista global y la armamos estructurada
+      globalMediaList = resources.sort((a,b) => b.version - a.version).map(m => {
+        const isVideo = m.format && ['mp4','mov','webm','avi'].includes(m.format.toLowerCase());
+        const resourceType = isVideo ? 'video' : 'image';
+        return {
+          isVideo: isVideo,
+          thumbUrl: `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/c_fill,w_400,h_400,g_auto/v${m.version}/${m.public_id}.${m.format}`,
+          fullUrl: `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/v${m.version}/${m.public_id}.${m.format}`
+        };
+      });
+
       const gallery = document.getElementById("gallery");
       gallery.innerHTML = "";
-      document.getElementById("counter").innerText = `${resources.length} Momentos capturados`;
+      document.getElementById("counter").innerText = `${globalMediaList.length} Momentos capturados`;
 
-      // 2. Los ordenamos del más nuevo al más viejo
-      resources.sort((a,b) => b.version - a.version).forEach(m => {
+      // Dibujamos la cuadrícula
+      globalMediaList.forEach((media, index) => {
         const div = document.createElement("div");
         div.className = "media-card";
         
-        const isVideo = m.format && ['mp4','mov','webm','avi'].includes(m.format.toLowerCase());
-        const resourceType = isVideo ? 'video' : 'image';
-        
-        // Miniatura cuadradita para la cuadrícula
-        const thumbUrl = `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/c_fill,w_400,h_400,g_auto/v${m.version}/${m.public_id}.${m.format}`;
-        // Archivo en tamaño original para el Modal
-        const fullUrl = `https://res.cloudinary.com/${cloudName}/${resourceType}/upload/v${m.version}/${m.public_id}.${m.format}`;
-
-        if(isVideo) {
+        if(media.isVideo) {
           div.innerHTML = `
-            <video src="${thumbUrl}" muted loop playsinline autoplay></video>
-            <div class="play-icon"><svg viewBox="0 0 24 24" fill="white" width="24" height="24"><path d="M8 5v14l11-7z"/></svg></div>
+            <video src="${media.thumbUrl}" muted loop playsinline autoplay></video>
+            <div class="play-icon"><svg viewBox="0 0 24 24" fill="white" width="22" height="22"><path d="M8 5v14l11-7z"/></svg></div>
           `;
         } else {
-          div.innerHTML = `<img src="${thumbUrl}">`;
+          div.innerHTML = `<img src="${media.thumbUrl}" loading="lazy">`;
         }
 
-        // Al tocar la miniatura, se abre el modal grande
-        div.onclick = () => openModal(fullUrl, isVideo);
-        
+        div.onclick = () => openModal(index);
         gallery.appendChild(div);
       });
+      
+      setTimeout(() => btn.style.transform = "rotate(0deg)", 300);
+
     } catch (e) { 
-      document.getElementById("counter").innerText = "¡Esperando el primer recuerdo!"; 
+      document.getElementById("counter").innerText = "¡Esperando las primeras fotos!"; 
     }
   }
 
-  // Lógica para abrir la foto/video en tamaño grande
-  function openModal(url, isVideo) {
+  // --- LÓGICA DE LA GALERÍA FLUIDA ---
+
+  function openModal(index) {
+    if(globalMediaList.length === 0) return;
+    currentMediaIndex = index;
+    renderCurrentMedia();
+    
     const modal = document.getElementById('mediaModal');
-    const modalBody = document.getElementById('modal-body');
-    
-    if (isVideo) {
-      modalBody.innerHTML = `<video class="modal-content" src="${url}" controls autoplay playsinline></video>`;
-    } else {
-      modalBody.innerHTML = `<img class="modal-content" src="${url}">`;
-    }
-    
     modal.style.display = 'flex';
     setTimeout(() => modal.classList.add('show'), 10);
   }
 
-  // Lógica para cerrar y apagar el video
-  function closeModal(e) {
-    if (e.target.classList.contains('modal') || e.target.classList.contains('close-modal')) {
-      const modal = document.getElementById('mediaModal');
-      modal.classList.remove('show');
-      setTimeout(() => {
-        modal.style.display = 'none';
-        document.getElementById('modal-body').innerHTML = ''; // Limpia el contenido para que el video deje de sonar
-      }, 300);
+  function renderCurrentMedia() {
+    const modalBody = document.getElementById('modal-body');
+    const positionText = document.getElementById('media-position');
+    const media = globalMediaList[currentMediaIndex];
+    
+    // Animación suave de cambio
+    modalBody.style.opacity = '0';
+    
+    setTimeout(() => {
+        if (media.isVideo) {
+          modalBody.innerHTML = `<video class="modal-media" src="${media.fullUrl}" controls autoplay playsinline></video>`;
+        } else {
+          modalBody.innerHTML = `<img class="modal-media" src="${media.fullUrl}">`;
+        }
+        
+        positionText.innerText = `${currentMediaIndex + 1} / ${globalMediaList.length}`;
+        modalBody.style.opacity = '1';
+    }, 150);
+  }
+
+  function changeMedia(direction, event) {
+    if(event) event.stopPropagation(); // Evita que se cierre el modal al tocar el botón
+    
+    currentMediaIndex += direction;
+    
+    // Carrusel infinito (si pasa del último, vuelve al primero y viceversa)
+    if (currentMediaIndex >= globalMediaList.length) currentMediaIndex = 0;
+    if (currentMediaIndex < 0) currentMediaIndex = globalMediaList.length - 1;
+    
+    renderCurrentMedia();
+  }
+
+  function closeModal() {
+    const modal = document.getElementById('mediaModal');
+    modal.classList.remove('show');
+    setTimeout(() => {
+      modal.style.display = 'none';
+      document.getElementById('modal-body').innerHTML = ''; // Detiene los videos
+    }, 300);
+  }
+
+  // Cierra si tocas fuera de la foto
+  document.getElementById('modal-wrapper').addEventListener('click', function(e) {
+    if (e.target === this || e.target.id === 'modal-body') {
+      closeModal();
+    }
+  });
+
+  // --- LÓGICA PARA DESLIZAR (SWIPE) EN CELULARES ---
+  const modalWrapper = document.getElementById('mediaModal');
+  
+  modalWrapper.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, {passive: true});
+
+  modalWrapper.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  }, {passive: true});
+
+  function handleSwipe() {
+    const threshold = 50; // Distancia mínima para considerar que fue un "desliz"
+    if (touchEndX < touchStartX - threshold) {
+      changeMedia(1); // Deslizó a la izquierda -> Siguiente
+    }
+    if (touchEndX > touchStartX + threshold) {
+      changeMedia(-1); // Deslizó a la derecha -> Anterior
     }
   }
 
-  // Refresca la galería automáticamente
+  // --- NAVEGACIÓN CON TECLADO (PC) ---
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('mediaModal').classList.contains('show')) {
+      if (e.key === 'ArrowRight') changeMedia(1);
+      if (e.key === 'ArrowLeft') changeMedia(-1);
+      if (e.key === 'Escape') closeModal();
+    }
+  });
+
+  // Refresca la galería automáticamente cada 30 seg
   setInterval(loadGallery, 30000);
   window.onload = loadGallery;
 </script>
