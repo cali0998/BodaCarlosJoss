@@ -28,7 +28,7 @@
       overscroll-behavior-y: none;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) CON ACELERACIÓN GPU --- */
+    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -585,7 +585,14 @@
     <div class="glass-card reveal">
       <h2>A Bailar</h2>
       <p>Queremos asegurarnos de que la pista de baile nunca esté vacía y que todos disfruten al máximo.</p>
-      <a href="https://wa.me/50683484866?text=Hola!+Para+la+boda,+sugiero+esta+cancion:" target="_blank" class="btn">Sugerir Canción</a>
+      
+      <div id="form-musica" style="margin-top: 20px; width: 100%;">
+        <input type="text" id="input-cancion" placeholder="Ej. Danza Kuduro - Don Omar" style="width: 100%; padding: 15px; border-radius: 10px; border: none; margin-bottom: 15px; font-family: 'Poppins', sans-serif; font-size: 1rem; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.3); outline: none;">
+        <br>
+        <button onclick="enviarCancionSupabase()" class="btn" id="btn-cancion" style="margin-top: 0; width: 100%;">Enviar Sugerencia</button>
+      </div>
+      <p id="mensaje-cancion" style="display:none; color: #2ecc71; font-weight: bold; margin-top: 15px; font-size: 1.2rem;"></p>
+
     </div>
     <div class="floating-text reveal">"Que no falte el ritmo, la risa y la buena compañía..."</div>
   </section>
@@ -774,6 +781,57 @@
             btnDeclinar.style.pointerEvents = "auto";
             btnDeclinar.style.opacity = "1";
             btnConfirmar.style.pointerEvents = "auto";
+        }
+    }
+
+    // NUEVA FUNCIÓN PARA ENVIAR CANCIONES MÚLTIPLES
+    async function enviarCancionSupabase() {
+        const inputField = document.getElementById('input-cancion');
+        const cancion = inputField.value;
+        if (!cancion) return; 
+
+        const btn = document.getElementById('btn-cancion');
+        const mensaje = document.getElementById('mensaje-cancion');
+        const nombre = document.getElementById('nombre-invitado').innerText; 
+
+        btn.innerText = "Enviando...";
+        btn.style.pointerEvents = "none";
+        btn.style.opacity = "0.7";
+
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/canciones`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ nombre_invitado: nombre, cancion: cancion }) 
+            });
+
+            if(response.ok) {
+                inputField.value = '';
+                btn.innerText = "Enviar otra canción";
+                btn.style.pointerEvents = "auto";
+                btn.style.opacity = "1";
+                
+                mensaje.innerText = "¡Canción anotada! Puedes sugerir otra 🎵";
+                mensaje.style.display = 'block';
+                
+                setTimeout(() => {
+                    mensaje.style.display = 'none';
+                }, 4000);
+
+            } else {
+                btn.innerText = "Error. Intenta de nuevo";
+                btn.style.pointerEvents = "auto";
+                btn.style.opacity = "1";
+            }
+        } catch (error) {
+            btn.innerText = "Error de conexión";
+            btn.style.pointerEvents = "auto";
+            btn.style.opacity = "1";
         }
     }
 
