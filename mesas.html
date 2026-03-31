@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizador de Mesas • Carlos & Joselyn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold: #c59d5f;
+      --wine: #4a0a16;
+      --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.05);
+      --border: rgba(197, 157, 95, 0.3);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+    
+    body {
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
+      background-attachment: fixed; color: white; height: 100vh; display: flex; flex-direction: column;
+    }
+
+    header {
+      padding: 20px; text-align: center; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border);
+    }
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; }
+
+    .container {
+      display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
+    }
+
+    /* LISTA DE INVITADOS SIN MESA */
+    .sidebar {
+      width: 300px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: 20px; display: flex; flex-direction: column;
+    }
+    
+    .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); text-align: center; }
+    .sidebar-header h3 { color: var(--gold); font-size: 1.2rem; }
+
+    .guest-list {
+      flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+      min-height: 200px;
+    }
+
+    /* INVITADO (DRAGGABLE) */
+    .guest {
+      background: rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.2); cursor: grab; font-size: 0.9rem;
+      transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
+    }
+    .guest:active { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; font-weight: bold; }
+    .guest.dragging { opacity: 0.5; }
+
+    /* ÁREA DE MESAS */
+    .main-area {
+      flex: 1; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px;
+      overflow-y: auto; display: flex; flex-wrap: wrap; gap: 20px; align-content: flex-start;
+      border: 1px dashed rgba(255,255,255,0.1);
+    }
+
+    /* MESA */
+    .table-card {
+      width: calc(33.333% - 14px); min-width: 250px; background: var(--glass);
+      backdrop-filter: blur(10px); border: 1px solid var(--gold); border-radius: 15px;
+      display: flex; flex-direction: column;
+    }
+
+    .table-header {
+      background: rgba(197, 157, 95, 0.15); padding: 15px; border-radius: 15px 15px 0 0;
+      border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+    }
+    .table-header input {
+      background: transparent; border: none; color: white; font-family: 'Playfair Display', serif;
+      font-size: 1.2rem; font-weight: bold; width: 60%; outline: none;
+    }
+    
+    .table-controls { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; opacity: 0.8; }
+    .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; }
+    .btn-small:hover { background: var(--gold); color: black; }
+
+    .table-seats {
+      padding: 15px; min-height: 150px; flex: 1; display: flex; flex-direction: column; gap: 8px;
+    }
+    .table-seats.drag-over { background: rgba(197, 157, 95, 0.1); }
+
+    .seat-count { text-align: center; padding: 10px; font-size: 0.8rem; color: var(--gold); border-top: 1px solid var(--border); }
+
+    /* BOTONES GLOBALES */
+    .actions { padding: 15px; display: flex; gap: 10px; }
+    .btn {
+      background: var(--gold); color: white; padding: 12px; border-radius: 10px; border: none;
+      font-weight: 600; cursor: pointer; flex: 1; text-transform: uppercase; font-size: 0.8rem; transition: 0.3s;
+    }
+    .btn:active { transform: scale(0.95); }
+    .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Diseño de Mesas</h1>
+  </header>
+
+  <div class="container">
+    
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h3>Invitados por Acomodar</h3>
+      </div>
+      <div class="guest-list" id="unseated-guests">
+        <div class="guest" draggable="true" id="g1">Tío Juan</div>
+        <div class="guest" draggable="true" id="g2">Tía Marta</div>
+        <div class="guest" draggable="true" id="g3">Primo Andrés</div>
+        <div class="guest" draggable="true" id="g4">Amiga Sofía</div>
+        <div class="guest" draggable="true" id="g5">Compañero Luis</div>
+        <div class="guest" draggable="true" id="g6">Abuela Carmen</div>
+        <div class="guest" draggable="true" id="g7">Hermano David</div>
+        <div class="guest" draggable="true" id="g8">Cuñada Elena</div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-outline" onclick="addDummyGuest()">+ Añadir Invitado</button>
+      </div>
+    </div>
+
+    <div class="main-area" id="floor-plan">
+      </div>
+
+  </div>
+
+  <button class="btn" style="position: fixed; bottom: 30px; right: 30px; width: 180px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);" onclick="addTable()">+ Nueva Mesa</button>
+
+<script>
+  let tableCount = 0;
+  let guestCounter = 9;
+
+  // Lógica de Drag & Drop
+  let draggedItem = null;
+
+  document.addEventListener('dragstart', (e) => {
+    if(e.target.classList.contains('guest')) {
+      draggedItem = e.target;
+      setTimeout(() => e.target.classList.add('dragging'), 0);
+    }
+  });
+
+  document.addEventListener('dragend', (e) => {
+    if(e.target.classList.contains('guest')) {
+      e.target.classList.remove('dragging');
+      draggedItem = null;
+      updateAllCounters();
+    }
+  });
+
+  function setupDropZone(zone) {
+    zone.addEventListener('dragover', e => {
+      e.preventDefault();
+      if(zone.classList.contains('table-seats')) {
+        const capacity = parseInt(zone.dataset.capacity);
+        const currentCount = zone.querySelectorAll('.guest').length;
+        // Si la mesa está llena y el invitado no está ya en esta mesa, no dejar soltar
+        if(currentCount >= capacity && draggedItem.parentElement !== zone) return;
+      }
+      zone.classList.add('drag-over');
+    });
+
+    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+
+    zone.addEventListener('drop', e => {
+      e.preventDefault();
+      zone.classList.remove('drag-over');
+      if (draggedItem) {
+        zone.appendChild(draggedItem);
+      }
+    });
+  }
+
+  // Inicializar la zona de la lista izquierda
+  setupDropZone(document.getElementById('unseated-guests'));
+
+  // Función para crear una mesa nueva
+  function addTable(capacity = 8) {
+    tableCount++;
+    const tableId = `table-${tableCount}`;
+    
+    const tableHTML = `
+      <div class="table-card" id="${tableId}">
+        <div class="table-header">
+          <input type="text" value="Mesa ${tableCount}">
+          <div class="table-controls">
+            <button class="btn-small" onclick="changeCapacity('${tableId}', -1)">-</button>
+            <span class="cap-display">${capacity}</span>
+            <button class="btn-small" onclick="changeCapacity('${tableId}', 1)">+</button>
+          </div>
+        </div>
+        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}">
+          </div>
+        <div class="seat-count" id="count-${tableId}">0 / ${capacity} sillas ocupadas</div>
+      </div>
+    `;
+
+    document.getElementById('floor-plan').insertAdjacentHTML('beforeend', tableHTML);
+    setupDropZone(document.getElementById(`seats-${tableId}`));
+  }
+
+  // Cambiar cantidad de sillas de una mesa
+  function changeCapacity(tableId, change) {
+    const seatsZone = document.getElementById(`seats-${tableId}`);
+    let cap = parseInt(seatsZone.dataset.capacity) + change;
+    if(cap < 1) cap = 1; // Mínimo 1 silla
+    
+    // Validar que no le bajen la capacidad si ya hay gente sentada superando ese número
+    const currentGuests = seatsZone.querySelectorAll('.guest').length;
+    if(cap < currentGuests) {
+      alert("No puedes quitar sillas si ya hay invitados sentados en ellas. Quita al invitado primero.");
+      return;
+    }
+
+    seatsZone.dataset.capacity = cap;
+    document.querySelector(`#${tableId} .cap-display`).innerText = cap;
+    updateCounter(tableId);
+  }
+
+  // Actualizar los contadores visuales de sillas
+  function updateCounter(tableId) {
+    const seatsZone = document.getElementById(`seats-${tableId}`);
+    const currentCount = seatsZone.querySelectorAll('.guest').length;
+    const cap = seatsZone.dataset.capacity;
+    document.getElementById(`count-${tableId}`).innerText = `${currentCount} / ${cap} sillas ocupadas`;
+    
+    if(currentCount >= cap) {
+      document.getElementById(`count-${tableId}`).style.color = "#e74c3c"; // Rojo si está llena
+    } else {
+      document.getElementById(`count-${tableId}`).style.color = "var(--gold)";
+    }
+  }
+
+  function updateAllCounters() {
+    for(let i=1; i<=tableCount; i++) {
+      if(document.getElementById(`table-${i}`)) updateCounter(`table-${i}`);
+    }
+  }
+
+  // Función temporal para probar añadir gente
+  function addDummyGuest() {
+    const name = prompt("Nombre del invitado:");
+    if(!name) return;
+    
+    const guestHTML = `<div class="guest" draggable="true" id="g${guestCounter++}">${name}</div>`;
+    document.getElementById('unseated-guests').insertAdjacentHTML('beforeend', guestHTML);
+  }
+
+  // Iniciar con 3 mesas por defecto
+  window.onload = () => {
+    addTable(8);
+    addTable(8);
+    addTable(10);
+  };
+</script>
+</body>
+</html>
