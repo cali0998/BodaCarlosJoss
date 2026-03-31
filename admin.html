@@ -3,9 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>Compartir Recuerdos • Carlos & Joselyn</title>
+  <title>Galería • Carlos & Joselyn 💍</title>
   
   <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="dns-prefetch" href="https://res.cloudinary.com">
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
@@ -22,180 +24,201 @@
       font-family: 'Poppins', sans-serif; 
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); 
       background-attachment: fixed; color: white; min-height: 100vh;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      padding: 20px;
+      overflow-x: hidden;
     }
     
-    .glass-card {
-      width: 100%; max-width: 400px;
-      background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(197, 157, 95, 0.3); border-radius: 30px;
-      padding: 40px 25px; text-align: center;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    header { 
+      padding: 25px 20px; text-align: center; 
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(197, 157, 95, 0.3); position: sticky; top: 0; z-index: 100;
     }
     
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; margin-bottom: 5px; }
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px; }
     
-    .date-badge { 
-      font-size: 10px; letter-spacing: 5px; text-transform: uppercase; 
-      color: rgba(255,255,255,0.5); margin-bottom: 30px; display: block; 
-    }
-
-    .welcome-text { font-size: 14px; font-weight: 300; opacity: 0.8; margin-bottom: 35px; line-height: 1.6; }
-    
-    .state-container { display: flex; flex-direction: column; gap: 12px; }
-    .hidden { display: none !important; }
-
-    /* BOTONES ESTILO ADMIN (LINEALES Y ELEGANTES) */
-    .btn-action {
-      display: flex; align-items: center; justify-content: center; gap: 12px;
-      padding: 18px; border-radius: 15px; font-weight: 400; text-transform: uppercase;
-      cursor: pointer; border: 1px solid rgba(255,255,255,0.1); 
-      transition: all 0.3s ease; font-size: 11px; letter-spacing: 1.5px; color: white;
-      background: rgba(255,255,255,0.05);
+    #gallery { 
+      display: grid; 
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 8px; padding: 15px; max-width: 900px; margin: 0 auto;
+      transform: translateZ(0); 
     }
     
-    .btn-primary { border: 1px solid var(--gold); color: var(--gold); }
-    .btn-primary:active { background: var(--gold); color: black; }
-
-    .btn-confirm { background: var(--gold); color: black; font-weight: 600; border: none; }
-
-    /* ICONOS SVG */
-    svg { opacity: 0.9; }
-
-    /* OCULTAR INPUTS */
-    input[type="file"] { display: none !important; }
-
-    #preview-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 8px; margin-bottom: 25px; max-height: 240px; overflow-y: auto;
-      padding: 10px; background: rgba(0,0,0,0.3); border-radius: 15px;
+    .media-card { 
+      aspect-ratio: 1/1; background: var(--glass); border-radius: 12px; 
+      overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05);
+      content-visibility: auto;
+      contain-intrinsic-size: 100px 100px;
     }
 
-    .preview-media { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid rgba(197, 157, 95, 0.3); }
+    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    
+    .play-icon { 
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+      background: rgba(0,0,0,0.6); border-radius: 50%; width: 40px; height: 40px; 
+      display: flex; align-items: center; justify-content: center; color: white;
+    }
 
-    /* PROGRESO */
-    #status { margin-top: 15px; }
-    .progress-bar-bg { width: 100%; height: 2px; background: rgba(255,255,255,0.1); margin-top: 12px; border-radius: 10px; overflow: hidden; }
-    .progress-bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.4s ease; }
-    #statusText { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+    /* BOTÓN ACTUALIZAR CON EL MISMO ESTILO DE ICONOS LIGEROS */
+    .btn-update {
+      position: fixed; bottom: 30px; right: 20px; background: var(--gold);
+      width: 55px; height: 55px; border-radius: 50%; border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 999;
+      display: flex; align-items: center; justify-content: center; color: white;
+      cursor: pointer; transition: transform 0.3s ease;
+    }
+    .btn-update:active { transform: scale(0.9) rotate(180deg); }
+
+    /* MODAL CON ESTÉTICA DE CRISTAL OSCURO */
+    .modal {
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.96); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      align-items: center; justify-content: center; opacity: 0; 
+      transition: opacity 0.25s ease-out;
+    }
+    .modal.show { opacity: 1; display: flex; }
+
+    #modal-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    .modal-media { 
+      max-width: 100%; max-height: 80vh; object-fit: contain; 
+      border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      transform: translateZ(0);
+    }
+
+    /* BOTONES DE NAVEGACIÓN UNIFICADOS (COMO EN LA INVITACIÓN/INDEX) */
+    .nav-btn {
+      position: absolute; bottom: 40px; background: rgba(197, 157, 95, 0.9);
+      color: white; width: 60px; height: 50px; border: none;
+      border-radius: 15px; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+    .prev { left: 20px; } .next { right: 20px; }
+    
+    @media (min-width: 600px) {
+      .nav-btn { top: 50%; bottom: auto; transform: translateY(-50%); width: 55px; height: 55px; border-radius: 50%; }
+      .prev { left: 30px; } .next { right: 30px; }
+      #gallery { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+    }
+
+    .close-modal { position: absolute; top: 25px; right: 20px; font-size: 40px; color: white; z-index: 11; cursor: pointer; }
+    .counter-text { position: absolute; bottom: 55px; font-size: 11px; opacity: 0.5; letter-spacing: 2px; text-transform: uppercase; }
   </style>
 </head>
 <body>
 
-<div class="glass-card">
-  <span class="date-badge">19 • DIC • 2026</span>
-  <h1>Carlos & Joselyn</h1>
-  <p class="welcome-text" id="mainText">
-    Ayúdanos a capturar cada momento de nuestra historia.
-  </p>
-  
-  <div class="state-container" id="actions-state">
-    <label for="cameraPhotoInput" class="btn-action btn-primary">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      Capturar Foto
-    </label>
-    <input type="file" id="cameraPhotoInput" accept="image/*" capture="environment" onchange="handleFileSelection(this.files)">
-    
-    <label for="cameraVideoInput" class="btn-action">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-      Grabar Video
-    </label>
-    <input type="file" id="cameraVideoInput" accept="video/*" capture="environment" onchange="handleFileSelection(this.files)">
-    
-    <label for="fileInput" class="btn-action" style="opacity: 0.5; font-size: 10px; border: none;">
-      Elegir de la Galería
-    </label>
-    <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
-  </div>
+<header>
+  <h1>Nuestros Recuerdos</h1>
+  <div id="status" style="font-size: 10px; opacity: 0.6; margin-top: 5px; letter-spacing: 1px;">SINCRONIZANDO...</div>
+</header>
 
-  <div class="state-container hidden" id="preview-state">
-    <div id="preview-grid"></div>
-    <div style="display:flex; gap:10px;">
-      <button class="btn-action" style="flex:1" onclick="cancelUpload()">Volver</button>
-      <button class="btn-action btn-confirm" style="flex:2" onclick="confirmAndUpload()">Enviar</button>
-    </div>
-  </div>
-  
-  <div id="status" class="hidden">
-    <div id="statusText">Enviando...</div>
-    <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
+<div id="gallery"></div>
+
+<button class="btn-update" onclick="loadGallery()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+</button>
+
+<div id="mediaModal" class="modal">
+  <span class="close-modal" onclick="closeModal()">&times;</span>
+  <div id="modal-content">
+    <button class="nav-btn prev" onclick="move(-1, event)">&#10094;</button>
+    <div id="media-container" style="width:100%; display:flex; justify-content:center;"></div>
+    <button class="nav-btn next" onclick="move(1, event)">&#10095;</button>
+    <div class="counter-text" id="modal-counter"></div>
   </div>
 </div>
 
 <script>
   const cloudName = "dhruy6ftj";
-  const uploadPreset = "boda_carlos_y_joss";
-  const MAX_SIZE = 25 * 1024 * 1024;
-  let selectedFiles = [];
+  const tag = "boda_carlos_y_joss";
+  let items = [];
+  let currentIndex = 0;
 
-  function handleFileSelection(files) {
-    if (files.length === 0) return;
-    const grid = document.getElementById('preview-grid');
-    grid.innerHTML = '';
-    selectedFiles = [];
+  async function loadGallery() {
+    const status = document.getElementById('status');
+    try {
+      const [imgRes, vidRes] = await Promise.allSettled([
+        fetch(`https://res.cloudinary.com/${cloudName}/image/list/v${Date.now()}/${tag}.json`).then(r => r.json()),
+        fetch(`https://res.cloudinary.com/${cloudName}/video/list/v${Date.now()}/${tag}.json`).then(r => r.json()).catch(() => ({resources:[]}))
+      ]);
 
-    Array.from(files).forEach(file => {
-      if (file.size > MAX_SIZE) {
-        alert(`El archivo supera el límite permitido.`);
-        return;
-      }
-      selectedFiles.push(file);
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const isVid = file.type.startsWith('video/');
-        const el = document.createElement(isVid ? 'video' : 'img');
-        el.src = e.target.result;
-        el.className = 'preview-media';
-        if (isVid) { el.muted = true; el.autoplay = true; el.loop = true; }
-        grid.appendChild(el);
-      };
-      reader.readAsDataURL(file);
-    });
+      let all = [];
+      if (imgRes.status === 'fulfilled') all = [...all, ...(imgRes.value.resources || [])];
+      if (vidRes.status === 'fulfilled') all = [...all, ...(vidRes.value.resources || [])];
 
-    if (selectedFiles.length > 0) setVisualState('preview');
+      items = all.sort((a,b) => b.version - a.version).map(m => {
+        const isVid = ['mp4','mov','webm'].includes(m.format.toLowerCase());
+        const type = isVid ? 'video' : 'image';
+        return {
+          isVid,
+          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_350,h_350,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${m.format}`,
+          full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
+          original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`
+        };
+      });
+
+      render();
+      status.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
+    } catch (e) { status.innerText = "ESPERANDO RECUERDOS..."; }
   }
 
-  async function confirmAndUpload() {
-    setVisualState('uploading');
-    const statusText = document.getElementById('statusText');
-    const bar = document.getElementById('progress-fill');
+  function render() {
+    const container = document.getElementById('gallery');
+    container.innerHTML = items.map((m, i) => `
+      <div class="media-card" onclick="openModal(${i})">
+        ${m.isVid ? `<video src="${m.thumb}" muted loop playsinline autoplay preload="none"></video><div class="play-icon">▶</div>` : `<img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}" ${i < 6 ? 'fetchpriority="high"' : ''}>`}
+      </div>
+    `).join('');
+  }
+
+  function openModal(i) {
+    currentIndex = i;
+    const modal = document.getElementById('mediaModal');
+    modal.style.display = 'flex';
+    renderMedia();
+    setTimeout(() => modal.classList.add('show'), 10);
+  }
+
+  function renderMedia() {
+    const container = document.getElementById('media-container');
+    const m = items[currentIndex];
     
-    for (let i = 0; i < selectedFiles.length; i++) {
-      let progress = ((i) / selectedFiles.length) * 100;
-      bar.style.width = `${progress}%`;
-      statusText.innerText = `Enviando ${i+1} de ${selectedFiles.length}`;
-      
-      const formData = new FormData();
-      formData.append('file', selectedFiles[i]);
-      formData.append('upload_preset', uploadPreset);
-      formData.append('tags', 'boda_carlos_y_joss');
-      
-      try {
-        await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/upload`, { method: 'POST', body: formData });
-      } catch (e) { 
-        statusText.innerText = "Error de conexión"; 
-        return; 
-      }
-    }
+    container.innerHTML = m.isVid ? 
+      `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'"></video>` :
+      `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">`;
     
-    bar.style.width = '100%';
-    statusText.innerHTML = "<b>Recuerdos guardados</b>";
-    setTimeout(cancelUpload, 3000);
+    document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
+    
+    preload((currentIndex + 1) % items.length);
+    preload((currentIndex - 1 + items.length) % items.length);
   }
 
-  function cancelUpload() {
-    selectedFiles = [];
-    document.querySelectorAll('input').forEach(i => i.value = '');
-    setVisualState('init');
+  function preload(idx) {
+    const m = items[idx];
+    if(m && !m.isVid) { const img = new Image(); img.src = m.full; }
   }
 
-  function setVisualState(state) {
-    document.getElementById('actions-state').className = (state === 'init') ? 'state-container' : 'state-container hidden';
-    document.getElementById('preview-state').className = (state === 'preview') ? 'state-container' : 'state-container hidden';
-    document.getElementById('status').className = (state === 'uploading') ? '' : 'hidden';
-    document.getElementById('mainText').style.opacity = (state === 'init') ? '1' : '0.3';
+  function move(dir, e) {
+    if(e) e.stopPropagation();
+    currentIndex = (currentIndex + dir + items.length) % items.length;
+    renderMedia();
   }
+
+  function closeModal() {
+    const modal = document.getElementById('mediaModal');
+    modal.classList.remove('show');
+    setTimeout(() => { modal.style.display = 'none'; document.getElementById('media-container').innerHTML = ''; }, 300);
+  }
+
+  document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
+
+  let touchX = 0;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive: true});
+  document.addEventListener('touchend', e => {
+    if(!document.getElementById('mediaModal').classList.contains('show')) return;
+    const diff = touchX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 50) move(diff > 0 ? 1 : -1);
+  }, {passive: true});
+
+  window.onload = loadGallery;
+  setInterval(loadGallery, 60000);
 </script>
 </body>
 </html>
