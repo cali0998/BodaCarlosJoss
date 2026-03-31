@@ -151,6 +151,41 @@
     .seccion-regalos .floating-text,
     .seccion-final .floating-text { left: 8%; text-align: left; }
 
+    /* --- NUEVOS ESTILOS PARA IMÁGENES DE VESTIMENTA Y PALETA --- */
+    .side-container-left {
+      position: absolute;
+      left: 8%;
+      top: 50%;
+      max-width: 320px;
+      z-index: 5;
+      text-align: left;
+    }
+    
+    .side-container-left.reveal { transform: translateY(calc(-50% + 30px)); }
+    .side-container-left.reveal.active { transform: translateY(-50%); }
+
+    .vestimenta-text {
+      position: relative !important;
+      top: auto !important;
+      transform: none !important;
+      left: auto !important;
+      margin-bottom: 20px;
+    }
+
+    .vestimenta-img {
+      width: 100%;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .paleta-img {
+      width: 100%;
+      max-width: 350px;
+      margin-top: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
     /* --- CARRETE INFINITO --- */
     .carousel-container {
       position: relative;
@@ -243,6 +278,19 @@
       }
       .floating-text.reveal { transform: translateY(30px) !important; }
       .floating-text.reveal.active { transform: translateY(0) !important; }
+      
+      .side-container-left {
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        margin-top: 20px;
+        text-align: center;
+        max-width: 90%;
+      }
+      .side-container-left.reveal { transform: translateY(30px) !important; }
+      .side-container-left.reveal.active { transform: translateY(0) !important; }
+      .side-container-left .vestimenta-text { text-align: center !important; margin-top: 0; }
+
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { 
         padding-left: 15px; padding-right: 15px; align-items: center; 
       }
@@ -321,8 +369,13 @@
       <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
       <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta.</p>
       <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
+      <img src="paleta.png" alt="Paleta de Colores" class="paleta-img">
     </div>
-    <div class="floating-text reveal">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio..."</div>
+    
+    <div class="side-container-left reveal">
+      <div class="floating-text vestimenta-text">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio..."</div>
+      <img src="vestimenta.jpeg" alt="Ejemplos de Vestimenta" class="vestimenta-img">
+    </div>
   </section>
 
   <section class="seccion-musica">
