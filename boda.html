@@ -193,6 +193,7 @@
       width: 100%;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      cursor: pointer;
     }
 
     .paleta-img {
@@ -201,6 +202,7 @@
       margin-top: 20px;
       border-radius: 10px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      cursor: pointer;
     }
 
     /* --- CARRETE INFINITO --- */
@@ -221,6 +223,7 @@
       border: none; 
       flex-shrink: 0;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
+      cursor: pointer;
     }
 
     .carousel-btn {
@@ -247,6 +250,54 @@
       border-radius: 15px; 
       border: none;
       box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
+
+    /* --- MODAL / LIGHTBOX DE IMÁGENES --- */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+    .modal.show {
+      opacity: 1;
+    }
+    .modal-content {
+      max-width: 90%;
+      max-height: 85vh;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      transform: scale(0.8);
+      transition: transform 0.3s ease;
+      object-fit: contain;
+    }
+    .modal.show .modal-content {
+      transform: scale(1);
+    }
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.3s;
+      z-index: 10000;
+    }
+    .close-modal:hover {
+      color: var(--gold);
     }
 
     /* --- FONDOS Y ENCUADRES --- */
@@ -444,6 +495,11 @@
     <div class="floating-text reveal">"¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
   </section>
 
+  <div id="imageModal" class="modal">
+    <span class="close-modal" id="closeModal">&times;</span>
+    <img class="modal-content" id="expandedImg">
+  </div>
+
   <script>
     // --- VARIABLES DE SUPABASE INYECTADAS ---
     const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
@@ -594,6 +650,53 @@
         if (currentIndex >= totalImages * 2) { track.style.transition = 'none'; currentIndex = totalImages; track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`; }
         if (currentIndex <= totalImages - 1) { track.style.transition = 'none'; currentIndex = (totalImages * 2) - 1; track.style.transform = `translateX(-${getSlideWidth() * currentIndex}px)`; }
     });
+
+    // --- FUNCIONALIDAD DEL MODAL DE IMÁGENES ---
+    const modal = document.getElementById('imageModal');
+    const expandedImg = document.getElementById('expandedImg');
+    const closeModalBtn = document.getElementById('closeModal');
+
+    function openModal(src) {
+      expandedImg.src = src;
+      modal.style.display = 'flex';
+      // Pequeño retraso para activar la animación de CSS
+      setTimeout(() => {
+        modal.classList.add('show');
+      }, 10);
+    }
+
+    function hideModal() {
+      modal.classList.remove('show');
+      setTimeout(() => {
+        modal.style.display = 'none';
+        expandedImg.src = '';
+      }, 300); // 300ms coincide con la transición CSS
+    }
+
+    // Eventos para la vestimenta y la paleta
+    document.querySelectorAll('.vestimenta-img, .paleta-img').forEach(img => {
+      img.addEventListener('click', function() {
+        openModal(this.src);
+      });
+    });
+
+    // Eventos para el carrete (delegación de eventos porque las imágenes se clonan)
+    document.getElementById('carouselTrack').addEventListener('click', function(e) {
+      if(e.target.tagName === 'IMG') {
+        openModal(e.target.src);
+      }
+    });
+
+    // Cerrar al dar clic en la X
+    closeModalBtn.addEventListener('click', hideModal);
+
+    // Cerrar al dar clic fuera de la imagen (en el fondo oscuro)
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        hideModal();
+      }
+    });
+
   </script>
 </body>
 </html>
