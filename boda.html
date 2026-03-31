@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -25,9 +25,11 @@
       color: white; 
       overflow-x: hidden; 
       -webkit-font-smoothing: antialiased;
+      /* OPTIMIZACIÓN GPU PARA SCROLL GENERAL */
+      overscroll-behavior-y: none;
     }
 
-    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) --- */
+    /* --- ESTILOS DE UNIÓN INFINITA (SEAMLESS) CON ACELERACIÓN GPU --- */
     section { 
       min-height: 100vh; 
       display: flex; 
@@ -43,6 +45,12 @@
       
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+      
+      /* ACELERACIÓN POR HARDWARE: Evita tirones al procesar el filtro de máscara */
+      transform: translateZ(0);
+      backface-visibility: hidden;
+      perspective: 1000px;
+      will-change: transform;
     }
 
     /* --- PORTADA CENTRADA TOTALMENTE --- */
@@ -74,7 +82,7 @@
       z-index: 1; 
     }
 
-    /* --- NUBE DIFUMINADA EXTREMA (SIN BORDES FÍSICOS) --- */
+    /* --- NUBE DIFUMINADA EXTREMA --- */
     .glass-card {
       background: transparent; 
       border: none; 
@@ -87,6 +95,8 @@
       text-align: center;
       backdrop-filter: none !important; 
       -webkit-backdrop-filter: none !important; 
+      /* ACELERACIÓN GPU */
+      transform: translateZ(0);
     }
     
     .glass-card::before {
@@ -250,9 +260,11 @@
       width: 100%;
       margin-top: 25px;
       overflow: hidden;
+      /* GPU ACELERACIÓN PARA CAROUSEL */
+      transform: translateZ(0);
     }
 
-    .carousel-track { display: flex; padding: 20px 0; gap: 15px; }
+    .carousel-track { display: flex; padding: 20px 0; gap: 15px; will-change: transform; }
 
     .carousel-track img { 
       width: 250px !important; 
@@ -263,6 +275,7 @@
       flex-shrink: 0;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
       cursor: pointer;
+      /* Removido el lazy-load intrusivo de las imágenes pesadas para evitar saltos */
     }
 
     .carousel-btn {
@@ -386,7 +399,15 @@
       transform: scale(0.95);
     }
 
-    .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; position: relative; z-index: 20; }
+    /* REVEAL CON OPTIMIZACIÓN DEL NAVEGADOR */
+    .reveal { 
+      opacity: 0; 
+      transform: translateY(30px); 
+      transition: 1s ease-out; 
+      position: relative; 
+      z-index: 20; 
+      will-change: opacity, transform; /* Le avisa al celular que esto se va a mover */
+    }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* ==============================================================
@@ -493,11 +514,11 @@
       <div class="carousel-container">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
         <div class="carousel-track" id="carouselTrack">
-          <img src="Foto1.jpg" alt="1" loading="lazy">
-          <img src="Foto2.jpg" alt="2" loading="lazy">
-          <img src="Foto3.jpg" alt="3" loading="lazy">
-          <img src="Foto4.jpg" alt="4" loading="lazy">
-          <img src="Foto5.jpg" alt="5" loading="lazy">
+          <img src="Foto1.jpg" alt="1">
+          <img src="Foto2.jpg" alt="2">
+          <img src="Foto3.jpg" alt="3">
+          <img src="Foto4.jpg" alt="4">
+          <img src="Foto5.jpg" alt="5">
         </div>
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
@@ -512,7 +533,7 @@
       
       <div class="vestimenta-col-left">
         <div class="floating-text vestimenta-quote">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio..."</div>
-        <img src="vestimenta1.jpeg" alt="Ejemplos de Vestimenta" class="vestimenta-img" loading="lazy">
+        <img src="vestimenta1.jpeg" alt="Ejemplos de Vestimenta" class="vestimenta-img">
       </div>
       
       <div class="vestimenta-col-right">
@@ -521,7 +542,7 @@
           <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
           <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta.</p>
           <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
-          <img src="paleta.png" alt="Paleta de Colores" class="paleta-img" loading="lazy">
+          <img src="paleta.png" alt="Paleta de Colores" class="paleta-img">
         </div>
       </div>
 
@@ -554,7 +575,7 @@
       <h2>Tus Fotos</h2>
       <p>Escanea este código QR o toca el botón para subir todas las fotos y videos que tomes durante la celebración.</p>
       <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="qr-link">
-        <img src="QRNUEVO.png" alt="QR Photos" loading="lazy">
+        <img src="QRNUEVO.png" alt="QR Photos">
       </a>
       <br>
       <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="btn">Subir Fotos Directamente</a>
@@ -596,7 +617,6 @@
     const urlParams = new URLSearchParams(window.location.search);
     const codigoInvitado = urlParams.get('c'); 
 
-    // OPTIMIZACIÓN: Cambiado de 'load' a 'DOMContentLoaded' para que los datos carguen antes de esperar las fotos
     document.addEventListener('DOMContentLoaded', async () => {
         if (!codigoInvitado) {
             document.getElementById('nombre-invitado').innerText = "Invitado Especial";
