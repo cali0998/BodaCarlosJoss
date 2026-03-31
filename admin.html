@@ -6,193 +6,192 @@
   <title>Galería • Carlos & Joselyn 💍</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
-    :root { --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24; --glass: rgba(255, 255, 255, 0.08); }
+    :root { --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24; --glass: rgba(255, 255, 255, 0.1); }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     
     body { 
       margin: 0; font-family: 'Poppins', sans-serif; 
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); 
       background-attachment: fixed; color: white; min-height: 100vh; 
-      display: flex; flex-direction: column; align-items: center; 
     }
     
     header { 
-      width: 100%; padding: 30px 20px; text-align: center; 
-      background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(197, 157, 95, 0.3); position: sticky; top: 0; z-index: 1000; 
+      padding: 25px 20px; text-align: center; background: rgba(0,0,0,0.5); 
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border-bottom: 1px solid rgba(197, 157, 95, 0.3); position: sticky; top: 0; z-index: 100;
     }
     
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); margin: 0; font-size: 2.2rem; }
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); margin: 0; font-size: 1.8rem; letter-spacing: 1px; }
     
     #gallery { 
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-      gap: 12px; padding: 25px 15px; width: 100%; max-width: 800px; 
+      display: grid; grid-template-columns: repeat(3, 1fr); 
+      gap: 8px; padding: 15px; max-width: 900px; margin: 0 auto; 
     }
     
     .media-card { 
-      position: relative; aspect-ratio: 1/1; background: var(--glass); 
-      border-radius: 16px; overflow: hidden; border: 1px solid rgba(197, 157, 95, 0.15); 
-      cursor: pointer; transform: translateZ(0);
+      aspect-ratio: 1/1; background: var(--glass); border-radius: 12px; 
+      overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05);
     }
 
-    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; }
     
-    .play-icon { 
-      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-      background: rgba(0,0,0,0.6); border-radius: 50%; width: 40px; height: 40px; 
-      display: flex; align-items: center; justify-content: center; color: white;
+    /* BOTÓN ACTUALIZAR FLOTANTE */
+    .btn-update {
+      position: fixed; bottom: 30px; right: 20px; background: var(--gold);
+      width: 55px; height: 55px; border-radius: 50%; border: none;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 999;
+      display: flex; align-items: center; justify-content: center; color: white; cursor: pointer;
     }
-    
-    /* --- LIGHTBOX --- */
+    .btn-update svg { width: 25px; transition: transform 0.5s ease; }
+    .btn-update:active svg { transform: rotate(360deg); }
+
+    /* LIGHTBOX / MODAL */
     .modal {
-      display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.98); backdrop-filter: blur(15px);
+      display: none; position: fixed; inset: 0; z-index: 9999;
+      background: rgba(0,0,0,0.97); backdrop-filter: blur(10px);
       align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s ease;
     }
-    .modal.show { opacity: 1; }
-    .modal-media { max-width: 100%; max-height: 85vh; object-fit: contain; animation: zoomIn 0.2s ease-out; }
+    .modal.show { opacity: 1; display: flex; }
 
-    @keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    #modal-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+    .modal-media { max-width: 100%; max-height: 85vh; object-fit: contain; box-shadow: 0 0 30px rgba(0,0,0,0.5); }
 
+    /* BOTONES NAVEGACIÓN MEJORADOS */
     .nav-btn {
-      position: absolute; bottom: 40px; background: var(--gold); color: white; border: none; 
-      width: 65px; height: 55px; border-radius: 12px; cursor: pointer; z-index: 10001;
-      display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: absolute; bottom: 40px; background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2); color: white; width: 60px; height: 50px;
+      border-radius: 12px; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center;
     }
-    .nav-prev { left: 20px; }
-    .nav-next { right: 20px; }
-
+    .prev { left: 20px; }
+    .next { right: 20px; }
+    
     @media (min-width: 600px) {
-      .nav-btn { top: 50%; bottom: auto; transform: translateY(-50%); width: 60px; height: 60px; border-radius: 50%; }
+      .nav-btn { top: 50%; bottom: auto; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 50%; }
+      .prev { left: 30px; } .next { right: 30px; }
+      #gallery { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
     }
 
-    .media-counter { position: absolute; bottom: 55px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; opacity: 0.6; letter-spacing: 2px; }
-    .close-modal { position: absolute; top: 25px; right: 25px; color: white; font-size: 45px; cursor: pointer; z-index: 10002; }
+    .close-modal { position: absolute; top: 25px; right: 20px; font-size: 40px; color: white; z-index: 11; line-height: 1; }
+    .counter-text { position: absolute; bottom: 55px; font-size: 12px; opacity: 0.6; letter-spacing: 2px; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Recuerdos</h1>
-  <div id="counter" style="font-size:11px; margin-top:5px; opacity:0.7;">SINCRONIZANDO...</div>
+  <h1>Nuestra Boda</h1>
+  <div id="status" style="font-size: 10px; opacity: 0.6; margin-top: 5px;">CARGANDO RECUERDOS...</div>
 </header>
 
 <div id="gallery"></div>
 
+<button class="btn-update" onclick="loadGallery()" title="Actualizar fotos">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+</button>
+
 <div id="mediaModal" class="modal">
   <span class="close-modal" onclick="closeModal()">&times;</span>
-  <button class="nav-btn nav-prev" onclick="changeMedia(-1, event)">&#10094;</button>
-  <div id="modal-body" onclick="closeModal()" style="width:100%; height:100%; display:flex; align-items:center; justify-content:center;"></div>
-  <button class="nav-btn nav-next" onclick="changeMedia(1, event)">&#10095;</button>
-  <div id="media-position" class="media-counter"></div>
+  <div id="modal-content">
+    <button class="nav-btn prev" onclick="move(-1, event)">&#10094;</button>
+    <div id="media-container" style="width:100%; display:flex; justify-content:center;"></div>
+    <button class="nav-btn next" onclick="move(1, event)">&#10095;</button>
+    <div class="counter-text" id="modal-counter"></div>
+  </div>
 </div>
 
 <script>
   const cloudName = "dhruy6ftj";
-  const tagBoda = "boda_carlos_y_joss";
-  let globalMediaList = [];
-  let currentMediaIndex = 0;
+  const tag = "boda_carlos_y_joss";
+  let items = [];
+  let currentIndex = 0;
 
   async function loadGallery() {
+    const status = document.getElementById('status');
+    status.innerText = "BUSCANDO NUEVAS FOTOS...";
+    
     try {
-      const ts = Date.now();
-      const [imgs, vids] = await Promise.allSettled([
-        fetch(`https://res.cloudinary.com/${cloudName}/image/list/v${ts}/${tagBoda}.json`).then(r => r.json()),
-        fetch(`https://res.cloudinary.com/${cloudName}/video/list/v${ts}/${tagBoda}.json`).then(r => r.json())
+      const [imgRes, vidRes] = await Promise.all([
+        fetch(`https://res.cloudinary.com/${cloudName}/image/list/v${Date.now()}/${tag}.json`).then(r => r.json()),
+        fetch(`https://res.cloudinary.com/${cloudName}/video/list/v${Date.now()}/${tag}.json`).then(r => r.json()).catch(() => ({resources:[]}))
       ]);
 
-      let res = [];
-      if(imgs.status === 'fulfilled') res = res.concat(imgs.value.resources || []);
-      if(vids.status === 'fulfilled') res = res.concat(vids.value.resources || []);
-
-      globalMediaList = res.sort((a,b) => b.version - a.version).map(m => {
-        const isVid = m.format && ['mp4','mov','webm'].includes(m.format.toLowerCase());
+      const all = [...(imgRes.resources || []), ...(vidRes.resources || [])];
+      items = all.sort((a,b) => b.version - a.version).map(m => {
+        const isVid = ['mp4','mov','webm'].includes(m.format.toLowerCase());
         const type = isVid ? 'video' : 'image';
         return {
           isVid,
-          // Miniatura ultra-optimizada
-          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_300,h_300,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${m.format}`,
-          // Foto grande balanceada (1080px es suficiente para móvil)
-          full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,q_auto:good,f_auto/v${m.version}/${m.public_id}.${m.format}`
+          // Miniatura rápida
+          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_300,h_300,g_auto,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
+          // Foto grande balanceada
+          full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1200,f_auto,q_auto:good/v${m.version}/${m.public_id}.${m.format}`,
+          // Original por si falla la optimizada
+          original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`
         };
       });
 
-      renderGallery();
-      // Pre-cargar las primeras 5 fotos grandes inmediatamente
-      preloadImages(0, 5);
-    } catch (e) { document.getElementById("counter").innerText = "Error"; }
+      render();
+      status.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
+    } catch (e) { status.innerText = "CONEXIÓN LENTA - REINTENTANDO..."; }
   }
 
-  function renderGallery() {
-    const gallery = document.getElementById("gallery");
-    gallery.innerHTML = "";
-    document.getElementById("counter").innerText = `${globalMediaList.length} RECUERDOS`;
-
-    globalMediaList.forEach((m, i) => {
-      const div = document.createElement("div");
-      div.className = "media-card";
-      if(m.isVid) {
-        div.innerHTML = `<video src="${m.thumb}" muted loop playsinline autoplay></video><div class="play-icon">▶</div>`;
-      } else {
-        div.innerHTML = `<img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}">`;
-      }
-      div.onclick = () => openModal(i);
-      gallery.appendChild(div);
-    });
+  function render() {
+    const container = document.getElementById('gallery');
+    container.innerHTML = items.map((m, i) => `
+      <div class="media-card" onclick="openModal(${i})">
+        ${m.isVid ? `<video src="${m.thumb}" muted loop playsinline autoplay></video>` : `<img src="${m.thumb}" loading="lazy">`}
+      </div>
+    `).join('');
   }
 
-  function preloadImages(start, count) {
-      for(let i=start; i < start + count && i < globalMediaList.length; i++) {
-          if(!globalMediaList[i].isVid) {
-              const img = new Image(); img.src = globalMediaList[i].full;
-          }
-      }
-  }
-
-  function openModal(index) {
-    currentMediaIndex = index;
+  function openModal(i) {
+    currentIndex = i;
     const modal = document.getElementById('mediaModal');
-    modal.style.display = 'flex';
-    renderMedia();
-    setTimeout(() => modal.classList.add('show'), 10);
+    modal.classList.add('show');
+    showMedia();
   }
 
-  function renderMedia() {
-    const body = document.getElementById('modal-body');
-    const media = globalMediaList[currentMediaIndex];
-    body.innerHTML = media.isVid ? 
-      `<video class="modal-media" src="${media.full}" controls autoplay playsinline></video>` : 
-      `<img class="modal-media" src="${media.full}">`;
+  function showMedia() {
+    const container = document.getElementById('media-container');
+    const counter = document.getElementById('modal-counter');
+    const m = items[currentIndex];
     
-    document.getElementById('media-position').innerText = `${currentMediaIndex + 1} / ${globalMediaList.length}`;
-    // Pre-cargar la siguiente y la anterior para fluidez total
-    preloadImages(currentMediaIndex + 1, 1);
-    preloadImages(currentMediaIndex - 1, 1);
+    container.innerHTML = m.isVid ? 
+      `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'"></video>` :
+      `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'">`;
+    
+    counter.innerText = `${currentIndex + 1} / ${items.length}`;
+    
+    // Precarga inteligente de la siguiente
+    const next = items[(currentIndex + 1) % items.length];
+    if(!next.isVid) { const img = new Image(); img.src = next.full; }
   }
 
-  function changeMedia(dir, e) {
+  function move(dir, e) {
     if(e) e.stopPropagation();
-    currentMediaIndex = (currentMediaIndex + dir + globalMediaList.length) % globalMediaList.length;
-    renderMedia();
+    currentIndex = (currentIndex + dir + items.length) % items.length;
+    showMedia();
   }
 
   function closeModal() {
-    const modal = document.getElementById('mediaModal');
-    modal.classList.remove('show');
-    setTimeout(() => { modal.style.display = 'none'; document.getElementById('modal-body').innerHTML = ''; }, 200);
+    document.getElementById('mediaModal').classList.remove('show');
+    document.getElementById('media-container').innerHTML = '';
   }
 
-  // Deslizar con el dedo
-  let sX = 0;
-  document.addEventListener('touchstart', e => sX = e.touches[0].clientX);
+  // Cerrar al tocar fondo
+  document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
+
+  // Deslizar (Swipe)
+  let touchX = 0;
+  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX);
   document.addEventListener('touchend', e => {
     if(!document.getElementById('mediaModal').classList.contains('show')) return;
-    let d = sX - e.changedTouches[0].clientX;
-    if(Math.abs(d) > 60) changeMedia(d > 0 ? 1 : -1);
+    const diff = touchX - e.changedTouches[0].clientX;
+    if(Math.abs(diff) > 50) move(diff > 0 ? 1 : -1);
   });
 
   window.onload = loadGallery;
+  // Auto-actualizar cada 60 segundos por si suben fotos nuevas
+  setInterval(loadGallery, 60000);
 </script>
 </body>
 </html>
