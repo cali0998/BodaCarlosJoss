@@ -32,18 +32,18 @@
     .media-card { 
       position: relative; aspect-ratio: 1/1; background: var(--glass); 
       border-radius: 16px; overflow: hidden; border: 1px solid rgba(197, 157, 95, 0.15); 
-      cursor: pointer; transition: transform 0.3s ease; 
+      cursor: pointer; 
     }
 
-    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; }
+    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
     
     .play-icon { 
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
       background: rgba(0,0,0,0.6); border-radius: 50%; width: 40px; height: 40px; 
-      display: flex; align-items: center; justify-content: center; pointer-events: none; 
+      display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem;
     }
     
-    /* --- LIGHTBOX MEJORADO --- */
+    /* --- LIGHTBOX --- */
     .modal {
       display: none; position: fixed; z-index: 9999; left: 0; top: 0; width: 100%; height: 100%;
       background-color: rgba(0, 0, 0, 0.95); backdrop-filter: blur(10px);
@@ -52,10 +52,9 @@
     .modal.show { opacity: 1; }
     .modal-media { max-width: 100%; max-height: 80vh; object-fit: contain; }
 
-    /* BOTONES VISIBLES EN CELULAR */
     .nav-btn {
       position: absolute; bottom: 30px;
-      background: rgba(197, 157, 95, 0.9); color: white; border: none; 
+      background: var(--gold); color: white; border: none; 
       width: 60px; height: 50px; border-radius: 10px; cursor: pointer; z-index: 10001;
       display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
     }
@@ -69,7 +68,7 @@
     }
 
     .media-counter {
-      position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+      position: absolute; bottom: 45px; left: 50%; transform: translateX(-50%);
       font-size: 0.8rem; letter-spacing: 2px; opacity: 0.8;
     }
 
@@ -80,7 +79,7 @@
 
 <header>
   <h1>Nuestros Recuerdos</h1>
-  <div id="counter" style="font-size:11px; margin-top:5px; opacity:0.7;">CARGANDO...</div>
+  <div id="counter" style="font-size:11px; margin-top:5px; opacity:0.7;">Sincronizando...</div>
 </header>
 
 <div id="gallery"></div>
@@ -101,29 +100,45 @@
 
   async function loadGallery() {
     try {
-      const [imgRes, vidRes] = await Promise.all([
-        fetch(`https://res.cloudinary.com/${cloudName}/image/list/v${Date.now()}/${tagBoda}.json`),
-        fetch(`https://res.cloudinary.com/${cloudName}/video/list/v${Date.now()}/${tagBoda}.json`)
-      ]);
+      // Cargamos imágenes y videos de forma independiente para evitar bloqueos
+      const imgUrl = `https://res.cloudinary.com/${cloudName}/image/list/v${Date.now()}/${tagBoda}.json`;
+      const vidUrl = `https://res.cloudinary.com/${cloudName}/video/list/v${Date.now()}/${tagBoda}.json`;
 
       let resources = [];
-      const imgData = await imgRes.json(); resources = resources.concat(imgData.resources || []);
-      const vidData = await vidRes.json(); resources = resources.concat(vidData.resources || []);
+
+      const fetchList = async (url) => {
+        const res = await fetch(url);
+        if (res.ok) {
+          const data = await res.json();
+          return data.resources || [];
+        }
+        return [];
+      };
+
+      const [imgs, vids] = await Promise.allSettled([fetchList(imgUrl), fetchList(vidUrl)]);
+      
+      if (imgs.status === 'fulfilled') resources = resources.concat(imgs.value);
+      if (vids.status === 'fulfilled') resources = resources.concat(vids.value);
+
+      if (resources.length === 0) {
+          document.getElementById("counter").innerText = "¡Esperando la primera foto!";
+          return;
+      }
 
       globalMediaList = resources.sort((a,b) => b.version - a.version).map(m => {
-        const isVid = m.format && ['mp4','mov','webm'].includes(m.format.toLowerCase());
+        const isVid = m.format && ['mp4','mov','webm','avi'].includes(m.format.toLowerCase());
         const type = isVid ? 'video' : 'image';
         return {
           isVid,
-          // Optimizamos miniaturas (f_auto, q_auto, ancho 400)
-          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_fill,w_400,h_400,g_auto,q_auto,f_auto/v${m.version}/${m.public_id}.${m.format}`,
-          // Optimizamos foto grande (limite 1600px para que no pese nada)
+          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_fill,w_350,h_350,g_auto,q_auto,f_auto/v${m.version}/${m.public_id}.${m.format}`,
           full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1600,q_auto,f_auto/v${m.version}/${m.public_id}.${m.format}`
         };
       });
 
       renderGallery();
-    } catch (e) { console.error(e); }
+    } catch (e) { 
+      document.getElementById("counter").innerText = "Error de conexión";
+    }
   }
 
   function renderGallery() {
@@ -134,13 +149,11 @@
     globalMediaList.forEach((media, i) => {
       const div = document.createElement("div");
       div.className = "media-card";
-      // Lazy loading nativo: las primeras 12 cargan ya, las otras después
-      const loadingType = i < 12 ? 'eager' : 'lazy';
       
       if(media.isVid) {
         div.innerHTML = `<video src="${media.thumb}" muted loop playsinline autoplay></video><div class="play-icon">▶</div>`;
       } else {
-        div.innerHTML = `<img src="${media.thumb}" loading="${loadingType}">`;
+        div.innerHTML = `<img src="${media.thumb}" loading="lazy">`;
       }
       div.onclick = () => openModal(i);
       gallery.appendChild(div);
@@ -162,25 +175,17 @@
     
     setTimeout(() => {
       if(media.isVid) {
-        body.innerHTML = `<video class="modal-media" src="${media.full}" controls autoplay></video>`;
+        body.innerHTML = `<video class="modal-media" src="${media.full}" controls autoplay playsinline></video>`;
       } else {
         body.innerHTML = `<img class="modal-media" src="${media.full}">`;
       }
       document.getElementById('media-position').innerText = `${currentMediaIndex + 1} / ${globalMediaList.length}`;
       body.style.opacity = "1";
-      preloadNext();
     }, 100);
   }
 
-  function preloadNext() {
-    let next = (currentMediaIndex + 1) % globalMediaList.length;
-    if(!globalMediaList[next].isVid) {
-      const img = new Image(); img.src = globalMediaList[next].full;
-    }
-  }
-
   function changeMedia(dir, e) {
-    e.stopPropagation();
+    if(e) e.stopPropagation();
     currentMediaIndex = (currentMediaIndex + dir + globalMediaList.length) % globalMediaList.length;
     renderMedia();
   }
@@ -191,16 +196,16 @@
     setTimeout(() => { modal.style.display = 'none'; document.getElementById('modal-body').innerHTML = ''; }, 300);
   }
 
-  // Soporte para deslizar (Swipe)
+  // Swipe para celular
   let startX = 0;
   document.getElementById('mediaModal').addEventListener('touchstart', e => startX = e.touches[0].clientX);
   document.getElementById('mediaModal').addEventListener('touchend', e => {
     let diff = startX - e.changedTouches[0].clientX;
-    if(Math.abs(diff) > 50) changeMedia(diff > 0 ? 1 : -1, e);
+    if(Math.abs(diff) > 50) changeMedia(diff > 0 ? 1 : -1);
   });
 
   window.onload = loadGallery;
-  setInterval(loadGallery, 60000); // Recarga cada minuto para ver fotos nuevas
+  setInterval(loadGallery, 30000);
 </script>
 </body>
 </html>
