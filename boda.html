@@ -308,7 +308,7 @@
       font-size: 1.6rem;
       cursor: pointer;
       z-index: 10001;
-      display: none; /* Se ocultan por defecto, se muestran mediante JS */
+      display: none;
       align-items: center;
       justify-content: center;
       transition: background 0.3s ease;
@@ -340,6 +340,11 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.5); 
       cursor: pointer; 
       border: none; 
+      transition: background 0.3s, transform 0.2s;
+    }
+    
+    .btn:active {
+      transform: scale(0.95);
     }
 
     .reveal { opacity: 0; transform: translateY(30px); transition: 1s ease-out; position: relative; z-index: 20; }
@@ -511,7 +516,10 @@
       <p>Tu presencia completará este momento tan mágico y significativo en nuestras vidas.</p>
       <p style="font-family: 'Playfair Display', serif; font-style: italic; color: var(--gold); font-size: 1.5rem; margin-top: 20px;">Con todo nuestro amor,<br>Carlos & Joselyn</p>
       
-      <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn" style="display: none;">Confirmar Asistencia ✅</button>
+      <div id="contenedor-botones" style="display: none; justify-content: center; gap: 15px; flex-wrap: wrap; margin-top: 20px;">
+        <button id="btn-confirmar" onclick="confirmarAsistenciaSupabase()" class="btn" style="margin-top: 0;">Confirmar Asistencia ✅</button>
+        <button id="btn-declinar" onclick="declinarAsistenciaSupabase()" class="btn" style="margin-top: 0; background: #e74c3c;">No podré asistir ❌</button>
+      </div>
 
     </div>
     <div class="floating-text reveal">"¡Te esperamos para celebrar juntos el inicio de nuestro viaje de amor!"</div>
@@ -552,13 +560,23 @@
                 document.getElementById('nombre-invitado').innerText = data[0].nombre;
                 document.getElementById('pases-invitado').innerText = `Pases Reservados: ${data[0].pases}`;
                 
-                // Mostramos el botón de confirmar y vemos si ya había confirmado antes
-                const btn = document.getElementById('btn-confirmar');
-                btn.style.display = 'inline-block';
-                if(data[0].estado.includes('Confirmado')) {
-                    btn.innerText = "¡Ya Confirmaste! 🎉";
-                    btn.style.background = "#2ecc71";
-                    btn.style.pointerEvents = "none";
+                // Mostramos los botones
+                const contenedorBotones = document.getElementById('contenedor-botones');
+                const btnConfirmar = document.getElementById('btn-confirmar');
+                const btnDeclinar = document.getElementById('btn-declinar');
+                
+                contenedorBotones.style.display = 'flex';
+                
+                if(data[0].estado && data[0].estado.includes('Confirmado')) {
+                    btnConfirmar.innerText = "¡Ya Confirmaste! 🎉";
+                    btnConfirmar.style.background = "#2ecc71";
+                    btnConfirmar.style.pointerEvents = "none";
+                    btnDeclinar.style.display = "none"; 
+                } else if (data[0].estado && data[0].estado.includes('Declinado')) {
+                    btnDeclinar.innerText = "Asistencia Declinada";
+                    btnDeclinar.style.background = "#95a5a6"; 
+                    btnDeclinar.style.pointerEvents = "none";
+                    btnConfirmar.style.display = "none"; 
                 }
             } else {
                 document.getElementById('nombre-invitado').innerText = "Invitación no encontrada";
@@ -568,17 +586,19 @@
         }
     });
 
-    // --- AL TOCAR BOTÓN: ACTUALIZAR SUPABASE ---
+    // --- AL TOCAR BOTÓN: CONFIRMAR ---
     async function confirmarAsistenciaSupabase() {
         if(!codigoInvitado) return;
         
-        const btn = document.getElementById('btn-confirmar');
-        btn.innerText = "Confirmando...";
-        btn.style.pointerEvents = "none";
-        btn.style.opacity = "0.7";
+        const btnConfirmar = document.getElementById('btn-confirmar');
+        const btnDeclinar = document.getElementById('btn-declinar');
+        
+        btnConfirmar.innerText = "Confirmando...";
+        btnConfirmar.style.pointerEvents = "none";
+        btnConfirmar.style.opacity = "0.7";
+        btnDeclinar.style.pointerEvents = "none";
 
         try {
-            // Actualizamos usando el código secreto
             const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, {
                 method: 'PATCH',
                 headers: {
@@ -591,18 +611,64 @@
             });
 
             if(response.ok) {
-                btn.innerText = "¡Asistencia Confirmada! 🎉";
-                btn.style.background = "#2ecc71"; 
-                btn.style.opacity = "1";
+                btnConfirmar.innerText = "¡Asistencia Confirmada! 🎉";
+                btnConfirmar.style.background = "#2ecc71"; 
+                btnConfirmar.style.opacity = "1";
+                btnDeclinar.style.display = "none"; 
             } else {
-                btn.innerText = "Error. Toca para reintentar";
-                btn.style.pointerEvents = "auto";
-                btn.style.opacity = "1";
+                btnConfirmar.innerText = "Error. Toca para reintentar";
+                btnConfirmar.style.pointerEvents = "auto";
+                btnConfirmar.style.opacity = "1";
+                btnDeclinar.style.pointerEvents = "auto";
             }
         } catch (error) {
-            btn.innerText = "Error de conexión. Reintentar";
-            btn.style.pointerEvents = "auto";
-            btn.style.opacity = "1";
+            btnConfirmar.innerText = "Error de conexión. Reintentar";
+            btnConfirmar.style.pointerEvents = "auto";
+            btnConfirmar.style.opacity = "1";
+            btnDeclinar.style.pointerEvents = "auto";
+        }
+    }
+
+    // --- AL TOCAR BOTÓN: DECLINAR ---
+    async function declinarAsistenciaSupabase() {
+        if(!codigoInvitado) return;
+        
+        const btnConfirmar = document.getElementById('btn-confirmar');
+        const btnDeclinar = document.getElementById('btn-declinar');
+        
+        btnDeclinar.innerText = "Procesando...";
+        btnDeclinar.style.pointerEvents = "none";
+        btnDeclinar.style.opacity = "0.7";
+        btnConfirmar.style.pointerEvents = "none"; 
+
+        try {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?codigo=eq.${codigoInvitado}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'apikey': SUPABASE_KEY,
+                    'Authorization': `Bearer ${SUPABASE_KEY}`,
+                    'Prefer': 'return=minimal'
+                },
+                body: JSON.stringify({ estado: 'Declinado ❌' })
+            });
+
+            if(response.ok) {
+                btnDeclinar.innerText = "Asistencia Declinada";
+                btnDeclinar.style.background = "#95a5a6"; 
+                btnDeclinar.style.opacity = "1";
+                btnConfirmar.style.display = "none"; 
+            } else {
+                btnDeclinar.innerText = "Error. Toca para reintentar";
+                btnDeclinar.style.pointerEvents = "auto";
+                btnDeclinar.style.opacity = "1";
+                btnConfirmar.style.pointerEvents = "auto";
+            }
+        } catch (error) {
+            btnDeclinar.innerText = "Error de conexión. Reintentar";
+            btnDeclinar.style.pointerEvents = "auto";
+            btnDeclinar.style.opacity = "1";
+            btnConfirmar.style.pointerEvents = "auto";
         }
     }
 
