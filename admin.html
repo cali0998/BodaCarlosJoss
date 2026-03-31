@@ -4,20 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Galería • Carlos & Joselyn 💍</title>
+  
+  <link rel="preconnect" href="https://res.cloudinary.com">
+  <link rel="dns-prefetch" href="https://res.cloudinary.com">
+  
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
   <style>
-    :root { --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24; --glass: rgba(255, 255, 255, 0.1); }
-    
-    /* Prevenimos cualquier tirón de scroll */
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    :root { --gold: #c59d5f; --wine: #4a0a16; --jade: #0a2e24; --glass: rgba(255, 255, 255, 0.08); }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     
     body { 
-      margin: 0; font-family: 'Poppins', sans-serif; 
+      font-family: 'Poppins', sans-serif; 
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); 
       background-attachment: fixed; color: white; min-height: 100vh;
-      /* Optimización de renderizado */
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
     }
     
     header { 
@@ -26,26 +27,25 @@
       border-bottom: 1px solid rgba(197, 157, 95, 0.3); position: sticky; top: 0; z-index: 100;
     }
     
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); margin: 0; font-size: 1.8rem; }
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; }
     
     #gallery { 
       display: grid; 
-      /* Ajuste dinámico según pantalla: 3 columnas en cel, más en PC */
-      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); 
-      gap: 8px; padding: 15px; max-width: 1000px; margin: 0 auto;
-      /* Mejora fluidez de GPU */
-      transform: translateZ(0);
+      grid-template-columns: repeat(3, 1fr); 
+      gap: 5px; padding: 10px; max-width: 900px; margin: 0 auto;
+      /* Fuerza a la GPU a renderizar suave */
+      transform: translateZ(0); 
     }
     
     .media-card { 
-      aspect-ratio: 1/1; background: var(--glass); border-radius: 12px; 
-      overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05);
-      /* Evita recálculos de diseño al cargar */
+      aspect-ratio: 1/1; background: var(--glass); border-radius: 8px; 
+      overflow: hidden; position: relative;
+      /* No calcula el diseño hasta que es necesario */
       content-visibility: auto;
-      contain-intrinsic-size: 110px 110px;
+      contain-intrinsic-size: 100px 100px;
     }
 
-    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; }
+    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
     
     .btn-update {
       position: fixed; bottom: 30px; right: 20px; background: var(--gold);
@@ -54,26 +54,25 @@
       display: flex; align-items: center; justify-content: center; color: white;
     }
 
-    /* LIGHTBOX FLUIDO */
+    /* MODAL ULTRA RÁPIDO */
     .modal {
       display: none; position: fixed; inset: 0; z-index: 9999;
-      background: rgba(0,0,0,0.98); backdrop-filter: blur(12px);
+      background: rgba(0,0,0,0.98); backdrop-filter: blur(10px);
       align-items: center; justify-content: center; opacity: 0; 
-      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.2s ease-out;
     }
     .modal.show { opacity: 1; display: flex; }
 
     #modal-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
     .modal-media { 
-      max-width: 100%; max-height: 85vh; object-fit: contain; 
-      /* Aceleración por hardware para la transición */
+      max-width: 100%; max-height: 80vh; object-fit: contain; 
       transform: translateZ(0);
       will-change: transform, opacity;
     }
 
     .nav-btn {
-      position: absolute; bottom: 40px; background: rgba(255,255,255,0.15);
-      border: 1px solid rgba(255,255,255,0.2); color: white; width: 60px; height: 50px;
+      position: absolute; bottom: 40px; background: rgba(197, 157, 95, 0.8);
+      color: white; width: 60px; height: 50px; border: none;
       border-radius: 12px; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center;
     }
     .prev { left: 20px; } .next { right: 20px; }
@@ -85,14 +84,14 @@
     }
 
     .close-modal { position: absolute; top: 25px; right: 20px; font-size: 40px; color: white; z-index: 11; }
-    .counter-text { position: absolute; bottom: 55px; font-size: 12px; opacity: 0.6; letter-spacing: 2px; }
+    .counter-text { position: absolute; bottom: 55px; font-size: 11px; opacity: 0.5; letter-spacing: 2px; }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Nuestra Boda</h1>
-  <div id="status" style="font-size: 10px; opacity: 0.6; margin-top: 5px;">ACTUALIZANDO...</div>
+  <h1>Nuestros Recuerdos</h1>
+  <div id="status" style="font-size: 10px; opacity: 0.6; margin-top: 5px;">CONECTANDO...</div>
 </header>
 
 <div id="gallery"></div>
@@ -134,23 +133,24 @@
         const type = isVid ? 'video' : 'image';
         return {
           isVid,
-          // Optimizamos aún más el tamaño para velocidad de carga
-          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_300,h_300,g_auto,q_auto:eco,f_auto/v${m.version}/${m.public_id}.${m.format}`,
+          // Miniatura ULTRA COMPRIMIDA (q_auto:low)
+          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_300,h_300,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${m.format}`,
+          // Foto grande BALANCEADA (q_auto:eco)
           full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
           original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`
         };
       });
 
       render();
-      status.innerText = `${items.length} MOMENTOS`;
-    } catch (e) { status.innerText = "ERROR DE CARGA"; }
+      status.innerText = `${items.length} MOMENTOS CAPTURADOS`;
+    } catch (e) { status.innerText = "ESPERANDO FOTOS..."; }
   }
 
   function render() {
     const container = document.getElementById('gallery');
     container.innerHTML = items.map((m, i) => `
       <div class="media-card" onclick="openModal(${i})">
-        ${m.isVid ? `<video src="${m.thumb}" muted loop playsinline autoplay></video>` : `<img src="${m.thumb}" loading="lazy">`}
+        ${m.isVid ? `<video src="${m.thumb}" muted loop playsinline autoplay preload="none"></video>` : `<img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}" ${i < 6 ? 'fetchpriority="high"' : ''}>`}
       </div>
     `).join('');
   }
@@ -164,19 +164,23 @@
 
   function showMedia() {
     const container = document.getElementById('media-container');
-    const counter = document.getElementById('modal-counter');
     const m = items[currentIndex];
     
-    // Fallback inteligente para evitar pantallas en blanco
+    // Cambiamos el contenido pero precargamos el original como respaldo inmediato
     container.innerHTML = m.isVid ? 
       `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'"></video>` :
-      `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'">`;
+      `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">`;
     
-    counter.innerText = `${currentIndex + 1} / ${items.length}`;
+    document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
     
-    // Precarga la siguiente
-    const next = items[(currentIndex + 1) % items.length];
-    if(!next.isVid) { const img = new Image(); img.src = next.full; }
+    // Pre-carga agresiva de los dos vecinos
+    preload((currentIndex + 1) % items.length);
+    preload((currentIndex - 1 + items.length) % items.length);
+  }
+
+  function preload(idx) {
+    const m = items[idx];
+    if(m && !m.isVid) { const img = new Image(); img.src = m.full; }
   }
 
   function move(dir, e) {
@@ -192,7 +196,7 @@
 
   document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
 
-  // Swipe Optimizado (Passive: true)
+  // Swipe Optimizado
   let touchX = 0;
   document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive: true});
   document.addEventListener('touchend', e => {
@@ -200,14 +204,6 @@
     const diff = touchX - e.changedTouches[0].clientX;
     if(Math.abs(diff) > 50) move(diff > 0 ? 1 : -1);
   }, {passive: true});
-
-  // Teclado
-  document.addEventListener('keydown', e => {
-    if(!document.getElementById('mediaModal').classList.contains('show')) return;
-    if(e.key === 'ArrowRight') move(1);
-    if(e.key === 'ArrowLeft') move(-1);
-    if(e.key === 'Escape') closeModal();
-  });
 
   window.onload = loadGallery;
   setInterval(loadGallery, 60000);
