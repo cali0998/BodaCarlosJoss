@@ -1,12 +1,16 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>Boda Carlos & Joselyn</title>
   
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
+  <link rel="preload" as="image" href="Foto10.jpg">
+
   <style>
     :root {
       --gold: #c59d5f;
@@ -141,7 +145,7 @@
       margin-top: 25px;
       padding-top: 15px;
       border-top: 1px solid rgba(197, 157, 95, 0.3);
-      display: none; /* Oculto por defecto hasta que JS revise la base de datos */
+      display: none; 
     }
 
     /* --- CONTADOR --- */
@@ -489,11 +493,11 @@
       <div class="carousel-container">
         <button class="carousel-btn prev" id="prevBtn">&#10094;</button>
         <div class="carousel-track" id="carouselTrack">
-          <img src="Foto1.jpg" alt="1">
-          <img src="Foto2.jpg" alt="2">
-          <img src="Foto3.jpg" alt="3">
-          <img src="Foto4.jpg" alt="4">
-          <img src="Foto5.jpg" alt="5">
+          <img src="Foto1.jpg" alt="1" loading="lazy">
+          <img src="Foto2.jpg" alt="2" loading="lazy">
+          <img src="Foto3.jpg" alt="3" loading="lazy">
+          <img src="Foto4.jpg" alt="4" loading="lazy">
+          <img src="Foto5.jpg" alt="5" loading="lazy">
         </div>
         <button class="carousel-btn next" id="nextBtn">&#10095;</button>
       </div>
@@ -508,7 +512,7 @@
       
       <div class="vestimenta-col-left">
         <div class="floating-text vestimenta-quote">"Vístete de gala, alegría y amor. Tu presencia es el mejor accesorio..."</div>
-        <img src="vestimenta1.jpeg" alt="Ejemplos de Vestimenta" class="vestimenta-img">
+        <img src="vestimenta1.jpeg" alt="Ejemplos de Vestimenta" class="vestimenta-img" loading="lazy">
       </div>
       
       <div class="vestimenta-col-right">
@@ -517,7 +521,7 @@
           <p style="letter-spacing: 2px; font-weight: 600; color: var(--gold); font-size: 1.4rem;">FORMAL / ELEGANTE</p>
           <p>Queremos que te sientas espectacular y disfrutes al máximo de la fiesta.</p>
           <p style="font-size: 1rem; font-style: italic; opacity: 0.9;">Sugerimos Verde Jade y Vino.<br>Agradecemos evitar el color blanco.</p>
-          <img src="paleta.png" alt="Paleta de Colores" class="paleta-img">
+          <img src="paleta.png" alt="Paleta de Colores" class="paleta-img" loading="lazy">
         </div>
       </div>
 
@@ -550,7 +554,7 @@
       <h2>Tus Fotos</h2>
       <p>Escanea este código QR o toca el botón para subir todas las fotos y videos que tomes durante la celebración.</p>
       <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="qr-link">
-        <img src="QRNUEVO.png" alt="QR Photos">
+        <img src="QRNUEVO.png" alt="QR Photos" loading="lazy">
       </a>
       <br>
       <a href="https://cali0998.github.io/BodaCarlosJoss/index.html" target="_blank" class="btn">Subir Fotos Directamente</a>
@@ -592,7 +596,8 @@
     const urlParams = new URLSearchParams(window.location.search);
     const codigoInvitado = urlParams.get('c'); 
 
-    window.addEventListener('load', async () => {
+    // OPTIMIZACIÓN: Cambiado de 'load' a 'DOMContentLoaded' para que los datos carguen antes de esperar las fotos
+    document.addEventListener('DOMContentLoaded', async () => {
         if (!codigoInvitado) {
             document.getElementById('nombre-invitado').innerText = "Invitado Especial";
             return; 
@@ -608,8 +613,6 @@
                 document.getElementById('nombre-invitado').innerText = data[0].nombre;
                 document.getElementById('pases-invitado').innerText = `Pases Reservados: ${data[0].pases}`;
                 
-                // LÓGICA PARA MOSTRAR/OCULTAR MENSAJE DE NIÑOS
-                // Si la columna excepcion_ninos NO es verdadera, mostramos el mensaje.
                 if(data[0].excepcion_ninos !== true) {
                     document.getElementById('mensaje-ninos').style.display = 'block';
                 }
