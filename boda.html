@@ -37,9 +37,8 @@
       
       margin-top: -21vh; 
       
-      /* CORRECCIÓN: La máscara ahora empieza más abajo (90%) para no atrapar el texto */
-      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
     }
 
     /* --- PORTADA CENTRADA TOTALMENTE --- */
@@ -49,8 +48,8 @@
       align-items: center; 
       justify-content: center; 
       text-align: center;
-      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
     }
     
     .hero .reveal { margin: 0 auto; position: relative; z-index: 20; } 
@@ -66,16 +65,7 @@
     .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } 
     .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } 
     .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } 
-    
-    /* CORRECCIÓN: Ajuste de máscara en la sección final */
-    .seccion-final { 
-      z-index: 2; 
-      align-items: flex-end; 
-      justify-content: center; 
-      padding-right: 10%; 
-      -webkit-mask-image: linear-gradient(to top, black 90%, transparent 100%); 
-      mask-image: linear-gradient(to top, black 90%, transparent 100%); 
-    } 
+    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -126,13 +116,18 @@
       font-style: italic; 
       color: white;
       text-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 1),    
-        -2px -2px 5px rgba(0, 0, 0, 1),  
-        0px 0px 15px rgba(0, 0, 0, 0.8); 
+        2px 2px 5px rgba(0, 0, 0, 1),    /* Sombra dura */
+        -2px -2px 5px rgba(0, 0, 0, 1),  /* Sombra dura opuesta */
+        0px 0px 15px rgba(0, 0, 0, 0.8); /* Resplandor oscuro suave */
       line-height: 1.6;
       max-width: 90%;
       margin-left: auto;
       margin-right: auto;
+      /* CORRECCIÓN: Explicit transparency for zero borders */
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
     }
     
     .cita-biblica .referencia {
@@ -397,7 +392,6 @@
       section:not(.hero) {
         justify-content: flex-end !important;
         padding-top: 45vh !important; 
-        /* CORRECCIÓN: Padding aumentado a 12vh para subir el contenido y que escape del filtro difuminado */
         padding-bottom: 12vh !important; 
       }
       section:not(.hero) .overlay {
@@ -420,6 +414,13 @@
       .modal-nav { width: 40px; height: 40px; font-size: 1.2rem; }
       .modal-nav.prev { left: 10px; }
       .modal-nav.next { right: 10px; }
+
+      /* CORRECCIÓN: Asegurar limpieza estructural de la cita biblica */
+      .cita-biblica {
+          padding: 0;
+          background: transparent !important;
+          border: none !important;
+      }
     }
   </style>
 </head>
