@@ -270,9 +270,7 @@
       justify-content: center;
       flex-direction: column;
     }
-    .modal.show {
-      opacity: 1;
-    }
+    .modal.show { opacity: 1; }
     .modal-content {
       max-width: 90%;
       max-height: 85vh;
@@ -282,9 +280,7 @@
       transition: transform 0.3s ease;
       object-fit: contain;
     }
-    .modal.show .modal-content {
-      transform: scale(1);
-    }
+    .modal.show .modal-content { transform: scale(1); }
     .close-modal {
       position: absolute;
       top: 20px;
@@ -296,9 +292,30 @@
       transition: color 0.3s;
       z-index: 10000;
     }
-    .close-modal:hover {
-      color: var(--gold);
+    .close-modal:hover { color: var(--gold); }
+    
+    /* Flechas del Modal */
+    .modal-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(197, 157, 95, 0.8);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 1.6rem;
+      cursor: pointer;
+      z-index: 10001;
+      display: none; /* Se ocultan por defecto, se muestran mediante JS */
+      align-items: center;
+      justify-content: center;
+      transition: background 0.3s ease;
     }
+    .modal-nav:hover { background: rgba(197, 157, 95, 1); }
+    .modal-nav.prev { left: 20px; }
+    .modal-nav.next { right: 20px; }
 
     /* --- FONDOS Y ENCUADRES --- */
     .hero { background-image: url('Foto10.jpg'); background-position: center; }
@@ -359,6 +376,11 @@
       }
       h2 { font-size: 2.4rem; } p { font-size: 1.15rem; }
       .carousel-track img { width: 220px !important; height: 280px !important; } 
+      
+      /* Ajuste flechas en móvil */
+      .modal-nav { width: 40px; height: 40px; font-size: 1.2rem; }
+      .modal-nav.prev { left: 10px; }
+      .modal-nav.next { right: 10px; }
     }
   </style>
 </head>
@@ -497,7 +519,9 @@
 
   <div id="imageModal" class="modal">
     <span class="close-modal" id="closeModal">&times;</span>
+    <button class="modal-nav prev" id="modalPrev">&#10094;</button>
     <img class="modal-content" id="expandedImg">
+    <button class="modal-nav next" id="modalNext">&#10095;</button>
   </div>
 
   <script>
@@ -628,6 +652,10 @@
     const prevBtn = document.getElementById('prevBtn');
     const nextBtn = document.getElementById('nextBtn');
     const images = Array.from(track.querySelectorAll('img'));
+    
+    // Obtenemos las imágenes originales ANTES de clonarlas para la galería del Modal
+    const gallerySources = images.map(img => img.src);
+    
     const totalImages = images.length; 
     images.forEach(img => track.appendChild(img.cloneNode(true)));
     for (let i = totalImages - 1; i >= 0; i--) track.insertBefore(images[i].cloneNode(true), track.firstChild);
@@ -655,10 +683,25 @@
     const modal = document.getElementById('imageModal');
     const expandedImg = document.getElementById('expandedImg');
     const closeModalBtn = document.getElementById('closeModal');
+    const modalPrevBtn = document.getElementById('modalPrev');
+    const modalNextBtn = document.getElementById('modalNext');
+    let currentModalGalleryIndex = -1;
 
-    function openModal(src) {
+    function openModal(src, isGallery) {
       expandedImg.src = src;
       modal.style.display = 'flex';
+      
+      if (isGallery) {
+        // Encontramos la imagen en nuestro array original de galería
+        currentModalGalleryIndex = gallerySources.findIndex(url => url === src || url.endsWith(src.substring(src.lastIndexOf('/'))));
+        modalPrevBtn.style.display = 'flex';
+        modalNextBtn.style.display = 'flex';
+      } else {
+        currentModalGalleryIndex = -1;
+        modalPrevBtn.style.display = 'none';
+        modalNextBtn.style.display = 'none';
+      }
+
       // Pequeño retraso para activar la animación de CSS
       setTimeout(() => {
         modal.classList.add('show');
@@ -673,24 +716,41 @@
       }, 300); // 300ms coincide con la transición CSS
     }
 
-    // Eventos para la vestimenta y la paleta
+    // Navegación en el modal
+    modalPrevBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Evita que se cierre el modal
+      if (currentModalGalleryIndex > -1) {
+        currentModalGalleryIndex = (currentModalGalleryIndex - 1 + gallerySources.length) % gallerySources.length;
+        expandedImg.src = gallerySources[currentModalGalleryIndex];
+      }
+    });
+
+    modalNextBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Evita que se cierre el modal
+      if (currentModalGalleryIndex > -1) {
+        currentModalGalleryIndex = (currentModalGalleryIndex + 1) % gallerySources.length;
+        expandedImg.src = gallerySources[currentModalGalleryIndex];
+      }
+    });
+
+    // Eventos para la vestimenta y la paleta (No son galería)
     document.querySelectorAll('.vestimenta-img, .paleta-img').forEach(img => {
       img.addEventListener('click', function() {
-        openModal(this.src);
+        openModal(this.src, false);
       });
     });
 
-    // Eventos para el carrete (delegación de eventos porque las imágenes se clonan)
+    // Eventos para el carrete (Es galería)
     document.getElementById('carouselTrack').addEventListener('click', function(e) {
       if(e.target.tagName === 'IMG') {
-        openModal(e.target.src);
+        openModal(e.target.src, true);
       }
     });
 
     // Cerrar al dar clic en la X
     closeModalBtn.addEventListener('click', hideModal);
 
-    // Cerrar al dar clic fuera de la imagen (en el fondo oscuro)
+    // Cerrar al dar clic fuera de la imagen
     modal.addEventListener('click', function(e) {
       if (e.target === modal) {
         hideModal();
