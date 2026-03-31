@@ -44,11 +44,6 @@
       
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
-      
-      transform: translateZ(0);
-      backface-visibility: hidden;
-      perspective: 1000px;
-      will-change: transform;
     }
 
     /* --- PORTADA CENTRADA TOTALMENTE --- */
@@ -93,7 +88,6 @@
       text-align: center;
       backdrop-filter: none !important; 
       -webkit-backdrop-filter: none !important; 
-      transform: translateZ(0);
     }
     
     .glass-card::before {
@@ -257,10 +251,9 @@
       width: 100%;
       margin-top: 25px;
       overflow: hidden;
-      transform: translateZ(0);
     }
 
-    .carousel-track { display: flex; padding: 20px 0; gap: 15px; will-change: transform; }
+    .carousel-track { display: flex; padding: 20px 0; gap: 15px; }
 
     .carousel-track img { 
       width: 250px !important; 
@@ -400,7 +393,6 @@
       transition: 1s ease-out; 
       position: relative; 
       z-index: 20; 
-      will-change: opacity, transform; 
     }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
@@ -483,9 +475,52 @@
           font-size: 1.1rem !important; /* Ajuste para versículos largos */
       }
     }
+
+    /* --- BOTÓN DE MÚSICA FLOTANTE --- */
+    .music-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      background: var(--gold);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 55px;
+      height: 55px;
+      font-size: 25px;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.3s ease, background 0.3s;
+    }
+    .music-btn.playing {
+      animation: spin 4s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    @media (max-width: 600px) {
+      .music-btn {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+      }
+    }
   </style>
 </head>
 <body>
+
+  <audio id="bg-music" loop>
+    <source src="musica.mp3" type="audio/mpeg">
+  </audio>
+  <button id="music-btn" class="music-btn" onclick="toggleMusic()">
+    🎵
+  </button>
 
   <section class="hero">
     <div class="overlay"></div>
@@ -974,6 +1009,32 @@
         hideModal();
       }
     });
+
+    // --- CONTROL DE MÚSICA ---
+    const bgMusic = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    let isMusicPlaying = false;
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        bgMusic.pause();
+        musicBtn.classList.remove('playing');
+        musicBtn.innerText = '🔇'; 
+      } else {
+        bgMusic.play().catch(error => console.log("Interacción necesaria para reproducir"));
+        musicBtn.classList.add('playing');
+        musicBtn.innerText = '🎵'; 
+      }
+      isMusicPlaying = !isMusicPlaying;
+    }
+
+    // Reproducir automáticamente cuando el usuario haga el PRIMER clic en cualquier parte de la pantalla
+    document.body.addEventListener('click', function() {
+      if(!isMusicPlaying && bgMusic.paused) {
+        toggleMusic();
+      }
+    }, { once: true });
+
   </script>
 </body>
 </html>
