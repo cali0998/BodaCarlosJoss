@@ -234,7 +234,7 @@
 
     .vestimenta-img {
       width: 100%;
-      border-radius: 15px; /* Estética unificada */
+      border-radius: 15px;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5);
       cursor: pointer;
     }
@@ -262,7 +262,7 @@
       width: 250px !important; 
       height: 300px !important; 
       object-fit: cover !important; 
-      border-radius: 15px; /* Estética unificada */
+      border-radius: 15px;
       border: none; 
       flex-shrink: 0;
       box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
@@ -386,11 +386,20 @@
     h3 { font-size: 1.6rem; color: white; margin: 0; font-weight: 600; } 
     p { font-size: 1.25rem; line-height: 1.7; margin: 12px 0; }
 
-    /* --- BOTONES ESTÉTICA GALERÍA/INDEX --- */
+    /* --- BOTONES ESTÉTICA GALERÍA/INDEX CON LETRA MÁS GRANDE --- */
     .btn {
-      background: var(--gold); color: white; padding: 18px 36px; border-radius: 15px; 
-      text-decoration: none; font-weight: 500; display: inline-block; margin-top: 20px;
-      text-transform: uppercase; font-size: 11px; letter-spacing: 2px;
+      background: var(--gold); 
+      color: white; 
+      padding: 16px 32px; 
+      border-radius: 15px; 
+      text-decoration: none; 
+      font-weight: 600; /* Letra más gruesa para mejor lectura */
+      display: inline-block; 
+      margin-top: 20px;
+      text-transform: uppercase; 
+      font-size: 14px; /* <--- Aumentado a 14px */
+      letter-spacing: 1.5px;
+      font-family: 'Poppins', sans-serif; /* Asegurando la tipografía correcta */
       border: 1px solid rgba(255,255,255,0.1);
       box-shadow: 0 10px 25px rgba(0,0,0,0.3); 
       cursor: pointer; 
