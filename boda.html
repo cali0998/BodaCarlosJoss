@@ -25,7 +25,6 @@
       color: white; 
       overflow-x: hidden; 
       -webkit-font-smoothing: antialiased;
-      /* OPTIMIZACIÓN GPU PARA SCROLL GENERAL */
       overscroll-behavior-y: none;
     }
 
@@ -46,7 +45,6 @@
       -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
       mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
       
-      /* ACELERACIÓN POR HARDWARE: Evita tirones al procesar el filtro de máscara */
       transform: translateZ(0);
       backface-visibility: hidden;
       perspective: 1000px;
@@ -95,7 +93,6 @@
       text-align: center;
       backdrop-filter: none !important; 
       -webkit-backdrop-filter: none !important; 
-      /* ACELERACIÓN GPU */
       transform: translateZ(0);
     }
     
@@ -260,7 +257,6 @@
       width: 100%;
       margin-top: 25px;
       overflow: hidden;
-      /* GPU ACELERACIÓN PARA CAROUSEL */
       transform: translateZ(0);
     }
 
@@ -275,7 +271,6 @@
       flex-shrink: 0;
       box-shadow: 0 5px 15px rgba(0,0,0,0.5); 
       cursor: pointer;
-      /* Removido el lazy-load intrusivo de las imágenes pesadas para evitar saltos */
     }
 
     .carousel-btn {
@@ -399,19 +394,18 @@
       transform: scale(0.95);
     }
 
-    /* REVEAL CON OPTIMIZACIÓN DEL NAVEGADOR */
     .reveal { 
       opacity: 0; 
       transform: translateY(30px); 
       transition: 1s ease-out; 
       position: relative; 
       z-index: 20; 
-      will-change: opacity, transform; /* Le avisa al celular que esto se va a mover */
+      will-change: opacity, transform; 
     }
     .reveal.active { opacity: 1; transform: translateY(0); }
 
     /* ==============================================================
-       MAGIA PARA MÓVILES
+       MAGIA PARA MÓVILES (REESTRUCTURADO Y BALANCEADO)
        ============================================================== */
     @media (max-width: 800px) {
       .vestimenta-wrapper {
@@ -421,25 +415,61 @@
     }
 
     @media (max-width: 600px) {
-      section:not(.hero) {
-        justify-content: flex-end !important;
-        padding-top: 45vh !important; 
-        padding-bottom: 12vh !important; 
+      /* Altura adaptativa perfecta para móviles */
+      section {
+        min-height: 100svh !important; 
+        padding-top: 80px;
+        padding-bottom: 80px;
       }
+      
+      /* Centrado simétrico de las tarjetas */
+      section:not(.hero) {
+        justify-content: center !important;
+        padding-top: 15vh !important; 
+        padding-bottom: 10vh !important; 
+      }
+      
       section:not(.hero) .overlay {
         background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 90%) !important;
       }
-      .floating-text { 
-        position: relative !important; top: 0 !important; right: auto !important; left: auto !important; text-align: center !important; 
-        max-width: 90%; margin-top: 20px; margin-bottom: 10px;
+      
+      /* Tarjetas más proporcionadas y con más respiro lateral */
+      .glass-card {
+        padding: 40px 20px; 
+        width: 100%;
+        max-width: 95%; /* Evita que choque con los bordes */
       }
-      .floating-text.reveal { transform: translateY(30px) !important; }
+      
+      /* Textos flotantes integrados limpiamente */
+      .floating-text { 
+        position: relative !important; 
+        top: 0 !important; 
+        right: auto !important; 
+        left: auto !important; 
+        text-align: center !important; 
+        max-width: 100%; 
+        margin-top: 25px; 
+        margin-bottom: 0px;
+        font-size: 1.35rem; /* Letra un poco más moderada */
+      }
+      .floating-text.reveal { transform: translateY(20px) !important; }
       .floating-text.reveal.active { transform: translateY(0) !important; }
       
+      /* Alineación general al centro */
       .seccion-pase, .seccion-lugar, .seccion-nosotros, .seccion-vestimenta, .seccion-musica, .seccion-regalos, .seccion-qr, .seccion-final { 
-        padding-left: 15px; padding-right: 15px; align-items: center; 
+        padding-left: 15px; padding-right: 15px; align-items: center !important; 
       }
-      h2 { font-size: 2.4rem; } p { font-size: 1.15rem; }
+      
+      /* TAMAÑOS DE TEXTO ADAPTADOS A PANTALLAS PEQUEÑAS */
+      h1 { font-size: 3.2rem; }
+      h2 { font-size: 2.2rem; margin-bottom: 15px; } 
+      h3 { font-size: 1.4rem; }
+      p { font-size: 1.05rem; line-height: 1.6; margin: 10px 0; }
+      
+      /* Contador mejor distribuido */
+      .time-box span { font-size: 1.6rem; }
+      .time-box { padding: 8px 10px; min-width: 60px; }
+      
       .carousel-track img { width: 220px !important; height: 280px !important; } 
       
       .modal-nav { width: 40px; height: 40px; font-size: 1.2rem; }
@@ -450,6 +480,7 @@
           padding: 0;
           background: transparent !important;
           border: none !important;
+          font-size: 1.1rem !important; /* Ajuste para versículos largos */
       }
     }
   </style>
