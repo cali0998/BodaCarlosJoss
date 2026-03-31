@@ -37,8 +37,9 @@
       
       margin-top: -21vh; 
       
-      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
-      mask-image: linear-gradient(to bottom, black 0%, black 85%, transparent 100%);
+      /* CORRECCIÓN: La máscara ahora empieza más abajo (90%) para no atrapar el texto */
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 0%, black 90%, transparent 100%);
     }
 
     /* --- PORTADA CENTRADA TOTALMENTE --- */
@@ -48,7 +49,8 @@
       align-items: center; 
       justify-content: center; 
       text-align: center;
-      -webkit-mask-image: linear-gradient(to bottom, black 85%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 90%, transparent 100%);
     }
     
     .hero .reveal { margin: 0 auto; position: relative; z-index: 20; } 
@@ -64,7 +66,16 @@
     .seccion-musica { z-index: 5; align-items: flex-start; justify-content: center; padding-left: 10%; } 
     .seccion-regalos { z-index: 4; align-items: flex-end; justify-content: center; padding-right: 10%; } 
     .seccion-qr { z-index: 3; align-items: flex-start; justify-content: center; padding-left: 10%; } 
-    .seccion-final { z-index: 2; align-items: flex-end; justify-content: center; padding-right: 10%; -webkit-mask-image: linear-gradient(to top, black 85%, transparent 100%); } 
+    
+    /* CORRECCIÓN: Ajuste de máscara en la sección final */
+    .seccion-final { 
+      z-index: 2; 
+      align-items: flex-end; 
+      justify-content: center; 
+      padding-right: 10%; 
+      -webkit-mask-image: linear-gradient(to top, black 90%, transparent 100%); 
+      mask-image: linear-gradient(to top, black 90%, transparent 100%); 
+    } 
 
     .overlay {
       position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -115,9 +126,9 @@
       font-style: italic; 
       color: white;
       text-shadow: 
-        2px 2px 5px rgba(0, 0, 0, 1),    /* Sombra dura */
-        -2px -2px 5px rgba(0, 0, 0, 1),  /* Sombra dura opuesta */
-        0px 0px 15px rgba(0, 0, 0, 0.8); /* Resplandor oscuro suave */
+        2px 2px 5px rgba(0, 0, 0, 1),    
+        -2px -2px 5px rgba(0, 0, 0, 1),  
+        0px 0px 15px rgba(0, 0, 0, 0.8); 
       line-height: 1.6;
       max-width: 90%;
       margin-left: auto;
@@ -385,8 +396,9 @@
     @media (max-width: 600px) {
       section:not(.hero) {
         justify-content: flex-end !important;
-        padding-top: 55vh !important; 
-        padding-bottom: 5vh !important; 
+        padding-top: 45vh !important; 
+        /* CORRECCIÓN: Padding aumentado a 12vh para subir el contenido y que escape del filtro difuminado */
+        padding-bottom: 12vh !important; 
       }
       section:not(.hero) .overlay {
         background: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.85) 90%) !important;
@@ -506,7 +518,7 @@
     <div class="glass-card reveal">
       <h2>¡A Bailar!</h2>
       <p>Queremos asegurarnos de que la pista de baile nunca esté vacía y que todos disfruten al máximo.</p>
-      <a href="https://wa.me/50683484866?text=¡Hola!+Para+la+boda,+sugiero+esta+canción:" target="_blank" class="btn">Sugerir Canción</a>
+      <a href="https://wa.me/50683484866?text=Hola!+Para+la+boda,+sugiero+esta+cancion:" target="_blank" class="btn">Sugerir Canción</a>
     </div>
     <div class="floating-text reveal">"Que no falte el ritmo, la risa y la buena compañía..."</div>
   </section>
@@ -616,7 +628,7 @@
         }
     });
 
-    // --- AL TOCAR BOTÓN: CONFIRMAR (ACTUALIZADO SIN EMOJIS) ---
+    // --- AL TOCAR BOTÓN: CONFIRMAR ---
     async function confirmarAsistenciaSupabase() {
         if(!codigoInvitado) return;
         
@@ -637,7 +649,7 @@
                     'Authorization': `Bearer ${SUPABASE_KEY}`,
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ estado: 'Confirmado' }) // Texto limpio
+                body: JSON.stringify({ estado: 'Confirmado' }) 
             });
 
             if(response.ok) {
@@ -659,7 +671,7 @@
         }
     }
 
-    // --- AL TOCAR BOTÓN: DECLINAR (ACTUALIZADO SIN EMOJIS) ---
+    // --- AL TOCAR BOTÓN: DECLINAR ---
     async function declinarAsistenciaSupabase() {
         if(!codigoInvitado) return;
         
@@ -680,7 +692,7 @@
                     'Authorization': `Bearer ${SUPABASE_KEY}`,
                     'Prefer': 'return=minimal'
                 },
-                body: JSON.stringify({ estado: 'Declinado' }) // Texto limpio
+                body: JSON.stringify({ estado: 'Declinado' }) 
             });
 
             if(response.ok) {
@@ -735,7 +747,7 @@
       const distance = countDownDate - now;
       if (distance < 0) {
         clearInterval(x);
-        document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>¡Llegó el gran día!</p>";
+        document.getElementById("countdown").innerHTML = "<p style='font-size:1.5rem; color:var(--gold);'>Llegó el gran día</p>";
         return;
       }
       document.getElementById("days").innerText = String(Math.floor(distance / (1000 * 60 * 60 * 24))).padStart(2, '0');
