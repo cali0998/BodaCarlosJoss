@@ -15,6 +15,8 @@
       --border: rgba(197, 157, 95, 0.3);
     }
 
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
     body {
       margin: 0; font-family: 'Poppins', sans-serif;
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
@@ -25,60 +27,65 @@
     .glass-card {
       background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       border: 1px solid var(--border); border-radius: 40px;
-      padding: 60px 35px; text-align: center; max-width: 420px; width: 100%;
+      padding: 50px 30px; text-align: center; max-width: 400px; width: 100%;
       box-shadow: 0 40px 100px rgba(0,0,0,0.7); position: relative;
     }
 
     /* Detalle elegante superior */
     .glass-card::before {
       content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 60px; height: 3px; background: var(--gold); border-radius: 0 0 10px 10px;
+      width: 50px; height: 3px; background: var(--gold); border-radius: 0 0 10px 10px;
     }
 
-    h1 { font-family: 'Playfair Display', serif; font-size: 38px; color: var(--gold); margin: 0 0 10px; font-weight: 600; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin: 0 0 8px; font-weight: 600; line-height: 1.2; }
     
     .date-badge { 
-      font-size: 10px; letter-spacing: 6px; text-transform: uppercase; 
-      color: rgba(255,255,255,0.6); margin-bottom: 40px; display: block; 
+      font-size: 10px; letter-spacing: 5px; text-transform: uppercase; 
+      color: rgba(255,255,255,0.5); margin-bottom: 30px; display: block; 
     }
 
-    .welcome-text { font-size: 15px; font-weight: 300; line-height: 1.6; color: rgba(255,255,255,0.8); margin-bottom: 40px; }
+    .welcome-text { font-size: 14px; font-weight: 300; line-height: 1.5; color: rgba(255,255,255,0.7); margin-bottom: 35px; padding: 0 10px; }
     
-    .state-container { display: flex; flex-direction: column; gap: 15px; }
+    .state-container { display: flex; flex-direction: column; gap: 14px; width: 100%; }
     .hidden { display: none !important; }
 
-    /* BOTONES ESTILO BOUTIQUE */
+    /* BOTONES REFINADOS */
     .btn-action {
-      display: flex; align-items: center; justify-content: center; gap: 15px;
-      padding: 20px; border-radius: 20px; font-weight: 400; text-transform: uppercase;
-      cursor: pointer; border: none; transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-      font-size: 12px; letter-spacing: 2px; color: white; width: 100%;
-      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+      display: flex; align-items: center; justify-content: center; gap: 12px;
+      height: 60px; border-radius: 18px; font-weight: 500; text-transform: uppercase;
+      cursor: pointer; border: none; transition: all 0.3s ease;
+      font-size: 11px; letter-spacing: 1.5px; color: white; width: 100%;
+      background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.1);
     }
 
-    .btn-primary { background: var(--gold); color: black; font-weight: 600; border: none; }
-    .btn-primary:active { background: var(--gold-dark); transform: scale(0.98); }
+    .btn-primary { background: var(--gold); color: #111; font-weight: 600; border: none; }
+    .btn-primary:active { background: var(--gold-dark); transform: scale(0.97); }
 
     .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--gold); }
-    .btn-secondary:active { background: rgba(197, 157, 95, 0.1); }
+    .btn-secondary:active { background: rgba(197, 157, 95, 0.1); transform: scale(0.97); }
+
+    .btn-ghost { opacity: 0.6; font-size: 10px; height: 50px; border: 1px solid rgba(255,255,255,0.05); }
+
+    /* ICONOS */
+    svg { flex-shrink: 0; }
 
     /* OCULTAR INPUTS */
     input[type="file"] { display: none !important; }
 
     #preview-grid {
       display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 12px; margin-bottom: 30px; max-height: 250px; overflow-y: auto;
-      padding: 15px; background: rgba(0,0,0,0.2); border-radius: 20px;
+      gap: 10px; margin-bottom: 25px; max-height: 240px; overflow-y: auto;
+      padding: 12px; background: rgba(0,0,0,0.3); border-radius: 18px;
     }
 
-    .preview-media { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 12px; border: 1px solid var(--border); }
+    .preview-media { width: 100%; aspect-ratio: 1/1; object-fit: cover; border-radius: 10px; border: 1px solid var(--border); }
 
-    /* BARRA DE PROGRESO MINIMALISTA */
-    #status { margin-top: 20px; }
-    .progress-bar-bg { width: 100%; height: 2px; background: rgba(255,255,255,0.1); margin-top: 15px; position: relative; overflow: hidden; }
-    .progress-bar-fill { position: absolute; left: 0; top: 0; height: 100%; background: var(--gold); width: 0%; transition: width 0.3s ease; }
+    /* BARRA DE PROGRESO */
+    #status { margin-top: 20px; width: 100%; }
+    .progress-bar-bg { width: 100%; height: 3px; background: rgba(255,255,255,0.1); margin-top: 15px; border-radius: 10px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--gold); width: 0%; transition: width 0.4s ease; }
 
-    #statusText { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
+    #statusText { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); }
 
   </style>
 </head>
@@ -94,19 +101,19 @@
   <div class="state-container" id="actions-state">
     
     <label for="cameraPhotoInput" class="btn-action btn-primary">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
       Capturar Foto
     </label>
     <input type="file" id="cameraPhotoInput" accept="image/*" capture="environment" onchange="handleFileSelection(this.files)">
     
     <label for="cameraVideoInput" class="btn-action btn-secondary">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M23 7l-7 5 7 5V7z"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
       Grabar Video
     </label>
     <input type="file" id="cameraVideoInput" accept="video/*" capture="environment" onchange="handleFileSelection(this.files)">
     
-    <label for="fileInput" class="btn-action" style="opacity: 0.7;">
-      Subir de la Galería
+    <label for="fileInput" class="btn-action btn-ghost">
+      Elegir de la Galería
     </label>
     <input type="file" id="fileInput" accept="image/*,video/*" multiple onchange="handleFileSelection(this.files)">
     
@@ -116,12 +123,12 @@
     <div id="preview-grid"></div>
     <div style="display:flex; gap:10px;">
       <button class="btn-action" style="flex:1" onclick="cancelUpload()">Volver</button>
-      <button class="btn-action btn-primary" style="flex:2" onclick="confirmAndUpload()">Enviar Recuerdos</button>
+      <button class="btn-action btn-primary" style="flex:2" onclick="confirmAndUpload()">Enviar</button>
     </div>
   </div>
   
   <div id="status" class="hidden">
-    <div id="statusText">Iniciando subida...</div>
+    <div id="statusText">Enviando...</div>
     <div class="progress-bar-bg"><div id="progress-fill" class="progress-bar-fill"></div></div>
   </div>
 </div>
@@ -129,7 +136,7 @@
 <script>
   const cloudName = "dhruy6ftj";
   const uploadPreset = "boda_carlos_y_joss";
-  const MAX_SIZE = 25 * 1024 * 1024; // Aumentado a 25MB
+  const MAX_SIZE = 25 * 1024 * 1024;
   let selectedFiles = [];
 
   function handleFileSelection(files) {
@@ -166,7 +173,7 @@
     for (let i = 0; i < selectedFiles.length; i++) {
       let progress = ((i) / selectedFiles.length) * 100;
       bar.style.width = `${progress}%`;
-      statusText.innerText = `Enviando recuerdo ${i+1} de ${selectedFiles.length}`;
+      statusText.innerText = `Enviando ${i+1} de ${selectedFiles.length}`;
       
       const formData = new FormData();
       formData.append('file', selectedFiles[i]);
@@ -182,7 +189,7 @@
     }
     
     bar.style.width = '100%';
-    statusText.innerHTML = "<b>Recuerdos guardados con éxito</b>";
+    statusText.innerHTML = "<b>Recuerdos guardados</b>";
     setTimeout(cancelUpload, 3000);
   }
 
