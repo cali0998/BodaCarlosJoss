@@ -48,7 +48,6 @@
       display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
     }
 
-    /* --- SIDEBAR LATERAL (LISTA DE INVITADOS) --- */
     .sidebar {
       width: 320px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border); border-radius: 20px; display: flex; flex-direction: column;
@@ -83,7 +82,6 @@
     .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; }
     .guest.dragging { opacity: 0.5; }
 
-    /* --- ÁREA DEL SALÓN (MAYPEADO VISUAL) --- */
     .main-area {
       flex: 1; border-radius: 20px; padding: 20px;
       overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
@@ -126,7 +124,6 @@
       display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
     }
 
-    /* --- NUEVO: RANURAS (IMANES) --- */
     .table-slot {
       width: 100%;
       min-height: 180px;
@@ -139,7 +136,6 @@
       position: relative;
     }
     
-    /* El imán cuando pasas una mesa por encima */
     .table-slot.slot-highlight {
       background: rgba(46, 204, 113, 0.1);
       border-color: var(--status-conf);
@@ -150,14 +146,12 @@
        width: calc(33.333% - 15px); min-width: 250px;
     }
 
-    /* --- FIGURAS DE MESA --- */
     .table-card {
       width: 100%; background: var(--table-bg); backdrop-filter: blur(10px);
       border: 2px solid var(--gold); border-radius: 15px; 
       display: flex; flex-direction: column; 
       box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
       transition: transform 0.2s, box-shadow 0.2s;
-      /* Se quita absolute de aquí, ahora viven dentro del slot */
     }
     
     .table-card:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
@@ -166,10 +160,9 @@
       width: 100%; max-width: 450px; border: 3px solid var(--gold); 
       box-shadow: 0 0 30px rgba(197, 157, 95, 0.4);
     }
-    #card-mesa-novios .table-header { cursor: default; } /* Los novios no se mueven */
+    #card-mesa-novios .table-header { cursor: default; } 
     #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.2rem;}
 
-    /* --- COMPONENTES DE LA MESA --- */
     .table-header {
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
@@ -195,7 +188,6 @@
       display: flex; flex-direction: column; gap: 5px;
     }
     .table-seats.drag-over { background: rgba(197, 157, 95, 0.2); }
-
     .table-seats .guest { padding: 8px 10px; font-size: 0.75rem; border-radius: 6px; }
 
     .seat-count { 
@@ -245,12 +237,24 @@
     <div class="main-area">
       <div class="room-layout">
         
-        <div class="top-stage" id="stage-area"></div>
+        <div class="top-stage" id="stage-area">
+            <div class="table-slot fixed-slot" id="slot-novios"></div>
+        </div>
 
         <div class="floor-grid">
-          <div class="side-zone" id="left-tables"></div>
+          <div class="side-zone" id="left-tables">
+              <div class="table-slot fixed-slot" id="slot-izq-1"></div>
+              <div class="table-slot fixed-slot" id="slot-izq-2"></div>
+              <div class="table-slot fixed-slot" id="slot-izq-3"></div>
+              <div class="table-slot fixed-slot" id="slot-izq-4"></div>
+          </div>
           <div class="dance-floor-area"><span>PISTA DE BAILE</span></div>
-          <div class="side-zone" id="right-tables"></div>
+          <div class="side-zone" id="right-tables">
+              <div class="table-slot fixed-slot" id="slot-der-1"></div>
+              <div class="table-slot fixed-slot" id="slot-der-2"></div>
+              <div class="table-slot fixed-slot" id="slot-der-3"></div>
+              <div class="table-slot fixed-slot" id="slot-der-4"></div>
+          </div>
         </div>
       </div>
       
@@ -266,21 +270,13 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
 
   let tableCount = 0;
-  let draggedGuest = null; // Renombrado para evitar confusión con el arrastre de mesas
+  let draggedGuest = null; 
 
-  // --- GENERACIÓN DEL PLANO Y RANURAS ---
-  function createTableHTML(name, capacity, targetContainerId, tableId) {
+  // --- GENERACIÓN DE MESAS DENTRO DE LOS IMANES ---
+  function createTableHTML(name, capacity, tableId, slotId) {
     const isNovios = tableId === 'mesa-novios';
     const hideDelete = isNovios ? 'style="display:none;"' : '';
     
-    // Generamos el Slot (Ranura)
-    const slotClass = isNovios ? 'table-slot fixed-slot' : 'table-slot';
-    const slotHTML = `<div class="${slotClass}" id="slot-${tableId}"></div>`;
-    
-    document.getElementById(targetContainerId).insertAdjacentHTML('beforeend', slotHTML);
-    const targetSlot = document.getElementById(`slot-${tableId}`);
-
-    // Generamos la Mesa adentro del Slot
     const tableHTML = `
       <div class="table-card" id="card-${tableId}">
         <div class="table-header">
@@ -297,15 +293,24 @@
       </div>
     `;
 
+    // Buscamos la ranura de destino. Si no existe (es una mesa extra), la creamos.
+    let targetSlot = document.getElementById(slotId);
+    if (!targetSlot) {
+        const extraHTML = `<div class="table-slot" id="${slotId}"></div>`;
+        document.getElementById('extra-tables').insertAdjacentHTML('beforeend', extraHTML);
+        targetSlot = document.getElementById(slotId);
+    }
+
     targetSlot.innerHTML = tableHTML;
     setupDropZone(document.getElementById(`seats-${tableId}`));
   }
 
   function initFloorPlan() {
-    createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'stage-area', 'mesa-novios');
+    createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'mesa-novios', 'slot-novios');
     
-    for(let i=1; i<=4; i++) { createTableHTML(`Mesa ${i}`, 10, 'left-tables', `mesa-${i}`); }
-    for(let i=5; i<=8; i++) { createTableHTML(`Mesa ${i}`, 10, 'right-tables', `mesa-${i}`); }
+    // Rellenamos los imanes fijos iniciales
+    for(let i=1; i<=4; i++) { createTableHTML(`Mesa ${i}`, 10, `mesa-${i}`, `slot-izq-${i}`); }
+    for(let i=5; i<=8; i++) { createTableHTML(`Mesa ${i}`, 10, `mesa-${i}`, `slot-der-${i-4}`); }
     
     tableCount = 8; 
   }
@@ -314,11 +319,16 @@
     tableCount++;
     const newId = `mesa-${tableCount}`;
     
-    let targetZone = 'extra-tables';
-    if (tableCount <= 4) targetZone = 'left-tables';
-    else if (tableCount <= 8) targetZone = 'right-tables';
-
-    createTableHTML(`Mesa ${tableCount}`, capacity, targetZone, newId);
+    // Buscar si hay algún imán fijo vacío primero
+    const fixedSlots = Array.from(document.querySelectorAll('.fixed-slot:not(#slot-novios)'));
+    let emptySlot = fixedSlots.find(slot => slot.children.length === 0);
+    
+    if (emptySlot) {
+        createTableHTML(`Mesa ${tableCount}`, capacity, newId, emptySlot.id);
+    } else {
+        // Si los 8 imanes fijos están llenos, creamos la mesa en la zona extra
+        createTableHTML(`Mesa ${tableCount}`, capacity, newId, `slot-extra-${tableCount}`);
+    }
   }
 
   function removeTable(tableId) {
@@ -328,18 +338,24 @@
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
     const unseatedZone = document.getElementById('unseated-guests');
-    const slot = tableCard.parentElement; // Borramos la mesa y la ranura entera
+    const slot = tableCard.parentElement; 
     
+    // Regresamos los invitados a la lista general
     const guests = seatsZone.querySelectorAll('.guest');
     guests.forEach(g => unseatedZone.appendChild(g));
     
-    slot.remove(); 
+    // Eliminamos solo la mesa
+    tableCard.remove(); 
+
+    // Si la ranura no es fija (está en la zona de extras), también borramos la ranura
+    if (!slot.classList.contains('fixed-slot')) {
+        slot.remove();
+    }
+    
     markUnsavedChanges();
-    // Nota: Como ahora son imanes, ya no usamos "reindexAndRepackTables"
-    // para que no se borren posiciones que tú ya arreglaste manualmente.
   }
 
-  // --- CARGA DE DATOS ---
+  // --- CARGA DE DATOS DESDE SUPABASE ---
   async function loadAllGuests() {
     const statusText = document.getElementById('connection-status');
     const guestList = document.getElementById('unseated-guests');
@@ -401,7 +417,7 @@
     }
   }
 
-  // --- DRAG & DROP DE INVITADOS (HTML5 API) ---
+  // --- DRAG & DROP DE INVITADOS ---
   document.addEventListener('dragstart', (e) => {
     const guestBlock = e.target.closest('.guest');
     if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
@@ -504,7 +520,7 @@
     btn.innerText = "Guardar Cambios *";
   }
 
-  async function saveLayout() { /* Igual que antes */
+  async function saveLayout() { 
     const btn = document.getElementById('btn-save-layout');
     const originalText = btn.innerText;
     btn.innerText = "Guardando..."; btn.style.background = "#3498db"; btn.disabled = true;
@@ -529,7 +545,7 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- NUEVA LÓGICA DE DRAG & DROP DE MESAS CON INTERCAMBIO (SWAP) ---
+  // --- LÓGICA DE INTERCAMBIO Y ARRASTRE DE MESAS ---
   let draggedTableUI = null;
   let originalSlot = null;
   let tableOffsetX = 0;
@@ -539,26 +555,20 @@
     const header = e.target.closest('.table-header');
     const card = header ? header.closest('.table-card') : null;
     
-    // Evitamos arrastrar si hacemos clic en botones, inputs, o si es la mesa de los novios
     if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT' && card.id !== 'card-mesa-novios') {
       
       draggedTableUI = card;
       originalSlot = draggedTableUI.parentElement; 
       
       const rect = draggedTableUI.getBoundingClientRect();
-      const bodyRect = document.body.getBoundingClientRect();
       
-      // Congelamos el tamaño antes de sacarlo del flexbox
       draggedTableUI.style.width = rect.width + 'px'; 
-      
-      // Lo sacamos de la ranura y lo hacemos flotar sobre todo el body
       draggedTableUI.style.position = 'absolute';
       draggedTableUI.style.zIndex = "1000";
       draggedTableUI.style.transition = "none"; 
-      draggedTableUI.style.pointerEvents = "none"; // IMPORTANTE: Para que el mouse detecte las ranuras de abajo
+      draggedTableUI.style.pointerEvents = "none"; 
       document.body.appendChild(draggedTableUI);
       
-      // Ajustamos para que se quede exactamente bajo el ratón donde hicimos clic
       tableOffsetX = e.clientX - rect.left;
       tableOffsetY = e.clientY - rect.top;
       
@@ -571,18 +581,14 @@
     if (draggedTableUI) {
       e.preventDefault(); 
       
-      // Mover la tarjeta con el mouse
       draggedTableUI.style.left = (e.clientX - tableOffsetX) + 'px';
       draggedTableUI.style.top = (e.clientY - tableOffsetY) + 'px';
 
-      // Detectar qué hay debajo del ratón
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
-      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(.fixed-slot)') : null;
+      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
 
-      // Limpiar luces de todas las ranuras
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
-      // Iluminar la ranura objetivo (si no es la original)
       if (targetSlot && targetSlot !== originalSlot) {
           targetSlot.classList.add('slot-highlight');
       }
@@ -591,31 +597,28 @@
 
   document.addEventListener('mouseup', (e) => {
     if (draggedTableUI) {
-      // Devolvemos la capacidad de interactuar
       draggedTableUI.style.pointerEvents = "auto";
       
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
-      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(.fixed-slot)') : null;
+      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
       
-      // Limpiamos luces
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
-      // LÓGICA DE INTERCAMBIO (SWAP)
+      // INTERCAMBIO O POSICIONAMIENTO
       if (targetSlot && targetSlot !== originalSlot) {
-          // Si la ranura de destino ya tiene una mesa, la mandamos a la ranura original
+          // Si el imán tiene una mesa, esa mesa vuela al imán original
           let existingTable = targetSlot.querySelector('.table-card');
           if (existingTable) {
               originalSlot.appendChild(existingTable);
           }
-          // Encajamos la mesa que venimos arrastrando en la nueva ranura
+          // Encajamos nuestra mesa en el imán nuevo
           targetSlot.appendChild(draggedTableUI);
           markUnsavedChanges();
       } else {
-          // Si la soltamos en el vacío o en su misma ranura, se regresa (snap back)
+          // Si no la soltamos en ningún imán, regresa al original
           originalSlot.appendChild(draggedTableUI);
       }
 
-      // Limpiamos los estilos de vuelo para que el CSS nativo de la ranura haga su trabajo
       draggedTableUI.style.position = '';
       draggedTableUI.style.left = '';
       draggedTableUI.style.top = '';
