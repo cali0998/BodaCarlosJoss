@@ -66,7 +66,6 @@
       flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
     }
 
-    /* INVITADO (FORMATO DE LISTA) */
     .guest {
       background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px;
       border: 1px solid rgba(255,255,255,0.1); cursor: grab; font-size: 0.85rem;
@@ -90,7 +89,6 @@
       overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
     }
 
-    /* EL SALÓN RECTANGULAR */
     .room-layout {
       width: 100%; max-width: 1100px; margin: 0 auto; 
       background: rgba(0,0,0,0.3); 
@@ -99,26 +97,22 @@
       padding: 30px 20px;
       display: flex; flex-direction: column; gap: 30px;
       box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
-      position: relative; /* CRÍTICO PARA QUE LAS MESAS PUEDAN FLOTAR DENTRO DEL SALÓN */
+      position: relative; 
     }
 
-    /* ZONA PRINCIPAL (CABECERA PARA NOVIOS) */
     .top-stage {
       width: 100%; display: flex; justify-content: center; padding-bottom: 20px;
       border-bottom: 2px dashed rgba(197, 157, 95, 0.3);
     }
 
-    /* ZONA DE INVITADOS (ALARGADA) */
     .floor-grid {
       display: flex; justify-content: space-between; align-items: stretch; gap: 20px;
     }
     
-    /* COLUMNAS LATERALES */
     .side-zone { 
       display: flex; flex-direction: column; gap: 20px; width: 30%; 
     }
 
-    /* PASILLO / PISTA CENTRAL */
     .dance-floor-area {
       width: 35%; border: 2px dashed var(--gold); border-radius: 15px; 
       background: rgba(197, 157, 95, 0.05); color: var(--gold); 
@@ -127,10 +121,33 @@
       min-height: 500px; 
     }
 
-    /* ZONA EXTRA */
     .extra-area {
       width: 100%; max-width: 1100px; margin: 20px auto 0 auto;
       display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
+    }
+
+    /* --- NUEVO: RANURAS (IMANES) --- */
+    .table-slot {
+      width: 100%;
+      min-height: 180px;
+      border: 2px dashed rgba(255, 255, 255, 0.15);
+      border-radius: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    /* El imán cuando pasas una mesa por encima */
+    .table-slot.slot-highlight {
+      background: rgba(46, 204, 113, 0.1);
+      border-color: var(--status-conf);
+      box-shadow: inset 0 0 15px rgba(46, 204, 113, 0.3);
+    }
+
+    .extra-area .table-slot {
+       width: calc(33.333% - 15px); min-width: 250px;
     }
 
     /* --- FIGURAS DE MESA --- */
@@ -140,24 +157,23 @@
       display: flex; flex-direction: column; 
       box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
       transition: transform 0.2s, box-shadow 0.2s;
+      /* Se quita absolute de aquí, ahora viven dentro del slot */
     }
     
     .table-card:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
 
-    /* MESA NOVIOS */
     #card-mesa-novios {
       width: 100%; max-width: 450px; border: 3px solid var(--gold); 
       box-shadow: 0 0 30px rgba(197, 157, 95, 0.4);
     }
+    #card-mesa-novios .table-header { cursor: default; } /* Los novios no se mueven */
     #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.2rem;}
-
-    .extra-area .table-card { width: calc(33.333% - 15px); min-width: 250px; }
 
     /* --- COMPONENTES DE LA MESA --- */
     .table-header {
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
-      cursor: grab; /* Indica que la mesa se puede arrastrar desde aquí */
+      cursor: grab; 
     }
     .table-header:active {
       cursor: grabbing;
@@ -174,16 +190,13 @@
     .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
     .btn-delete:hover { background: #e74c3c; color: white; }
 
-    /* ZONA DONDE CAEN LOS INVITADOS */
     .table-seats {
       padding: 10px; min-height: 120px; max-height: 250px; overflow-y: auto;
       display: flex; flex-direction: column; gap: 5px;
     }
     .table-seats.drag-over { background: rgba(197, 157, 95, 0.2); }
 
-    .table-seats .guest {
-      padding: 8px 10px; font-size: 0.75rem; border-radius: 6px;
-    }
+    .table-seats .guest { padding: 8px 10px; font-size: 0.75rem; border-radius: 6px; }
 
     .seat-count { 
       text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 600; 
@@ -191,7 +204,6 @@
       border-radius: 0 0 13px 13px;
     }
 
-    /* BOTONES */
     .btn-add-table {
       position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: white; 
       padding: 15px 25px; border-radius: 50px; border: none; font-weight: 600; 
@@ -254,13 +266,21 @@
   const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
 
   let tableCount = 0;
-  let draggedItem = null;
+  let draggedGuest = null; // Renombrado para evitar confusión con el arrastre de mesas
 
-  // --- GENERACIÓN DEL PLANO ---
+  // --- GENERACIÓN DEL PLANO Y RANURAS ---
   function createTableHTML(name, capacity, targetContainerId, tableId) {
     const isNovios = tableId === 'mesa-novios';
     const hideDelete = isNovios ? 'style="display:none;"' : '';
     
+    // Generamos el Slot (Ranura)
+    const slotClass = isNovios ? 'table-slot fixed-slot' : 'table-slot';
+    const slotHTML = `<div class="${slotClass}" id="slot-${tableId}"></div>`;
+    
+    document.getElementById(targetContainerId).insertAdjacentHTML('beforeend', slotHTML);
+    const targetSlot = document.getElementById(`slot-${tableId}`);
+
+    // Generamos la Mesa adentro del Slot
     const tableHTML = `
       <div class="table-card" id="card-${tableId}">
         <div class="table-header">
@@ -277,7 +297,7 @@
       </div>
     `;
 
-    document.getElementById(targetContainerId).insertAdjacentHTML('beforeend', tableHTML);
+    targetSlot.innerHTML = tableHTML;
     setupDropZone(document.getElementById(`seats-${tableId}`));
   }
 
@@ -290,7 +310,6 @@
     tableCount = 8; 
   }
 
-  // --- AUTOMATIZACIÓN DE REUBICACIÓN (ELIMINAR Y REEMPAQUETAR) ---
   function addTable(capacity = 10) {
     tableCount++;
     const newId = `mesa-${tableCount}`;
@@ -309,69 +328,18 @@
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
     const unseatedZone = document.getElementById('unseated-guests');
+    const slot = tableCard.parentElement; // Borramos la mesa y la ranura entera
     
-    // Devolver invitados a la lista
     const guests = seatsZone.querySelectorAll('.guest');
     guests.forEach(g => unseatedZone.appendChild(g));
     
-    // Eliminar la mesa del HTML
-    tableCard.remove();
-    
-    // REUBICAR Y RENOMBRAR
-    reindexAndRepackTables();
+    slot.remove(); 
     markUnsavedChanges();
+    // Nota: Como ahora son imanes, ya no usamos "reindexAndRepackTables"
+    // para que no se borren posiciones que tú ya arreglaste manualmente.
   }
 
-  function reindexAndRepackTables() {
-    const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
-
-    allCards.sort((a, b) => {
-       let numA = parseInt(a.id.replace('card-mesa-', ''));
-       let numB = parseInt(b.id.replace('card-mesa-', ''));
-       return numA - numB;
-    });
-
-    tableCount = allCards.length;
-
-    allCards.forEach((card, index) => {
-      let newNum = index + 1;
-      let newId = `mesa-${newNum}`;
-
-      card.id = `card-${newId}`;
-      
-      let input = card.querySelector('.table-header input');
-      input.id = `name-${newId}`;
-      if (/^Mesa \d+$/i.test(input.value)) {
-          input.value = `Mesa ${newNum}`;
-      }
-
-      let btns = card.querySelectorAll('.btn-small');
-      btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
-      btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
-      
-      let delBtn = card.querySelector('.btn-delete');
-      if(delBtn) delBtn.setAttribute('onclick', `removeTable('${newId}')`);
-
-      let seats = card.querySelector('.table-seats');
-      seats.id = `seats-${newId}`;
-
-      let count = card.querySelector('.seat-count');
-      count.id = `count-${newId}`;
-
-      // Solo recolocamos automáticamente en la cuadrícula si la mesa NO se ha arrastrado libremente
-      if (card.style.position !== 'absolute') {
-        const leftZone = document.getElementById('left-tables');
-        const rightZone = document.getElementById('right-tables');
-        const extraZone = document.getElementById('extra-tables');
-        
-        if (newNum <= 4) leftZone.appendChild(card);
-        else if (newNum <= 8) rightZone.appendChild(card);
-        else extraZone.appendChild(card);
-      }
-    });
-  }
-
-  // --- CARGAR INVITADOS DE SUPABASE ---
+  // --- CARGA DE DATOS ---
   async function loadAllGuests() {
     const statusText = document.getElementById('connection-status');
     const guestList = document.getElementById('unseated-guests');
@@ -425,31 +393,29 @@
 
         targetZone.insertAdjacentHTML('beforeend', guestHTML);
       });
-
       updateAllCounters();
-
     } catch (error) {
       document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = "Error de conexión. Recarga la página.";
+      statusText.innerText = "Error de conexión.";
       statusText.style.color = "#e74c3c";
     }
   }
 
-  // --- LÓGICA DE DRAG & DROP DE INVITADOS ---
+  // --- DRAG & DROP DE INVITADOS (HTML5 API) ---
   document.addEventListener('dragstart', (e) => {
     const guestBlock = e.target.closest('.guest');
     if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
-      draggedItem = guestBlock;
-      setTimeout(() => draggedItem.classList.add('dragging'), 0);
+      draggedGuest = guestBlock;
+      setTimeout(() => draggedGuest.classList.add('dragging'), 0);
     } else if (guestBlock && guestBlock.classList.contains('status-declinado')) {
         e.preventDefault(); 
     }
   });
 
   document.addEventListener('dragend', (e) => {
-    if(draggedItem) {
-      draggedItem.classList.remove('dragging');
-      draggedItem = null;
+    if(draggedGuest) {
+      draggedGuest.classList.remove('dragging');
+      draggedGuest = null;
       updateAllCounters();
       markUnsavedChanges();
     }
@@ -458,16 +424,13 @@
   function setupDropZone(zone) {
     zone.addEventListener('dragover', e => {
       e.preventDefault();
-      
-      if(zone.classList.contains('table-seats') && draggedItem) {
+      if(zone.classList.contains('table-seats') && draggedGuest) {
         const capacity = parseInt(zone.dataset.capacity);
-        const incomingPasses = parseInt(draggedItem.dataset.passes);
+        const incomingPasses = parseInt(draggedGuest.dataset.passes);
         let currentUsed = 0;
-        
         zone.querySelectorAll('.guest').forEach(g => {
-            if(g !== draggedItem) currentUsed += parseInt(g.dataset.passes);
+            if(g !== draggedGuest) currentUsed += parseInt(g.dataset.passes);
         });
-
         if((currentUsed + incomingPasses) > capacity) {
             e.dataTransfer.dropEffect = "none";
             return;
@@ -482,40 +445,36 @@
       e.preventDefault();
       zone.classList.remove('drag-over');
       
-      if (draggedItem) {
+      if (draggedGuest) {
         if(zone.classList.contains('table-seats')) {
             const capacity = parseInt(zone.dataset.capacity);
-            const incomingPasses = parseInt(draggedItem.dataset.passes);
+            const incomingPasses = parseInt(draggedGuest.dataset.passes);
             let currentUsed = 0;
             zone.querySelectorAll('.guest').forEach(g => {
-                if(g !== draggedItem) currentUsed += parseInt(g.dataset.passes);
+                if(g !== draggedGuest) currentUsed += parseInt(g.dataset.passes);
             });
             if((currentUsed + incomingPasses) > capacity) {
                 alert(`No hay sillas suficientes. Ocupan ${incomingPasses} lugares.`);
                 return;
             }
         }
-        zone.appendChild(draggedItem);
+        zone.appendChild(draggedGuest);
       }
     });
   }
 
   setupDropZone(document.getElementById('unseated-guests'));
 
-  // --- CONTROL DE CAPACIDADES ---
   function changeCapacity(tableId, change) {
     const seatsZone = document.getElementById(`seats-${tableId}`);
     let cap = parseInt(seatsZone.dataset.capacity) + change;
     if(cap < 1) cap = 1;
-    
     let currentUsed = 0;
     seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
-
     if(cap < currentUsed) {
-      alert("No puedes quitar sillas si ya hay invitados sentados. Mueve primero a un invitado.");
+      alert("Mueve primero a un invitado antes de quitar sillas.");
       return;
     }
-
     seatsZone.dataset.capacity = cap;
     document.querySelector(`#card-${tableId} .cap-display`).innerText = cap;
     updateCounter(tableId);
@@ -524,15 +483,11 @@
   function updateCounter(tableId) {
     const seatsZone = document.getElementById(`seats-${tableId}`);
     if(!seatsZone) return;
-
     let currentUsed = 0;
     seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
-
     const cap = parseInt(seatsZone.dataset.capacity);
     const countDisplay = document.getElementById(`count-${tableId}`);
-    
     countDisplay.innerText = `${currentUsed} / ${cap} sillas ocupadas`;
-    
     if(currentUsed === cap) countDisplay.style.color = "#2ecc71";
     else if (currentUsed > cap) countDisplay.style.color = "#e74c3c";
     else countDisplay.style.color = "var(--gold)"; 
@@ -543,132 +498,136 @@
     for(let i=1; i<=tableCount; i++) { updateCounter(`mesa-${i}`); }
   }
 
-  // --- GUARDADO EN SUPABASE ---
   function markUnsavedChanges() {
     const btn = document.getElementById('btn-save-layout');
     btn.style.background = "#e67e22"; 
     btn.innerText = "Guardar Cambios *";
   }
 
-  async function saveLayout() {
+  async function saveLayout() { /* Igual que antes */
     const btn = document.getElementById('btn-save-layout');
     const originalText = btn.innerText;
-    btn.innerText = "Guardando...";
-    btn.style.background = "#3498db";
-    btn.disabled = true;
-
+    btn.innerText = "Guardando..."; btn.style.background = "#3498db"; btn.disabled = true;
     try {
         const guests = document.querySelectorAll('.guest');
         const updates = [];
-
         guests.forEach(guest => {
             const dbId = guest.dataset.dbId;
             const parentZone = guest.parentElement.id; 
-            
-            let targetMesa = "";
-            if (parentZone.startsWith("seats-")) {
-                targetMesa = parentZone.replace("seats-", ""); 
-            }
-
+            let targetMesa = parentZone.startsWith("seats-") ? parentZone.replace("seats-", "") : "";
             updates.push(
                 fetch(`${SUPABASE_URL}/rest/v1/invitados?id=eq.${dbId}`, {
                     method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Prefer': 'return=minimal'
-                    },
+                    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' },
                     body: JSON.stringify({ mesa: targetMesa })
                 })
             );
         });
-
         await Promise.all(updates);
-
-        btn.innerText = "¡Mapeado Guardado!";
-        btn.style.background = "#2ecc71";
-        
-        setTimeout(() => {
-            btn.innerText = "Guardar Distribución";
-            btn.disabled = false;
-        }, 3000);
-
-    } catch (error) {
-        alert("Error al guardar. Revisa tu conexión.");
-        btn.innerText = originalText;
-        btn.style.background = "#e74c3c";
-        btn.disabled = false;
-    }
+        btn.innerText = "¡Mapeado Guardado!"; btn.style.background = "#2ecc71";
+        setTimeout(() => { btn.innerText = "Guardar Distribución"; btn.disabled = false; }, 3000);
+    } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- LÓGICA DE ARRASTRE LIBRE DE LAS MESAS ---
+  // --- NUEVA LÓGICA DE DRAG & DROP DE MESAS CON INTERCAMBIO (SWAP) ---
   let draggedTableUI = null;
+  let originalSlot = null;
   let tableOffsetX = 0;
   let tableOffsetY = 0;
 
   document.addEventListener('mousedown', (e) => {
-    // Buscar si hicimos clic en la cabecera
     const header = e.target.closest('.table-header');
+    const card = header ? header.closest('.table-card') : null;
     
-    // Si clicamos el header, pero NO uno de sus botones ni en el input
-    if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT') {
+    // Evitamos arrastrar si hacemos clic en botones, inputs, o si es la mesa de los novios
+    if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT' && card.id !== 'card-mesa-novios') {
       
-      draggedTableUI = header.closest('.table-card');
+      draggedTableUI = card;
+      originalSlot = draggedTableUI.parentElement; 
+      
       const rect = draggedTableUI.getBoundingClientRect();
-      const layout = document.querySelector('.room-layout');
-      const layoutRect = layout.getBoundingClientRect();
-
-      // Independizar del Flexbox en el primer arrastre
-      if (draggedTableUI.style.position !== 'absolute') {
-        draggedTableUI.style.width = rect.width + 'px'; // Congelar ancho para que no colapse
-        
-        // Coordenadas exactas relativas al layout
-        let initialLeft = rect.left - layoutRect.left;
-        let initialTop = rect.top - layoutRect.top;
-        
-        draggedTableUI.style.position = 'absolute';
-        draggedTableUI.style.left = initialLeft + 'px';
-        draggedTableUI.style.top = initialTop + 'px';
-        
-        // Mover nodo al contenedor relativo
-        layout.appendChild(draggedTableUI); 
-      }
+      const bodyRect = document.body.getBoundingClientRect();
       
+      // Congelamos el tamaño antes de sacarlo del flexbox
+      draggedTableUI.style.width = rect.width + 'px'; 
+      
+      // Lo sacamos de la ranura y lo hacemos flotar sobre todo el body
+      draggedTableUI.style.position = 'absolute';
       draggedTableUI.style.zIndex = "1000";
-      draggedTableUI.style.transition = "none"; // Quitar transición para que el arrastre sea veloz
+      draggedTableUI.style.transition = "none"; 
+      draggedTableUI.style.pointerEvents = "none"; // IMPORTANTE: Para que el mouse detecte las ranuras de abajo
+      document.body.appendChild(draggedTableUI);
       
-      // Calcular dónde agarramos la mesa exactamente
+      // Ajustamos para que se quede exactamente bajo el ratón donde hicimos clic
       tableOffsetX = e.clientX - rect.left;
       tableOffsetY = e.clientY - rect.top;
+      
+      draggedTableUI.style.left = (e.clientX - tableOffsetX) + 'px';
+      draggedTableUI.style.top = (e.clientY - tableOffsetY) + 'px';
     }
   });
 
   document.addEventListener('mousemove', (e) => {
     if (draggedTableUI) {
-      e.preventDefault(); // Prevenir selección de texto
+      e.preventDefault(); 
       
-      const layout = document.querySelector('.room-layout');
-      const layoutRect = layout.getBoundingClientRect();
-      
-      let newX = e.clientX - layoutRect.left - tableOffsetX;
-      let newY = e.clientY - layoutRect.top - tableOffsetY;
-      
-      draggedTableUI.style.left = newX + 'px';
-      draggedTableUI.style.top = newY + 'px';
+      // Mover la tarjeta con el mouse
+      draggedTableUI.style.left = (e.clientX - tableOffsetX) + 'px';
+      draggedTableUI.style.top = (e.clientY - tableOffsetY) + 'px';
+
+      // Detectar qué hay debajo del ratón
+      let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
+      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(.fixed-slot)') : null;
+
+      // Limpiar luces de todas las ranuras
+      document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
+
+      // Iluminar la ranura objetivo (si no es la original)
+      if (targetSlot && targetSlot !== originalSlot) {
+          targetSlot.classList.add('slot-highlight');
+      }
     }
   });
 
-  document.addEventListener('mouseup', () => {
+  document.addEventListener('mouseup', (e) => {
     if (draggedTableUI) {
-      draggedTableUI.style.zIndex = "10";
-      draggedTableUI.style.transition = "transform 0.2s, box-shadow 0.2s"; // Devolver las animaciones de hover
+      // Devolvemos la capacidad de interactuar
+      draggedTableUI.style.pointerEvents = "auto";
+      
+      let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
+      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(.fixed-slot)') : null;
+      
+      // Limpiamos luces
+      document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
+
+      // LÓGICA DE INTERCAMBIO (SWAP)
+      if (targetSlot && targetSlot !== originalSlot) {
+          // Si la ranura de destino ya tiene una mesa, la mandamos a la ranura original
+          let existingTable = targetSlot.querySelector('.table-card');
+          if (existingTable) {
+              originalSlot.appendChild(existingTable);
+          }
+          // Encajamos la mesa que venimos arrastrando en la nueva ranura
+          targetSlot.appendChild(draggedTableUI);
+          markUnsavedChanges();
+      } else {
+          // Si la soltamos en el vacío o en su misma ranura, se regresa (snap back)
+          originalSlot.appendChild(draggedTableUI);
+      }
+
+      // Limpiamos los estilos de vuelo para que el CSS nativo de la ranura haga su trabajo
+      draggedTableUI.style.position = '';
+      draggedTableUI.style.left = '';
+      draggedTableUI.style.top = '';
+      draggedTableUI.style.zIndex = '';
+      draggedTableUI.style.width = '100%'; 
+      draggedTableUI.style.transition = "transform 0.2s, box-shadow 0.2s"; 
+
       draggedTableUI = null;
-      markUnsavedChanges();
+      originalSlot = null;
     }
   });
 
-  // --- INICIO ---
   window.onload = () => {
     initFloorPlan(); 
     loadAllGuests(); 
