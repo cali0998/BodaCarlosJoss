@@ -1,616 +1,144 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Plano del Salón • Carlos & Joselyn</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
-  <style>
-    :root {
-      --gold: #c59d5f;
-      --wine: #4a0a16;
-      --jade: #0a2e24;
-      --glass: rgba(255, 255, 255, 0.05);
-      --border: rgba(197, 157, 95, 0.3);
-      --table-bg: rgba(0,0,0,0.6);
-      --status-conf: #2ecc71; 
-      --status-pend: #f1c40f; 
-      --status-decl: #e74c3c; 
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plano del Salón</title>
+    <style>
+        :root {
+            --verde-jade: #00A86B;
+            --vino: #722F37;
+            --dorado: #D4AF37;
+            --fondo: #fcfcfc;
+        }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-    
-    body {
-      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
-      background-attachment: fixed; color: white; height: 100vh; display: flex; flex-direction: column;
-      overflow-x: hidden;
-    }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+        }
 
-    header {
-      padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
-      background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border);
-      z-index: 100; flex-shrink: 0;
-    }
-    
-    .header-titles h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 2px; }
-    #connection-status { font-size: 0.8rem; opacity: 0.7; letter-spacing: 1px; }
+        h2 {
+            color: var(--vino);
+            margin-bottom: 10px;
+        }
 
-    .btn-save {
-      background: #2ecc71; color: white; padding: 12px 25px; border-radius: 10px; border: none;
-      font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.9rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.2s;
-    }
-    .btn-save:hover { background: #27ae60; transform: translateY(-2px); }
-    .btn-save:active { transform: scale(0.95); }
+        /* El contenedor principal que representa el salón */
+        #salon {
+            width: 800px;
+            height: 500px;
+            background-color: var(--fondo);
+            border: 4px solid var(--verde-jade);
+            border-radius: 10px;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
 
-    .container {
-      display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
-    }
+        /* Estilo base para las mesas */
+        .mesa {
+            width: 80px;
+            height: 80px;
+            background-color: white;
+            border: 3px solid var(--dorado);
+            border-radius: 50%; /* Mesas redondas */
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: var(--vino);
+            cursor: grab;
+            user-select: none;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.1s;
+        }
 
-    /* --- SIDEBAR LATERAL (LISTA DE INVITADOS) --- */
-    .sidebar {
-      width: 320px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border); border-radius: 20px; display: flex; flex-direction: column;
-      flex-shrink: 0;
-    }
-    
-    .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); text-align: center; }
-    .sidebar-header h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 10px;}
+        /* Efecto al hacer clic en la mesa */
+        .mesa:active {
+            cursor: grabbing;
+            transform: scale(1.05);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+        }
 
-    .legend { display: flex; justify-content: center; gap: 12px; font-size: 0.7rem; opacity: 0.9; margin-bottom: 5px;}
-    .legend-item { display: flex; align-items: center; gap: 5px; text-transform: uppercase; letter-spacing: 1px;}
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
-    
-    .guest-list {
-      flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-    }
-
-    /* INVITADO (FORMATO DE LISTA) */
-    .guest {
-      background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1); cursor: grab; font-size: 0.85rem;
-      transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
-      border-left: 5px solid transparent; 
-      width: 100%;
-    }
-    .guest-info { display: flex; flex-direction: column; pointer-events: none;}
-    .guest-name { font-weight: bold; }
-    .guest-passes { font-size: 0.7rem; opacity: 0.8; letter-spacing: 0.5px; }
-
-    .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(46, 204, 113, 0.1); }
-    .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(241, 196, 15, 0.05); }
-    .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
-    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; }
-    .guest.dragging { opacity: 0.5; }
-
-    /* --- ÁREA DEL SALÓN (MAYPEADO VISUAL) --- */
-    .main-area {
-      flex: 1; border-radius: 20px; padding: 20px;
-      overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
-    }
-
-    /* EL SALÓN RECTANGULAR */
-    .room-layout {
-      width: 100%; max-width: 1100px; margin: 0 auto; 
-      background: rgba(0,0,0,0.3); 
-      border: 3px solid var(--gold); 
-      border-radius: 15px;
-      padding: 30px 20px;
-      display: flex; flex-direction: column; gap: 30px;
-      box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
-    }
-
-    /* ZONA PRINCIPAL (CABECERA PARA NOVIOS) */
-    .top-stage {
-      width: 100%; display: flex; justify-content: center; padding-bottom: 20px;
-      border-bottom: 2px dashed rgba(197, 157, 95, 0.3);
-    }
-
-    /* ZONA DE INVITADOS (ALARGADA) */
-    .floor-grid {
-      display: flex; justify-content: space-between; align-items: stretch; gap: 20px;
-    }
-    
-    /* COLUMNAS LATERALES (4 mesas en fila vertical) */
-    .side-zone { 
-      display: flex; flex-direction: column; gap: 20px; width: 30%; 
-    }
-
-    /* PASILLO / PISTA CENTRAL */
-    .dance-floor-area {
-      width: 35%; border: 2px dashed var(--gold); border-radius: 15px; 
-      background: rgba(197, 157, 95, 0.05); color: var(--gold); 
-      letter-spacing: 4px; font-weight: bold; opacity: 0.5; 
-      display: flex; align-items: center; justify-content: center; text-align: center;
-      min-height: 500px; 
-    }
-
-    /* ZONA EXTRA */
-    .extra-area {
-      width: 100%; max-width: 1100px; margin: 20px auto 0 auto;
-      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
-    }
-
-    /* --- FIGURAS DE MESA (CUADRADAS/RECTANGULARES) --- */
-    .table-card {
-      width: 100%; background: var(--table-bg); backdrop-filter: blur(10px);
-      border: 2px solid var(--gold); border-radius: 15px; 
-      display: flex; flex-direction: column; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    
-    .table-card:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
-
-    /* MESA NOVIOS */
-    #card-mesa-novios {
-      width: 100%; max-width: 450px; border: 3px solid var(--gold); 
-      box-shadow: 0 0 30px rgba(197, 157, 95, 0.4);
-    }
-    #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.2rem;}
-
-    /* Mesas zona extra */
-    .extra-area .table-card { width: calc(33.333% - 15px); min-width: 250px; }
-
-    /* --- COMPONENTES DE LA MESA --- */
-    .table-header {
-      background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
-      border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
-    }
-    
-    .table-header input {
-      background: transparent; border: none; color: white; font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; font-weight: bold; width: 60%; outline: none;
-    }
-    
-    .table-controls { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; opacity: 0.8; }
-    .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; }
-    .btn-small:hover { background: var(--gold); color: black; }
-    .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
-    .btn-delete:hover { background: #e74c3c; color: white; }
-
-    /* ZONA DONDE CAEN LOS INVITADOS (LISTA INTERNA) */
-    .table-seats {
-      padding: 10px; min-height: 120px; max-height: 250px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 5px;
-    }
-    .table-seats.drag-over { background: rgba(197, 157, 95, 0.2); }
-
-    .table-seats .guest {
-      padding: 8px 10px; font-size: 0.75rem; border-radius: 6px;
-    }
-
-    .seat-count { 
-      text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 600; 
-      color: var(--gold); border-top: 1px solid var(--border); background: rgba(0,0,0,0.3);
-      border-radius: 0 0 13px 13px;
-    }
-
-    /* BOTONES */
-    .btn-add-table {
-      position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: white; 
-      padding: 15px 25px; border-radius: 50px; border: none; font-weight: 600; 
-      cursor: pointer; text-transform: uppercase; font-size: 0.9rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; z-index: 100;
-    }
-    .btn-add-table:hover { transform: scale(1.05); }
-
-    .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 20px auto; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-  </style>
+        /* Mesa principal rectangular */
+        .mesa-principal {
+            width: 150px;
+            height: 60px;
+            border-radius: 10px;
+            background-color: var(--verde-jade);
+            color: white;
+            border: 3px solid var(--dorado);
+        }
+    </style>
 </head>
 <body>
 
-  <header>
-    <div class="header-titles">
-      <h1>Mapeado del Salón</h1>
-      <div id="connection-status">Cargando base de datos...</div>
-    </div>
-    <button class="btn-save" id="btn-save-layout" onclick="saveLayout()">Guardar Distribución</button>
-  </header>
+    <h2>Distribución de Mesas</h2>
+    <p>Haz clic y arrastra las mesas para acomodarlas dentro del salón.</p>
 
-  <div class="container">
-    
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <h3>Por Acomodar</h3>
-        <div class="legend">
-          <div class="legend-item"><div class="dot" style="background:var(--status-conf)"></div> Conf.</div>
-          <div class="legend-item"><div class="dot" style="background:var(--status-pend)"></div> Pend.</div>
-          <div class="legend-item"><div class="dot" style="background:var(--status-decl)"></div> Decl.</div>
-        </div>
-      </div>
-      <div class="guest-list" id="unseated-guests">
-        <div class="loader" id="loading-guests"></div>
-      </div>
+    <div id="salon">
+        <div class="mesa mesa-principal" style="top: 20px; left: 320px;">Principal</div>
+        <div class="mesa" style="top: 150px; left: 100px;">1</div>
+        <div class="mesa" style="top: 150px; left: 360px;">2</div>
+        <div class="mesa" style="top: 150px; left: 620px;">3</div>
+        <div class="mesa" style="top: 300px; left: 230px;">4</div>
+        <div class="mesa" style="top: 300px; left: 490px;">5</div>
     </div>
 
-    <div class="main-area">
-      <div class="room-layout">
+    <script>
+        // Lógica para arrastrar y soltar (Drag and Drop)
+        const mesas = document.querySelectorAll('.mesa');
+        const salon = document.getElementById('salon');
         
-        <div class="top-stage" id="stage-area"></div>
+        let mesaActiva = null;
+        let offsetX = 0;
+        let offsetY = 0;
 
-        <div class="floor-grid">
-          <div class="side-zone" id="left-tables"></div>
-          <div class="dance-floor-area"><span>PISTA DE BAILE</span></div>
-          <div class="side-zone" id="right-tables"></div>
-        </div>
-      </div>
-      
-      <div class="extra-area" id="extra-tables"></div>
-    </div>
-
-  </div>
-
-  <button class="btn-add-table" onclick="addTable()">+ Añadir Mesa Extra</button>
-
-<script>
-  const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
-
-  let tableCount = 0;
-  let draggedItem = null;
-
-  // --- GENERACIÓN DEL PLANO ---
-  function createTableHTML(name, capacity, targetContainerId, tableId) {
-    const isNovios = tableId === 'mesa-novios';
-    const hideDelete = isNovios ? 'style="display:none;"' : '';
-    
-    const tableHTML = `
-      <div class="table-card" id="card-${tableId}">
-        <div class="table-header">
-          <input type="text" value="${name}" id="name-${tableId}" ${isNovios ? 'readonly' : ''}>
-          <div class="table-controls">
-            <button class="btn-small" onclick="changeCapacity('${tableId}', -1)">-</button>
-            <span class="cap-display">${capacity}</span>
-            <button class="btn-small" onclick="changeCapacity('${tableId}', 1)">+</button>
-            <button class="btn-delete" ${hideDelete} onclick="removeTable('${tableId}')" title="Eliminar Mesa">×</button>
-          </div>
-        </div>
-        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}"></div>
-        <div class="seat-count" id="count-${tableId}">0 / ${capacity} sillas ocupadas</div>
-      </div>
-    `;
-
-    document.getElementById(targetContainerId).insertAdjacentHTML('beforeend', tableHTML);
-    setupDropZone(document.getElementById(`seats-${tableId}`));
-  }
-
-  function initFloorPlan() {
-    createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'stage-area', 'mesa-novios');
-    
-    for(let i=1; i<=4; i++) { createTableHTML(`Mesa ${i}`, 10, 'left-tables', `mesa-${i}`); }
-    for(let i=5; i<=8; i++) { createTableHTML(`Mesa ${i}`, 10, 'right-tables', `mesa-${i}`); }
-    
-    tableCount = 8; 
-  }
-
-  // --- AUTOMATIZACIÓN DE REUBICACIÓN (ELIMINAR Y REEMPAQUETAR) ---
-  function addTable(capacity = 10) {
-    tableCount++;
-    const newId = `mesa-${tableCount}`;
-    
-    let targetZone = 'extra-tables';
-    if (tableCount <= 4) targetZone = 'left-tables';
-    else if (tableCount <= 8) targetZone = 'right-tables';
-
-    createTableHTML(`Mesa ${tableCount}`, capacity, targetZone, newId);
-  }
-
-  function removeTable(tableId) {
-    if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa? Las siguientes mesas se recorrerán automáticamente para llenar el espacio.")) return;
-    
-    const tableCard = document.getElementById(`card-${tableId}`);
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    const unseatedZone = document.getElementById('unseated-guests');
-    
-    // Devolver invitados a la lista
-    const guests = seatsZone.querySelectorAll('.guest');
-    guests.forEach(g => unseatedZone.appendChild(g));
-    
-    // Eliminar la mesa del HTML
-    tableCard.remove();
-    
-    // REUBICAR Y RENOMBRAR
-    reindexAndRepackTables();
-    markUnsavedChanges();
-  }
-
-  function reindexAndRepackTables() {
-    // Tomamos todas las mesas excepto la de los novios
-    const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
-
-    // Ordenarlas numéricamente por su ID actual para evitar cruces extraños
-    allCards.sort((a, b) => {
-       let numA = parseInt(a.id.replace('card-mesa-', ''));
-       let numB = parseInt(b.id.replace('card-mesa-', ''));
-       return numA - numB;
-    });
-
-    const leftZone = document.getElementById('left-tables');
-    const rightZone = document.getElementById('right-tables');
-    const extraZone = document.getElementById('extra-tables');
-
-    tableCount = allCards.length; // Actualizamos el conteo maestro
-
-    allCards.forEach((card, index) => {
-      let newNum = index + 1;
-      let newId = `mesa-${newNum}`;
-
-      // Actualizar el ID principal de la tarjeta
-      card.id = `card-${newId}`;
-      
-      // Actualizar el input del nombre (solo si tiene el nombre por defecto "Mesa X")
-      let input = card.querySelector('.table-header input');
-      input.id = `name-${newId}`;
-      if (/^Mesa \d+$/i.test(input.value)) {
-          input.value = `Mesa ${newNum}`;
-      }
-
-      // Actualizar botones de + y - y Eliminar
-      let btns = card.querySelectorAll('.btn-small');
-      btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
-      btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
-      
-      let delBtn = card.querySelector('.btn-delete');
-      if(delBtn) delBtn.setAttribute('onclick', `removeTable('${newId}')`);
-
-      // Actualizar zona de asientos y contador
-      let seats = card.querySelector('.table-seats');
-      seats.id = `seats-${newId}`;
-
-      let count = card.querySelector('.seat-count');
-      count.id = `count-${newId}`;
-
-      // Mover físicamente al contenedor correcto para respetar el plano (4 y 4)
-      if (newNum <= 4) {
-        leftZone.appendChild(card);
-      } else if (newNum <= 8) {
-        rightZone.appendChild(card);
-      } else {
-        extraZone.appendChild(card);
-      }
-    });
-  }
-
-  // --- CARGAR INVITADOS DE SUPABASE ---
-  async function loadAllGuests() {
-    const statusText = document.getElementById('connection-status');
-    const guestList = document.getElementById('unseated-guests');
-    
-    try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?select=id,nombre,pases,estado,mesa`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
-      
-      if (!response.ok) throw new Error('Error al conectar');
-      
-      const invitados = await response.json();
-      document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = `${invitados.length} Registros Sincronizados`;
-
-      invitados.forEach(invitado => {
-        let statusClass = 'status-pendiente'; 
-        let isDraggable = true;
-
-        if (invitado.estado === 'Confirmado') statusClass = 'status-confirmado';
-        else if (invitado.estado === 'Declinado') {
-            statusClass = 'status-declinado';
-            isDraggable = false; 
-        }
-
-        const pases = parseInt(invitado.pases) || 1;
-        const uniqueId = `guest-${invitado.id}`;
-        
-        const guestHTML = `
-          <div class="guest ${statusClass}" draggable="${isDraggable}" id="${uniqueId}" data-db-id="${invitado.id}" data-passes="${pases}">
-            <div class="guest-info">
-              <span class="guest-name">${invitado.nombre}</span>
-              <span class="guest-passes">Pases: ${pases}</span>
-            </div>
-          </div>
-        `;
-
-        let targetZone = guestList;
-        if (invitado.mesa && invitado.mesa.trim() !== '') {
-            let tableZone = document.getElementById(`seats-${invitado.mesa}`);
-            
-            if (!tableZone && invitado.mesa !== 'mesa-novios') {
-                let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
-                if(!isNaN(tNum)) {
-                    while(tableCount < tNum) { addTable(10); } // Usa addTable para que se acomoden bien
-                    tableZone = document.getElementById(`seats-${invitado.mesa}`);
-                }
-            }
-            if(tableZone) targetZone = tableZone;
-        }
-
-        targetZone.insertAdjacentHTML('beforeend', guestHTML);
-      });
-
-      updateAllCounters();
-
-    } catch (error) {
-      document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = "Error de conexión. Recarga la página.";
-      statusText.style.color = "#e74c3c";
-    }
-  }
-
-  // --- LÓGICA DE DRAG & DROP ---
-  document.addEventListener('dragstart', (e) => {
-    const guestBlock = e.target.closest('.guest');
-    if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
-      draggedItem = guestBlock;
-      setTimeout(() => draggedItem.classList.add('dragging'), 0);
-    } else if (guestBlock && guestBlock.classList.contains('status-declinado')) {
-        e.preventDefault(); 
-    }
-  });
-
-  document.addEventListener('dragend', (e) => {
-    if(draggedItem) {
-      draggedItem.classList.remove('dragging');
-      draggedItem = null;
-      updateAllCounters();
-      markUnsavedChanges();
-    }
-  });
-
-  function setupDropZone(zone) {
-    zone.addEventListener('dragover', e => {
-      e.preventDefault();
-      
-      if(zone.classList.contains('table-seats') && draggedItem) {
-        const capacity = parseInt(zone.dataset.capacity);
-        const incomingPasses = parseInt(draggedItem.dataset.passes);
-        let currentUsed = 0;
-        
-        zone.querySelectorAll('.guest').forEach(g => {
-            if(g !== draggedItem) currentUsed += parseInt(g.dataset.passes);
-        });
-
-        if((currentUsed + incomingPasses) > capacity) {
-            e.dataTransfer.dropEffect = "none";
-            return;
-        }
-      }
-      zone.classList.add('drag-over');
-    });
-
-    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-
-    zone.addEventListener('drop', e => {
-      e.preventDefault();
-      zone.classList.remove('drag-over');
-      
-      if (draggedItem) {
-        if(zone.classList.contains('table-seats')) {
-            const capacity = parseInt(zone.dataset.capacity);
-            const incomingPasses = parseInt(draggedItem.dataset.passes);
-            let currentUsed = 0;
-            zone.querySelectorAll('.guest').forEach(g => {
-                if(g !== draggedItem) currentUsed += parseInt(g.dataset.passes);
+        // Cuando el usuario hace clic en una mesa
+        mesas.forEach(mesa => {
+            mesa.addEventListener('mousedown', (e) => {
+                mesaActiva = mesa;
+                // Calculamos la diferencia entre el clic del ratón y la esquina de la mesa
+                offsetX = e.clientX - mesa.getBoundingClientRect().left;
+                offsetY = e.clientY - mesa.getBoundingClientRect().top;
             });
-            if((currentUsed + incomingPasses) > capacity) {
-                alert(`No hay sillas suficientes. Ocupan ${incomingPasses} lugares.`);
-                return;
-            }
-        }
-        zone.appendChild(draggedItem);
-      }
-    });
-  }
-
-  setupDropZone(document.getElementById('unseated-guests'));
-
-  // --- CONTROL DE CAPACIDADES ---
-  function changeCapacity(tableId, change) {
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    let cap = parseInt(seatsZone.dataset.capacity) + change;
-    if(cap < 1) cap = 1;
-    
-    let currentUsed = 0;
-    seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
-
-    if(cap < currentUsed) {
-      alert("No puedes quitar sillas si ya hay invitados sentados. Mueve primero a un invitado.");
-      return;
-    }
-
-    seatsZone.dataset.capacity = cap;
-    document.querySelector(`#card-${tableId} .cap-display`).innerText = cap;
-    updateCounter(tableId);
-  }
-
-  function updateCounter(tableId) {
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    if(!seatsZone) return;
-
-    let currentUsed = 0;
-    seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
-
-    const cap = parseInt(seatsZone.dataset.capacity);
-    const countDisplay = document.getElementById(`count-${tableId}`);
-    
-    countDisplay.innerText = `${currentUsed} / ${cap} sillas ocupadas`;
-    
-    if(currentUsed === cap) countDisplay.style.color = "#2ecc71";
-    else if (currentUsed > cap) countDisplay.style.color = "#e74c3c";
-    else countDisplay.style.color = "var(--gold)"; 
-  }
-
-  function updateAllCounters() {
-    updateCounter('mesa-novios');
-    for(let i=1; i<=tableCount; i++) { updateCounter(`mesa-${i}`); }
-  }
-
-  // --- GUARDADO EN SUPABASE ---
-  function markUnsavedChanges() {
-    const btn = document.getElementById('btn-save-layout');
-    btn.style.background = "#e67e22"; 
-    btn.innerText = "Guardar Cambios *";
-  }
-
-  async function saveLayout() {
-    const btn = document.getElementById('btn-save-layout');
-    const originalText = btn.innerText;
-    btn.innerText = "Guardando...";
-    btn.style.background = "#3498db";
-    btn.disabled = true;
-
-    try {
-        const guests = document.querySelectorAll('.guest');
-        const updates = [];
-
-        guests.forEach(guest => {
-            const dbId = guest.dataset.dbId;
-            const parentZone = guest.parentElement.id; 
-            
-            let targetMesa = "";
-            if (parentZone.startsWith("seats-")) {
-                targetMesa = parentZone.replace("seats-", ""); 
-            }
-
-            updates.push(
-                fetch(`${SUPABASE_URL}/rest/v1/invitados?id=eq.${dbId}`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'apikey': SUPABASE_KEY,
-                        'Authorization': `Bearer ${SUPABASE_KEY}`,
-                        'Prefer': 'return=minimal'
-                    },
-                    body: JSON.stringify({ mesa: targetMesa })
-                })
-            );
         });
 
-        await Promise.all(updates);
+        // Cuando el usuario mueve el ratón por toda la pantalla
+        document.addEventListener('mousemove', (e) => {
+            if (!mesaActiva) return;
 
-        btn.innerText = "¡Mapeado Guardado!";
-        btn.style.background = "#2ecc71";
-        
-        setTimeout(() => {
-            btn.innerText = "Guardar Distribución";
-            btn.disabled = false;
-        }, 3000);
+            const salonRect = salon.getBoundingClientRect();
 
-    } catch (error) {
-        alert("Error al guardar. Revisa tu conexión.");
-        btn.innerText = originalText;
-        btn.style.background = "#e74c3c";
-        btn.disabled = false;
-    }
-  }
+            // Calculamos la nueva posición relativa al contenedor del salón
+            let nuevaPosicionX = e.clientX - salonRect.left - offsetX;
+            let nuevaPosicionY = e.clientY - salonRect.top - offsetY;
 
-  // --- INICIO ---
-  window.onload = () => {
-    initFloorPlan(); 
-    loadAllGuests(); 
-  };
-</script>
+            // Límites para que las mesas no se salgan del salón
+            if (nuevaPosicionX < 0) nuevaPosicionX = 0;
+            if (nuevaPosicionY < 0) nuevaPosicionY = 0;
+            if (nuevaPosicionX + mesaActiva.offsetWidth > salonRect.width) {
+                nuevaPosicionX = salonRect.width - mesaActiva.offsetWidth;
+            }
+            if (nuevaPosicionY + mesaActiva.offsetHeight > salonRect.height) {
+                nuevaPosicionY = salonRect.height - mesaActiva.offsetHeight;
+            }
+
+            // Aplicamos las nuevas coordenadas
+            mesaActiva.style.left = `${nuevaPosicionX}px`;
+            mesaActiva.style.top = `${nuevaPosicionY}px`;
+        });
+
+        // Cuando el usuario suelta el clic del ratón
+        document.addEventListener('mouseup', () => {
+            mesaActiva = null;
+        });
+    </script>
+
 </body>
 </html>
