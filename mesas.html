@@ -13,6 +13,10 @@
       --jade: #0a2e24;
       --glass: rgba(255, 255, 255, 0.05);
       --border: rgba(197, 157, 95, 0.3);
+      /* Colores de estado */
+      --status-conf: #2ecc71; /* Verde */
+      --status-pend: #f1c40f; /* Amarillo/Dorado */
+      --status-decl: #e74c3c; /* Rojo */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
@@ -25,7 +29,8 @@
     header {
       padding: 20px; text-align: center; background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border);
     }
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; }
+    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; margin-bottom: 5px; }
+    #connection-status { font-size: 0.8rem; opacity: 0.7; letter-spacing: 1px; }
 
     .container {
       display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
@@ -33,25 +38,37 @@
 
     /* LISTA DE INVITADOS SIN MESA */
     .sidebar {
-      width: 300px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      width: 320px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border); border-radius: 20px; display: flex; flex-direction: column;
     }
     
     .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); text-align: center; }
-    .sidebar-header h3 { color: var(--gold); font-size: 1.2rem; }
+    .sidebar-header h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 10px;}
 
+    /* LEYENDA DE ESTADOS */
+    .legend { display: flex; justify-content: center; gap: 12px; font-size: 0.7rem; opacity: 0.9; margin-bottom: 5px;}
+    .legend-item { display: flex; align-items: center; gap: 5px; text-transform: uppercase; letter-spacing: 1px;}
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    
     .guest-list {
       flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
       min-height: 200px;
     }
 
-    /* INVITADO (DRAGGABLE) */
+    /* INVITADO (DRAGGABLE) CON ESTADOS DE COLOR */
     .guest {
       background: rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.2); cursor: grab; font-size: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.1); cursor: grab; font-size: 0.85rem;
       transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
+      border-left: 5px solid transparent; /* Espacio para el color */
     }
-    .guest:active { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; font-weight: bold; }
+
+    /* Clases de estado aplicadas por JS */
+    .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(46, 204, 113, 0.1); }
+    .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(241, 196, 15, 0.05); }
+    .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
+
+    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; font-weight: bold; border-left-color: transparent;}
     .guest.dragging { opacity: 0.5; }
 
     /* ÁREA DE MESAS */
@@ -65,7 +82,7 @@
     .table-card {
       width: calc(33.333% - 14px); min-width: 250px; background: var(--glass);
       backdrop-filter: blur(10px); border: 1px solid var(--gold); border-radius: 15px;
-      display: flex; flex-direction: column;
+      display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
     }
 
     .table-header {
@@ -89,40 +106,38 @@
     .seat-count { text-align: center; padding: 10px; font-size: 0.8rem; color: var(--gold); border-top: 1px solid var(--border); }
 
     /* BOTONES GLOBALES */
-    .actions { padding: 15px; display: flex; gap: 10px; }
     .btn {
       background: var(--gold); color: white; padding: 12px; border-radius: 10px; border: none;
       font-weight: 600; cursor: pointer; flex: 1; text-transform: uppercase; font-size: 0.8rem; transition: 0.3s;
     }
     .btn:active { transform: scale(0.95); }
-    .btn-outline { background: transparent; border: 1px solid var(--gold); color: var(--gold); }
+    
+    /* Loader */
+    .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 20px auto; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
   <header>
     <h1>Diseño de Mesas</h1>
+    <div id="connection-status">Sincronizando invitados...</div>
   </header>
 
   <div class="container">
     
     <div class="sidebar">
       <div class="sidebar-header">
-        <h3>Invitados por Acomodar</h3>
+        <h3>Lista de Invitados</h3>
+        <div class="legend">
+          <div class="legend-item"><div class="dot" style="background:var(--status-conf)"></div> Conf.</div>
+          <div class="legend-item"><div class="dot" style="background:var(--status-pend)"></div> Pend.</div>
+          <div class="legend-item"><div class="dot" style="background:var(--status-decl)"></div> Decl.</div>
+        </div>
       </div>
       <div class="guest-list" id="unseated-guests">
-        <div class="guest" draggable="true" id="g1">Tío Juan</div>
-        <div class="guest" draggable="true" id="g2">Tía Marta</div>
-        <div class="guest" draggable="true" id="g3">Primo Andrés</div>
-        <div class="guest" draggable="true" id="g4">Amiga Sofía</div>
-        <div class="guest" draggable="true" id="g5">Compañero Luis</div>
-        <div class="guest" draggable="true" id="g6">Abuela Carmen</div>
-        <div class="guest" draggable="true" id="g7">Hermano David</div>
-        <div class="guest" draggable="true" id="g8">Cuñada Elena</div>
-      </div>
-      <div class="actions">
-        <button class="btn btn-outline" onclick="addDummyGuest()">+ Añadir Invitado</button>
-      </div>
+        <div class="loader" id="loading-guests"></div>
+        </div>
     </div>
 
     <div class="main-area" id="floor-plan">
@@ -133,16 +148,71 @@
   <button class="btn" style="position: fixed; bottom: 30px; right: 30px; width: 180px; box-shadow: 0 10px 20px rgba(0,0,0,0.5);" onclick="addTable()">+ Nueva Mesa</button>
 
 <script>
-  let tableCount = 0;
-  let guestCounter = 9;
+  // --- CREDENCIALES DE SUPABASE INYECTADAS ---
+  const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
 
-  // Lógica de Drag & Drop
+  let tableCount = 0;
   let draggedItem = null;
 
+  // --- CARGAR ABSOLUTAMENTE TODOS LOS INVITADOS ---
+  async function loadAllGuests() {
+    const statusText = document.getElementById('connection-status');
+    const guestList = document.getElementById('unseated-guests');
+    
+    try {
+      // Petición sin filtros de estado para traer a todos
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?select=id,nombre,pases,estado,mesa`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      
+      if (!response.ok) throw new Error('Error al conectar con la base de datos');
+      
+      const invitados = await response.json();
+      document.getElementById('loading-guests').style.display = 'none';
+      statusText.innerText = `${invitados.length} Invitados Totales Sincronizados`;
+
+      invitados.forEach(invitado => {
+        // Determinar la clase CSS de estado
+        let statusClass = 'status-pendiente'; // Por defecto si está vacío o nulo
+        let isDraggable = true;
+
+        if (invitado.estado === 'Confirmado') {
+            statusClass = 'status-confirmado';
+        } else if (invitado.estado === 'Declinado') {
+            statusClass = 'status-declinado';
+            isDraggable = false; // No tiene sentido mover a alguien que no va
+        }
+
+        // Por cada pase, creamos una silla "virtual" arrastrable
+        for (let i = 1; i <= invitado.pases; i++) {
+          const suffix = invitado.pases > 1 ? ` (${i}/${invitado.pases})` : '';
+          const guestName = `${invitado.nombre}${suffix}`;
+          const uniqueId = `guest-${invitado.id}-${i}`;
+          
+          const guestHTML = `
+            <div class="guest ${statusClass}" draggable="${isDraggable}" id="${uniqueId}" data-db-id="${invitado.id}">
+              ${guestName}
+            </div>
+          `;
+          guestList.insertAdjacentHTML('beforeend', guestHTML);
+        }
+      });
+
+    } catch (error) {
+      document.getElementById('loading-guests').style.display = 'none';
+      statusText.innerText = "Error de conexión. Recarga la página.";
+      statusText.style.color = "#e74c3c";
+    }
+  }
+
+  // --- LÓGICA DE DRAG & DROP (Actualizada para bloquear declinados) ---
   document.addEventListener('dragstart', (e) => {
-    if(e.target.classList.contains('guest')) {
+    if(e.target.classList.contains('guest') && !e.target.classList.contains('status-declinado')) {
       draggedItem = e.target;
       setTimeout(() => e.target.classList.add('dragging'), 0);
+    } else if (e.target.classList.contains('status-declinado')) {
+        e.preventDefault(); // Evita que empiece el arrastre
     }
   });
 
@@ -157,10 +227,10 @@
   function setupDropZone(zone) {
     zone.addEventListener('dragover', e => {
       e.preventDefault();
+      // Bloquear drop si la mesa está llena
       if(zone.classList.contains('table-seats')) {
         const capacity = parseInt(zone.dataset.capacity);
         const currentCount = zone.querySelectorAll('.guest').length;
-        // Si la mesa está llena y el invitado no está ya en esta mesa, no dejar soltar
         if(currentCount >= capacity && draggedItem.parentElement !== zone) return;
       }
       zone.classList.add('drag-over');
@@ -171,16 +241,19 @@
     zone.addEventListener('drop', e => {
       e.preventDefault();
       zone.classList.remove('drag-over');
+      // Solo permitir drop si hay un ítem arrastrándose (evita errores con declinados)
       if (draggedItem) {
         zone.appendChild(draggedItem);
+        // Aquí guardaremos en el futuro
+        console.log(`Movido: ${draggedItem.innerText} -> ${zone.id}`); 
       }
     });
   }
 
-  // Inicializar la zona de la lista izquierda
+  // Zona de la lista izquierda (para devolver invitados)
   setupDropZone(document.getElementById('unseated-guests'));
 
-  // Función para crear una mesa nueva
+  // --- LÓGICA DE MESAS ---
   function addTable(capacity = 8) {
     tableCount++;
     const tableId = `table-${tableCount}`;
@@ -205,16 +278,14 @@
     setupDropZone(document.getElementById(`seats-${tableId}`));
   }
 
-  // Cambiar cantidad de sillas de una mesa
   function changeCapacity(tableId, change) {
     const seatsZone = document.getElementById(`seats-${tableId}`);
     let cap = parseInt(seatsZone.dataset.capacity) + change;
-    if(cap < 1) cap = 1; // Mínimo 1 silla
+    if(cap < 1) cap = 1;
     
-    // Validar que no le bajen la capacidad si ya hay gente sentada superando ese número
     const currentGuests = seatsZone.querySelectorAll('.guest').length;
     if(cap < currentGuests) {
-      alert("No puedes quitar sillas si ya hay invitados sentados en ellas. Quita al invitado primero.");
+      alert("No puedes quitar sillas si ya hay invitados sentados. Mueve al invitado primero.");
       return;
     }
 
@@ -223,40 +294,34 @@
     updateCounter(tableId);
   }
 
-  // Actualizar los contadores visuales de sillas
   function updateCounter(tableId) {
     const seatsZone = document.getElementById(`seats-${tableId}`);
     const currentCount = seatsZone.querySelectorAll('.guest').length;
     const cap = seatsZone.dataset.capacity;
     document.getElementById(`count-${tableId}`).innerText = `${currentCount} / ${cap} sillas ocupadas`;
     
+    // Cambiar color si está llena
     if(currentCount >= cap) {
-      document.getElementById(`count-${tableId}`).style.color = "#e74c3c"; // Rojo si está llena
+      document.getElementById(`count-${tableId}`).style.color = "#e74c3c"; // Rojo
     } else {
       document.getElementById(`count-${tableId}`).style.color = "var(--gold)";
     }
   }
 
   function updateAllCounters() {
-    for(let i=1; i<=tableCount; i++) {
-      if(document.getElementById(`table-${i}`)) updateCounter(`table-${i}`);
-    }
+    // Buscar todas las tarjetas de mesa actuales
+    document.querySelectorAll('.table-card').forEach(table => {
+        updateCounter(table.id);
+    });
   }
 
-  // Función temporal para probar añadir gente
-  function addDummyGuest() {
-    const name = prompt("Nombre del invitado:");
-    if(!name) return;
-    
-    const guestHTML = `<div class="guest" draggable="true" id="g${guestCounter++}">${name}</div>`;
-    document.getElementById('unseated-guests').insertAdjacentHTML('beforeend', guestHTML);
-  }
-
-  // Iniciar con 3 mesas por defecto
+  // --- INICIALIZACIÓN ---
   window.onload = () => {
+    // Mesas por defecto
     addTable(8);
     addTable(8);
     addTable(10);
+    loadAllGuests(); // Cargar la base de datos
   };
 </script>
 </body>
