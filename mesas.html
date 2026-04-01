@@ -272,7 +272,6 @@
   let tableCount = 0;
   let draggedGuest = null; 
 
-  // --- GENERACIÓN DE MESAS DENTRO DE LOS IMANES ---
   function createTableHTML(name, capacity, tableId, slotId) {
     const isNovios = tableId === 'mesa-novios';
     const hideDelete = isNovios ? 'style="display:none;"' : '';
@@ -293,7 +292,6 @@
       </div>
     `;
 
-    // Buscamos la ranura de destino. Si no existe (es una mesa extra), la creamos.
     let targetSlot = document.getElementById(slotId);
     if (!targetSlot) {
         const extraHTML = `<div class="table-slot" id="${slotId}"></div>`;
@@ -308,7 +306,6 @@
   function initFloorPlan() {
     createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'mesa-novios', 'slot-novios');
     
-    // Rellenamos los imanes fijos iniciales
     for(let i=1; i<=4; i++) { createTableHTML(`Mesa ${i}`, 10, `mesa-${i}`, `slot-izq-${i}`); }
     for(let i=5; i<=8; i++) { createTableHTML(`Mesa ${i}`, 10, `mesa-${i}`, `slot-der-${i-4}`); }
     
@@ -319,14 +316,12 @@
     tableCount++;
     const newId = `mesa-${tableCount}`;
     
-    // Buscar si hay algún imán fijo vacío primero
     const fixedSlots = Array.from(document.querySelectorAll('.fixed-slot:not(#slot-novios)'));
     let emptySlot = fixedSlots.find(slot => slot.children.length === 0);
     
     if (emptySlot) {
         createTableHTML(`Mesa ${tableCount}`, capacity, newId, emptySlot.id);
     } else {
-        // Si los 8 imanes fijos están llenos, creamos la mesa en la zona extra
         createTableHTML(`Mesa ${tableCount}`, capacity, newId, `slot-extra-${tableCount}`);
     }
   }
@@ -340,14 +335,11 @@
     const unseatedZone = document.getElementById('unseated-guests');
     const slot = tableCard.parentElement; 
     
-    // Regresamos los invitados a la lista general
     const guests = seatsZone.querySelectorAll('.guest');
     guests.forEach(g => unseatedZone.appendChild(g));
     
-    // Eliminamos solo la mesa
     tableCard.remove(); 
 
-    // Si la ranura no es fija (está en la zona de extras), también borramos la ranura
     if (!slot.classList.contains('fixed-slot')) {
         slot.remove();
     }
@@ -355,7 +347,6 @@
     markUnsavedChanges();
   }
 
-  // --- CARGA DE DATOS DESDE SUPABASE ---
   async function loadAllGuests() {
     const statusText = document.getElementById('connection-status');
     const guestList = document.getElementById('unseated-guests');
@@ -545,7 +536,7 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- LÓGICA DE INTERCAMBIO Y ARRASTRE DE MESAS ---
+  // --- LÓGICA DE INTERCAMBIO Y ARRASTRE DE MESAS (CORREGIDA) ---
   let draggedTableUI = null;
   let originalSlot = null;
   let tableOffsetX = 0;
@@ -566,7 +557,10 @@
       draggedTableUI.style.position = 'absolute';
       draggedTableUI.style.zIndex = "1000";
       draggedTableUI.style.transition = "none"; 
+      
+      // Hacemos que la mesa sea invisible al ratón MIENTRAS la arrastramos
       draggedTableUI.style.pointerEvents = "none"; 
+      
       document.body.appendChild(draggedTableUI);
       
       tableOffsetX = e.clientX - rect.left;
@@ -597,10 +591,13 @@
 
   document.addEventListener('mouseup', (e) => {
     if (draggedTableUI) {
-      draggedTableUI.style.pointerEvents = "auto";
       
+      // 1. Buscamos qué hay debajo ANTES de devolverle los pointerEvents a la mesa
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
+      
+      // 2. AHORA SÍ, devolvemos los eventos del ratón a la mesa para que vuelva a ser "sólida"
+      draggedTableUI.style.pointerEvents = "auto";
       
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
