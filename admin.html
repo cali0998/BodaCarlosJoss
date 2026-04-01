@@ -57,22 +57,7 @@
       display: flex; align-items: center; justify-content: center; color: white;
     }
 
-    /* --- SELLO DE CÁMARA DESECHABLE --- */
-    .date-stamp {
-      position: absolute;
-      bottom: 8%;
-      right: 8%;
-      color: #ff6600; /* Naranja radiante de cámara vieja */
-      font-family: 'Courier New', Courier, monospace;
-      font-weight: bold;
-      font-size: 14px;
-      text-shadow: 2px 2px 2px rgba(0,0,0,0.9);
-      letter-spacing: 2px;
-      z-index: 5;
-      pointer-events: none;
-      opacity: 0.9;
-    }
-
+    /* BOTÓN ACTUALIZAR CON EL MISMO ESTILO DE ICONOS LIGEROS */
     .btn-update {
       position: fixed; bottom: 30px; right: 20px; background: var(--gold);
       width: 55px; height: 55px; border-radius: 50%; border: none;
@@ -82,6 +67,7 @@
     }
     .btn-update:active { transform: scale(0.9) rotate(180deg); }
 
+    /* MODAL CON ESTÉTICA DE CRISTAL OSCURO */
     .modal {
       display: none; position: fixed; inset: 0; z-index: 9999;
       background: rgba(0,0,0,0.96); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
@@ -97,6 +83,7 @@
       transform: translateZ(0);
     }
 
+    /* BOTONES DE NAVEGACIÓN UNIFICADOS (COMO EN LA INVITACIÓN/INDEX) */
     .nav-btn {
       position: absolute; bottom: 40px; background: rgba(197, 157, 95, 0.9);
       color: white; width: 60px; height: 50px; border: none;
@@ -159,15 +146,10 @@
       items = all.sort((a,b) => b.version - a.version).map(m => {
         const isVid = ['mp4','mov','webm'].includes(m.format.toLowerCase());
         const type = isVid ? 'video' : 'image';
-        
-        // 🔥 FILTRO EXTREMO: Contraste alto, sepia, saturación, GRANO REAL (noise) y viñeta oscura. 
-        // El servidor procesa esto ANTES de enviarle la foto al celular.
-        const filtroDesechable = !isVid ? ",e_contrast:50,e_saturation:40,e_sepia:40,e_noise:30,e_vignette:60" : "";
-
         return {
           isVid,
-          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_350,h_350,g_auto,q_auto:low,f_auto${filtroDesechable}/v${m.version}/${m.public_id}.${m.format}`,
-          full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco${filtroDesechable}/v${m.version}/${m.public_id}.${m.format}`,
+          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_350,h_350,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${m.format}`,
+          full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
           original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`
         };
       });
@@ -181,11 +163,7 @@
     const container = document.getElementById('gallery');
     container.innerHTML = items.map((m, i) => `
       <div class="media-card" onclick="openModal(${i})">
-        ${m.isVid ? 
-          `<video src="${m.thumb}" muted loop playsinline autoplay preload="none"></video><div class="play-icon">▶</div>` : 
-          `<img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}" ${i < 6 ? 'fetchpriority="high"' : ''}>
-           <div class="date-stamp">'26 12 19</div>`
-        }
+        ${m.isVid ? `<video src="${m.thumb}" muted loop playsinline autoplay preload="none"></video><div class="play-icon">▶</div>` : `<img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}" ${i < 6 ? 'fetchpriority="high"' : ''}>`}
       </div>
     `).join('');
   }
@@ -204,10 +182,7 @@
     
     container.innerHTML = m.isVid ? 
       `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'"></video>` :
-      `<div style="position:relative; display:inline-block; max-height:80vh; max-width:100%;">
-         <img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">
-         <div class="date-stamp" style="font-size: 1.5rem; bottom: 6%; right: 6%;">'26 12 19</div>
-       </div>`;
+      `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">`;
     
     document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
     
@@ -247,4 +222,3 @@
 </script>
 </body>
 </html>
-
