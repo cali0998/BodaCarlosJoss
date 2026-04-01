@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Organizador de Mesas • Carlos & Joselyn</title>
+  <title>Plano del Salón • Carlos & Joselyn</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
@@ -28,6 +28,7 @@
     header {
       padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
       background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border);
+      z-index: 100;
     }
     
     .header-titles h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 2px; }
@@ -45,10 +46,11 @@
       display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
     }
 
-    /* LISTA LATERAL */
+    /* --- LISTA LATERAL (INVITADOS) --- */
     .sidebar {
       width: 320px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border: 1px solid var(--border); border-radius: 20px; display: flex; flex-direction: column;
+      flex-shrink: 0;
     }
     
     .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); text-align: center; }
@@ -60,71 +62,110 @@
     
     .guest-list {
       flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
-      min-height: 200px;
     }
 
-    /* INVITADO (BLOQUE FAMILIAR) */
+    /* INVITADOS */
     .guest {
       background: rgba(255,255,255,0.1); padding: 12px 15px; border-radius: 10px;
       border: 1px solid rgba(255,255,255,0.1); cursor: grab; font-size: 0.85rem;
       transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
       border-left: 5px solid transparent; 
     }
-
-    .guest-info { display: flex; flex-direction: column; }
+    .guest-info { display: flex; flex-direction: column; pointer-events: none;}
     .guest-name { font-weight: bold; }
     .guest-passes { font-size: 0.7rem; opacity: 0.8; letter-spacing: 0.5px; }
 
     .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(46, 204, 113, 0.1); }
     .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(241, 196, 15, 0.05); }
     .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
-
     .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; border-left-color: transparent;}
     .guest.dragging { opacity: 0.5; }
 
-    /* ÁREA DE MESAS */
+    /* --- ÁREA DEL SALÓN (PLANO) --- */
     .main-area {
       flex: 1; background: rgba(0,0,0,0.2); border-radius: 20px; padding: 20px;
-      overflow-y: auto; display: flex; flex-wrap: wrap; gap: 20px; align-content: flex-start;
-      border: 1px dashed rgba(255,255,255,0.1);
+      overflow-y: auto; border: 1px dashed rgba(255,255,255,0.1);
     }
 
-    /* MESA */
-    .table-card {
-      width: calc(33.333% - 14px); min-width: 260px; background: var(--glass);
-      backdrop-filter: blur(10px); border: 1px solid var(--gold); border-radius: 15px;
-      display: flex; flex-direction: column; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    .room-layout {
+      width: 100%; max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 30px;
     }
+
+    /* ZONA NOVIOS */
+    .top-stage {
+      width: 100%; display: flex; justify-content: center; padding-bottom: 20px;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    /* ZONA INVITADOS Y PISTA */
+    .guest-zone {
+      display: flex; justify-content: space-between; gap: 20px; width: 100%;
+    }
+    .side-column {
+      display: flex; flex-direction: column; gap: 25px; width: 35%;
+    }
+    .center-aisle {
+      width: 25%; display: flex; align-items: center; justify-content: center;
+    }
+    
+    .dance-floor {
+      width: 100%; height: 90%; border: 2px dashed var(--gold); border-radius: 20px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(197, 157, 95, 0.05); color: var(--gold); 
+      letter-spacing: 4px; font-weight: bold; opacity: 0.5; text-align: center;
+    }
+
+    /* ZONA EXTRA (Si se añaden más mesas de las 8 principales) */
+    .extra-zone {
+      width: 100%; display: flex; flex-wrap: wrap; gap: 25px; justify-content: center; 
+      padding-top: 20px; border-top: 1px dashed var(--border);
+    }
+    .extra-zone:empty { border: none; padding: 0; } /* Ocultar si está vacía */
+
+    /* --- TARJETAS DE MESA --- */
+    .table-card {
+      width: 100%; background: var(--glass); backdrop-filter: blur(10px); 
+      border: 1px solid var(--gold); border-radius: 15px; display: flex; flex-direction: column; 
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: transform 0.2s;
+    }
+    
+    /* Diseño especial para la mesa de los novios */
+    #card-mesa-novios {
+      width: 450px; border: 2px solid var(--gold); box-shadow: 0 0 25px rgba(197, 157, 95, 0.3);
+    }
+    #card-mesa-novios .table-header { background: rgba(197, 157, 95, 0.3); }
+    #card-mesa-novios .table-header input { color: var(--gold); text-align: center; width: 100%; }
+
+    /* Mesas en zona extra */
+    .extra-zone .table-card { width: calc(33.333% - 17px); min-width: 260px; }
 
     .table-header {
-      background: rgba(197, 157, 95, 0.15); padding: 15px; border-radius: 15px 15px 0 0;
+      background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 15px 15px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
     }
     .table-header input {
       background: transparent; border: none; color: white; font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: bold; width: 45%; outline: none;
+      font-size: 1.1rem; font-weight: bold; width: 50%; outline: none;
     }
     
     .table-controls { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; opacity: 0.8; }
-    .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; }
+    .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; }
     .btn-small:hover { background: var(--gold); color: black; }
-    
-    /* BOTÓN BORRAR MESA */
-    .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
+    .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
     .btn-delete:hover { background: #e74c3c; color: white; }
 
     .table-seats {
-      padding: 15px; min-height: 150px; flex: 1; display: flex; flex-direction: column; gap: 8px;
+      padding: 10px; min-height: 100px; flex: 1; display: flex; flex-direction: column; gap: 8px;
     }
     .table-seats.drag-over { background: rgba(197, 157, 95, 0.2); }
 
-    .seat-count { text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 600; color: var(--gold); border-top: 1px solid var(--border); }
+    .seat-count { text-align: center; padding: 8px; font-size: 0.75rem; font-weight: 600; color: var(--gold); border-top: 1px solid var(--border); }
 
     .btn-add-table {
       position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: white; 
       padding: 15px 25px; border-radius: 50px; border: none; font-weight: 600; 
       cursor: pointer; text-transform: uppercase; font-size: 0.9rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; z-index: 100;
     }
     .btn-add-table:hover { transform: scale(1.05); }
 
@@ -136,7 +177,7 @@
 
   <header>
     <div class="header-titles">
-      <h1>Organizador de Mesas</h1>
+      <h1>Plano del Salón</h1>
       <div id="connection-status">Cargando base de datos...</div>
     </div>
     <button class="btn-save" id="btn-save-layout" onclick="saveLayout()">Guardar Distribución</button>
@@ -146,7 +187,7 @@
     
     <div class="sidebar">
       <div class="sidebar-header">
-        <h3>Invitados por Acomodar</h3>
+        <h3>Por Acomodar</h3>
         <div class="legend">
           <div class="legend-item"><div class="dot" style="background:var(--status-conf)"></div> Conf.</div>
           <div class="legend-item"><div class="dot" style="background:var(--status-pend)"></div> Pend.</div>
@@ -158,12 +199,33 @@
       </div>
     </div>
 
-    <div class="main-area" id="floor-plan">
+    <div class="main-area">
+      <div class="room-layout">
+        
+        <div class="top-stage" id="stage-area">
+          </div>
+
+        <div class="guest-zone">
+          <div class="side-column" id="left-tables">
+            </div>
+          
+          <div class="center-aisle">
+            <div class="dance-floor"><span>PISTA DE BAILE</span></div>
+          </div>
+          
+          <div class="side-column" id="right-tables">
+            </div>
+        </div>
+
+        <div class="extra-zone" id="extra-tables">
+          </div>
+
       </div>
+    </div>
 
   </div>
 
-  <button class="btn-add-table" onclick="addTable()">+ Añadir Mesa</button>
+  <button class="btn-add-table" onclick="addExtraTable()">+ Añadir Mesa Extra</button>
 
 <script>
   const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
@@ -172,7 +234,55 @@
   let tableCount = 0;
   let draggedItem = null;
 
-  // --- 1. CARGAR INVITADOS ---
+  // --- GENERACIÓN DEL PLANO INICIAL ---
+  function createTableHTML(name, capacity, targetContainerId, tableId) {
+    const isNovios = tableId === 'mesa-novios';
+    const hideDelete = isNovios ? 'style="display:none;"' : '';
+    
+    const tableHTML = `
+      <div class="table-card" id="card-${tableId}">
+        <div class="table-header">
+          <input type="text" value="${name}" id="name-${tableId}" ${isNovios ? 'readonly' : ''}>
+          <div class="table-controls">
+            <button class="btn-small" onclick="changeCapacity('${tableId}', -1)">-</button>
+            <span class="cap-display">${capacity}</span>
+            <button class="btn-small" onclick="changeCapacity('${tableId}', 1)">+</button>
+            <button class="btn-delete" ${hideDelete} onclick="removeTable('${tableId}')" title="Eliminar Mesa">×</button>
+          </div>
+        </div>
+        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}"></div>
+        <div class="seat-count" id="count-${tableId}">0 / ${capacity} sillas</div>
+      </div>
+    `;
+
+    document.getElementById(targetContainerId).insertAdjacentHTML('beforeend', tableHTML);
+    setupDropZone(document.getElementById(`seats-${tableId}`));
+  }
+
+  function initFloorPlan() {
+    // 1. Mesa Novios
+    createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'stage-area', 'mesa-novios');
+    
+    // 2. Mesas Izquierda (1 a 4)
+    for(let i=1; i<=4; i++) {
+        createTableHTML(`Mesa ${i}`, 10, 'left-tables', `mesa-${i}`);
+    }
+    
+    // 3. Mesas Derecha (5 a 8)
+    for(let i=5; i<=8; i++) {
+        createTableHTML(`Mesa ${i}`, 10, 'right-tables', `mesa-${i}`);
+    }
+    
+    tableCount = 8; // El contador general (sin contar novios)
+  }
+
+  // Si añaden más de las 8, van a la zona de abajo
+  function addExtraTable(capacity = 10) {
+    tableCount++;
+    createTableHTML(`Mesa ${tableCount}`, capacity, 'extra-tables', `mesa-${tableCount}`);
+  }
+
+  // --- CARGAR INVITADOS ---
   async function loadAllGuests() {
     const statusText = document.getElementById('connection-status');
     
@@ -212,14 +322,14 @@
         let targetZone = document.getElementById('unseated-guests');
         if (invitado.mesa && invitado.mesa.trim() !== '') {
             let tableZone = document.getElementById(`seats-${invitado.mesa}`);
-            if (!tableZone) {
+            
+            // Si la mesa guardada no existe (ej. mesa-9), la crea en la zona extra
+            if (!tableZone && invitado.mesa !== 'mesa-novios') {
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
-                if(isNaN(tNum)) tNum = tableCount + 1;
-                
-                while(tableCount < tNum) {
-                    addTable(10); 
+                if(!isNaN(tNum)) {
+                    while(tableCount < tNum) { addExtraTable(10); }
+                    tableZone = document.getElementById(`seats-${invitado.mesa}`);
                 }
-                tableZone = document.getElementById(`seats-${invitado.mesa}`);
             }
             if(tableZone) targetZone = tableZone;
         }
@@ -236,19 +346,20 @@
     }
   }
 
-  // --- 2. LÓGICA DE DRAG & DROP ---
+  // --- LÓGICA DE DRAG & DROP ---
   document.addEventListener('dragstart', (e) => {
-    if(e.target.classList.contains('guest') && !e.target.classList.contains('status-declinado')) {
-      draggedItem = e.target;
-      setTimeout(() => e.target.classList.add('dragging'), 0);
-    } else if (e.target.classList.contains('status-declinado')) {
+    // Si no es status-declinado, permitir arrastre
+    if(e.target.closest('.guest') && !e.target.closest('.guest').classList.contains('status-declinado')) {
+      draggedItem = e.target.closest('.guest');
+      setTimeout(() => draggedItem.classList.add('dragging'), 0);
+    } else if (e.target.closest('.status-declinado')) {
         e.preventDefault(); 
     }
   });
 
   document.addEventListener('dragend', (e) => {
-    if(e.target.classList.contains('guest')) {
-      e.target.classList.remove('dragging');
+    if(draggedItem) {
+      draggedItem.classList.remove('dragging');
       draggedItem = null;
       updateAllCounters();
       markUnsavedChanges();
@@ -291,7 +402,7 @@
                 if(g !== draggedItem) currentUsed += parseInt(g.dataset.passes);
             });
             if((currentUsed + incomingPasses) > capacity) {
-                alert(`No hay suficientes sillas. Esta familia necesita ${incomingPasses} lugares.`);
+                alert(`No hay sillas suficientes. Ocupan ${incomingPasses} lugares.`);
                 return;
             }
         }
@@ -302,43 +413,17 @@
 
   setupDropZone(document.getElementById('unseated-guests'));
 
-  // --- 3. LÓGICA DE MESAS ---
-  function addTable(capacity = 10) {
-    tableCount++;
-    const tableId = `mesa-${tableCount}`;
-    
-    const tableHTML = `
-      <div class="table-card" id="card-${tableId}">
-        <div class="table-header">
-          <input type="text" value="Mesa ${tableCount}" id="name-${tableId}">
-          <div class="table-controls">
-            <button class="btn-small" onclick="changeCapacity('${tableId}', -1)">-</button>
-            <span class="cap-display">${capacity}</span>
-            <button class="btn-small" onclick="changeCapacity('${tableId}', 1)">+</button>
-            <button class="btn-delete" onclick="removeTable('${tableId}')" title="Eliminar Mesa">×</button>
-          </div>
-        </div>
-        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}"></div>
-        <div class="seat-count" id="count-${tableId}">0 / ${capacity} sillas</div>
-      </div>
-    `;
-
-    document.getElementById('floor-plan').insertAdjacentHTML('beforeend', tableHTML);
-    setupDropZone(document.getElementById(`seats-${tableId}`));
-  }
-
+  // --- LÓGICA DE MESAS (Capacidades y Eliminación) ---
   function changeCapacity(tableId, change) {
     const seatsZone = document.getElementById(`seats-${tableId}`);
     let cap = parseInt(seatsZone.dataset.capacity) + change;
     if(cap < 1) cap = 1;
     
     let currentUsed = 0;
-    seatsZone.querySelectorAll('.guest').forEach(g => {
-        currentUsed += parseInt(g.dataset.passes);
-    });
+    seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
 
     if(cap < currentUsed) {
-      alert("No puedes reducir la mesa. Ya hay demasiados invitados sentados aquí.");
+      alert("Mueve primero a un invitado antes de quitar la silla.");
       return;
     }
 
@@ -352,47 +437,37 @@
     if(!seatsZone) return;
 
     let currentUsed = 0;
-    seatsZone.querySelectorAll('.guest').forEach(g => {
-        currentUsed += parseInt(g.dataset.passes);
-    });
+    seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
 
     const cap = parseInt(seatsZone.dataset.capacity);
     const countDisplay = document.getElementById(`count-${tableId}`);
     
     countDisplay.innerText = `${currentUsed} / ${cap} sillas ocupadas`;
     
-    if(currentUsed === cap) {
-      countDisplay.style.color = "#2ecc71";
-    } else if (currentUsed > cap) {
-      countDisplay.style.color = "#e74c3c";
-    } else {
-      countDisplay.style.color = "var(--gold)"; 
-    }
+    if(currentUsed === cap) countDisplay.style.color = "#2ecc71";
+    else if (currentUsed > cap) countDisplay.style.color = "#e74c3c";
+    else countDisplay.style.color = "var(--gold)"; 
   }
 
   function updateAllCounters() {
-    for(let i=1; i<=tableCount; i++) {
-        updateCounter(`mesa-${i}`);
-    }
+    updateCounter('mesa-novios');
+    for(let i=1; i<=tableCount; i++) { updateCounter(`mesa-${i}`); }
   }
 
   function removeTable(tableId) {
-    if(!confirm("¿Estás seguro de eliminar esta mesa? Los invitados volverán a la lista.")) return;
+    if(tableId === 'mesa-novios') return; // Seguridad extra
+    if(!confirm("¿Seguro de eliminar esta mesa? Los invitados volverán a la lista.")) return;
     
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
     const unseatedZone = document.getElementById('unseated-guests');
     
-    // Devolver invitados a la lista lateral
-    const guests = seatsZone.querySelectorAll('.guest');
-    guests.forEach(g => unseatedZone.appendChild(g));
-    
-    // Eliminar del DOM
+    seatsZone.querySelectorAll('.guest').forEach(g => unseatedZone.appendChild(g));
     tableCard.remove();
     markUnsavedChanges();
   }
 
-  // --- 4. GUARDAR EN SUPABASE ---
+  // --- GUARDADO SUPABASE ---
   function markUnsavedChanges() {
     const btn = document.getElementById('btn-save-layout');
     btn.style.background = "#e67e22"; 
@@ -416,7 +491,7 @@
             
             let targetMesa = "";
             if (parentZone.startsWith("seats-")) {
-                targetMesa = parentZone.replace("seats-", ""); 
+                targetMesa = parentZone.replace("seats-", ""); // ej: "mesa-novios", "mesa-1"
             }
 
             updates.push(
@@ -444,17 +519,16 @@
         }, 3000);
 
     } catch (error) {
-        alert("Hubo un error al guardar. Verifica tu conexión.");
+        alert("Error al guardar. Revisa tu conexión.");
         btn.innerText = originalText;
         btn.style.background = "#e74c3c";
         btn.disabled = false;
     }
   }
 
-  // --- INICIALIZACIÓN ---
+  // --- INICIO ---
   window.onload = () => {
-    // Generamos 12 mesas por defecto al iniciar
-    for(let i=0; i<12; i++) { addTable(10); }
+    initFloorPlan();
     loadAllGuests(); 
   };
 </script>
