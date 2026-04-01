@@ -99,6 +99,7 @@
       padding: 30px 20px;
       display: flex; flex-direction: column; gap: 30px;
       box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+      position: relative; /* CRÍTICO PARA QUE LAS MESAS PUEDAN FLOTAR DENTRO DEL SALÓN */
     }
 
     /* ZONA PRINCIPAL (CABECERA PARA NOVIOS) */
@@ -112,7 +113,7 @@
       display: flex; justify-content: space-between; align-items: stretch; gap: 20px;
     }
     
-    /* COLUMNAS LATERALES (4 mesas en fila vertical) */
+    /* COLUMNAS LATERALES */
     .side-zone { 
       display: flex; flex-direction: column; gap: 20px; width: 30%; 
     }
@@ -132,7 +133,7 @@
       display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
     }
 
-    /* --- FIGURAS DE MESA (CUADRADAS/RECTANGULARES) --- */
+    /* --- FIGURAS DE MESA --- */
     .table-card {
       width: 100%; background: var(--table-bg); backdrop-filter: blur(10px);
       border: 2px solid var(--gold); border-radius: 15px; 
@@ -141,7 +142,7 @@
       transition: transform 0.2s, box-shadow 0.2s;
     }
     
-    .table-card:hover { transform: translateY(-2px); box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
+    .table-card:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
 
     /* MESA NOVIOS */
     #card-mesa-novios {
@@ -150,18 +151,21 @@
     }
     #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.2rem;}
 
-    /* Mesas zona extra */
     .extra-area .table-card { width: calc(33.333% - 15px); min-width: 250px; }
 
     /* --- COMPONENTES DE LA MESA --- */
     .table-header {
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
+      cursor: grab; /* Indica que la mesa se puede arrastrar desde aquí */
+    }
+    .table-header:active {
+      cursor: grabbing;
     }
     
     .table-header input {
       background: transparent; border: none; color: white; font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; font-weight: bold; width: 60%; outline: none;
+      font-size: 1.1rem; font-weight: bold; width: 60%; outline: none; pointer-events: auto;
     }
     
     .table-controls { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; opacity: 0.8; }
@@ -170,7 +174,7 @@
     .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
     .btn-delete:hover { background: #e74c3c; color: white; }
 
-    /* ZONA DONDE CAEN LOS INVITADOS (LISTA INTERNA) */
+    /* ZONA DONDE CAEN LOS INVITADOS */
     .table-seats {
       padding: 10px; min-height: 120px; max-height: 250px; overflow-y: auto;
       display: flex; flex-direction: column; gap: 5px;
@@ -300,7 +304,7 @@
 
   function removeTable(tableId) {
     if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa? Las siguientes mesas se recorrerán automáticamente para llenar el espacio.")) return;
+    if(!confirm("¿Seguro de eliminar esta mesa?")) return;
     
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
@@ -319,37 +323,28 @@
   }
 
   function reindexAndRepackTables() {
-    // Tomamos todas las mesas excepto la de los novios
     const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
 
-    // Ordenarlas numéricamente por su ID actual para evitar cruces extraños
     allCards.sort((a, b) => {
        let numA = parseInt(a.id.replace('card-mesa-', ''));
        let numB = parseInt(b.id.replace('card-mesa-', ''));
        return numA - numB;
     });
 
-    const leftZone = document.getElementById('left-tables');
-    const rightZone = document.getElementById('right-tables');
-    const extraZone = document.getElementById('extra-tables');
-
-    tableCount = allCards.length; // Actualizamos el conteo maestro
+    tableCount = allCards.length;
 
     allCards.forEach((card, index) => {
       let newNum = index + 1;
       let newId = `mesa-${newNum}`;
 
-      // Actualizar el ID principal de la tarjeta
       card.id = `card-${newId}`;
       
-      // Actualizar el input del nombre (solo si tiene el nombre por defecto "Mesa X")
       let input = card.querySelector('.table-header input');
       input.id = `name-${newId}`;
       if (/^Mesa \d+$/i.test(input.value)) {
           input.value = `Mesa ${newNum}`;
       }
 
-      // Actualizar botones de + y - y Eliminar
       let btns = card.querySelectorAll('.btn-small');
       btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
       btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
@@ -357,20 +352,21 @@
       let delBtn = card.querySelector('.btn-delete');
       if(delBtn) delBtn.setAttribute('onclick', `removeTable('${newId}')`);
 
-      // Actualizar zona de asientos y contador
       let seats = card.querySelector('.table-seats');
       seats.id = `seats-${newId}`;
 
       let count = card.querySelector('.seat-count');
       count.id = `count-${newId}`;
 
-      // Mover físicamente al contenedor correcto para respetar el plano (4 y 4)
-      if (newNum <= 4) {
-        leftZone.appendChild(card);
-      } else if (newNum <= 8) {
-        rightZone.appendChild(card);
-      } else {
-        extraZone.appendChild(card);
+      // Solo recolocamos automáticamente en la cuadrícula si la mesa NO se ha arrastrado libremente
+      if (card.style.position !== 'absolute') {
+        const leftZone = document.getElementById('left-tables');
+        const rightZone = document.getElementById('right-tables');
+        const extraZone = document.getElementById('extra-tables');
+        
+        if (newNum <= 4) leftZone.appendChild(card);
+        else if (newNum <= 8) rightZone.appendChild(card);
+        else extraZone.appendChild(card);
       }
     });
   }
@@ -420,7 +416,7 @@
             if (!tableZone && invitado.mesa !== 'mesa-novios') {
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
                 if(!isNaN(tNum)) {
-                    while(tableCount < tNum) { addTable(10); } // Usa addTable para que se acomoden bien
+                    while(tableCount < tNum) { addTable(10); }
                     tableZone = document.getElementById(`seats-${invitado.mesa}`);
                 }
             }
@@ -439,7 +435,7 @@
     }
   }
 
-  // --- LÓGICA DE DRAG & DROP ---
+  // --- LÓGICA DE DRAG & DROP DE INVITADOS ---
   document.addEventListener('dragstart', (e) => {
     const guestBlock = e.target.closest('.guest');
     if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
@@ -605,6 +601,72 @@
         btn.disabled = false;
     }
   }
+
+  // --- LÓGICA DE ARRASTRE LIBRE DE LAS MESAS ---
+  let draggedTableUI = null;
+  let tableOffsetX = 0;
+  let tableOffsetY = 0;
+
+  document.addEventListener('mousedown', (e) => {
+    // Buscar si hicimos clic en la cabecera
+    const header = e.target.closest('.table-header');
+    
+    // Si clicamos el header, pero NO uno de sus botones ni en el input
+    if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT') {
+      
+      draggedTableUI = header.closest('.table-card');
+      const rect = draggedTableUI.getBoundingClientRect();
+      const layout = document.querySelector('.room-layout');
+      const layoutRect = layout.getBoundingClientRect();
+
+      // Independizar del Flexbox en el primer arrastre
+      if (draggedTableUI.style.position !== 'absolute') {
+        draggedTableUI.style.width = rect.width + 'px'; // Congelar ancho para que no colapse
+        
+        // Coordenadas exactas relativas al layout
+        let initialLeft = rect.left - layoutRect.left;
+        let initialTop = rect.top - layoutRect.top;
+        
+        draggedTableUI.style.position = 'absolute';
+        draggedTableUI.style.left = initialLeft + 'px';
+        draggedTableUI.style.top = initialTop + 'px';
+        
+        // Mover nodo al contenedor relativo
+        layout.appendChild(draggedTableUI); 
+      }
+      
+      draggedTableUI.style.zIndex = "1000";
+      draggedTableUI.style.transition = "none"; // Quitar transición para que el arrastre sea veloz
+      
+      // Calcular dónde agarramos la mesa exactamente
+      tableOffsetX = e.clientX - rect.left;
+      tableOffsetY = e.clientY - rect.top;
+    }
+  });
+
+  document.addEventListener('mousemove', (e) => {
+    if (draggedTableUI) {
+      e.preventDefault(); // Prevenir selección de texto
+      
+      const layout = document.querySelector('.room-layout');
+      const layoutRect = layout.getBoundingClientRect();
+      
+      let newX = e.clientX - layoutRect.left - tableOffsetX;
+      let newY = e.clientY - layoutRect.top - tableOffsetY;
+      
+      draggedTableUI.style.left = newX + 'px';
+      draggedTableUI.style.top = newY + 'px';
+    }
+  });
+
+  document.addEventListener('mouseup', () => {
+    if (draggedTableUI) {
+      draggedTableUI.style.zIndex = "10";
+      draggedTableUI.style.transition = "transform 0.2s, box-shadow 0.2s"; // Devolver las animaciones de hover
+      draggedTableUI = null;
+      markUnsavedChanges();
+    }
+  });
 
   // --- INICIO ---
   window.onload = () => {
