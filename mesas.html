@@ -93,8 +93,8 @@
     /* EL SALÓN RECTANGULAR */
     .room-layout {
       width: 100%; max-width: 1100px; margin: 0 auto; 
-      background: rgba(0,0,0,0.3); /* Color del piso del salón */
-      border: 3px solid var(--gold); /* Las paredes del salón */
+      background: rgba(0,0,0,0.3); 
+      border: 3px solid var(--gold); 
       border-radius: 15px;
       padding: 30px 20px;
       display: flex; flex-direction: column; gap: 30px;
@@ -177,10 +177,8 @@
     }
     .table-seats.drag-over { background: rgba(197, 157, 95, 0.2); }
 
-    /* Personalización para los invitados cuando están DENTRO de la mesa */
     .table-seats .guest {
       padding: 8px 10px; font-size: 0.75rem; border-radius: 6px;
-      /* Mantiene su color de estado a la izquierda para identificar rápido quién confirmó */
     }
 
     .seat-count { 
@@ -206,7 +204,7 @@
 
   <header>
     <div class="header-titles">
-      <h1>Plano del Salón</h1>
+      <h1>Mapeado del Salón</h1>
       <div id="connection-status">Cargando base de datos...</div>
     </div>
     <button class="btn-save" id="btn-save-layout" onclick="saveLayout()">Guardar Distribución</button>
@@ -231,29 +229,21 @@
     <div class="main-area">
       <div class="room-layout">
         
-        <div class="top-stage" id="stage-area">
-          </div>
+        <div class="top-stage" id="stage-area"></div>
 
         <div class="floor-grid">
-          
-          <div class="side-zone" id="left-tables">
-            </div>
-          
+          <div class="side-zone" id="left-tables"></div>
           <div class="dance-floor-area"><span>PISTA DE BAILE</span></div>
-          
-          <div class="side-zone" id="right-tables">
-            </div>
-          
+          <div class="side-zone" id="right-tables"></div>
         </div>
       </div>
       
-      <div class="extra-area" id="extra-tables">
-        </div>
+      <div class="extra-area" id="extra-tables"></div>
     </div>
 
   </div>
 
-  <button class="btn-add-table" onclick="addExtraTable()">+ Añadir Mesa Extra</button>
+  <button class="btn-add-table" onclick="addTable()">+ Añadir Mesa Extra</button>
 
 <script>
   const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
@@ -262,7 +252,7 @@
   let tableCount = 0;
   let draggedItem = null;
 
-  // --- GENERACIÓN DEL PLANO INICIAL (RECTÁNGULOS) ---
+  // --- GENERACIÓN DEL PLANO ---
   function createTableHTML(name, capacity, targetContainerId, tableId) {
     const isNovios = tableId === 'mesa-novios';
     const hideDelete = isNovios ? 'style="display:none;"' : '';
@@ -278,8 +268,7 @@
             <button class="btn-delete" ${hideDelete} onclick="removeTable('${tableId}')" title="Eliminar Mesa">×</button>
           </div>
         </div>
-        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}">
-          </div>
+        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}"></div>
         <div class="seat-count" id="count-${tableId}">0 / ${capacity} sillas ocupadas</div>
       </div>
     `;
@@ -289,25 +278,101 @@
   }
 
   function initFloorPlan() {
-    // 1. Mesa Novios (Arriba centro)
     createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'stage-area', 'mesa-novios');
     
-    // 2. Mesas Izquierda (1 a 4) - Se acomodan en fila
-    for(let i=1; i<=4; i++) {
-        createTableHTML(`Mesa ${i}`, 10, 'left-tables', `mesa-${i}`);
-    }
-    
-    // 3. Mesas Derecha (5 a 8) - Se acomodan en fila
-    for(let i=5; i<=8; i++) {
-        createTableHTML(`Mesa ${i}`, 10, 'right-tables', `mesa-${i}`);
-    }
+    for(let i=1; i<=4; i++) { createTableHTML(`Mesa ${i}`, 10, 'left-tables', `mesa-${i}`); }
+    for(let i=5; i<=8; i++) { createTableHTML(`Mesa ${i}`, 10, 'right-tables', `mesa-${i}`); }
     
     tableCount = 8; 
   }
 
-  function addExtraTable(capacity = 10) {
+  // --- AUTOMATIZACIÓN DE REUBICACIÓN (ELIMINAR Y REEMPAQUETAR) ---
+  function addTable(capacity = 10) {
     tableCount++;
-    createTableHTML(`Mesa ${tableCount}`, capacity, 'extra-tables', `mesa-${tableCount}`);
+    const newId = `mesa-${tableCount}`;
+    
+    let targetZone = 'extra-tables';
+    if (tableCount <= 4) targetZone = 'left-tables';
+    else if (tableCount <= 8) targetZone = 'right-tables';
+
+    createTableHTML(`Mesa ${tableCount}`, capacity, targetZone, newId);
+  }
+
+  function removeTable(tableId) {
+    if(tableId === 'mesa-novios') return; 
+    if(!confirm("¿Seguro de eliminar esta mesa? Las siguientes mesas se recorrerán automáticamente para llenar el espacio.")) return;
+    
+    const tableCard = document.getElementById(`card-${tableId}`);
+    const seatsZone = document.getElementById(`seats-${tableId}`);
+    const unseatedZone = document.getElementById('unseated-guests');
+    
+    // Devolver invitados a la lista
+    const guests = seatsZone.querySelectorAll('.guest');
+    guests.forEach(g => unseatedZone.appendChild(g));
+    
+    // Eliminar la mesa del HTML
+    tableCard.remove();
+    
+    // REUBICAR Y RENOMBRAR
+    reindexAndRepackTables();
+    markUnsavedChanges();
+  }
+
+  function reindexAndRepackTables() {
+    // Tomamos todas las mesas excepto la de los novios
+    const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
+
+    // Ordenarlas numéricamente por su ID actual para evitar cruces extraños
+    allCards.sort((a, b) => {
+       let numA = parseInt(a.id.replace('card-mesa-', ''));
+       let numB = parseInt(b.id.replace('card-mesa-', ''));
+       return numA - numB;
+    });
+
+    const leftZone = document.getElementById('left-tables');
+    const rightZone = document.getElementById('right-tables');
+    const extraZone = document.getElementById('extra-tables');
+
+    tableCount = allCards.length; // Actualizamos el conteo maestro
+
+    allCards.forEach((card, index) => {
+      let newNum = index + 1;
+      let newId = `mesa-${newNum}`;
+
+      // Actualizar el ID principal de la tarjeta
+      card.id = `card-${newId}`;
+      
+      // Actualizar el input del nombre (solo si tiene el nombre por defecto "Mesa X")
+      let input = card.querySelector('.table-header input');
+      input.id = `name-${newId}`;
+      if (/^Mesa \d+$/i.test(input.value)) {
+          input.value = `Mesa ${newNum}`;
+      }
+
+      // Actualizar botones de + y - y Eliminar
+      let btns = card.querySelectorAll('.btn-small');
+      btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
+      btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
+      
+      let delBtn = card.querySelector('.btn-delete');
+      if(delBtn) delBtn.setAttribute('onclick', `removeTable('${newId}')`);
+
+      // Actualizar zona de asientos y contador
+      let seats = card.querySelector('.table-seats');
+      seats.id = `seats-${newId}`;
+
+      let count = card.querySelector('.seat-count');
+      count.id = `count-${newId}`;
+
+      // Mover físicamente al contenedor correcto para respetar el plano (4 y 4)
+      if (newNum <= 4) {
+        leftZone.appendChild(card);
+      } else if (newNum <= 8) {
+        rightZone.appendChild(card);
+      } else {
+        extraZone.appendChild(card);
+      }
+    });
   }
 
   // --- CARGAR INVITADOS DE SUPABASE ---
@@ -355,7 +420,7 @@
             if (!tableZone && invitado.mesa !== 'mesa-novios') {
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
                 if(!isNaN(tNum)) {
-                    while(tableCount < tNum) { addExtraTable(10); }
+                    while(tableCount < tNum) { addTable(10); } // Usa addTable para que se acomoden bien
                     tableZone = document.getElementById(`seats-${invitado.mesa}`);
                 }
             }
@@ -441,7 +506,7 @@
 
   setupDropZone(document.getElementById('unseated-guests'));
 
-  // --- LÓGICA DE MESAS (Capacidades, Eliminación) ---
+  // --- CONTROL DE CAPACIDADES ---
   function changeCapacity(tableId, change) {
     const seatsZone = document.getElementById(`seats-${tableId}`);
     let cap = parseInt(seatsZone.dataset.capacity) + change;
@@ -480,21 +545,6 @@
   function updateAllCounters() {
     updateCounter('mesa-novios');
     for(let i=1; i<=tableCount; i++) { updateCounter(`mesa-${i}`); }
-  }
-
-  function removeTable(tableId) {
-    if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa? Los invitados volverán a la lista.")) return;
-    
-    const tableCard = document.getElementById(`card-${tableId}`);
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    const unseatedZone = document.getElementById('unseated-guests');
-    
-    const guests = seatsZone.querySelectorAll('.guest');
-    guests.forEach(g => unseatedZone.appendChild(g));
-    
-    tableCard.remove();
-    markUnsavedChanges();
   }
 
   // --- GUARDADO EN SUPABASE ---
