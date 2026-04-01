@@ -102,12 +102,16 @@
     }
     .table-header input {
       background: transparent; border: none; color: white; font-family: 'Playfair Display', serif;
-      font-size: 1.2rem; font-weight: bold; width: 55%; outline: none;
+      font-size: 1.2rem; font-weight: bold; width: 45%; outline: none;
     }
     
     .table-controls { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; opacity: 0.8; }
     .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; }
     .btn-small:hover { background: var(--gold); color: black; }
+    
+    /* BOTÓN BORRAR MESA */
+    .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 25px; height: 25px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
+    .btn-delete:hover { background: #e74c3c; color: white; }
 
     .table-seats {
       padding: 15px; min-height: 150px; flex: 1; display: flex; flex-direction: column; gap: 8px;
@@ -193,7 +197,6 @@
             isDraggable = false; 
         }
 
-        // Creamos un SOLO bloque por familia/invitación
         const pases = parseInt(invitado.pases) || 1;
         const uniqueId = `guest-${invitado.id}`;
         
@@ -206,19 +209,15 @@
           </div>
         `;
 
-        // Si ya tiene mesa asignada y existe, lo ponemos ahí. Si no, a la barra lateral.
         let targetZone = document.getElementById('unseated-guests');
         if (invitado.mesa && invitado.mesa.trim() !== '') {
             let tableZone = document.getElementById(`seats-${invitado.mesa}`);
-            // Si la mesa guardada aún no existe en el HTML, la creamos dinámicamente
             if (!tableZone) {
-                // Extraemos el número de la mesa del string (ej: "mesa-5")
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
                 if(isNaN(tNum)) tNum = tableCount + 1;
                 
-                // Aseguramos de crear mesas hasta llegar a la necesaria
                 while(tableCount < tNum) {
-                    addTable(10); // Crea mesas por defecto de 10 espacios
+                    addTable(10); 
                 }
                 tableZone = document.getElementById(`seats-${invitado.mesa}`);
             }
@@ -260,7 +259,6 @@
     zone.addEventListener('dragover', e => {
       e.preventDefault();
       
-      // Validar si caben las sillas
       if(zone.classList.contains('table-seats') && draggedItem) {
         const capacity = parseInt(zone.dataset.capacity);
         const incomingPasses = parseInt(draggedItem.dataset.passes);
@@ -271,7 +269,7 @@
         });
 
         if((currentUsed + incomingPasses) > capacity) {
-            e.dataTransfer.dropEffect = "none"; // Muestra ícono de prohibido
+            e.dataTransfer.dropEffect = "none";
             return;
         }
       }
@@ -285,7 +283,6 @@
       zone.classList.remove('drag-over');
       
       if (draggedItem) {
-        // Doble validación antes de soltar
         if(zone.classList.contains('table-seats')) {
             const capacity = parseInt(zone.dataset.capacity);
             const incomingPasses = parseInt(draggedItem.dataset.passes);
@@ -318,6 +315,7 @@
             <button class="btn-small" onclick="changeCapacity('${tableId}', -1)">-</button>
             <span class="cap-display">${capacity}</span>
             <button class="btn-small" onclick="changeCapacity('${tableId}', 1)">+</button>
+            <button class="btn-delete" onclick="removeTable('${tableId}')" title="Eliminar Mesa">×</button>
           </div>
         </div>
         <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}"></div>
@@ -364,11 +362,11 @@
     countDisplay.innerText = `${currentUsed} / ${cap} sillas ocupadas`;
     
     if(currentUsed === cap) {
-      countDisplay.style.color = "#2ecc71"; // Verde si está perfecta
+      countDisplay.style.color = "#2ecc71";
     } else if (currentUsed > cap) {
-      countDisplay.style.color = "#e74c3c"; // Rojo si se pasa
+      countDisplay.style.color = "#e74c3c";
     } else {
-      countDisplay.style.color = "var(--gold)"; // Normal
+      countDisplay.style.color = "var(--gold)"; 
     }
   }
 
@@ -378,10 +376,26 @@
     }
   }
 
+  function removeTable(tableId) {
+    if(!confirm("¿Estás seguro de eliminar esta mesa? Los invitados volverán a la lista.")) return;
+    
+    const tableCard = document.getElementById(`card-${tableId}`);
+    const seatsZone = document.getElementById(`seats-${tableId}`);
+    const unseatedZone = document.getElementById('unseated-guests');
+    
+    // Devolver invitados a la lista lateral
+    const guests = seatsZone.querySelectorAll('.guest');
+    guests.forEach(g => unseatedZone.appendChild(g));
+    
+    // Eliminar del DOM
+    tableCard.remove();
+    markUnsavedChanges();
+  }
+
   // --- 4. GUARDAR EN SUPABASE ---
   function markUnsavedChanges() {
     const btn = document.getElementById('btn-save-layout');
-    btn.style.background = "#e67e22"; // Naranja indicando que hay cambios
+    btn.style.background = "#e67e22"; 
     btn.innerText = "Guardar Cambios *";
   }
 
@@ -398,11 +412,11 @@
 
         guests.forEach(guest => {
             const dbId = guest.dataset.dbId;
-            const parentZone = guest.parentElement.id; // "unseated-guests" o "seats-mesa-1"
+            const parentZone = guest.parentElement.id; 
             
             let targetMesa = "";
             if (parentZone.startsWith("seats-")) {
-                targetMesa = parentZone.replace("seats-", ""); // Queda "mesa-1"
+                targetMesa = parentZone.replace("seats-", ""); 
             }
 
             updates.push(
@@ -419,7 +433,6 @@
             );
         });
 
-        // Ejecutar todas las actualizaciones
         await Promise.all(updates);
 
         btn.innerText = "¡Guardado Exitoso!";
@@ -440,7 +453,7 @@
 
   // --- INICIALIZACIÓN ---
   window.onload = () => {
-    // Generamos unas 12 mesas por defecto al iniciar
+    // Generamos 12 mesas por defecto al iniciar
     for(let i=0; i<12; i++) { addTable(10); }
     loadAllGuests(); 
   };
