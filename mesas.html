@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Plano del Salón • Carlos & Joselyn</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
@@ -85,7 +85,6 @@
     .main-area {
       flex: 1; border-radius: 20px; padding: 20px;
       overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
-      position: relative;
     }
 
     .room-layout {
@@ -138,9 +137,9 @@
     }
     
     .table-slot.slot-highlight {
-      background: rgba(46, 204, 113, 0.1);
+      background: rgba(46, 204, 113, 0.15);
       border-color: var(--status-conf);
-      box-shadow: inset 0 0 15px rgba(46, 204, 113, 0.3);
+      box-shadow: inset 0 0 15px rgba(46, 204, 113, 0.4);
     }
 
     .extra-area .table-slot {
@@ -152,23 +151,20 @@
       border: 2px solid var(--gold); border-radius: 15px; 
       display: flex; flex-direction: column; 
       box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
-      transition: box-shadow 0.2s; /* Se quitó el transform aquí para evitar parpadeos */
     }
-    
-    .table-card:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
 
     #card-mesa-novios {
       width: 100%; max-width: 450px; border: 3px solid var(--gold); 
       box-shadow: 0 0 30px rgba(197, 157, 95, 0.4);
     }
-    #card-mesa-novios .table-header { cursor: default; } 
+    #card-mesa-novios .table-header { cursor: default; touch-action: auto; } 
     #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.2rem;}
 
     .table-header {
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
       cursor: grab; 
-      touch-action: none; /* EVITA EL CONFLICTO CON EL SCROLL DEL NAVEGADOR */
+      touch-action: none; /* Bloqueo de scroll táctil obligatorio */
       user-select: none;
     }
     .table-header:active {
@@ -237,7 +233,7 @@
       </div>
     </div>
 
-    <div class="main-area" id="main-scroll-area">
+    <div class="main-area" id="scroll-container">
       <div class="room-layout">
         
         <div class="top-stage" id="stage-area">
@@ -307,7 +303,8 @@
   }
 
   function initFloorPlan() {
-    // YA NO CREA LAS 8 MESAS POR DEFECTO. Empieza limpio.
+    // 1. INICIAMOS COMPLETAMENTE EN LIMPIO
+    document.getElementById('slot-novios').innerHTML = '';
     createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'mesa-novios', 'slot-novios');
     tableCount = 0; 
   }
@@ -328,34 +325,31 @@
 
   function removeTable(tableId) {
     if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa? Las demás se reorganizarán automáticamente.")) return;
+    if(!confirm("¿Seguro de eliminar esta mesa? Las demás se reacomodarán.")) return;
     
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
     const unseatedZone = document.getElementById('unseated-guests');
     const slot = tableCard.parentElement; 
     
-    // Regresa invitados a la lista
+    // Regresamos invitados a la lista
     const guests = seatsZone.querySelectorAll('.guest');
     guests.forEach(g => unseatedZone.appendChild(g));
     
-    // Elimina la mesa
+    // Eliminamos la mesa y la ranura si es extra
     tableCard.remove(); 
-
-    if (!slot.classList.contains('fixed-slot')) {
-        slot.remove();
-    }
+    if (!slot.classList.contains('fixed-slot')) slot.remove();
     
-    // ESTA ES LA FUNCIÓN QUE REACOMODA TODO
+    // Disparamos la reorganización forzada
     reindexAndRepackTables();
     markUnsavedChanges();
   }
 
-  // FUNCIÓN PARA REACOMODAR LAS MESAS AL ELIMINAR UNA
+  // REORGANIZACIÓN ESTRICTA
   function reindexAndRepackTables() {
     const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
     
-    // Ordena las mesas por su número anterior para no mezclar a la gente
+    // Ordenamos por número actual
     allCards.sort((a, b) => {
        let numA = parseInt(a.id.replace('card-mesa-', '')) || 0;
        let numB = parseInt(b.id.replace('card-mesa-', '')) || 0;
@@ -363,40 +357,29 @@
     });
 
     tableCount = allCards.length;
-
-    const slots = [
-      'slot-izq-1', 'slot-izq-2', 'slot-izq-3', 'slot-izq-4', 
-      'slot-der-1', 'slot-der-2', 'slot-der-3', 'slot-der-4'
-    ];
+    const slots = ['slot-izq-1', 'slot-izq-2', 'slot-izq-3', 'slot-izq-4', 'slot-der-1', 'slot-der-2', 'slot-der-3', 'slot-der-4'];
     const extraZone = document.getElementById('extra-tables');
 
     allCards.forEach((card, index) => {
       let newNum = index + 1;
       let newId = `mesa-${newNum}`;
 
-      // Actualiza IDs
+      // Actualizamos identificadores
       card.id = `card-${newId}`;
-      
       let input = card.querySelector('.table-header input');
       input.id = `name-${newId}`;
       if (/^Mesa \d+$/i.test(input.value)) {
-          input.value = `Mesa ${newNum}`; // Renombra visualmente
+          input.value = `Mesa ${newNum}`;
       }
 
       let btns = card.querySelectorAll('.btn-small');
       btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
       btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
-      
-      let delBtn = card.querySelector('.btn-delete');
-      if(delBtn) delBtn.setAttribute('onclick', `removeTable('${newId}')`);
+      card.querySelector('.btn-delete').setAttribute('onclick', `removeTable('${newId}')`);
+      card.querySelector('.table-seats').id = `seats-${newId}`;
+      card.querySelector('.seat-count').id = `count-${newId}`;
 
-      let seats = card.querySelector('.table-seats');
-      seats.id = `seats-${newId}`;
-
-      let count = card.querySelector('.seat-count');
-      count.id = `count-${newId}`;
-
-      // Físicamente mueve la mesa al hueco que le corresponde
+      // Acomodamos físicamente
       if (newNum <= 8) {
          document.getElementById(slots[newNum-1]).appendChild(card);
       } else {
@@ -410,11 +393,10 @@
       }
     });
     
-    // Limpia slots basura de la zona extra
+    // Limpieza de divs vacíos
     document.querySelectorAll('#extra-tables .table-slot').forEach(slot => {
        if(slot.children.length === 0) slot.remove();
     });
-    
     updateAllCounters();
   }
 
@@ -427,11 +409,11 @@
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
       
-      if (!response.ok) throw new Error('Error al conectar');
+      if (!response.ok) throw new Error('Error de red');
       
       const invitados = await response.json();
       document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = `${invitados.length} Registros Sincronizados`;
+      statusText.innerText = `${invitados.length} Registros Cargados`;
 
       invitados.forEach(invitado => {
         const estadoActual = (invitado.estado || "").toLowerCase().trim();
@@ -457,14 +439,20 @@
         `;
 
         let targetZone = guestList;
+        
         if (invitado.mesa && invitado.mesa.trim() !== '') {
             let tableZone = document.getElementById(`seats-${invitado.mesa}`);
             
-            // Si la mesa de Supabase no existe aún en la pantalla, la creamos al vuelo
+            // 2. CORRECCIÓN DEL BUCLE FANTASMA. Ahora SOLO crea la mesa que necesita, no las anteriores.
             if (!tableZone && invitado.mesa !== 'mesa-novios') {
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
                 if(!isNaN(tNum)) {
-                    while(tableCount < tNum) { addTable(10); }
+                    if (tNum > tableCount) tableCount = tNum; // Actualizamos el contador global
+                    
+                    const fixedSlots = Array.from(document.querySelectorAll('.fixed-slot:not(#slot-novios)'));
+                    let emptySlot = fixedSlots.find(slot => slot.children.length === 0);
+                    
+                    createTableHTML(`Mesa ${tNum}`, 10, `mesa-${tNum}`, emptySlot ? emptySlot.id : `slot-extra-${tNum}`);
                     tableZone = document.getElementById(`seats-${invitado.mesa}`);
                 }
             }
@@ -476,19 +464,17 @@
       updateAllCounters();
     } catch (error) {
       document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = "Error de conexión.";
+      statusText.innerText = "Error cargando base de datos.";
       statusText.style.color = "#e74c3c";
     }
   }
 
-  // --- DRAG & DROP DE INVITADOS ---
+  // --- DRAG & DROP INVITADOS ---
   document.addEventListener('dragstart', (e) => {
     const guestBlock = e.target.closest('.guest');
     if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
       draggedGuest = guestBlock;
       setTimeout(() => draggedGuest.classList.add('dragging'), 0);
-    } else if (guestBlock && guestBlock.classList.contains('status-declinado')) {
-        e.preventDefault(); 
     }
   });
 
@@ -552,7 +538,7 @@
     let currentUsed = 0;
     seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
     if(cap < currentUsed) {
-      alert("Mueve primero a un invitado antes de quitar sillas.");
+      alert("Saca primero a un invitado antes de quitar la silla.");
       return;
     }
     seatsZone.dataset.capacity = cap;
@@ -575,7 +561,10 @@
 
   function updateAllCounters() {
     updateCounter('mesa-novios');
-    for(let i=1; i<=tableCount; i++) { updateCounter(`mesa-${i}`); }
+    document.querySelectorAll('.table-card:not(#card-mesa-novios)').forEach(card => {
+       let num = card.id.replace('card-mesa-', '');
+       updateCounter(`mesa-${num}`);
+    });
   }
 
   function markUnsavedChanges() {
@@ -609,105 +598,76 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- MOTOR DE ARRASTRE DE MESAS 2.0 (Fluido, Scroll Automático y Soporte Táctil) ---
+  // --- 3. MOTOR DE ARRASTRE TÁCTIL ABSOLUTO (FIXED) ---
   let draggedTableUI = null;
   let originalSlot = null;
-  let tableOffsetX = 0;
-  let tableOffsetY = 0;
-  let autoScrollInterval = null;
+  let offsetX = 0;
+  let offsetY = 0;
 
-  // Maneja el auto-scroll cuando te acercas al borde de la pantalla
-  function handleAutoScroll(clientY) {
-    const edgeThreshold = 60; // Píxeles de sensibilidad al borde
-    const scrollSpeed = 15;
-    
-    if (clientY < edgeThreshold) {
-        if (!autoScrollInterval) {
-            autoScrollInterval = setInterval(() => {
-                window.scrollBy(0, -scrollSpeed);
-                if(draggedTableUI) draggedTableUI.style.top = (parseInt(draggedTableUI.style.top) - scrollSpeed) + 'px';
-            }, 20);
-        }
-    } else if (window.innerHeight - clientY < edgeThreshold) {
-        if (!autoScrollInterval) {
-            autoScrollInterval = setInterval(() => {
-                window.scrollBy(0, scrollSpeed);
-                if(draggedTableUI) draggedTableUI.style.top = (parseInt(draggedTableUI.style.top) + scrollSpeed) + 'px';
-            }, 20);
-        }
-    } else {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-    }
-  }
-
-  // Usamos "pointerdown" en lugar de mousedown para soportar pantallas táctiles perfecto
-  document.addEventListener('pointerdown', (e) => {
+  function handleDragStart(e) {
     const header = e.target.closest('.table-header');
     const card = header ? header.closest('.table-card') : null;
     
     if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT' && card.id !== 'card-mesa-novios') {
       
-      e.preventDefault(); // Crítico: detiene conflictos con el scroll nativo
-
       draggedTableUI = card;
       originalSlot = draggedTableUI.parentElement; 
       
       const rect = draggedTableUI.getBoundingClientRect();
       
-      // Congelamos dimensiones exactas
+      // Congelamos el tamaño exacto
       draggedTableUI.style.width = rect.width + 'px'; 
       draggedTableUI.style.height = rect.height + 'px';
       
-      draggedTableUI.style.position = 'absolute';
-      draggedTableUI.style.zIndex = "1000";
-      
-      // La mesa deja de ser un obstáculo para el ratón
+      // POSITION FIXED: Ignora el scroll por completo. Perfecto para móviles.
+      draggedTableUI.style.position = 'fixed';
+      draggedTableUI.style.zIndex = "9999";
       draggedTableUI.style.pointerEvents = "none"; 
       
       document.body.appendChild(draggedTableUI);
       
-      tableOffsetX = e.clientX - rect.left;
-      tableOffsetY = e.clientY - rect.top;
+      // Soporte para PC o Táctil
+      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let clientY = e.touches ? e.touches[0].clientY : e.clientY;
       
-      draggedTableUI.style.left = (e.pageX - tableOffsetX) + 'px';
-      draggedTableUI.style.top = (e.pageY - tableOffsetY) + 'px';
+      offsetX = clientX - rect.left;
+      offsetY = clientY - rect.top;
+      
+      draggedTableUI.style.left = (clientX - offsetX) + 'px';
+      draggedTableUI.style.top = (clientY - offsetY) + 'px';
     }
-  });
+  }
 
-  document.addEventListener('pointermove', (e) => {
+  function handleDragMove(e) {
     if (draggedTableUI) {
-      e.preventDefault(); 
+      e.preventDefault(); // Evita scroll de la pantalla al arrastrar
       
-      draggedTableUI.style.left = (e.pageX - tableOffsetX) + 'px';
-      draggedTableUI.style.top = (e.pageY - tableOffsetY) + 'px';
+      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      let clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      
+      draggedTableUI.style.left = (clientX - offsetX) + 'px';
+      draggedTableUI.style.top = (clientY - offsetY) + 'px';
 
-      // Dispara el scroll automático si llegas a los bordes
-      handleAutoScroll(e.clientY);
-
-      let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
+      let elementBelow = document.elementFromPoint(clientX, clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
 
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
-
       if (targetSlot && targetSlot !== originalSlot) {
           targetSlot.classList.add('slot-highlight');
       }
     }
-  });
+  }
 
-  document.addEventListener('pointerup', (e) => {
+  function handleDragEnd(e) {
     if (draggedTableUI) {
-      
-      // Apagar el auto-scroll
-      clearInterval(autoScrollInterval);
-      autoScrollInterval = null;
-
-      let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
-      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
+      let clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+      let clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
       
       draggedTableUI.style.pointerEvents = "auto";
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
+
+      let elementBelow = document.elementFromPoint(clientX, clientY);
+      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
 
       if (targetSlot && targetSlot !== originalSlot) {
           let existingTable = targetSlot.querySelector('.table-card');
@@ -730,7 +690,16 @@
       draggedTableUI = null;
       originalSlot = null;
     }
-  });
+  }
+
+  // Eventos duales (Mouse + Touch) para soportar todo tipo de pantalla
+  document.addEventListener('mousedown', handleDragStart);
+  document.addEventListener('mousemove', handleDragMove, {passive: false});
+  document.addEventListener('mouseup', handleDragEnd);
+
+  document.addEventListener('touchstart', handleDragStart, {passive: false});
+  document.addEventListener('touchmove', handleDragMove, {passive: false});
+  document.addEventListener('touchend', handleDragEnd);
 
   window.onload = () => {
     initFloorPlan(); 
