@@ -11,59 +11,72 @@
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
   <style>
-    :root { 
-      --wine: #4A0A16; 
-      --jade: #0A2E24; 
-      --gold: #D4AF37; 
-      --background: #0B0C10;
-      --glass: rgba(255, 255, 255, 0.03); 
-      --border: rgba(212, 175, 55, 0.15);
-      --text: #F5F5F5;
-      --text-muted: rgba(245, 245, 245, 0.6);
+    :root {
+      --gold: #c59d5f;
+      --gold-dark: #a67b45;
+      --wine: #4a0a16;
+      --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.05);
+      --border: rgba(197, 157, 95, 0.3);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
-    
-    body { 
-      font-family: 'Poppins', sans-serif; 
-      background-color: var(--background);
-      background-image:
-        radial-gradient(circle at top left, var(--jade) 0%, transparent 50%),
-        radial-gradient(circle at bottom right, var(--wine) 0%, transparent 50%);
-      background-attachment: fixed; color: var(--text); min-height: 100vh;
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
+      background-attachment: fixed; color: white;
+      min-height: 100vh; display: flex; flex-direction: column; align-items: center; 
+      padding: 30px 15px 100px 15px; /* Espacio extra abajo para el botón flotante */
       overflow-x: hidden;
     }
-    
-    header { 
-      padding: 25px 20px; text-align: center; 
-      background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      display: flex; flex-direction: column; align-items: center;
-    }
-    
-    h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px; }
-    #status { font-size: 10px; color: var(--text-muted); margin-top: 6px; letter-spacing: 2px; font-weight: 600; }
-    
-    /* ESTILO BOTÓN DESCARGAR TODO */
-    .btn-download-all {
-      display: none; align-items: center; gap: 8px; margin-top: 15px;
-      padding: 8px 16px; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold);
-      border-radius: 20px; color: var(--gold); font-size: 0.75rem; font-weight: 600;
-      text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
-      transition: all 0.2s ease; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-    }
-    .btn-download-all:active { transform: scale(0.95); background: var(--gold); color: var(--background); }
 
+    /* LA TARJETA DE CRISTAL PRINCIPAL */
+    .glass-card {
+      background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--border); border-radius: 40px;
+      padding: 45px 20px; text-align: center; max-width: 900px; width: 100%;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7); position: relative;
+    }
+
+    /* Detalle elegante superior */
+    .glass-card::before {
+      content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 50px; height: 3px; background: var(--gold); border-radius: 0 0 10px 10px;
+    }
+
+    /* TIPOGRAFÍAS UNIFICADAS */
+    h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin: 0 0 5px; font-weight: 600; line-height: 1.2; }
+    
+    .date-badge { 
+      font-size: 10px; letter-spacing: 5px; text-transform: uppercase; 
+      color: rgba(255,255,255,0.5); margin-bottom: 25px; display: block; 
+    }
+
+    .welcome-text { font-size: 14px; font-weight: 300; line-height: 1.5; color: rgba(255,255,255,0.7); margin-bottom: 5px; }
+    
+    #statusText { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); margin-bottom: 25px; font-weight: 600; }
+
+    /* BOTÓN DE DESCARGAR TODO (Estilo Secundario) */
+    .btn-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      height: 45px; padding: 0 20px; border-radius: 15px; font-weight: 500; text-transform: uppercase;
+      cursor: pointer; transition: all 0.3s ease; font-size: 10px; letter-spacing: 1.5px; 
+      text-decoration: none; margin-bottom: 20px;
+    }
+    .btn-secondary { background: transparent; border: 1px solid var(--border); color: var(--gold); }
+    .btn-secondary:active { background: rgba(197, 157, 95, 0.1); transform: scale(0.97); }
+
+    /* CUADRÍCULA DE LA GALERÍA */
     #gallery { 
       display: grid; 
       grid-template-columns: repeat(3, 1fr); 
-      gap: 10px; padding: 15px; max-width: 1000px; margin: 0 auto 80px auto;
+      gap: 8px; width: 100%;
       transform: translateZ(0); 
     }
     
     .media-card { 
-      aspect-ratio: 1/1; background: var(--glass); border-radius: 8px; 
+      aspect-ratio: 1/1; background: rgba(0,0,0,0.2); border-radius: 12px; 
       overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05);
       content-visibility: auto; contain-intrinsic-size: 100px 100px;
       cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
@@ -79,29 +92,31 @@
     .play-icon { 
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
       background: rgba(10, 10, 12, 0.7); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
-      border: 1px solid var(--border); border-radius: 50%; width: 45px; height: 45px; 
+      border: 1px solid var(--border); border-radius: 50%; width: 40px; height: 40px; 
       display: flex; align-items: center; justify-content: center; color: var(--gold);
-      padding-left: 3px; 
-      font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      padding-left: 3px; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
+    /* ESTADO VACÍO ELEGANTE */
     .empty-state {
       grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 60px 20px; text-align: center; opacity: 0.7;
+      justify-content: center; padding: 40px 10px; text-align: center; opacity: 0.8;
     }
-    .empty-state svg { width: 60px; height: 60px; margin-bottom: 20px; color: var(--gold); opacity: 0.8; }
-    .empty-state p { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 10px; }
-    .empty-state span { font-size: 0.9rem; color: var(--text-muted); }
+    .empty-state svg { width: 50px; height: 50px; margin-bottom: 15px; color: var(--gold); opacity: 0.8; }
+    .empty-state p { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 5px; }
+    .empty-state span { font-size: 0.85rem; color: rgba(255,255,255,0.6); }
 
+    /* BOTÓN FLOTANTE PARA ACTUALIZAR (Estilo Primario) */
     .btn-update {
       position: fixed; bottom: 30px; right: 20px; background: var(--gold);
-      width: 55px; height: 55px; border-radius: 50%; border: none;
-      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); z-index: 99;
-      display: flex; align-items: center; justify-content: center; color: var(--background);
-      cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 60px; height: 60px; border-radius: 50%; border: none;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 99;
+      display: flex; align-items: center; justify-content: center; color: #111;
+      cursor: pointer; transition: transform 0.3s ease, background 0.3s ease;
     }
-    .btn-update:active { transform: scale(0.9) rotate(180deg); }
+    .btn-update:active { transform: scale(0.9) rotate(180deg); background: var(--gold-dark); }
 
+    /* MODAL TIPO CINE PARA VER FOTOS */
     .modal {
       display: none; position: fixed; inset: 0; z-index: 9999;
       background: rgba(5, 5, 7, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -115,66 +130,71 @@
     .modal-media { 
       max-width: 100%; max-height: 80vh; object-fit: contain; 
       border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-      transform: translateZ(0);
-      animation: fadeIn 0.3s ease; 
+      transform: translateZ(0); animation: fadeIn 0.3s ease; 
     }
 
     @keyframes fadeIn { from { opacity: 0.5; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
 
     .nav-btn {
-      position: absolute; bottom: 40px; background: rgba(212, 175, 55, 0.15);
+      position: absolute; bottom: 40px; background: rgba(255, 255, 255, 0.05);
       backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       color: var(--gold); width: 60px; height: 50px; border: 1px solid var(--border);
-      border-radius: 12px; font-size: 18px; z-index: 10; display: flex; align-items: center; justify-content: center;
+      border-radius: 15px; font-size: 18px; z-index: 10; display: flex; align-items: center; justify-content: center;
       box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.2s;
     }
-    .nav-btn:active { background: var(--gold); color: var(--background); transform: scale(0.95); }
+    .nav-btn:active { background: var(--gold); color: #111; transform: scale(0.95); }
     .prev { left: 20px; } .next { right: 20px; }
     
     @media (min-width: 600px) {
+      .glass-card { padding: 50px 40px; }
       .nav-btn { top: 50%; bottom: auto; transform: translateY(-50%); width: 55px; height: 55px; border-radius: 50%; }
       .prev { left: 30px; } .next { right: 30px; }
-      #gallery { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
+      #gallery { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
     }
 
-    .close-modal { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--text-muted); z-index: 11; cursor: pointer; transition: color 0.2s; }
+    .close-modal { position: absolute; top: 25px; right: 25px; font-size: 40px; color: rgba(255,255,255,0.6); z-index: 11; cursor: pointer; transition: color 0.2s; }
     .close-modal:hover { color: var(--gold); }
     
+    /* BOTÓN GUARDAR NATIVO EN MODAL */
     .download-btn { 
-      position: absolute; top: 25px; left: 25px; color: var(--text-muted); 
+      position: absolute; top: 25px; left: 25px; color: var(--gold); 
       z-index: 11; cursor: pointer; transition: all 0.2s ease; text-decoration: none;
       display: flex; align-items: center; justify-content: center;
       background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
       border-radius: 50%; width: 45px; height: 45px; backdrop-filter: blur(5px);
     }
-    .download-btn:hover, .download-btn:active { 
-      color: var(--background); background: var(--gold); transform: scale(0.95);
-    }
+    .download-btn:active { color: #111; background: var(--gold); transform: scale(0.95); }
 
     .counter-text { position: absolute; bottom: 55px; font-size: 11px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
+    
+    .loader { border: 2px solid rgba(255,255,255,0.1); border-top: 2px solid var(--gold); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; margin-bottom: 15px; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-<header>
-  <h1>Nuestros Recuerdos</h1>
-  <div id="status">SINCRONIZANDO...</div>
-  <a id="download-all-btn" class="btn-download-all" href="https://res.cloudinary.com/dhruy6ftj/image/tags/boda_carlos_y_joss.zip" target="_blank" title="Descargar todo el álbum en ZIP">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
-    Descargar Álbum (.zip)
-  </a>
-</header>
+<div class="glass-card">
+  <span class="date-badge">19 • Diciembre • 2026</span>
+  <h1>Carlos & Joselyn</h1>
+  <p class="welcome-text">Nuestros Recuerdos</p>
+  <div id="statusText">SINCRONIZANDO...</div>
 
-<div id="gallery">
-  <div class="empty-state">
-     <div class="loader" style="border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
-     <p>Preparando Galería</p>
-     <span>Conectando con el álbum...</span>
+  <a id="download-all-btn" class="btn-action btn-secondary" style="display:none;" href="https://res.cloudinary.com/dhruy6ftj/image/tags/boda_carlos_y_joss.zip" target="_blank" title="Descargar todo el álbum en ZIP">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    Descargar Álbum
+  </a>
+
+  <div id="gallery">
+    <div class="empty-state">
+       <div class="loader"></div>
+       <p>Preparando Galería</p>
+       <span>Conectando con el álbum...</span>
+    </div>
   </div>
 </div>
 
 <button class="btn-update" onclick="loadGallery()" title="Actualizar Galería">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
 </button>
 
 <div id="mediaModal" class="modal">
@@ -191,8 +211,6 @@
   </div>
 </div>
 
-<style> @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } </style>
-
 <script>
   const cloudName = "dhruy6ftj";
   const tag = "boda_carlos_y_joss";
@@ -200,7 +218,7 @@
   let currentIndex = 0;
 
   async function loadGallery() {
-    const status = document.getElementById('status');
+    const statusText = document.getElementById('statusText');
     const container = document.getElementById('gallery');
     const downloadAllBtn = document.getElementById('download-all-btn');
     
@@ -217,7 +235,6 @@
       items = all.sort((a,b) => b.version - a.version).map(m => {
         const isVid = ['mp4','mov','webm'].includes(m.format.toLowerCase());
         const type = isVid ? 'video' : 'image';
-        
         const thumbFormat = isVid ? 'jpg' : m.format;
 
         return {
@@ -237,15 +254,15 @@
             <p>Sé el primero</p>
             <span>Aún no hay fotos. ¡Sube la primera!</span>
           </div>`;
-        status.innerText = "GALERÍA VACÍA";
-        downloadAllBtn.style.display = 'none'; // Ocultar si no hay fotos
+        statusText.innerText = "GALERÍA VACÍA";
+        downloadAllBtn.style.display = 'none';
       } else {
         render();
-        status.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
-        downloadAllBtn.style.display = 'inline-flex'; // Mostrar el botón de descarga
+        statusText.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
+        downloadAllBtn.style.display = 'inline-flex';
       }
     } catch (e) { 
-      status.innerText = "ERROR AL CONECTAR"; 
+      statusText.innerText = "ERROR AL CONECTAR"; 
     }
   }
 
@@ -276,6 +293,7 @@
       `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">`;
     
     document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
+    document.getElementById('download-btn').href = m.download;
     
     preload((currentIndex + 1) % items.length);
     preload((currentIndex - 1 + items.length) % items.length);
@@ -300,7 +318,7 @@
 
   document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
 
-  // --- LÓGICA DE GUARDAR / COMPARTIR NATIVA ---
+  // LÓGICA DE COMPARTIR/GUARDAR
   async function shareOrDownload(e) {
     e.preventDefault();
     const m = items[currentIndex];
@@ -324,7 +342,6 @@
         window.open(m.download, '_blank');
       }
     } catch (error) {
-      console.error("Error al intentar compartir:", error);
       window.open(m.download, '_blank');
     } finally {
       btn.innerHTML = originalIcon;
@@ -332,18 +349,14 @@
     }
   }
 
-  // --- CONTROL TÁCTIL MEJORADO ---
+  // CONTROL TÁCTIL
   let touchStartX = 0;
   let touchStartY = 0;
   let isSwiping = false;
-
   const modalElement = document.getElementById('mediaModal');
 
   modalElement.addEventListener('touchstart', e => {
-    if (e.touches.length > 1) {
-      isSwiping = false;
-      return;
-    }
+    if (e.touches.length > 1) { isSwiping = false; return; }
     isSwiping = true;
     touchStartX = e.touches[0].clientX;
     touchStartY = e.touches[0].clientY;
@@ -353,16 +366,12 @@
     if(!modalElement.classList.contains('show') || !isSwiping) return;
     if (e.changedTouches.length > 1) return;
 
-    const touchEndX = e.changedTouches[0].clientX;
-    const touchEndY = e.changedTouches[0].clientY;
-
-    const diffX = touchStartX - touchEndX;
-    const diffY = touchStartY - touchEndY;
+    const diffX = touchStartX - e.changedTouches[0].clientX;
+    const diffY = touchStartY - e.changedTouches[0].clientY;
 
     if (Math.abs(diffX) > 70 && Math.abs(diffX) > Math.abs(diffY)) {
       move(diffX > 0 ? 1 : -1);
     }
-    
     isSwiping = false;
   }, {passive: true});
 
