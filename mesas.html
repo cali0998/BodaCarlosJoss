@@ -8,100 +8,114 @@
   
   <style>
     :root {
-      --gold: #c59d5f;
-      --wine: #4a0a16;
-      --jade: #0a2e24;
-      --glass: rgba(255, 255, 255, 0.05);
-      --border: rgba(197, 157, 95, 0.3);
-      --table-bg: rgba(0,0,0,0.6);
-      --status-conf: #2ecc71; 
-      --status-pend: #f1c40f; 
-      --status-decl: #e74c3c; 
+      /* Palette Refinada - ELEGANCIA DE MEDIANOCHE */
+      --wine: #4A0A16; /* Más sutil */
+      --jade: #0A2E24; /* Más sutil */
+      --gold: #D4AF37; /* Champaña / Warm Gold */
+      --background: #0B0C10; /* Casi negro azulado */
+      --card-bg: rgba(18, 18, 22, 0.9); /* Vidrio esmerilado oscuro */
+      --glass: rgba(255, 255, 255, 0.03); /* Inputs */
+      --border: rgba(212, 175, 55, 0.15); /* Bordes Champaña sutiles */
+      --text: #F5F5F5; /* Soft White */
+      --text-muted: rgba(245, 245, 245, 0.6);
+
+      /* Suavizado de Estados (menos vibrantes) */
+      --status-conf: #66BB6A; /* Emerald Pastel */
+      --status-pend: #FFD54F; /* Amber Soft */
+      --status-decl: #EF9A9A; /* Rose Soft */
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
     
     body {
-      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
-      background-attachment: fixed; color: white; height: 100vh; display: flex; flex-direction: column;
+      background-color: var(--background);
+      /* Degradados extremadamente sutiles */
+      background-image:
+        radial-gradient(circle at top left, var(--jade) 0%, transparent 50%),
+        radial-gradient(circle at bottom right, var(--wine) 0%, transparent 50%);
+      background-attachment: fixed; color: var(--text); height: 100vh; display: flex; flex-direction: column;
       overflow-x: hidden;
     }
 
     header {
-      padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; 
-      background: rgba(0,0,0,0.5); border-bottom: 1px solid var(--border);
+      padding: 15px 30px; display: flex; justify-content: space-between; align-items: center; 
+      background: rgba(10, 10, 12, 0.9); border-bottom: 1px solid var(--border);
       z-index: 100; flex-shrink: 0;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
     
-    .header-titles h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; margin-bottom: 2px; }
-    #connection-status { font-size: 0.8rem; opacity: 0.7; letter-spacing: 1px; }
+    .header-titles h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 2rem; margin-bottom: 2px; }
+    #connection-status { font-size: 0.8rem; opacity: 0.6; letter-spacing: 1px; font-weight: 300;}
 
     .btn-save {
-      background: #2ecc71; color: white; padding: 12px 25px; border-radius: 10px; border: none;
-      font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 0.9rem;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.3); transition: all 0.2s;
+      background: #49da9a; /* Jade green save button */ color: var(--background);
+      padding: 14px 30px; border-radius: 8px; border: none;
+      font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 0.85rem;
+      letter-spacing: 1px; box-shadow: 0 4px 20px rgba(73, 218, 154, 0.2); 
+      transition: all 0.3s ease;
     }
-    .btn-save:hover { background: #27ae60; transform: translateY(-2px); }
-    .btn-save:active { transform: scale(0.95); }
+    .btn-save:hover { background: #66bb6a; transform: translateY(-1px); box-shadow: 0 6px 25px rgba(102, 187, 106, 0.3); }
+    .btn-save:active { transform: translateY(1px); scale(0.98); }
 
     .container {
-      display: flex; flex: 1; overflow: hidden; padding: 20px; gap: 20px;
+      display: flex; flex: 1; overflow: hidden; padding: 30px; gap: 30px;
     }
 
     .sidebar {
-      width: 320px; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--border); border-radius: 20px; display: flex; flex-direction: column;
-      flex-shrink: 0;
+      width: 320px; background: var(--card-bg); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column;
+      flex-shrink: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
     
-    .sidebar-header { padding: 15px; border-bottom: 1px solid var(--border); text-align: center; }
-    .sidebar-header h3 { color: var(--gold); font-size: 1.2rem; margin-bottom: 10px;}
+    .sidebar-header { padding: 20px; border-bottom: 1px solid var(--border); text-align: center; }
+    .sidebar-header h3 { color: var(--gold); font-size: 1.3rem; margin-bottom: 12px; font-weight: 600; letter-spacing: 0.5px;}
 
-    .legend { display: flex; justify-content: center; gap: 12px; font-size: 0.7rem; opacity: 0.9; margin-bottom: 5px;}
-    .legend-item { display: flex; align-items: center; gap: 5px; text-transform: uppercase; letter-spacing: 1px;}
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
+    .legend { display: flex; justify-content: center; gap: 12px; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 9px; height: 9px; border-radius: 50%; }
     
     .guest-list {
-      flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px;
+      flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
     }
 
     .guest {
-      background: rgba(255,255,255,0.1); padding: 10px 15px; border-radius: 8px;
-      border: 1px solid rgba(255,255,255,0.1); cursor: grab; font-size: 0.85rem;
-      transition: all 0.2s; display: flex; justify-content: space-between; align-items: center;
-      border-left: 5px solid transparent; 
-      width: 100%;
+      background: rgba(255,255,255,0.03); padding: 12px 18px; border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.05); cursor: grab; font-size: 0.85rem;
+      transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;
+      border-left: 4px solid transparent; 
+      width: 100%; box-shadow: 0 2px 5px rgba(0,0,0,0.15);
     }
     .guest-info { display: flex; flex-direction: column; pointer-events: none;}
-    .guest-name { font-weight: bold; }
-    .guest-passes { font-size: 0.7rem; opacity: 0.8; letter-spacing: 0.5px; }
+    .guest-name { font-weight: 600; color: var(--text); }
+    .guest-passes { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.5px; }
 
-    .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(46, 204, 113, 0.1); }
-    .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(241, 196, 15, 0.05); }
-    .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.3; text-decoration: line-through; cursor: not-allowed; }
-    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.95); background: var(--gold); color: black; }
+    .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(102, 187, 106, 0.05); }
+    .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(255, 213, 79, 0.05); }
+    .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.4; text-decoration: line-through; cursor: not-allowed; }
+    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.96); background: var(--gold); color: var(--background); box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3); }
+    .guest:active:not(.status-declinado) .guest-name, .guest:active:not(.status-declinado) .guest-passes { color: var(--background); }
     .guest.dragging { opacity: 0.5; }
 
     .main-area {
-      flex: 1; border-radius: 20px; padding: 20px;
+      flex: 1; border-radius: 12px; padding: 25px;
       overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
-      position: relative; /* Necesario para que calcule bien los límites */
+      position: relative;
     }
 
     .room-layout {
       width: 100%; max-width: 1100px; margin: 0 auto; 
-      background: rgba(0,0,0,0.3); 
-      border: 3px solid var(--gold); 
-      border-radius: 15px;
-      padding: 30px 20px;
+      background: rgba(10, 10, 12, 0.3); 
+      border: 2px solid var(--gold); /* Borde Champagne Gold */
+      border-radius: 10px;
+      padding: 35px 25px;
       display: flex; flex-direction: column; gap: 30px;
-      box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.7), 0 10px 40px rgba(0,0,0,0.6);
       position: relative; 
     }
 
     .top-stage {
-      width: 100%; display: flex; justify-content: center; padding-bottom: 20px;
-      border-bottom: 2px dashed rgba(197, 157, 95, 0.3);
+      width: 100%; display: flex; justify-content: center; padding-bottom: 25px;
+      border-bottom: 2px dashed var(--border);
     }
 
     .floor-grid {
@@ -109,27 +123,31 @@
     }
     
     .side-zone { 
-      display: flex; flex-direction: column; gap: 20px; width: 30%; 
+      display: flex; flex-direction: column; gap: 25px; width: 30%; 
     }
 
+    /* PISTA DE BAILE - SUAVE */
     .dance-floor-area {
-      width: 35%; border: 2px dashed var(--gold); border-radius: 15px; 
-      background: rgba(197, 157, 95, 0.05); color: var(--gold); 
-      letter-spacing: 4px; font-weight: bold; opacity: 0.5; 
+      width: 35%; 
+      border: 2px solid var(--gold); /* Champagne sólido */
+      border-radius: 15px; 
+      background: rgba(10, 10, 12, 0.5); 
+      color: var(--text-muted); 
+      letter-spacing: 2px; font-weight: 600; font-size: 0.9rem;
       display: flex; align-items: center; justify-content: center; text-align: center;
-      min-height: 500px; 
+      min-height: 480px; box-shadow: inset 0 0 30px rgba(0,0,0,0.5);
     }
 
     .extra-area {
-      width: 100%; max-width: 1100px; margin: 20px auto 0 auto;
+      width: 100%; max-width: 1100px; margin: 25px auto 0 auto;
       display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
     }
 
     .table-slot {
       width: 100%;
       min-height: 180px;
-      border: 2px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 15px;
+      border: 1px dashed rgba(255, 255, 255, 0.1); /* Muy tenue */
+      border-radius: 10px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -138,31 +156,35 @@
     }
     
     .table-slot.slot-highlight {
-      background: rgba(46, 204, 113, 0.15);
+      background: rgba(102, 187, 106, 0.1); /* Emerald tint */
       border-color: var(--status-conf);
-      box-shadow: inset 0 0 15px rgba(46, 204, 113, 0.4);
+      box-shadow: inset 0 0 15px rgba(102, 187, 106, 0.2);
     }
 
     .extra-area .table-slot {
-       width: calc(33.333% - 15px); min-width: 250px;
+       width: calc(33.333% - 14px); min-width: 250px;
     }
 
     .table-card {
-      width: 100%; background: var(--table-bg); backdrop-filter: blur(10px);
-      border: 2px solid var(--gold); border-radius: 15px; 
+      width: 100%; background: var(--card-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border: 1px solid var(--border); border-radius: 8px; 
       display: flex; flex-direction: column; 
-      box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
+      box-shadow: 0 8px 30px rgba(0,0,0,0.5); 
+      transition: box-shadow 0.2s ease;
     }
+    
+    .table-card:hover { box-shadow: 0 12px 45px rgba(0,0,0,0.7); }
 
     #card-mesa-novios {
-      width: 100%; max-width: 450px; border: 3px solid var(--gold); 
-      box-shadow: 0 0 30px rgba(197, 157, 95, 0.4);
+      width: 100%; max-width: 450px; 
+      border: 3px solid var(--gold); 
+      box-shadow: 0 0 30px rgba(212, 175, 55, 0.3), 0 10px 30px rgba(0,0,0,0.6);
     }
-    #card-mesa-novios .table-header { cursor: default; touch-action: auto; } 
-    #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.2rem;}
+    #card-mesa-novios .table-header { cursor: default; touch-action: auto; background: rgba(212, 175, 55, 0.05); } 
+    #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.25rem; font-weight: 600;}
 
     .table-header {
-      background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
+      background: rgba(255, 255, 255, 0.02); padding: 14px 18px; border-radius: 7px 7px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
       cursor: grab; 
       touch-action: none; 
@@ -173,38 +195,41 @@
     }
     
     .table-header input {
-      background: transparent; border: none; color: white; font-family: 'Playfair Display', serif;
-      font-size: 1.1rem; font-weight: bold; width: 60%; outline: none; pointer-events: auto;
+      background: transparent; border: none; color: var(--text); font-family: 'Playfair Display', serif;
+      font-size: 1.15rem; font-weight: 600; width: 60%; outline: none; pointer-events: auto;
+      letter-spacing: 0.5px;
     }
     
-    .table-controls { display: flex; align-items: center; gap: 5px; font-size: 0.8rem; opacity: 0.8; }
-    .btn-small { background: rgba(255,255,255,0.1); border: none; color: white; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; }
-    .btn-small:hover { background: var(--gold); color: black; }
-    .btn-delete { background: rgba(231, 76, 60, 0.2); border: none; color: #e74c3c; width: 22px; height: 22px; border-radius: 5px; cursor: pointer; margin-left: 5px; font-weight: bold;}
-    .btn-delete:hover { background: #e74c3c; color: white; }
+    .table-controls { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
+    .btn-small { background: rgba(255,255,255,0.05); border: none; color: var(--text); width: 22px; height: 22px; border-radius: 4px; cursor: pointer; transition: 0.2s; font-weight: 600;}
+    .btn-small:hover { background: var(--gold); color: var(--background); }
+    .btn-delete { background: rgba(239, 154, 154, 0.1); border: none; color: var(--status-decl); width: 22px; height: 22px; border-radius: 4px; cursor: pointer; margin-left: 5px; font-weight: 600; transition: 0.2s; }
+    .btn-delete:hover { background: var(--status-decl); color: var(--background); }
 
     .table-seats {
-      padding: 10px; min-height: 120px; max-height: 250px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 5px;
+      padding: 10px 15px; min-height: 120px; max-height: 250px; overflow-y: auto;
+      display: flex; flex-direction: column; gap: 6px;
     }
-    .table-seats.drag-over { background: rgba(197, 157, 95, 0.2); }
-    .table-seats .guest { padding: 8px 10px; font-size: 0.75rem; border-radius: 6px; }
+    .table-seats.drag-over { background: rgba(212, 175, 55, 0.05); }
+    .table-seats .guest { padding: 8px 12px; font-size: 0.78rem; border-radius: 5px; border-left-width: 3px; box-shadow: none; border-color: rgba(255,255,255,0.03); }
 
     .seat-count { 
-      text-align: center; padding: 10px; font-size: 0.8rem; font-weight: 600; 
+      text-align: center; padding: 12px; font-size: 0.8rem; font-weight: 600; 
       color: var(--gold); border-top: 1px solid var(--border); background: rgba(0,0,0,0.3);
-      border-radius: 0 0 13px 13px;
+      border-radius: 0 0 11px 11px; letter-spacing: 0.5px;
     }
 
     .btn-add-table {
-      position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: white; 
-      padding: 15px 25px; border-radius: 50px; border: none; font-weight: 600; 
+      position: fixed; bottom: 30px; right: 30px; background: var(--gold); color: var(--background); 
+      padding: 16px 32px; border-radius: 50px; border: none; font-weight: 600; 
       cursor: pointer; text-transform: uppercase; font-size: 0.9rem;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.5); transition: 0.3s; z-index: 100;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); transition: all 0.3s ease; z-index: 100;
+      letter-spacing: 1px;
     }
-    .btn-add-table:hover { transform: scale(1.05); }
+    .btn-add-table:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4); }
+    .btn-add-table:active { transform: scale(1.02) translateY(1px); }
 
-    .loader { border: 3px solid rgba(255,255,255,0.3); border-top: 3px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 20px auto; }
+    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 20px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
   </style>
 </head>
@@ -325,7 +350,7 @@
 
   function removeTable(tableId) {
     if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa? Las demás se reacomodarán.")) return;
+    if(!confirm("¿Seguro de eliminar esta mesa? Las demás se reacomodarán automáticamente.")) return;
     
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
@@ -589,45 +614,25 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- 4. MOTOR DE ARRASTRE TÁCTIL ABSOLUTO + AUTO-SCROLL ---
+  // --- MOTOR DE ARRASTRE TÁCTIL ABSOLUTO + AUTO-SCROLL ---
   let draggedTableUI = null;
   let originalSlot = null;
   let offsetX = 0;
   let offsetY = 0;
   
-  // Variables para controlar el Auto-Scroll
   let autoScrollInterval = null;
   const scrollContainer = document.getElementById('scroll-container');
-  const scrollSpeed = 15; // Velocidad de desplazamiento
-  const edgeThreshold = 80; // Distancia desde el borde para activar el scroll
+  const scrollSpeed = 15; 
+  const edgeThreshold = 80; 
 
   function handleAutoScroll(clientY) {
     if (!draggedTableUI) return;
-
-    // Obtenemos los límites del contenedor principal
     const containerRect = scrollContainer.getBoundingClientRect();
-    
-    // Si el ratón está cerca del borde SUPERIOR del contenedor
     if (clientY - containerRect.top < edgeThreshold && scrollContainer.scrollTop > 0) {
-        if (!autoScrollInterval) {
-            autoScrollInterval = setInterval(() => {
-                scrollContainer.scrollTop -= scrollSpeed;
-            }, 20);
-        }
-    } 
-    // Si el ratón está cerca del borde INFERIOR del contenedor
-    else if (containerRect.bottom - clientY < edgeThreshold) {
-        if (!autoScrollInterval) {
-            autoScrollInterval = setInterval(() => {
-                scrollContainer.scrollTop += scrollSpeed;
-            }, 20);
-        }
-    } 
-    // Si está en medio de la pantalla, detenemos el scroll
-    else {
-        clearInterval(autoScrollInterval);
-        autoScrollInterval = null;
-    }
+        if (!autoScrollInterval) { autoScrollInterval = setInterval(() => { scrollContainer.scrollTop -= scrollSpeed; }, 20); }
+    } else if (containerRect.bottom - clientY < edgeThreshold) {
+        if (!autoScrollInterval) { autoScrollInterval = setInterval(() => { scrollContainer.scrollTop += scrollSpeed; }, 20); }
+    } else { clearInterval(autoScrollInterval); autoScrollInterval = null; }
   }
 
   function handleDragStart(e) {
@@ -668,11 +673,8 @@
       let clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let clientY = e.touches ? e.touches[0].clientY : e.clientY;
       
-      // Actualiza la posición de la mesa
       draggedTableUI.style.left = (clientX - offsetX) + 'px';
       draggedTableUI.style.top = (clientY - offsetY) + 'px';
-
-      // Dispara la verificación de Auto-Scroll
       handleAutoScroll(clientY);
 
       let elementBelow = document.elementFromPoint(clientX, clientY);
@@ -687,7 +689,6 @@
 
   function handleDragEnd(e) {
     if (draggedTableUI) {
-      // Detenemos el auto-scroll de inmediato
       clearInterval(autoScrollInterval);
       autoScrollInterval = null;
 
@@ -702,14 +703,10 @@
 
       if (targetSlot && targetSlot !== originalSlot) {
           let existingTable = targetSlot.querySelector('.table-card');
-          if (existingTable) {
-              originalSlot.appendChild(existingTable); 
-          }
+          if (existingTable) { originalSlot.appendChild(existingTable); }
           targetSlot.appendChild(draggedTableUI); 
           markUnsavedChanges();
-      } else {
-          originalSlot.appendChild(draggedTableUI); 
-      }
+      } else { originalSlot.appendChild(draggedTableUI); }
 
       draggedTableUI.style.position = '';
       draggedTableUI.style.left = '';
