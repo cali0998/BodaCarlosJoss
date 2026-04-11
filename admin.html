@@ -12,107 +12,144 @@
   
   <style>
     :root { 
-      --gold: #c59d5f; 
-      --wine: #4a0a16; 
-      --jade: #0a2e24; 
-      --glass: rgba(255, 255, 255, 0.08); 
+      --wine: #4A0A16; 
+      --jade: #0A2E24; 
+      --gold: #D4AF37; 
+      --background: #0B0C10;
+      --glass: rgba(255, 255, 255, 0.03); 
+      --border: rgba(212, 175, 55, 0.15);
+      --text: #F5F5F5;
+      --text-muted: rgba(245, 245, 245, 0.6);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
     
     body { 
       font-family: 'Poppins', sans-serif; 
-      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%); 
-      background-attachment: fixed; color: white; min-height: 100vh;
+      background-color: var(--background);
+      background-image:
+        radial-gradient(circle at top left, var(--jade) 0%, transparent 50%),
+        radial-gradient(circle at bottom right, var(--wine) 0%, transparent 50%);
+      background-attachment: fixed; color: var(--text); min-height: 100vh;
       overflow-x: hidden;
     }
     
     header { 
       padding: 25px 20px; text-align: center; 
-      background: rgba(0,0,0,0.4); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(197, 157, 95, 0.3); position: sticky; top: 0; z-index: 100;
+      background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
     }
     
     h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px; }
+    #status { font-size: 10px; color: var(--text-muted); margin-top: 6px; letter-spacing: 2px; font-weight: 600; }
     
     #gallery { 
       display: grid; 
       grid-template-columns: repeat(3, 1fr); 
-      gap: 8px; padding: 15px; max-width: 900px; margin: 0 auto;
+      gap: 10px; padding: 15px; max-width: 1000px; margin: 0 auto 80px auto;
       transform: translateZ(0); 
     }
     
     .media-card { 
-      aspect-ratio: 1/1; background: var(--glass); border-radius: 12px; 
+      aspect-ratio: 1/1; background: var(--glass); border-radius: 8px; 
       overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,0.05);
-      content-visibility: auto;
-      contain-intrinsic-size: 100px 100px;
+      content-visibility: auto; contain-intrinsic-size: 100px 100px;
+      cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
     }
 
-    .media-card img, .media-card video { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    .media-card img { 
+      width: 100%; height: 100%; object-fit: cover; pointer-events: none; 
+      transition: transform 0.4s ease;
+    }
+
+    .media-card:hover img { transform: scale(1.05); }
     
     .play-icon { 
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
-      background: rgba(0,0,0,0.6); border-radius: 50%; width: 40px; height: 40px; 
-      display: flex; align-items: center; justify-content: center; color: white;
+      background: rgba(10, 10, 12, 0.7); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
+      border: 1px solid var(--border); border-radius: 50%; width: 45px; height: 45px; 
+      display: flex; align-items: center; justify-content: center; color: var(--gold);
+      padding-left: 3px; /* Centrado visual perfecto del triangulo */
+      font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
-    /* BOTÓN ACTUALIZAR CON EL MISMO ESTILO DE ICONOS LIGEROS */
+    /* ESTADO VACÍO ELEGANTE */
+    .empty-state {
+      grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; padding: 60px 20px; text-align: center; opacity: 0.7;
+    }
+    .empty-state svg { width: 60px; height: 60px; margin-bottom: 20px; color: var(--gold); opacity: 0.8; }
+    .empty-state p { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); margin-bottom: 10px; }
+    .empty-state span { font-size: 0.9rem; color: var(--text-muted); }
+
     .btn-update {
       position: fixed; bottom: 30px; right: 20px; background: var(--gold);
       width: 55px; height: 55px; border-radius: 50%; border: none;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4); z-index: 999;
-      display: flex; align-items: center; justify-content: center; color: white;
-      cursor: pointer; transition: transform 0.3s ease;
+      box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3); z-index: 99;
+      display: flex; align-items: center; justify-content: center; color: var(--background);
+      cursor: pointer; transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .btn-update:active { transform: scale(0.9) rotate(180deg); }
 
-    /* MODAL CON ESTÉTICA DE CRISTAL OSCURO */
+    /* MODAL TIPO CINE */
     .modal {
       display: none; position: fixed; inset: 0; z-index: 9999;
-      background: rgba(0,0,0,0.96); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      background: rgba(5, 5, 7, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       align-items: center; justify-content: center; opacity: 0; 
-      transition: opacity 0.25s ease-out;
+      transition: opacity 0.3s ease-out;
     }
     .modal.show { opacity: 1; display: flex; }
 
-    #modal-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+    #modal-content { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; position: relative; }
+    
     .modal-media { 
       max-width: 100%; max-height: 80vh; object-fit: contain; 
-      border-radius: 15px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
       transform: translateZ(0);
+      animation: fadeIn 0.3s ease; /* Transición suave entre fotos */
     }
 
-    /* BOTONES DE NAVEGACIÓN UNIFICADOS (COMO EN LA INVITACIÓN/INDEX) */
+    @keyframes fadeIn { from { opacity: 0.5; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
     .nav-btn {
-      position: absolute; bottom: 40px; background: rgba(197, 157, 95, 0.9);
-      color: white; width: 60px; height: 50px; border: none;
-      border-radius: 15px; font-size: 20px; z-index: 10; display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      position: absolute; bottom: 40px; background: rgba(212, 175, 55, 0.15);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      color: var(--gold); width: 60px; height: 50px; border: 1px solid var(--border);
+      border-radius: 12px; font-size: 18px; z-index: 10; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3); transition: all 0.2s;
     }
+    .nav-btn:active { background: var(--gold); color: var(--background); transform: scale(0.95); }
     .prev { left: 20px; } .next { right: 20px; }
     
     @media (min-width: 600px) {
       .nav-btn { top: 50%; bottom: auto; transform: translateY(-50%); width: 55px; height: 55px; border-radius: 50%; }
       .prev { left: 30px; } .next { right: 30px; }
-      #gallery { grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
+      #gallery { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; }
     }
 
-    .close-modal { position: absolute; top: 25px; right: 20px; font-size: 40px; color: white; z-index: 11; cursor: pointer; }
-    .counter-text { position: absolute; bottom: 55px; font-size: 11px; opacity: 0.5; letter-spacing: 2px; text-transform: uppercase; }
+    .close-modal { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--text-muted); z-index: 11; cursor: pointer; transition: color 0.2s; }
+    .close-modal:hover { color: var(--gold); }
+    .counter-text { position: absolute; bottom: 55px; font-size: 11px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
   </style>
 </head>
 <body>
 
 <header>
   <h1>Nuestros Recuerdos</h1>
-  <div id="status" style="font-size: 10px; opacity: 0.6; margin-top: 5px; letter-spacing: 1px;">SINCRONIZANDO...</div>
+  <div id="status">SINCRONIZANDO...</div>
 </header>
 
-<div id="gallery"></div>
+<div id="gallery">
+  <div class="empty-state">
+     <div class="loader" style="border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; margin-bottom: 20px;"></div>
+     <p>Preparando Galería</p>
+     <span>Conectando con el álbum...</span>
+  </div>
+</div>
 
-<button class="btn-update" onclick="loadGallery()">
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+<button class="btn-update" onclick="loadGallery()" title="Actualizar Galería">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="22"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
 </button>
 
 <div id="mediaModal" class="modal">
@@ -125,6 +162,8 @@
   </div>
 </div>
 
+<style> @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } </style>
+
 <script>
   const cloudName = "dhruy6ftj";
   const tag = "boda_carlos_y_joss";
@@ -133,6 +172,8 @@
 
   async function loadGallery() {
     const status = document.getElementById('status');
+    const container = document.getElementById('gallery');
+    
     try {
       const [imgRes, vidRes] = await Promise.allSettled([
         fetch(`https://res.cloudinary.com/${cloudName}/image/list/v${Date.now()}/${tag}.json`).then(r => r.json()),
@@ -146,24 +187,41 @@
       items = all.sort((a,b) => b.version - a.version).map(m => {
         const isVid = ['mp4','mov','webm'].includes(m.format.toLowerCase());
         const type = isVid ? 'video' : 'image';
+        
+        // TRUCO DE RENDIMIENTO: Si es video, pedimos la extensión .jpg para la miniatura
+        const thumbFormat = isVid ? 'jpg' : m.format;
+
         return {
           isVid,
-          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_350,h_350,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${m.format}`,
+          thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_400,h_400,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${thumbFormat}`,
           full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
           original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`
         };
       });
 
-      render();
-      status.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
-    } catch (e) { status.innerText = "ESPERANDO RECUERDOS..."; }
+      if (items.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+            <p>Sé el primero</p>
+            <span>Aún no hay fotos. ¡Sube la primera!</span>
+          </div>`;
+        status.innerText = "GALERÍA VACÍA";
+      } else {
+        render();
+        status.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
+      }
+    } catch (e) { 
+      status.innerText = "ERROR AL CONECTAR"; 
+    }
   }
 
   function render() {
     const container = document.getElementById('gallery');
     container.innerHTML = items.map((m, i) => `
       <div class="media-card" onclick="openModal(${i})">
-        ${m.isVid ? `<video src="${m.thumb}" muted loop playsinline autoplay preload="none"></video><div class="play-icon">▶</div>` : `<img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}" ${i < 6 ? 'fetchpriority="high"' : ''}>`}
+        <img src="${m.thumb}" loading="${i < 12 ? 'eager' : 'lazy'}" ${i < 6 ? 'fetchpriority="high"' : ''} alt="Recuerdo de Boda">
+        ${m.isVid ? `<div class="play-icon">▶</div>` : ''}
       </div>
     `).join('');
   }
@@ -180,8 +238,9 @@
     const container = document.getElementById('media-container');
     const m = items[currentIndex];
     
+    // Al reescribir el innerHTML, la animación de CSS 'fadeIn' se dispara de nuevo
     container.innerHTML = m.isVid ? 
-      `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'"></video>` :
+      `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'" style="background: black;"></video>` :
       `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">`;
     
     document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
@@ -217,6 +276,8 @@
     if(Math.abs(diff) > 50) move(diff > 0 ? 1 : -1);
   }, {passive: true});
 
+  // Nota de seguridad: Para que esto funcione, en tu panel de Cloudinary debes 
+  // asegurarte de que en Settings > Security, la opción "Resource list" esté habilitada.
   window.onload = loadGallery;
   setInterval(loadGallery, 60000);
 </script>
