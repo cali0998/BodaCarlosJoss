@@ -167,6 +167,8 @@
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
       cursor: grab; 
+      user-select: none; /* Bloquea selección de texto molesta al arrastrar */
+      touch-action: none; /* Mejora la respuesta si lo usas en un iPad/Tablet */
     }
     .table-header:active {
       cursor: grabbing;
@@ -536,7 +538,7 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- LÓGICA DE INTERCAMBIO Y ARRASTRE DE MESAS (CORREGIDA) ---
+  // --- LÓGICA DE INTERCAMBIO Y ARRASTRE DE MESAS (RECONSTRUIDA PARA MÁXIMA FLUIDEZ) ---
   let draggedTableUI = null;
   let originalSlot = null;
   let tableOffsetX = 0;
@@ -546,28 +548,38 @@
     const header = e.target.closest('.table-header');
     const card = header ? header.closest('.table-card') : null;
     
+    // Evitamos arrastrar si se pulsan botones o se escribe texto
     if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT' && card.id !== 'card-mesa-novios') {
       
+      e.preventDefault(); // Crítico: Previene el arrastre nativo del navegador que causaba el fallo
+
       draggedTableUI = card;
       originalSlot = draggedTableUI.parentElement; 
       
       const rect = draggedTableUI.getBoundingClientRect();
       
+      // Congelamos tanto el ancho como el ALTO exacto para que no se achique al volar
       draggedTableUI.style.width = rect.width + 'px'; 
+      draggedTableUI.style.height = rect.height + 'px';
+      
       draggedTableUI.style.position = 'absolute';
       draggedTableUI.style.zIndex = "1000";
-      draggedTableUI.style.transition = "none"; 
       
-      // Hacemos que la mesa sea invisible al ratón MIENTRAS la arrastramos
+      // Añadimos una sutil animación para que se vea que "levita"
+      draggedTableUI.style.transition = "transform 0.15s ease-out"; 
+      draggedTableUI.style.transform = "scale(1.02)"; 
+      
+      // Evitamos que la mesa interfiera con el ratón al buscar ranuras abajo
       draggedTableUI.style.pointerEvents = "none"; 
       
       document.body.appendChild(draggedTableUI);
       
+      // Usamos pageX y pageY para que soporte el scroll sin volverse loco
       tableOffsetX = e.clientX - rect.left;
       tableOffsetY = e.clientY - rect.top;
       
-      draggedTableUI.style.left = (e.clientX - tableOffsetX) + 'px';
-      draggedTableUI.style.top = (e.clientY - tableOffsetY) + 'px';
+      draggedTableUI.style.left = (e.pageX - tableOffsetX) + 'px';
+      draggedTableUI.style.top = (e.pageY - tableOffsetY) + 'px';
     }
   });
 
@@ -575,12 +587,15 @@
     if (draggedTableUI) {
       e.preventDefault(); 
       
-      draggedTableUI.style.left = (e.clientX - tableOffsetX) + 'px';
-      draggedTableUI.style.top = (e.clientY - tableOffsetY) + 'px';
+      // Movimiento ultrasuave con coordenadas del documento
+      draggedTableUI.style.left = (e.pageX - tableOffsetX) + 'px';
+      draggedTableUI.style.top = (e.pageY - tableOffsetY) + 'px';
 
+      // Identificamos sobre qué recuadro punteado está el cursor
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
 
+      // Actualizamos luces verdes
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
       if (targetSlot && targetSlot !== originalSlot) {
@@ -591,36 +606,33 @@
 
   document.addEventListener('mouseup', (e) => {
     if (draggedTableUI) {
-      
-      // 1. Buscamos qué hay debajo ANTES de devolverle los pointerEvents a la mesa
+      // Identificamos dónde lo soltó el usuario antes de devolverle su fisicalidad
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
       
-      // 2. AHORA SÍ, devolvemos los eventos del ratón a la mesa para que vuelva a ser "sólida"
       draggedTableUI.style.pointerEvents = "auto";
-      
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
-      // INTERCAMBIO O POSICIONAMIENTO
+      // INTERCAMBIO MAGNÉTICO O POSICIONAMIENTO
       if (targetSlot && targetSlot !== originalSlot) {
-          // Si el imán tiene una mesa, esa mesa vuela al imán original
           let existingTable = targetSlot.querySelector('.table-card');
           if (existingTable) {
-              originalSlot.appendChild(existingTable);
+              originalSlot.appendChild(existingTable); // Manda la vieja a la ranura original
           }
-          // Encajamos nuestra mesa en el imán nuevo
-          targetSlot.appendChild(draggedTableUI);
+          targetSlot.appendChild(draggedTableUI); // Encaja la nueva
           markUnsavedChanges();
       } else {
-          // Si no la soltamos en ningún imán, regresa al original
-          originalSlot.appendChild(draggedTableUI);
+          originalSlot.appendChild(draggedTableUI); // Si no le atinó, regresa a donde estaba
       }
 
+      // Limpieza profunda de los estilos inyectados durante el vuelo
       draggedTableUI.style.position = '';
       draggedTableUI.style.left = '';
       draggedTableUI.style.top = '';
       draggedTableUI.style.zIndex = '';
       draggedTableUI.style.width = '100%'; 
+      draggedTableUI.style.height = ''; 
+      draggedTableUI.style.transform = ''; 
       draggedTableUI.style.transition = "transform 0.2s, box-shadow 0.2s"; 
 
       draggedTableUI = null;
