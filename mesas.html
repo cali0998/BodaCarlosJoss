@@ -85,6 +85,7 @@
     .main-area {
       flex: 1; border-radius: 20px; padding: 20px;
       overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
+      position: relative;
     }
 
     .room-layout {
@@ -151,7 +152,7 @@
       border: 2px solid var(--gold); border-radius: 15px; 
       display: flex; flex-direction: column; 
       box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: box-shadow 0.2s; /* Se quitó el transform aquí para evitar parpadeos */
     }
     
     .table-card:hover { box-shadow: 0 15px 35px rgba(0,0,0,0.6); }
@@ -167,8 +168,8 @@
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
       cursor: grab; 
-      user-select: none; /* Bloquea selección de texto molesta al arrastrar */
-      touch-action: none; /* Mejora la respuesta si lo usas en un iPad/Tablet */
+      touch-action: none; /* EVITA EL CONFLICTO CON EL SCROLL DEL NAVEGADOR */
+      user-select: none;
     }
     .table-header:active {
       cursor: grabbing;
@@ -236,7 +237,7 @@
       </div>
     </div>
 
-    <div class="main-area">
+    <div class="main-area" id="main-scroll-area">
       <div class="room-layout">
         
         <div class="top-stage" id="stage-area">
@@ -306,12 +307,9 @@
   }
 
   function initFloorPlan() {
+    // YA NO CREA LAS 8 MESAS POR DEFECTO. Empieza limpio.
     createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'mesa-novios', 'slot-novios');
-    
-    for(let i=1; i<=4; i++) { createTableHTML(`Mesa ${i}`, 10, `mesa-${i}`, `slot-izq-${i}`); }
-    for(let i=5; i<=8; i++) { createTableHTML(`Mesa ${i}`, 10, `mesa-${i}`, `slot-der-${i-4}`); }
-    
-    tableCount = 8; 
+    tableCount = 0; 
   }
 
   function addTable(capacity = 10) {
@@ -330,23 +328,94 @@
 
   function removeTable(tableId) {
     if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa?")) return;
+    if(!confirm("¿Seguro de eliminar esta mesa? Las demás se reorganizarán automáticamente.")) return;
     
     const tableCard = document.getElementById(`card-${tableId}`);
     const seatsZone = document.getElementById(`seats-${tableId}`);
     const unseatedZone = document.getElementById('unseated-guests');
     const slot = tableCard.parentElement; 
     
+    // Regresa invitados a la lista
     const guests = seatsZone.querySelectorAll('.guest');
     guests.forEach(g => unseatedZone.appendChild(g));
     
+    // Elimina la mesa
     tableCard.remove(); 
 
     if (!slot.classList.contains('fixed-slot')) {
         slot.remove();
     }
     
+    // ESTA ES LA FUNCIÓN QUE REACOMODA TODO
+    reindexAndRepackTables();
     markUnsavedChanges();
+  }
+
+  // FUNCIÓN PARA REACOMODAR LAS MESAS AL ELIMINAR UNA
+  function reindexAndRepackTables() {
+    const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
+    
+    // Ordena las mesas por su número anterior para no mezclar a la gente
+    allCards.sort((a, b) => {
+       let numA = parseInt(a.id.replace('card-mesa-', '')) || 0;
+       let numB = parseInt(b.id.replace('card-mesa-', '')) || 0;
+       return numA - numB;
+    });
+
+    tableCount = allCards.length;
+
+    const slots = [
+      'slot-izq-1', 'slot-izq-2', 'slot-izq-3', 'slot-izq-4', 
+      'slot-der-1', 'slot-der-2', 'slot-der-3', 'slot-der-4'
+    ];
+    const extraZone = document.getElementById('extra-tables');
+
+    allCards.forEach((card, index) => {
+      let newNum = index + 1;
+      let newId = `mesa-${newNum}`;
+
+      // Actualiza IDs
+      card.id = `card-${newId}`;
+      
+      let input = card.querySelector('.table-header input');
+      input.id = `name-${newId}`;
+      if (/^Mesa \d+$/i.test(input.value)) {
+          input.value = `Mesa ${newNum}`; // Renombra visualmente
+      }
+
+      let btns = card.querySelectorAll('.btn-small');
+      btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
+      btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
+      
+      let delBtn = card.querySelector('.btn-delete');
+      if(delBtn) delBtn.setAttribute('onclick', `removeTable('${newId}')`);
+
+      let seats = card.querySelector('.table-seats');
+      seats.id = `seats-${newId}`;
+
+      let count = card.querySelector('.seat-count');
+      count.id = `count-${newId}`;
+
+      // Físicamente mueve la mesa al hueco que le corresponde
+      if (newNum <= 8) {
+         document.getElementById(slots[newNum-1]).appendChild(card);
+      } else {
+         let extraSlotId = `slot-extra-${newNum}`;
+         let targetSlot = document.getElementById(extraSlotId);
+         if (!targetSlot) {
+            extraZone.insertAdjacentHTML('beforeend', `<div class="table-slot" id="${extraSlotId}"></div>`);
+            targetSlot = document.getElementById(extraSlotId);
+         }
+         targetSlot.appendChild(card);
+      }
+    });
+    
+    // Limpia slots basura de la zona extra
+    document.querySelectorAll('#extra-tables .table-slot').forEach(slot => {
+       if(slot.children.length === 0) slot.remove();
+    });
+    
+    updateAllCounters();
   }
 
   async function loadAllGuests() {
@@ -365,11 +434,12 @@
       statusText.innerText = `${invitados.length} Registros Sincronizados`;
 
       invitados.forEach(invitado => {
+        const estadoActual = (invitado.estado || "").toLowerCase().trim();
         let statusClass = 'status-pendiente'; 
         let isDraggable = true;
 
-        if (invitado.estado === 'Confirmado') statusClass = 'status-confirmado';
-        else if (invitado.estado === 'Declinado') {
+        if (estadoActual === 'confirmado' || estadoActual === 'si') statusClass = 'status-confirmado';
+        else if (estadoActual === 'declinado' || estadoActual === 'no') {
             statusClass = 'status-declinado';
             isDraggable = false; 
         }
@@ -390,6 +460,7 @@
         if (invitado.mesa && invitado.mesa.trim() !== '') {
             let tableZone = document.getElementById(`seats-${invitado.mesa}`);
             
+            // Si la mesa de Supabase no existe aún en la pantalla, la creamos al vuelo
             if (!tableZone && invitado.mesa !== 'mesa-novios') {
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
                 if(!isNaN(tNum)) {
@@ -538,43 +609,64 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- LÓGICA DE INTERCAMBIO Y ARRASTRE DE MESAS (RECONSTRUIDA PARA MÁXIMA FLUIDEZ) ---
+  // --- MOTOR DE ARRASTRE DE MESAS 2.0 (Fluido, Scroll Automático y Soporte Táctil) ---
   let draggedTableUI = null;
   let originalSlot = null;
   let tableOffsetX = 0;
   let tableOffsetY = 0;
+  let autoScrollInterval = null;
 
-  document.addEventListener('mousedown', (e) => {
+  // Maneja el auto-scroll cuando te acercas al borde de la pantalla
+  function handleAutoScroll(clientY) {
+    const edgeThreshold = 60; // Píxeles de sensibilidad al borde
+    const scrollSpeed = 15;
+    
+    if (clientY < edgeThreshold) {
+        if (!autoScrollInterval) {
+            autoScrollInterval = setInterval(() => {
+                window.scrollBy(0, -scrollSpeed);
+                if(draggedTableUI) draggedTableUI.style.top = (parseInt(draggedTableUI.style.top) - scrollSpeed) + 'px';
+            }, 20);
+        }
+    } else if (window.innerHeight - clientY < edgeThreshold) {
+        if (!autoScrollInterval) {
+            autoScrollInterval = setInterval(() => {
+                window.scrollBy(0, scrollSpeed);
+                if(draggedTableUI) draggedTableUI.style.top = (parseInt(draggedTableUI.style.top) + scrollSpeed) + 'px';
+            }, 20);
+        }
+    } else {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+    }
+  }
+
+  // Usamos "pointerdown" en lugar de mousedown para soportar pantallas táctiles perfecto
+  document.addEventListener('pointerdown', (e) => {
     const header = e.target.closest('.table-header');
     const card = header ? header.closest('.table-card') : null;
     
-    // Evitamos arrastrar si se pulsan botones o se escribe texto
     if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT' && card.id !== 'card-mesa-novios') {
       
-      e.preventDefault(); // Crítico: Previene el arrastre nativo del navegador que causaba el fallo
+      e.preventDefault(); // Crítico: detiene conflictos con el scroll nativo
 
       draggedTableUI = card;
       originalSlot = draggedTableUI.parentElement; 
       
       const rect = draggedTableUI.getBoundingClientRect();
       
-      // Congelamos tanto el ancho como el ALTO exacto para que no se achique al volar
+      // Congelamos dimensiones exactas
       draggedTableUI.style.width = rect.width + 'px'; 
       draggedTableUI.style.height = rect.height + 'px';
       
       draggedTableUI.style.position = 'absolute';
       draggedTableUI.style.zIndex = "1000";
       
-      // Añadimos una sutil animación para que se vea que "levita"
-      draggedTableUI.style.transition = "transform 0.15s ease-out"; 
-      draggedTableUI.style.transform = "scale(1.02)"; 
-      
-      // Evitamos que la mesa interfiera con el ratón al buscar ranuras abajo
+      // La mesa deja de ser un obstáculo para el ratón
       draggedTableUI.style.pointerEvents = "none"; 
       
       document.body.appendChild(draggedTableUI);
       
-      // Usamos pageX y pageY para que soporte el scroll sin volverse loco
       tableOffsetX = e.clientX - rect.left;
       tableOffsetY = e.clientY - rect.top;
       
@@ -583,19 +675,19 @@
     }
   });
 
-  document.addEventListener('mousemove', (e) => {
+  document.addEventListener('pointermove', (e) => {
     if (draggedTableUI) {
       e.preventDefault(); 
       
-      // Movimiento ultrasuave con coordenadas del documento
       draggedTableUI.style.left = (e.pageX - tableOffsetX) + 'px';
       draggedTableUI.style.top = (e.pageY - tableOffsetY) + 'px';
 
-      // Identificamos sobre qué recuadro punteado está el cursor
+      // Dispara el scroll automático si llegas a los bordes
+      handleAutoScroll(e.clientY);
+
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
 
-      // Actualizamos luces verdes
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
       if (targetSlot && targetSlot !== originalSlot) {
@@ -604,37 +696,37 @@
     }
   });
 
-  document.addEventListener('mouseup', (e) => {
+  document.addEventListener('pointerup', (e) => {
     if (draggedTableUI) {
-      // Identificamos dónde lo soltó el usuario antes de devolverle su fisicalidad
+      
+      // Apagar el auto-scroll
+      clearInterval(autoScrollInterval);
+      autoScrollInterval = null;
+
       let elementBelow = document.elementFromPoint(e.clientX, e.clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
       
       draggedTableUI.style.pointerEvents = "auto";
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
-      // INTERCAMBIO MAGNÉTICO O POSICIONAMIENTO
       if (targetSlot && targetSlot !== originalSlot) {
           let existingTable = targetSlot.querySelector('.table-card');
           if (existingTable) {
-              originalSlot.appendChild(existingTable); // Manda la vieja a la ranura original
+              originalSlot.appendChild(existingTable); 
           }
-          targetSlot.appendChild(draggedTableUI); // Encaja la nueva
+          targetSlot.appendChild(draggedTableUI); 
           markUnsavedChanges();
       } else {
-          originalSlot.appendChild(draggedTableUI); // Si no le atinó, regresa a donde estaba
+          originalSlot.appendChild(draggedTableUI); 
       }
 
-      // Limpieza profunda de los estilos inyectados durante el vuelo
       draggedTableUI.style.position = '';
       draggedTableUI.style.left = '';
       draggedTableUI.style.top = '';
       draggedTableUI.style.zIndex = '';
       draggedTableUI.style.width = '100%'; 
       draggedTableUI.style.height = ''; 
-      draggedTableUI.style.transform = ''; 
-      draggedTableUI.style.transition = "transform 0.2s, box-shadow 0.2s"; 
-
+      
       draggedTableUI = null;
       originalSlot = null;
     }
