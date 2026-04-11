@@ -85,6 +85,7 @@
     .main-area {
       flex: 1; border-radius: 20px; padding: 20px;
       overflow-y: auto; background: rgba(0,0,0,0.2); border: 1px dashed rgba(255,255,255,0.1);
+      position: relative; /* Necesario para que calcule bien los límites */
     }
 
     .room-layout {
@@ -588,11 +589,46 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- MOTOR DE ARRASTRE TÁCTIL ABSOLUTO (FIXED) ---
+  // --- 4. MOTOR DE ARRASTRE TÁCTIL ABSOLUTO + AUTO-SCROLL ---
   let draggedTableUI = null;
   let originalSlot = null;
   let offsetX = 0;
   let offsetY = 0;
+  
+  // Variables para controlar el Auto-Scroll
+  let autoScrollInterval = null;
+  const scrollContainer = document.getElementById('scroll-container');
+  const scrollSpeed = 15; // Velocidad de desplazamiento
+  const edgeThreshold = 80; // Distancia desde el borde para activar el scroll
+
+  function handleAutoScroll(clientY) {
+    if (!draggedTableUI) return;
+
+    // Obtenemos los límites del contenedor principal
+    const containerRect = scrollContainer.getBoundingClientRect();
+    
+    // Si el ratón está cerca del borde SUPERIOR del contenedor
+    if (clientY - containerRect.top < edgeThreshold && scrollContainer.scrollTop > 0) {
+        if (!autoScrollInterval) {
+            autoScrollInterval = setInterval(() => {
+                scrollContainer.scrollTop -= scrollSpeed;
+            }, 20);
+        }
+    } 
+    // Si el ratón está cerca del borde INFERIOR del contenedor
+    else if (containerRect.bottom - clientY < edgeThreshold) {
+        if (!autoScrollInterval) {
+            autoScrollInterval = setInterval(() => {
+                scrollContainer.scrollTop += scrollSpeed;
+            }, 20);
+        }
+    } 
+    // Si está en medio de la pantalla, detenemos el scroll
+    else {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+    }
+  }
 
   function handleDragStart(e) {
     const header = e.target.closest('.table-header');
@@ -632,8 +668,12 @@
       let clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let clientY = e.touches ? e.touches[0].clientY : e.clientY;
       
+      // Actualiza la posición de la mesa
       draggedTableUI.style.left = (clientX - offsetX) + 'px';
       draggedTableUI.style.top = (clientY - offsetY) + 'px';
+
+      // Dispara la verificación de Auto-Scroll
+      handleAutoScroll(clientY);
 
       let elementBelow = document.elementFromPoint(clientX, clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
@@ -647,14 +687,16 @@
 
   function handleDragEnd(e) {
     if (draggedTableUI) {
+      // Detenemos el auto-scroll de inmediato
+      clearInterval(autoScrollInterval);
+      autoScrollInterval = null;
+
       let clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
       let clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
       
-      // 1. PRIMERO leemos qué hay debajo ANTES de devolverle los punteros a la mesa
       let elementBelow = document.elementFromPoint(clientX, clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
       
-      // 2. AHORA SÍ devolvemos la interacción a la mesa
       draggedTableUI.style.pointerEvents = "auto";
       document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
