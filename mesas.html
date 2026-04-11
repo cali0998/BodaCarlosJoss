@@ -164,7 +164,7 @@
       background: rgba(197, 157, 95, 0.15); padding: 12px 15px; border-radius: 13px 13px 0 0;
       border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center;
       cursor: grab; 
-      touch-action: none; /* Bloqueo de scroll táctil obligatorio */
+      touch-action: none; 
       user-select: none;
     }
     .table-header:active {
@@ -303,7 +303,6 @@
   }
 
   function initFloorPlan() {
-    // 1. INICIAMOS COMPLETAMENTE EN LIMPIO
     document.getElementById('slot-novios').innerHTML = '';
     createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'mesa-novios', 'slot-novios');
     tableCount = 0; 
@@ -332,24 +331,19 @@
     const unseatedZone = document.getElementById('unseated-guests');
     const slot = tableCard.parentElement; 
     
-    // Regresamos invitados a la lista
     const guests = seatsZone.querySelectorAll('.guest');
     guests.forEach(g => unseatedZone.appendChild(g));
     
-    // Eliminamos la mesa y la ranura si es extra
     tableCard.remove(); 
     if (!slot.classList.contains('fixed-slot')) slot.remove();
     
-    // Disparamos la reorganización forzada
     reindexAndRepackTables();
     markUnsavedChanges();
   }
 
-  // REORGANIZACIÓN ESTRICTA
   function reindexAndRepackTables() {
     const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
     
-    // Ordenamos por número actual
     allCards.sort((a, b) => {
        let numA = parseInt(a.id.replace('card-mesa-', '')) || 0;
        let numB = parseInt(b.id.replace('card-mesa-', '')) || 0;
@@ -364,7 +358,6 @@
       let newNum = index + 1;
       let newId = `mesa-${newNum}`;
 
-      // Actualizamos identificadores
       card.id = `card-${newId}`;
       let input = card.querySelector('.table-header input');
       input.id = `name-${newId}`;
@@ -379,7 +372,6 @@
       card.querySelector('.table-seats').id = `seats-${newId}`;
       card.querySelector('.seat-count').id = `count-${newId}`;
 
-      // Acomodamos físicamente
       if (newNum <= 8) {
          document.getElementById(slots[newNum-1]).appendChild(card);
       } else {
@@ -393,7 +385,6 @@
       }
     });
     
-    // Limpieza de divs vacíos
     document.querySelectorAll('#extra-tables .table-slot').forEach(slot => {
        if(slot.children.length === 0) slot.remove();
     });
@@ -443,11 +434,10 @@
         if (invitado.mesa && invitado.mesa.trim() !== '') {
             let tableZone = document.getElementById(`seats-${invitado.mesa}`);
             
-            // 2. CORRECCIÓN DEL BUCLE FANTASMA. Ahora SOLO crea la mesa que necesita, no las anteriores.
             if (!tableZone && invitado.mesa !== 'mesa-novios') {
                 let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
                 if(!isNaN(tNum)) {
-                    if (tNum > tableCount) tableCount = tNum; // Actualizamos el contador global
+                    if (tNum > tableCount) tableCount = tNum; 
                     
                     const fixedSlots = Array.from(document.querySelectorAll('.fixed-slot:not(#slot-novios)'));
                     let emptySlot = fixedSlots.find(slot => slot.children.length === 0);
@@ -598,7 +588,7 @@
     } catch (error) { alert("Error al guardar."); btn.innerText = originalText; btn.style.background = "#e74c3c"; btn.disabled = false; }
   }
 
-  // --- 3. MOTOR DE ARRASTRE TÁCTIL ABSOLUTO (FIXED) ---
+  // --- MOTOR DE ARRASTRE TÁCTIL ABSOLUTO (FIXED) ---
   let draggedTableUI = null;
   let originalSlot = null;
   let offsetX = 0;
@@ -615,18 +605,15 @@
       
       const rect = draggedTableUI.getBoundingClientRect();
       
-      // Congelamos el tamaño exacto
       draggedTableUI.style.width = rect.width + 'px'; 
       draggedTableUI.style.height = rect.height + 'px';
       
-      // POSITION FIXED: Ignora el scroll por completo. Perfecto para móviles.
       draggedTableUI.style.position = 'fixed';
       draggedTableUI.style.zIndex = "9999";
       draggedTableUI.style.pointerEvents = "none"; 
       
       document.body.appendChild(draggedTableUI);
       
-      // Soporte para PC o Táctil
       let clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let clientY = e.touches ? e.touches[0].clientY : e.clientY;
       
@@ -640,7 +627,7 @@
 
   function handleDragMove(e) {
     if (draggedTableUI) {
-      e.preventDefault(); // Evita scroll de la pantalla al arrastrar
+      e.preventDefault(); 
       
       let clientX = e.touches ? e.touches[0].clientX : e.clientX;
       let clientY = e.touches ? e.touches[0].clientY : e.clientY;
@@ -663,11 +650,13 @@
       let clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
       let clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
       
-      draggedTableUI.style.pointerEvents = "auto";
-      document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
-
+      // 1. PRIMERO leemos qué hay debajo ANTES de devolverle los punteros a la mesa
       let elementBelow = document.elementFromPoint(clientX, clientY);
       let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
+      
+      // 2. AHORA SÍ devolvemos la interacción a la mesa
+      draggedTableUI.style.pointerEvents = "auto";
+      document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
 
       if (targetSlot && targetSlot !== originalSlot) {
           let existingTable = targetSlot.querySelector('.table-card');
@@ -692,7 +681,6 @@
     }
   }
 
-  // Eventos duales (Mouse + Touch) para soportar todo tipo de pantalla
   document.addEventListener('mousedown', handleDragStart);
   document.addEventListener('mousemove', handleDragMove, {passive: false});
   document.addEventListener('mouseup', handleDragEnd);
