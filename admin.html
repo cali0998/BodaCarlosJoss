@@ -39,11 +39,22 @@
       background: rgba(10, 10, 12, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100;
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column; align-items: center;
     }
     
     h1 { font-family: 'Playfair Display', serif; color: var(--gold); font-size: 1.8rem; letter-spacing: 1px; }
     #status { font-size: 10px; color: var(--text-muted); margin-top: 6px; letter-spacing: 2px; font-weight: 600; }
     
+    /* ESTILO BOTÓN DESCARGAR TODO */
+    .btn-download-all {
+      display: none; align-items: center; gap: 8px; margin-top: 15px;
+      padding: 8px 16px; background: rgba(212, 175, 55, 0.1); border: 1px solid var(--gold);
+      border-radius: 20px; color: var(--gold); font-size: 0.75rem; font-weight: 600;
+      text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+      transition: all 0.2s ease; cursor: pointer; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .btn-download-all:active { transform: scale(0.95); background: var(--gold); color: var(--background); }
+
     #gallery { 
       display: grid; 
       grid-template-columns: repeat(3, 1fr); 
@@ -129,7 +140,6 @@
     .close-modal { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--text-muted); z-index: 11; cursor: pointer; transition: color 0.2s; }
     .close-modal:hover { color: var(--gold); }
     
-    /* BOTÓN DE COMPARTIR/GUARDAR NATIVO */
     .download-btn { 
       position: absolute; top: 25px; left: 25px; color: var(--text-muted); 
       z-index: 11; cursor: pointer; transition: all 0.2s ease; text-decoration: none;
@@ -149,6 +159,10 @@
 <header>
   <h1>Nuestros Recuerdos</h1>
   <div id="status">SINCRONIZANDO...</div>
+  <a id="download-all-btn" class="btn-download-all" href="https://res.cloudinary.com/dhruy6ftj/image/tags/boda_carlos_y_joss.zip" target="_blank" title="Descargar todo el álbum en ZIP">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+    Descargar Álbum (.zip)
+  </a>
 </header>
 
 <div id="gallery">
@@ -188,6 +202,7 @@
   async function loadGallery() {
     const status = document.getElementById('status');
     const container = document.getElementById('gallery');
+    const downloadAllBtn = document.getElementById('download-all-btn');
     
     try {
       const [imgRes, vidRes] = await Promise.allSettled([
@@ -223,9 +238,11 @@
             <span>Aún no hay fotos. ¡Sube la primera!</span>
           </div>`;
         status.innerText = "GALERÍA VACÍA";
+        downloadAllBtn.style.display = 'none'; // Ocultar si no hay fotos
       } else {
         render();
         status.innerText = `${items.length} MOMENTOS COMPARTIDOS`;
+        downloadAllBtn.style.display = 'inline-flex'; // Mostrar el botón de descarga
       }
     } catch (e) { 
       status.innerText = "ERROR AL CONECTAR"; 
@@ -289,35 +306,27 @@
     const m = items[currentIndex];
     const btn = document.getElementById('download-btn');
     
-    // Guardamos el SVG original para restaurarlo después
     const originalIcon = btn.innerHTML;
-    
-    // Mostramos un mini-spinner dorado mientras descarga la foto para compartirla
     btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid transparent;border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;"></div>';
     btn.style.pointerEvents = 'none';
 
     try {
-      // Pedimos la imagen a Cloudinary
       const response = await fetch(m.original);
       const blob = await response.blob();
       const file = new File([blob], `Boda_Carlos_y_Joselyn.${m.format}`, { type: blob.type });
 
-      // Verificamos si el celular soporta compartir/guardar archivos nativamente
       if (navigator.canShare && navigator.canShare({ files: [file] })) {
         await navigator.share({
           files: [file],
           title: 'Recuerdo de Boda',
         });
       } else {
-        // Si es PC o un navegador muy viejo, forzamos la descarga normal
         window.open(m.download, '_blank');
       }
     } catch (error) {
       console.error("Error al intentar compartir:", error);
-      // Fallback de seguridad por si falla la descarga del blob
       window.open(m.download, '_blank');
     } finally {
-      // Restauramos el botón a su estado original
       btn.innerHTML = originalIcon;
       btn.style.pointerEvents = 'auto';
     }
