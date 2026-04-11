@@ -129,7 +129,7 @@
     .close-modal { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--text-muted); z-index: 11; cursor: pointer; transition: color 0.2s; }
     .close-modal:hover { color: var(--gold); }
     
-    /* ESTILO DEL BOTÓN DE DESCARGA MANUAL */
+    /* BOTÓN DE COMPARTIR/GUARDAR NATIVO */
     .download-btn { 
       position: absolute; top: 25px; left: 25px; color: var(--text-muted); 
       z-index: 11; cursor: pointer; transition: all 0.2s ease; text-decoration: none;
@@ -164,7 +164,7 @@
 </button>
 
 <div id="mediaModal" class="modal">
-  <a id="download-btn" class="download-btn" href="#" title="Descargar recuerdo">
+  <a id="download-btn" class="download-btn" onclick="shareOrDownload(event)" title="Guardar en carrete">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
   </a>
 
@@ -207,6 +207,7 @@
 
         return {
           isVid,
+          format: m.format,
           thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_400,h_400,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${thumbFormat}`,
           full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
           original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`,
@@ -259,9 +260,6 @@
     
     document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
     
-    // Actualizamos el link de descarga con la foto actual
-    document.getElementById('download-btn').href = m.download;
-    
     preload((currentIndex + 1) % items.length);
     preload((currentIndex - 1 + items.length) % items.length);
   }
@@ -284,6 +282,46 @@
   }
 
   document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
+
+  // --- LÓGICA DE GUARDAR / COMPARTIR NATIVA ---
+  async function shareOrDownload(e) {
+    e.preventDefault();
+    const m = items[currentIndex];
+    const btn = document.getElementById('download-btn');
+    
+    // Guardamos el SVG original para restaurarlo después
+    const originalIcon = btn.innerHTML;
+    
+    // Mostramos un mini-spinner dorado mientras descarga la foto para compartirla
+    btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid transparent;border-top-color:var(--gold);border-radius:50%;animation:spin 1s linear infinite;"></div>';
+    btn.style.pointerEvents = 'none';
+
+    try {
+      // Pedimos la imagen a Cloudinary
+      const response = await fetch(m.original);
+      const blob = await response.blob();
+      const file = new File([blob], `Boda_Carlos_y_Joselyn.${m.format}`, { type: blob.type });
+
+      // Verificamos si el celular soporta compartir/guardar archivos nativamente
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: 'Recuerdo de Boda',
+        });
+      } else {
+        // Si es PC o un navegador muy viejo, forzamos la descarga normal
+        window.open(m.download, '_blank');
+      }
+    } catch (error) {
+      console.error("Error al intentar compartir:", error);
+      // Fallback de seguridad por si falla la descarga del blob
+      window.open(m.download, '_blank');
+    } finally {
+      // Restauramos el botón a su estado original
+      btn.innerHTML = originalIcon;
+      btn.style.pointerEvents = 'auto';
+    }
+  }
 
   // --- CONTROL TÁCTIL MEJORADO ---
   let touchStartX = 0;
