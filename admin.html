@@ -128,6 +128,19 @@
 
     .close-modal { position: absolute; top: 25px; right: 25px; font-size: 40px; color: var(--text-muted); z-index: 11; cursor: pointer; transition: color 0.2s; }
     .close-modal:hover { color: var(--gold); }
+    
+    /* ESTILO DEL BOTÓN DE DESCARGA MANUAL */
+    .download-btn { 
+      position: absolute; top: 25px; left: 25px; color: var(--text-muted); 
+      z-index: 11; cursor: pointer; transition: all 0.2s ease; text-decoration: none;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border);
+      border-radius: 50%; width: 45px; height: 45px; backdrop-filter: blur(5px);
+    }
+    .download-btn:hover, .download-btn:active { 
+      color: var(--background); background: var(--gold); transform: scale(0.95);
+    }
+
     .counter-text { position: absolute; bottom: 55px; font-size: 11px; color: var(--gold); letter-spacing: 2px; font-weight: 600; }
   </style>
 </head>
@@ -151,6 +164,10 @@
 </button>
 
 <div id="mediaModal" class="modal">
+  <a id="download-btn" class="download-btn" href="#" title="Descargar recuerdo">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="20"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
+  </a>
+
   <span class="close-modal" onclick="closeModal()">&times;</span>
   <div id="modal-content">
     <button class="nav-btn prev" onclick="move(-1, event)">&#10094;</button>
@@ -192,7 +209,8 @@
           isVid,
           thumb: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_thumb,w_400,h_400,g_auto,q_auto:low,f_auto/v${m.version}/${m.public_id}.${thumbFormat}`,
           full: `https://res.cloudinary.com/${cloudName}/${type}/upload/c_limit,w_1080,f_auto,q_auto:eco/v${m.version}/${m.public_id}.${m.format}`,
-          original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`
+          original: `https://res.cloudinary.com/${cloudName}/${type}/upload/v${m.version}/${m.public_id}.${m.format}`,
+          download: `https://res.cloudinary.com/${cloudName}/${type}/upload/fl_attachment/v${m.version}/${m.public_id}.${m.format}`
         };
       });
 
@@ -241,6 +259,9 @@
     
     document.getElementById('modal-counter').innerText = `${currentIndex + 1} / ${items.length}`;
     
+    // Actualizamos el link de descarga con la foto actual
+    document.getElementById('download-btn').href = m.download;
+    
     preload((currentIndex + 1) % items.length);
     preload((currentIndex - 1 + items.length) % items.length);
   }
@@ -264,7 +285,7 @@
 
   document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
 
-  // --- CONTROL TÁCTIL MEJORADO (Evita conflictos con el Zoom) ---
+  // --- CONTROL TÁCTIL MEJORADO ---
   let touchStartX = 0;
   let touchStartY = 0;
   let isSwiping = false;
@@ -272,7 +293,6 @@
   const modalElement = document.getElementById('mediaModal');
 
   modalElement.addEventListener('touchstart', e => {
-    // Si hay más de un dedo en la pantalla (intento de zoom), abortamos el swipe.
     if (e.touches.length > 1) {
       isSwiping = false;
       return;
@@ -284,8 +304,6 @@
 
   modalElement.addEventListener('touchend', e => {
     if(!modalElement.classList.contains('show') || !isSwiping) return;
-    
-    // Si hay más de un dedo al soltar, no hacemos nada
     if (e.changedTouches.length > 1) return;
 
     const touchEndX = e.changedTouches[0].clientX;
@@ -294,9 +312,6 @@
     const diffX = touchStartX - touchEndX;
     const diffY = touchStartY - touchEndY;
 
-    // Solo activamos el Swipe si:
-    // 1. El movimiento horizontal fue mayor a 70px (evita toques accidentales).
-    // 2. El movimiento horizontal es mayor que el vertical (evita cambios al hacer scroll hacia arriba/abajo).
     if (Math.abs(diffX) > 70 && Math.abs(diffX) > Math.abs(diffY)) {
       move(diffX > 0 ? 1 : -1);
     }
