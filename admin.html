@@ -70,11 +70,10 @@
       background: rgba(10, 10, 12, 0.7); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px);
       border: 1px solid var(--border); border-radius: 50%; width: 45px; height: 45px; 
       display: flex; align-items: center; justify-content: center; color: var(--gold);
-      padding-left: 3px; /* Centrado visual perfecto del triangulo */
+      padding-left: 3px; 
       font-size: 18px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
-    /* ESTADO VACÍO ELEGANTE */
     .empty-state {
       grid-column: 1 / -1; display: flex; flex-direction: column; align-items: center;
       justify-content: center; padding: 60px 20px; text-align: center; opacity: 0.7;
@@ -92,7 +91,6 @@
     }
     .btn-update:active { transform: scale(0.9) rotate(180deg); }
 
-    /* MODAL TIPO CINE */
     .modal {
       display: none; position: fixed; inset: 0; z-index: 9999;
       background: rgba(5, 5, 7, 0.98); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
@@ -107,7 +105,7 @@
       max-width: 100%; max-height: 80vh; object-fit: contain; 
       border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.7);
       transform: translateZ(0);
-      animation: fadeIn 0.3s ease; /* Transición suave entre fotos */
+      animation: fadeIn 0.3s ease; 
     }
 
     @keyframes fadeIn { from { opacity: 0.5; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
@@ -188,7 +186,6 @@
         const isVid = ['mp4','mov','webm'].includes(m.format.toLowerCase());
         const type = isVid ? 'video' : 'image';
         
-        // TRUCO DE RENDIMIENTO: Si es video, pedimos la extensión .jpg para la miniatura
         const thumbFormat = isVid ? 'jpg' : m.format;
 
         return {
@@ -238,7 +235,6 @@
     const container = document.getElementById('media-container');
     const m = items[currentIndex];
     
-    // Al reescribir el innerHTML, la animación de CSS 'fadeIn' se dispara de nuevo
     container.innerHTML = m.isVid ? 
       `<video class="modal-media" src="${m.full}" controls autoplay playsinline onerror="this.src='${m.original}'" style="background: black;"></video>` :
       `<img class="modal-media" src="${m.full}" onerror="this.src='${m.original}'" fetchpriority="high">`;
@@ -268,16 +264,46 @@
 
   document.getElementById('modal-content').onclick = (e) => { if(e.target.id === 'modal-content') closeModal(); };
 
-  let touchX = 0;
-  document.addEventListener('touchstart', e => touchX = e.touches[0].clientX, {passive: true});
-  document.addEventListener('touchend', e => {
-    if(!document.getElementById('mediaModal').classList.contains('show')) return;
-    const diff = touchX - e.changedTouches[0].clientX;
-    if(Math.abs(diff) > 50) move(diff > 0 ? 1 : -1);
+  // --- CONTROL TÁCTIL MEJORADO (Evita conflictos con el Zoom) ---
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let isSwiping = false;
+
+  const modalElement = document.getElementById('mediaModal');
+
+  modalElement.addEventListener('touchstart', e => {
+    // Si hay más de un dedo en la pantalla (intento de zoom), abortamos el swipe.
+    if (e.touches.length > 1) {
+      isSwiping = false;
+      return;
+    }
+    isSwiping = true;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
   }, {passive: true});
 
-  // Nota de seguridad: Para que esto funcione, en tu panel de Cloudinary debes 
-  // asegurarte de que en Settings > Security, la opción "Resource list" esté habilitada.
+  modalElement.addEventListener('touchend', e => {
+    if(!modalElement.classList.contains('show') || !isSwiping) return;
+    
+    // Si hay más de un dedo al soltar, no hacemos nada
+    if (e.changedTouches.length > 1) return;
+
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+
+    // Solo activamos el Swipe si:
+    // 1. El movimiento horizontal fue mayor a 70px (evita toques accidentales).
+    // 2. El movimiento horizontal es mayor que el vertical (evita cambios al hacer scroll hacia arriba/abajo).
+    if (Math.abs(diffX) > 70 && Math.abs(diffX) > Math.abs(diffY)) {
+      move(diffX > 0 ? 1 : -1);
+    }
+    
+    isSwiping = false;
+  }, {passive: true});
+
   window.onload = loadGallery;
   setInterval(loadGallery, 60000);
 </script>
