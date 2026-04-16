@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Boda • Carlos & Joselyn 💍</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold: #c59d5f;
+      --gold-dark: #a67b45;
+      --wine: #4a0a16;
+      --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.03);
+      --border: rgba(212, 175, 55, 0.15);
+      --text: #F5F5F5;
+      --text-muted: rgba(245, 245, 245, 0.6);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at top left, var(--jade) 0%, transparent 60%),
+                  radial-gradient(circle at bottom right, var(--wine) 0%, transparent 60%);
+      background-color: #0B0C10;
+      background-attachment: fixed; color: var(--text);
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; 
+      padding: 20px; overflow-x: hidden;
+    }
+
+    .glass-card {
+      background: rgba(18, 18, 22, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border); border-radius: 40px;
+      padding: 50px 30px; text-align: center; max-width: 450px; width: 100%;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7), inset 0 0 20px rgba(255,255,255,0.02);
+      position: relative;
+    }
+
+    /* Detalle elegante superior */
+    .glass-card::before {
+      content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 3px; background: var(--gold); border-radius: 0 0 10px 10px;
+    }
+
+    .date-badge { 
+      font-size: 10px; letter-spacing: 5px; text-transform: uppercase; 
+      color: var(--gold); margin-bottom: 20px; display: block; font-weight: 600;
+    }
+
+    h1 { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--text); margin: 0 0 10px; font-weight: 600; line-height: 1.1; }
+    
+    .welcome-text { font-size: 0.9rem; font-weight: 300; line-height: 1.6; color: var(--text-muted); margin-bottom: 40px; padding: 0 10px; }
+
+    /* CONTENEDOR DEL MENÚ */
+    .menu-container {
+      display: flex; flex-direction: column; gap: 15px;
+    }
+
+    /* ESTILO DE LOS BOTONES DEL HUB */
+    .menu-btn {
+      display: flex; align-items: center; justify-content: flex-start; gap: 18px;
+      padding: 18px 25px; border-radius: 20px; text-decoration: none;
+      transition: all 0.3s ease; cursor: pointer; text-align: left;
+      border: 1px solid transparent; position: relative; overflow: hidden;
+    }
+
+    /* Botón Principal (Fotos) */
+    .btn-primary {
+      background: var(--gold); color: #111;
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+    }
+    .btn-primary .btn-title { font-weight: 600; font-size: 1.1rem; color: #111; }
+    .btn-primary .btn-sub { font-size: 0.75rem; color: rgba(0,0,0,0.6); }
+    .btn-primary svg { color: #111; }
+    .btn-primary:active { transform: scale(0.97); background: var(--gold-dark); }
+
+    /* Botones Secundarios (Galería y RSVP) */
+    .btn-secondary {
+      background: var(--glass); border: 1px solid var(--border); color: var(--text);
+    }
+    .btn-secondary .btn-title { font-weight: 600; font-size: 1.1rem; color: var(--gold); }
+    .btn-secondary .btn-sub { font-size: 0.75rem; color: var(--text-muted); }
+    .btn-secondary svg { color: var(--gold); }
+    .btn-secondary:active { transform: scale(0.97); background: rgba(212, 175, 55, 0.05); }
+
+    .icon-wrapper {
+      width: 45px; height: 45px; border-radius: 50%; display: flex; 
+      align-items: center; justify-content: center; flex-shrink: 0;
+      background: rgba(255,255,255,0.1); 
+    }
+    .btn-primary .icon-wrapper { background: rgba(0,0,0,0.1); }
+
+    .btn-content { display: flex; flex-direction: column; }
+
+    .footer-text { margin-top: 40px; font-size: 0.7rem; color: rgba(255,255,255,0.3); letter-spacing: 1px; text-transform: uppercase; }
+
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <span class="date-badge">19 • Diciembre • 2026</span>
+    <h1>Carlos & Joselyn</h1>
+    <p class="welcome-text">Bienvenidos a nuestro gran día. Por favor, selecciona una opción para continuar.</p>
+
+    <div class="menu-container">
+      
+      <a href="asistencia.html" class="menu-btn btn-secondary">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+        </div>
+        <div class="btn-content">
+          <span class="btn-title">Confirmar Asistencia</span>
+          <span class="btn-sub">Confirma tu cupo antes de la boda</span>
+        </div>
+      </a>
+
+      <a href="index.html" class="menu-btn btn-primary">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        </div>
+        <div class="btn-content">
+          <span class="btn-title">Compartir Recuerdos</span>
+          <span class="btn-sub">Toma fotos y videos en tiempo real</span>
+        </div>
+      </a>
+
+      <a href="galeria.html" class="menu-btn btn-secondary">
+        <div class="icon-wrapper">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+        </div>
+        <div class="btn-content">
+          <span class="btn-title">Ver Galería</span>
+          <span class="btn-sub">Mira los recuerdos de todos</span>
+        </div>
+      </a>
+
+    </div>
+
+    <div class="footer-text">Guápiles, Costa Rica</div>
+  </div>
+
+</body>
+</html>
