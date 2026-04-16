@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+  <title>Mi Mesa • Carlos & Joselyn</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --gold: #c59d5f;
+      --gold-dark: #a67b45;
+      --wine: #4a0a16;
+      --jade: #0a2e24;
+      --glass: rgba(255, 255, 255, 0.05);
+      --border: rgba(197, 157, 95, 0.3);
+      --text: #F5F5F5;
+      --text-muted: rgba(245, 245, 245, 0.6);
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
+      background-attachment: fixed; color: var(--text);
+      min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px;
+    }
+
+    .glass-card {
+      background: rgba(18, 18, 22, 0.6); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+      border: 1px solid var(--border); border-radius: 40px;
+      padding: 50px 30px; text-align: center; max-width: 450px; width: 100%;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7); position: relative;
+    }
+
+    .glass-card::before {
+      content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 60px; height: 3px; background: var(--gold); border-radius: 0 0 10px 10px;
+    }
+
+    h1 { font-family: 'Playfair Display', serif; font-size: 28px; color: var(--gold); margin-bottom: 25px; }
+
+    .search-box { margin-bottom: 30px; }
+
+    input[type="text"] {
+      width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+      border-radius: 15px; padding: 18px; color: white; font-size: 1rem;
+      outline: none; transition: 0.3s; text-align: center;
+    }
+    input[type="text"]:focus { background: rgba(255,255,255,0.1); border-color: var(--gold); }
+
+    .btn-search {
+      margin-top: 15px; width: 100%; height: 60px; background: var(--gold);
+      border: none; border-radius: 18px; color: #111; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 2px; cursor: pointer; transition: 0.3s;
+    }
+    .btn-search:active { transform: scale(0.97); background: var(--gold-dark); }
+
+    #results { margin-top: 30px; }
+
+    .result-card {
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 20px; padding: 25px; animation: fadeIn 0.5s ease;
+    }
+
+    .table-number {
+      font-family: 'Playfair Display', serif; font-size: 4rem; color: var(--gold);
+      line-height: 1; margin: 15px 0; font-weight: 600;
+    }
+
+    .guest-option {
+      padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer; transition: 0.2s;
+    }
+    .guest-option:last-child { border: none; }
+    .guest-option:active { color: var(--gold); background: rgba(255,255,255,0.05); }
+
+    .btn-back {
+      display: inline-block; margin-top: 30px; font-size: 0.75rem; color: var(--text-muted);
+      text-decoration: none; text-transform: uppercase; letter-spacing: 1px;
+    }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+
+  <div class="glass-card">
+    <h1>¿Cuál es mi mesa?</h1>
+    
+    <div class="search-box">
+      <input type="text" id="nameInput" placeholder="Escribe tu nombre..." onkeypress="handleKey(event)">
+      <button class="btn-search" onclick="searchGuest()">Buscar</button>
+    </div>
+
+    <div id="results"></div>
+
+    <a href="hub.html" class="btn-back">← Volver al Menú</a>
+  </div>
+
+<script>
+  const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
+
+  function handleKey(e) { if(e.key === 'Enter') searchGuest(); }
+
+  async function searchGuest() {
+    const query = document.getElementById('nameInput').value.trim();
+    const resultsDiv = document.getElementById('results');
+    
+    if(query.length < 3) {
+      alert("Por favor, escribe al menos 3 letras.");
+      return;
+    }
+
+    resultsDiv.innerHTML = '<div style="opacity:0.6">Buscando en la lista...</div>';
+
+    try {
+      // Buscamos coincidencias parciales (case-insensitive con ilike)
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?nombre=ilike.*${query}*&select=nombre,mesa`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      
+      const data = await response.json();
+      resultsDiv.innerHTML = '';
+
+      if(data.length === 0) {
+        resultsDiv.innerHTML = '<div style="color:var(--status-decl)">No te encontramos. Intenta con otro nombre.</div>';
+      } else if (data.length === 1) {
+        showTable(data[0]);
+      } else {
+        resultsDiv.innerHTML = '<div style="margin-bottom:15px; font-size:0.8rem">Varios invitados coinciden. Toca tu nombre:</div>';
+        data.forEach(guest => {
+          const div = document.createElement('div');
+          div.className = 'guest-option';
+          div.innerText = guest.nombre;
+          div.onclick = () => showTable(guest);
+          resultsDiv.appendChild(div);
+        });
+      }
+    } catch (e) { resultsDiv.innerHTML = "Error de conexión."; }
+  }
+
+  function showTable(guest) {
+    const resultsDiv = document.getElementById('results');
+    const tableId = guest.mesa || "Pendiente";
+    // Limpiamos el texto "mesa-" si existe para que se vea solo el número
+    const displayNum = tableId.replace('mesa-', '');
+    
+    resultsDiv.innerHTML = `
+      <div class="result-card">
+        <div style="font-size: 0.9rem; opacity: 0.8">¡Hola ${guest.nombre}!</div>
+        <div style="margin-top: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">Tu Mesa es:</div>
+        <div class="table-number">${displayNum}</div>
+        <div style="font-size: 0.7rem; color: var(--gold); opacity: 0.7;">¡Disfruta la celebración!</div>
+      </div>
+    `;
+  }
+</script>
+</body>
+</html>
