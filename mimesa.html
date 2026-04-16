@@ -117,7 +117,7 @@
     resultsDiv.innerHTML = '<div style="opacity:0.6">Buscando en la lista...</div>';
 
     try {
-      // AQUÍ ESTÁ EL FILTRO MÁGICO: es_duplicado=is.false
+      // Ignora los registros marcados como duplicados
       const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?nombre=ilike.*${query}*&es_duplicado=is.false&select=nombre,mesa`, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
@@ -128,28 +128,48 @@
       if(data.length === 0) {
         resultsDiv.innerHTML = '<div style="color:var(--status-decl)">No te encontramos. Intenta con otro nombre o apellido.</div>';
       } else if (data.length === 1) {
-        showTable(data[0]);
+        showTable(data[0], query);
       } else {
         resultsDiv.innerHTML = '<div style="margin-bottom:15px; font-size:0.8rem">Varios invitados coinciden. Toca tu nombre:</div>';
         data.forEach(guest => {
           const div = document.createElement('div');
           div.className = 'guest-option';
-          div.innerText = guest.nombre;
-          div.onclick = () => showTable(guest);
+          
+          // Separar el nombre para la lista de opciones
+          let optionName = guest.nombre;
+          const parts = optionName.split(/\s+y\s+|\s+&\s+/i);
+          if (parts.length > 1) {
+             const match = parts.find(p => p.toLowerCase().includes(query.toLowerCase()));
+             if (match) optionName = match.trim();
+          }
+          
+          div.innerText = optionName;
+          div.onclick = () => showTable(guest, query);
           resultsDiv.appendChild(div);
         });
       }
     } catch (e) { resultsDiv.innerHTML = "Error de conexión."; }
   }
 
-  function showTable(guest) {
+  function showTable(guest, query) {
     const resultsDiv = document.getElementById('results');
     const tableId = guest.mesa || "Pendiente";
     const displayNum = tableId.replace('mesa-', '');
     
+    // Separar el nombre para el saludo final
+    let nombreAMostrar = guest.nombre;
+    const partesDelNombre = nombreAMostrar.split(/\s+y\s+|\s+&\s+/i);
+    
+    if (partesDelNombre.length > 1) {
+       const coincidencia = partesDelNombre.find(p => p.toLowerCase().includes(query.toLowerCase()));
+       if (coincidencia) {
+           nombreAMostrar = coincidencia.trim();
+       }
+    }
+    
     resultsDiv.innerHTML = `
       <div class="result-card">
-        <div style="font-size: 0.9rem; opacity: 0.8">¡Hola ${guest.nombre}!</div>
+        <div style="font-size: 0.9rem; opacity: 0.8">¡Hola ${nombreAMostrar}!</div>
         <div style="margin-top: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px;">Tu Mesa es:</div>
         <div class="table-number">${displayNum}</div>
         <div style="font-size: 0.7rem; color: var(--gold); opacity: 0.7;">¡Disfruta la celebración!</div>
