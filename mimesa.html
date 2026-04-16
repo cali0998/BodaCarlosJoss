@@ -105,13 +105,11 @@
 
   function handleKey(e) { if(e.key === 'Enter') searchGuest(); }
 
-  // FUNCIÓN CON REGLA DE FAMILIA Y CORTES AGRESIVOS
   function extraerNombre(nombreCompleto, busqueda) {
     
-    // 1. REGLA DE FAMILIA: Si hay un paréntesis, devolvemos todo junto
+    // 1. REGLA DE FAMILIA: Si hay un paréntesis, devolvemos todo junto CON las viñetas
     if (nombreCompleto.includes('(') || nombreCompleto.includes(')')) {
-        // Limpiamos las viñetas por si acaso, pero dejamos el texto intacto
-        return nombreCompleto.replace(/•/g, '').trim();
+        return nombreCompleto.trim();
     }
 
     // 2. CORTE NORMAL PARA PAREJAS SIN BEBÉ
@@ -138,6 +136,7 @@
       }
     }
     
+    // Si no lo encuentra, devuelve el nombre sin las viñetas
     return nombreCompleto.replace(/•/g, '').trim();
   }
 
