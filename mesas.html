@@ -17,7 +17,6 @@
       --text: #F5F5F5;
       --text-muted: rgba(245, 245, 245, 0.6);
 
-      /* Suavizado de Estados */
       --status-conf: #66BB6A; 
       --status-pend: #FFD54F; 
       --status-decl: #EF9A9A; 
@@ -29,10 +28,9 @@
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
       background-attachment: fixed; color: var(--text); 
       min-height: 100vh; display: flex; justify-content: center; align-items: center; 
-      padding: 20px; overflow: hidden; /* Evita el scroll global, el scroll ocurre adentro */
+      padding: 20px; overflow: hidden; 
     }
 
-    /* --- TARJETA DE CRISTAL PRINCIPAL --- */
     .glass-card {
       background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
       border: 1px solid var(--border); border-radius: 40px;
@@ -41,13 +39,11 @@
       box-shadow: 0 40px 100px rgba(0,0,0,0.7); position: relative;
     }
 
-    /* Detalle dorado superior */
     .glass-card::before {
       content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
       width: 60px; height: 4px; background: var(--gold); border-radius: 0 0 10px 10px;
     }
 
-    /* --- CABECERA INTEGRADA --- */
     .card-header {
       display: flex; justify-content: space-between; align-items: flex-end;
       margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -59,7 +55,6 @@
     h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin: 0; font-weight: 600; line-height: 1.2; }
     #connection-status { font-size: 11px; opacity: 0.6; letter-spacing: 1px; font-weight: 300; margin-top: 5px; text-transform: uppercase;}
 
-    /* --- BOTONES ESTILO PREMIUM --- */
     .btn-action {
       display: inline-flex; align-items: center; justify-content: center; gap: 10px;
       height: 50px; padding: 0 25px; border-radius: 18px; font-weight: 600; text-transform: uppercase;
@@ -78,10 +73,7 @@
     }
     .btn-add-table:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 20px 45px rgba(0,0,0,0.6); }
 
-    /* --- CUERPO DEL DASHBOARD --- */
-    .dashboard-body {
-      display: flex; flex: 1; gap: 25px; min-height: 0; 
-    }
+    .dashboard-body { display: flex; flex: 1; gap: 25px; min-height: 0; }
 
     .sidebar {
       width: 320px; background: rgba(0,0,0,0.2);
@@ -96,11 +88,8 @@
     .legend-item { display: flex; align-items: center; gap: 6px; }
     .dot { width: 9px; height: 9px; border-radius: 50%; }
     
-    .guest-list {
-      flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
-    }
+    .guest-list { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 
-    /* --- INVITADOS --- */
     .guest {
       background: rgba(255,255,255,0.03); padding: 12px 18px; border-radius: 12px;
       border: 1px solid rgba(255,255,255,0.05); cursor: grab; font-size: 0.85rem;
@@ -118,7 +107,6 @@
     .guest:active:not(.status-declinado) .guest-name, .guest:active:not(.status-declinado) .guest-passes { color: #111; }
     .guest.dragging { opacity: 0.5; }
 
-    /* --- ÁREA PRINCIPAL (MAPA) --- */
     .main-area {
       flex: 1; border-radius: 25px; padding: 25px;
       overflow-y: auto; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.05);
@@ -127,23 +115,16 @@
 
     .room-layout {
       width: 100%; max-width: 1100px; margin: 0 auto; 
-      background: rgba(0, 0, 0, 0.2); 
-      border: 1px solid var(--gold); 
+      background: rgba(0, 0, 0, 0.2); border: 1px solid var(--gold); 
       border-radius: 20px; padding: 35px 25px;
       display: flex; flex-direction: column; gap: 30px; position: relative; 
     }
 
-    .top-stage {
-      width: 100%; display: flex; justify-content: center; padding-bottom: 25px;
-      border-bottom: 1px dashed rgba(212, 175, 55, 0.3);
-    }
+    .top-stage { width: 100%; display: flex; justify-content: center; padding-bottom: 25px; border-bottom: 1px dashed rgba(212, 175, 55, 0.3); }
 
-    .floor-grid {
-      display: flex; justify-content: space-between; align-items: stretch; gap: 20px;
-    }
+    .floor-grid { display: flex; justify-content: space-between; align-items: stretch; gap: 20px; }
     .side-zone { display: flex; flex-direction: column; gap: 25px; width: 30%; }
 
-    /* PISTA DE BAILE */
     .dance-floor-area {
       width: 35%; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 15px; 
       background: rgba(10, 10, 12, 0.3); color: var(--text-muted); 
@@ -152,32 +133,19 @@
       min-height: 480px;
     }
 
-    .extra-area {
-      width: 100%; max-width: 1100px; margin: 25px auto 0 auto;
-      display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; 
-    }
+    .extra-area { width: 100%; max-width: 1100px; margin: 25px auto 0 auto; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
 
-    .table-slot {
-      width: 100%; min-height: 180px; border: 1px dashed rgba(255, 255, 255, 0.1); 
-      border-radius: 18px; display: flex; justify-content: center; align-items: center;
-      transition: all 0.3s ease; position: relative;
-    }
-    .table-slot.slot-highlight {
-      background: rgba(102, 187, 106, 0.1); border-color: var(--status-conf);
-    }
+    .table-slot { width: 100%; min-height: 180px; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 18px; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease; position: relative; }
+    .table-slot.slot-highlight { background: rgba(102, 187, 106, 0.1); border-color: var(--status-conf); }
     .extra-area .table-slot { width: calc(33.333% - 14px); min-width: 250px; }
 
-    /* --- MESAS --- */
     .table-card {
       width: 100%; background: rgba(255,255,255,0.02); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
       border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; 
       display: flex; flex-direction: column; box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
     }
     
-    #card-mesa-novios {
-      width: 100%; max-width: 450px; border: 2px solid var(--gold); background: rgba(212, 175, 55, 0.05);
-      box-shadow: 0 0 30px rgba(212, 175, 55, 0.15);
-    }
+    #card-mesa-novios { width: 100%; max-width: 450px; border: 2px solid var(--gold); background: rgba(212, 175, 55, 0.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
     #card-mesa-novios .table-header { cursor: default; touch-action: auto; background: transparent; } 
     #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.25rem; font-weight: 600;}
 
@@ -188,10 +156,7 @@
     }
     .table-header:active { cursor: grabbing; }
     
-    .table-header input {
-      background: transparent; border: none; color: var(--text); font-family: 'Playfair Display', serif;
-      font-size: 1.15rem; font-weight: 600; width: 60%; outline: none; pointer-events: auto; letter-spacing: 0.5px;
-    }
+    .table-header input { background: transparent; border: none; color: var(--text); font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; width: 60%; outline: none; pointer-events: auto; letter-spacing: 0.5px; }
     
     .table-controls { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
     .btn-small { background: rgba(255,255,255,0.05); border: none; color: var(--text); width: 24px; height: 24px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: 600;}
@@ -199,10 +164,7 @@
     .btn-delete { background: rgba(239, 154, 154, 0.1); border: none; color: var(--status-decl); width: 24px; height: 24px; border-radius: 6px; cursor: pointer; margin-left: 5px; font-weight: 600; transition: 0.2s; }
     .btn-delete:hover { background: var(--status-decl); color: #111; }
 
-    .table-seats {
-      padding: 10px 15px; min-height: 120px; max-height: 250px; overflow-y: auto;
-      display: flex; flex-direction: column; gap: 6px;
-    }
+    .table-seats { padding: 10px 15px; min-height: 120px; max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
     .table-seats.drag-over { background: rgba(212, 175, 55, 0.05); }
     .table-seats .guest { padding: 8px 12px; font-size: 0.78rem; border-radius: 8px; border-left-width: 3px; box-shadow: none; border-color: transparent; }
 
@@ -215,7 +177,6 @@
     .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 20px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    /* Adaptación Móvil */
     @media (max-width: 800px) {
       body { padding: 10px; }
       .glass-card { border-radius: 30px; padding: 25px 20px; height: calc(100vh - 20px); }
@@ -423,7 +384,8 @@
     const guestList = document.getElementById('unseated-guests');
     
     try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?select=id,nombre,pases,estado,mesa`, {
+      // Ignora los registros marcados como duplicados
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?select=id,nombre,pases,estado,mesa&es_duplicado=is.false`, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
       
@@ -572,7 +534,6 @@
     const countDisplay = document.getElementById(`count-${tableId}`);
     countDisplay.innerText = `${currentUsed} / ${cap} sillas ocupadas`;
     
-    // Colores más sutiles para los contadores
     if(currentUsed === cap) countDisplay.style.color = "var(--status-conf)";
     else if (currentUsed > cap) countDisplay.style.color = "var(--status-decl)";
     else countDisplay.style.color = "var(--text-muted)"; 
