@@ -105,11 +105,18 @@
 
   function handleKey(e) { if(e.key === 'Enter') searchGuest(); }
 
-  // FUNCIÓN AGRESIVA ACTUALIZADA PARA PUNTOS Y VIÑETAS
+  // FUNCIÓN CON REGLA DE FAMILIA Y CORTES AGRESIVOS
   function extraerNombre(nombreCompleto, busqueda) {
+    
+    // 1. REGLA DE FAMILIA: Si hay un paréntesis, devolvemos todo junto
+    if (nombreCompleto.includes('(') || nombreCompleto.includes(')')) {
+        // Limpiamos las viñetas por si acaso, pero dejamos el texto intacto
+        return nombreCompleto.replace(/•/g, '').trim();
+    }
+
+    // 2. CORTE NORMAL PARA PAREJAS SIN BEBÉ
     let texto = nombreCompleto;
     
-    // Reemplazamos todos los separadores, INCLUYENDO las viñetas de tu base de datos
     texto = texto.replace(/•/g, '|');
     texto = texto.replace(/\*/g, '|');
     texto = texto.replace(/ y /gi, '|');
@@ -121,20 +128,16 @@
     texto = texto.replace(/ - /gi, '|');
     texto = texto.replace(/ \+ /gi, '|');
 
-    // Partimos el texto y quitamos los pedazos vacíos (por ejemplo, si la viñeta estaba al puro inicio)
     let partes = texto.split('|').map(p => p.trim()).filter(p => p.length > 0);
     let busquedaLimpia = busqueda.toLowerCase().trim();
 
-    // Revisamos cada nombre limpio para ver si coincide
     for (let i = 0; i < partes.length; i++) {
       let nombreIndividual = partes[i];
-      
       if (nombreIndividual.toLowerCase().includes(busquedaLimpia)) {
-          return nombreIndividual; // Te devuelve SOLO "Leo Briceño"
+          return nombreIndividual;
       }
     }
     
-    // Si no lo encuentra por alguna razón, devuelve el nombre sin las viñetas
     return nombreCompleto.replace(/•/g, '').trim();
   }
 
