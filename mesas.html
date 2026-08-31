@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Plano del Salón • Carlos & Joselyn</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
   
@@ -22,7 +22,13 @@
       --status-decl: #EF9A9A; 
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; -webkit-tap-highlight-color: transparent; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Poppins', sans-serif; 
+      -webkit-tap-highlight-color: transparent; 
+    }
     
     body {
       background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
@@ -51,66 +57,71 @@
     }
     
     .header-text { text-align: left; }
-    .date-badge { font-size: 10px; letter-spacing: 5px; text-transform: uppercase; color: rgba(255,255,255,0.5); display: block; margin-bottom: 8px; }
-    h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--gold); margin: 0; font-weight: 600; line-height: 1.2; }
-    #connection-status { font-size: 11px; opacity: 0.6; letter-spacing: 1px; font-weight: 300; margin-top: 5px; text-transform: uppercase;}
+    .date-badge { font-size: 12px; letter-spacing: 5px; text-transform: uppercase; color: rgba(255,255,255,0.5); display: block; margin-bottom: 8px; }
+    h1 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); margin: 0; font-weight: 600; line-height: 1.2; }
+    #connection-status { font-size: 13px; opacity: 0.8; letter-spacing: 1px; font-weight: 300; margin-top: 5px; text-transform: uppercase;}
 
     .btn-action {
       display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      height: 50px; padding: 0 25px; border-radius: 18px; font-weight: 600; text-transform: uppercase;
+      height: 55px; padding: 0 30px; border-radius: 18px; font-weight: 600; text-transform: uppercase;
       cursor: pointer; border: none; transition: all 0.3s ease;
-      font-size: 11px; letter-spacing: 1.5px; color: white;
+      font-size: 13px; letter-spacing: 1.5px; color: white;
     }
     .btn-primary { background: var(--gold); color: #111; }
     .btn-primary:active { background: var(--gold-dark); transform: scale(0.97); }
 
     .btn-add-table {
       position: absolute; bottom: 35px; right: 35px;
-      background: var(--gold); color: #111; height: 55px; padding: 0 25px;
+      background: var(--gold); color: #111; height: 60px; padding: 0 30px;
       border-radius: 20px; font-weight: 600; text-transform: uppercase;
-      font-size: 11px; letter-spacing: 1.5px; border: none;
+      font-size: 13px; letter-spacing: 1.5px; border: none;
       box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: 0.3s; z-index: 100; cursor: pointer;
     }
-    .btn-add-table:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 20px 45px rgba(0,0,0,0.6); }
+    .btn-add-table:active { transform: scale(0.95); }
 
     .dashboard-body { display: flex; flex: 1; gap: 25px; min-height: 0; }
 
     .sidebar {
-      width: 320px; background: rgba(0,0,0,0.2);
+      width: 360px; background: rgba(0,0,0,0.2);
       border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; display: flex; flex-direction: column;
       flex-shrink: 0;
     }
     
-    .sidebar-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
-    .sidebar-header h3 { color: var(--text); font-size: 1.1rem; margin-bottom: 12px; font-weight: 400; letter-spacing: 1px;}
+    .sidebar-header { padding: 25px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
+    .sidebar-header h3 { color: var(--text); font-size: 1.2rem; margin-bottom: 12px; font-weight: 400; letter-spacing: 1px;}
 
-    .legend { display: flex; justify-content: center; gap: 12px; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
-    .legend-item { display: flex; align-items: center; gap: 6px; }
-    .dot { width: 9px; height: 9px; border-radius: 50%; }
+    .legend { display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
+    .legend-item { display: flex; align-items: center; gap: 8px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; }
     
-    .guest-list { flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    /* Touch optimization for scrolling areas */
+    .guest-list { 
+      flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; 
+      -webkit-overflow-scrolling: touch; 
+    }
 
     .guest {
-      background: rgba(255,255,255,0.03); padding: 12px 18px; border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.05); cursor: grab; font-size: 0.85rem;
+      background: rgba(255,255,255,0.03); padding: 16px 20px; border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.05); cursor: grab; font-size: 0.95rem;
       transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;
-      border-left: 4px solid transparent; width: 100%;
+      border-left: 5px solid transparent; width: 100%;
+      -webkit-user-select: none; user-select: none; /* Prevents text selection on iPad while dragging */
     }
     .guest-info { display: flex; flex-direction: column; pointer-events: none;}
     .guest-name { font-weight: 600; color: var(--text); }
-    .guest-passes { font-size: 0.7rem; color: var(--text-muted); letter-spacing: 0.5px; }
+    .guest-passes { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; margin-top: 2px;}
 
     .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(102, 187, 106, 0.05); }
     .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(255, 213, 79, 0.05); }
     .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.4; text-decoration: line-through; cursor: not-allowed; }
-    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.96); background: var(--gold); color: #111; }
+    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.98); background: var(--gold); color: #111; }
     .guest:active:not(.status-declinado) .guest-name, .guest:active:not(.status-declinado) .guest-passes { color: #111; }
     .guest.dragging { opacity: 0.5; }
 
     .main-area {
       flex: 1; border-radius: 25px; padding: 25px;
       overflow-y: auto; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.05);
-      position: relative;
+      position: relative; -webkit-overflow-scrolling: touch;
     }
 
     .room-layout {
@@ -128,7 +139,7 @@
     .dance-floor-area {
       width: 35%; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 15px; 
       background: rgba(10, 10, 12, 0.3); color: var(--text-muted); 
-      letter-spacing: 2px; font-weight: 400; font-size: 0.9rem;
+      letter-spacing: 2px; font-weight: 400; font-size: 1rem;
       display: flex; align-items: center; justify-content: center; text-align: center;
       min-height: 480px;
     }
@@ -147,42 +158,44 @@
     
     #card-mesa-novios { width: 100%; max-width: 450px; border: 2px solid var(--gold); background: rgba(212, 175, 55, 0.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
     #card-mesa-novios .table-header { cursor: default; touch-action: auto; background: transparent; } 
-    #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.25rem; font-weight: 600;}
+    #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.3rem; font-weight: 600;}
 
     .table-header {
-      background: rgba(0, 0, 0, 0.3); padding: 14px 18px; border-radius: 18px 18px 0 0;
+      background: rgba(0, 0, 0, 0.3); padding: 15px 20px; border-radius: 18px 18px 0 0;
       border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;
-      cursor: grab; touch-action: none; user-select: none;
+      cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
     }
     .table-header:active { cursor: grabbing; }
     
-    .table-header input { background: transparent; border: none; color: var(--text); font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 600; width: 60%; outline: none; pointer-events: auto; letter-spacing: 0.5px; }
+    .table-header input { background: transparent; border: none; color: var(--text); font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; width: 50%; outline: none; pointer-events: auto; letter-spacing: 0.5px; }
     
-    .table-controls { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: var(--text-muted); }
-    .btn-small { background: rgba(255,255,255,0.05); border: none; color: var(--text); width: 24px; height: 24px; border-radius: 6px; cursor: pointer; transition: 0.2s; font-weight: 600;}
-    .btn-small:hover { background: var(--gold); color: #111; }
-    .btn-delete { background: rgba(239, 154, 154, 0.1); border: none; color: var(--status-decl); width: 24px; height: 24px; border-radius: 6px; cursor: pointer; margin-left: 5px; font-weight: 600; transition: 0.2s; }
-    .btn-delete:hover { background: var(--status-decl); color: #111; }
+    .table-controls { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
+    
+    /* iPad Touch target optimization */
+    .btn-small { background: rgba(255,255,255,0.08); border: none; color: var(--text); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-weight: 600; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;}
+    .btn-small:active { background: var(--gold); color: #111; transform: scale(0.95); }
+    
+    .btn-delete { background: rgba(239, 154, 154, 0.1); border: none; color: var(--status-decl); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; margin-left: 8px; font-weight: 600; transition: 0.2s; font-size: 1.3rem; display: flex; justify-content: center; align-items: center;}
+    .btn-delete:active { background: var(--status-decl); color: #111; transform: scale(0.95); }
+    
+    .cap-display { font-size: 1.1rem; width: 25px; text-align: center; }
 
-    .table-seats { padding: 10px 15px; min-height: 120px; max-height: 250px; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; }
+    .table-seats { padding: 12px 18px; min-height: 140px; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; -webkit-overflow-scrolling: touch;}
     .table-seats.drag-over { background: rgba(212, 175, 55, 0.05); }
-    .table-seats .guest { padding: 8px 12px; font-size: 0.78rem; border-radius: 8px; border-left-width: 3px; box-shadow: none; border-color: transparent; }
+    .table-seats .guest { padding: 10px 14px; font-size: 0.85rem; border-radius: 10px; border-left-width: 4px; box-shadow: none; border-color: transparent; margin-bottom: 0;}
 
     .seat-count { 
-      text-align: center; padding: 12px; font-size: 0.75rem; font-weight: 600; 
+      text-align: center; padding: 15px; font-size: 0.8rem; font-weight: 600; 
       color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);
       border-radius: 0 0 18px 18px; letter-spacing: 1px; text-transform: uppercase;
     }
 
-    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 20px; height: 20px; animation: spin 1s linear infinite; margin: 20px auto; }
+    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
     @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 
-    @media (max-width: 800px) {
-      body { padding: 10px; }
-      .glass-card { border-radius: 30px; padding: 25px 20px; height: calc(100vh - 20px); }
-      .dashboard-body { flex-direction: column; }
-      .sidebar { width: 100%; max-height: 250px; }
-      .btn-add-table { right: 20px; bottom: 20px; }
+    @media (max-width: 1024px) {
+      .dashboard-body { gap: 15px; }
+      .sidebar { width: 300px; }
     }
   </style>
 </head>
@@ -198,7 +211,7 @@
     </div>
     
     <button class="btn-action btn-primary" id="btn-save-layout" onclick="saveLayout()">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
       Guardar Cambios
     </button>
   </div>
@@ -384,7 +397,6 @@
     const guestList = document.getElementById('unseated-guests');
     
     try {
-      // Ignora los registros marcados como duplicados
       const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?select=id,nombre,pases,estado,mesa&es_duplicado=is.false`, {
         headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
       });
@@ -448,7 +460,6 @@
     }
   }
 
-  // --- DRAG & DROP INVITADOS ---
   document.addEventListener('dragstart', (e) => {
     const guestBlock = e.target.closest('.guest');
     if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
@@ -551,14 +562,14 @@
     const btn = document.getElementById('btn-save-layout');
     btn.style.background = "var(--status-pend)"; 
     btn.style.color = "#111";
-    btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios *';
+    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios *';
   }
 
   async function saveLayout() { 
     const btn = document.getElementById('btn-save-layout');
     const originalHTML = btn.innerHTML;
     
-    btn.innerHTML = '<div style="width:16px;height:16px;border:2px solid #111;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div> Guardando...';
+    btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid #111;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div> Guardando...';
     btn.style.background = "var(--gold)"; 
     btn.disabled = true;
     
@@ -579,11 +590,11 @@
         });
         await Promise.all(updates);
         
-        btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ¡Guardado!';
+        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ¡Guardado!';
         btn.style.background = "var(--status-conf)";
         
         setTimeout(() => { 
-          btn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios'; 
+          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios'; 
           btn.style.background = "var(--gold)";
           btn.disabled = false; 
         }, 3000);
@@ -595,7 +606,6 @@
     }
   }
 
-  // --- MOTOR DE ARRASTRE TÁCTIL ABSOLUTO + AUTO-SCROLL ---
   let draggedTableUI = null;
   let originalSlot = null;
   let offsetX = 0;
