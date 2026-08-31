@@ -2,166 +2,443 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Organizador de Mesas</title>
+  <!-- SDK de Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    body { font-family: sans-serif; padding: 15px; background: #fff; color: #000; }
-    button { padding: 8px 12px; margin: 4px; font-size: 16px; cursor: pointer; }
-    
-    .panel { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; }
-    
-    .columna-invitados {
-      border: 2px solid #000;
-      padding: 10px;
-      min-width: 220px;
-      min-height: 200px;
-    }
-    
-    .grid-mesas {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      flex: 1;
-    }
-    
-    .mesa {
-      border: 2px solid #333;
-      padding: 10px;
-      min-width: 200px;
-      min-height: 150px;
-      background: #fafafa;
+    :root {
+      --primary: #2b4c3f;
+      --primary-light: #eef2ef;
+      --accent: #d4a373;
+      --bg: #f8f9fa;
+      --card-bg: #ffffff;
+      --text: #2b2d42;
+      --text-muted: #6c757d;
+      --danger: #d90429;
+      --border-radius: 12px;
+      --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
-    .tarjeta-invitado {
-      border: 1px solid #666;
-      background: #eee;
-      padding: 6px;
-      margin: 4px 0;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 20px;
+    }
+
+    header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    h1 { color: var(--primary); font-size: 1.6rem; font-weight: 700; }
+
+    .btn {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:active { opacity: 0.85; }
+    .btn-secondary { background-color: #e9ecef; color: var(--text); }
+
+    .input-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      width: 100%;
+      max-width: 500px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      min-width: 200px;
+      padding: 10px 14px;
+      border: 1px solid #ced4da;
+      border-radius: 8px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      background: var(--card-bg);
+      border-radius: var(--border-radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--primary-light);
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .badge {
+      background: var(--primary-light);
+      color: var(--primary);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .lista-invitados {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+
+    .card-invitado {
+      background: var(--primary-light);
+      padding: 12px;
+      border-radius: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .select-mesa {
+      width: 100%;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ced4da;
+      background: white;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .grid-mesas {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card-mesa {
+      background: var(--card-bg);
+      border: 2px solid var(--primary-light);
+      border-radius: var(--border-radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mesa-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mesa-titulo {
+      font-weight: 700;
+      color: var(--primary);
+      font-size: 1.1rem;
+    }
+
+    .btn-borrar {
+      background: none;
+      border: none;
+      color: var(--danger);
+      font-size: 1.2rem;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .ilustracion-mesa {
+      background: var(--primary-light);
+      border-radius: 50px;
+      padding: 8px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--primary);
+      font-weight: 600;
+    }
+
+    .sillas-contenedor {
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .silla-ocupada {
+      background: white;
+      border: 1px solid #e0e0e0;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .silla-vacia {
+      border: 1px dashed #ccc;
+      padding: 8px;
+      border-radius: 6px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .btn-desasignar {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
     }
   </style>
 </head>
 <body>
 
-  <h2>Acomodador de Mesas</h2>
-
-  <div>
-    <input type="text" id="nuevo-nombre" placeholder="Nombre del invitado">
-    <button onclick="agregarInvitado()">+ Agregar Invitado</button>
-    <button onclick="agregarMesa()">+ Agregar Mesa</button>
-  </div>
-
-  <div class="panel">
-    <div>
-      <h3>Sin Mesa</h3>
-      <div id="lista-espera" class="columna-invitados">
-        <!-- Invitados de prueba iniciales -->
-        <div class="tarjeta-invitado" id="inv-1">
-          <span>Invitado 1</span>
-          <button onclick="moverAMesa('inv-1')">Mover a...</button>
-        </div>
-      </div>
+  <header>
+    <h1>Organizador de Mesas</h1>
+    <div class="input-group">
+      <input type="text" id="nuevo-nombre" placeholder="Nombre del invitado...">
+      <button class="btn" onclick="agregarInvitado()">+ Invitado</button>
+      <button class="btn btn-secondary" onclick="agregarMesa()">+ Mesa</button>
     </div>
+  </header>
 
-    <div>
-      <h3>Mesas</h3>
-      <div id="contenedor-mesas" class="grid-mesas">
-        <!-- Las mesas se generarán aquí -->
+  <div class="layout">
+    <aside class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Sin Asignar</span>
+        <span class="badge" id="count-sin-mesa">0</span>
       </div>
-    </div>
+      <div class="lista-invitados" id="lista-sin-mesa"></div>
+    </aside>
+
+    <main class="panel">
+      <div class="panel-header">
+        <span class="panel-title">Distribución del Salón</span>
+        <span class="badge" id="count-mesas">0 Mesas</span>
+      </div>
+      <div class="grid-mesas" id="grid-mesas"></div>
+    </main>
   </div>
 
   <script>
-    let contadorMesa = 0;
-    let contadorInvitado = 1;
+    // Inicialización del cliente Supabase original
+    const SUPABASE_URL = window.SUPABASE_URL || 'TU_SUPABASE_URL';
+    const SUPABASE_KEY = window.SUPABASE_KEY || 'TU_SUPABASE_ANON_KEY';
+    const supabase = window.supabaseClient || supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // Crear la primera mesa por defecto
-    agregarMesa();
+    let invitados = [];
+    let mesas = [];
 
-    function agregarMesa() {
-      contadorMesa++;
-      const contenedor = document.getElementById('contenedor-mesas');
-      const divMesa = document.createElement('div');
-      divMesa.className = 'mesa';
-      divMesa.id = `mesa-${contadorMesa}`;
-      divMesa.innerHTML = `
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-          <strong>Mesa ${contadorMesa}</strong>
-          <button onclick="eliminarMesa('mesa-${contadorMesa}')">X</button>
-        </div>
-        <hr>
-        <div class="zona-sillas" id="sillas-mesa-${contadorMesa}"></div>
-      `;
-      contenedor.appendChild(divMesa);
+    async function cargarDatos() {
+      const { data: dataMesas, error: errMesas } = await supabase.from('mesas').select('*');
+      const { data: dataInvitados, error: errInv } = await supabase.from('invitados').select('*');
+
+      if (!errMesas && dataMesas) mesas = dataMesas;
+      if (!errInv && dataInvitados) invitados = dataInvitados;
+
+      render();
     }
 
-    function agregarInvitado() {
+    function render() {
+      renderSinMesa();
+      renderMesas();
+      actualizarContadores();
+    }
+
+    function renderSinMesa() {
+      const contenedor = document.getElementById('lista-sin-mesa');
+      contenedor.innerHTML = '';
+
+      const sinMesa = invitados.filter(i => !i.mesa_id);
+
+      if (sinMesa.length === 0) {
+        contenedor.innerHTML = '<div class="silla-vacia">Todos los invitados tienen mesa.</div>';
+        return;
+      }
+
+      sinMesa.forEach(inv => {
+        const div = document.createElement('div');
+        div.className = 'card-invitado';
+        div.innerHTML = `
+          <div><strong>${inv.nombre}</strong></div>
+          <select class="select-mesa" onchange="asignarAMesa('${inv.id}', this.value)">
+            <option value="">-- Asignar a mesa --</option>
+            ${mesas.map(m => `<option value="${m.id}">${m.nombre}</option>`).join('')}
+          </select>
+        `;
+        contenedor.appendChild(div);
+      });
+    }
+
+    function renderMesas() {
+      const grid = document.getElementById('grid-mesas');
+      grid.innerHTML = '';
+
+      mesas.forEach(mesa => {
+        const invitadosMesa = invitados.filter(i => i.mesa_id === mesa.id);
+        const ocupados = invitadosMesa.length;
+        const capacidad = mesa.capacidad || 8;
+        
+        const card = document.createElement('div');
+        card.className = 'card-mesa';
+        
+        let sillasHTML = '';
+        invitadosMesa.forEach(inv => {
+          sillasHTML += `
+            <div class="silla-ocupada">
+              <span>👤 ${inv.nombre}</span>
+              <button class="btn-desasignar" onclick="desasignar('${inv.id}')" title="Quitar de la mesa">✕</button>
+            </div>
+          `;
+        });
+
+        const vacias = capacidad - ocupados;
+        for (let i = 0; i < vacias; i++) {
+          sillasHTML += `<div class="silla-vacia">Silla disponible</div>`;
+        }
+
+        card.innerHTML = `
+          <div class="mesa-header">
+            <span class="mesa-titulo">${mesa.nombre}</span>
+            <button class="btn-borrar" onclick="eliminarMesa('${mesa.id}')" title="Eliminar mesa">🗑️</button>
+          </div>
+          <div class="ilustracion-mesa">
+            Capacidad: ${ocupados} / ${capacidad}
+          </div>
+          <div class="sillas-contenedor">
+            ${sillasHTML}
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    async function agregarInvitado() {
       const input = document.getElementById('nuevo-nombre');
       const nombre = input.value.trim();
       if (!nombre) return;
 
-      contadorInvitado++;
-      const idInv = `inv-${contadorInvitado}`;
-      const listaEspera = document.getElementById('lista-espera');
-      
-      const divInv = document.createElement('div');
-      divInv.className = 'tarjeta-invitado';
-      divInv.id = idInv;
-      divInv.innerHTML = `
-        <span>${nombre}</span>
-        <button onclick="moverAMesa('${idInv}')">Mover a...</button>
-      `;
-      
-      listaEspera.appendChild(divInv);
-      input.value = '';
-    }
+      const { data, error } = await supabase
+        .from('invitados')
+        .insert([{ nombre: nombre, mesa_id: null }])
+        .select();
 
-    function moverAMesa(idInvitado) {
-      const invitado = document.getElementById(idInvitado);
-      const mesas = document.querySelectorAll('.mesa');
-      
-      if (mesas.length === 0) {
-        alert("Primero crea una mesa.");
-        return;
-      }
-
-      // Crear lista de opciones para seleccionar mesa
-      let opciones = "Ingresa el número de mesa al que deseas moverlo:\n\n";
-      opciones += "0 = Sin Mesa (Lista de espera)\n";
-      mesas.forEach((m, index) => {
-        const num = m.id.replace('mesa-', '');
-        opciones += `${num} = Mesa ${num}\n`;
-      });
-
-      const seleccion = prompt(opciones);
-      if (seleccion === null) return;
-
-      if (seleccion.trim() === '0') {
-        document.getElementById('lista-espera').appendChild(invitado);
-      } else {
-        const destino = document.getElementById(`sillas-mesa-${seleccion.trim()}`);
-        if (destino) {
-          destino.appendChild(invitado);
-        } else {
-          alert("Esa mesa no existe.");
-        }
+      if (!error && data) {
+        invitados.push(data[0]);
+        input.value = '';
+        render();
       }
     }
 
-    function eliminarMesa(idMesa) {
-      const mesa = document.getElementById(idMesa);
-      const sillas = mesa.querySelector('.zona-sillas');
-      const listaEspera = document.getElementById('lista-espera');
-      
-      // Regresar invitados a la lista de espera antes de borrar la mesa
-      while (sillas.firstChild) {
-        listaEspera.appendChild(sillas.firstChild);
+    async function agregarMesa() {
+      const numero = mesas.length + 1;
+      const { data, error } = await supabase
+        .from('mesas')
+        .insert([{ nombre: `Mesa ${numero}`, capacidad: 8 }])
+        .select();
+
+      if (!error && data) {
+        mesas.push(data[0]);
+        render();
       }
-      mesa.remove();
     }
+
+    async function asignarAMesa(invitadoId, mesaId) {
+      if (!mesaId) return;
+
+      const { error } = await supabase
+        .from('invitados')
+        .update({ mesa_id: mesaId })
+        .eq('id', invitadoId);
+
+      if (!error) {
+        const inv = invitados.find(i => i.id === invitadoId);
+        if (inv) inv.mesa_id = mesaId;
+        render();
+      }
+    }
+
+    async function desasignar(invitadoId) {
+      const { error } = await supabase
+        .from('invitados')
+        .update({ mesa_id: null })
+        .eq('id', invitadoId);
+
+      if (!error) {
+        const inv = invitados.find(i => i.id === invitadoId);
+        if (inv) inv.mesa_id = null;
+        render();
+      }
+    }
+
+    async function eliminarMesa(mesaId) {
+      // Liberar invitados en Supabase
+      await supabase
+        .from('invitados')
+        .update({ mesa_id: null })
+        .eq('mesa_id', mesaId);
+
+      // Eliminar la mesa
+      const { error } = await supabase
+        .from('mesas')
+        .delete()
+        .eq('id', mesaId);
+
+      if (!error) {
+        invitados.forEach(i => {
+          if (i.mesa_id === mesaId) i.mesa_id = null;
+        });
+        mesas = mesas.filter(m => m.id !== mesaId);
+        render();
+      }
+    }
+
+    function actualizarContadores() {
+      const sinMesaCount = invitados.filter(i => !i.mesa_id).length;
+      document.getElementById('count-sin-mesa').textContent = sinMesaCount;
+      document.getElementById('count-mesas').textContent = `${mesas.length} Mesas`;
+    }
+
+    // Carga inicial
+    cargarDatos();
   </script>
-
 </body>
 </html>
+
