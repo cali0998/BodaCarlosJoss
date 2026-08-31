@@ -2,727 +2,166 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Plano del Salón • Carlos & Joselyn</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,600&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Organizador de Mesas</title>
   <style>
-    :root {
-      --gold: #c59d5f;
-      --gold-dark: #a67b45;
-      --wine: #4a0a16;
-      --jade: #0a2e24;
-      --glass: rgba(255, 255, 255, 0.05);
-      --border: rgba(197, 157, 95, 0.3);
-      --text: #F5F5F5;
-      --text-muted: rgba(245, 245, 245, 0.6);
-
-      --status-conf: #66BB6A; 
-      --status-pend: #FFD54F; 
-      --status-decl: #EF9A9A; 
-    }
-
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: 'Poppins', sans-serif; 
-      -webkit-tap-highlight-color: transparent; 
+    body { font-family: sans-serif; padding: 15px; background: #fff; color: #000; }
+    button { padding: 8px 12px; margin: 4px; font-size: 16px; cursor: pointer; }
+    
+    .panel { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 15px; }
+    
+    .columna-invitados {
+      border: 2px solid #000;
+      padding: 10px;
+      min-width: 220px;
+      min-height: 200px;
     }
     
-    body {
-      background: radial-gradient(circle at center, var(--wine) 0%, var(--jade) 100%);
-      background-attachment: fixed; color: var(--text); 
-      min-height: 100vh; display: flex; justify-content: center; align-items: center; 
-      padding: 20px; overflow: hidden; 
-    }
-
-    .glass-card {
-      background: var(--glass); backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
-      border: 1px solid var(--border); border-radius: 40px;
-      padding: 35px 30px; display: flex; flex-direction: column;
-      width: 100%; max-width: 1400px; height: calc(100vh - 40px);
-      box-shadow: 0 40px 100px rgba(0,0,0,0.7); position: relative;
-    }
-
-    .glass-card::before {
-      content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 60px; height: 4px; background: var(--gold); border-radius: 0 0 10px 10px;
-    }
-
-    .card-header {
-      display: flex; justify-content: space-between; align-items: flex-end;
-      margin-bottom: 25px; padding-bottom: 20px; border-bottom: 1px solid rgba(255,255,255,0.05);
-      flex-shrink: 0;
+    .grid-mesas {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      flex: 1;
     }
     
-    .header-text { text-align: left; }
-    .date-badge { font-size: 12px; letter-spacing: 5px; text-transform: uppercase; color: rgba(255,255,255,0.5); display: block; margin-bottom: 8px; }
-    h1 { font-family: 'Playfair Display', serif; font-size: 36px; color: var(--gold); margin: 0; font-weight: 600; line-height: 1.2; }
-    #connection-status { font-size: 13px; opacity: 0.8; letter-spacing: 1px; font-weight: 300; margin-top: 5px; text-transform: uppercase;}
-
-    .btn-action {
-      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
-      height: 55px; padding: 0 30px; border-radius: 18px; font-weight: 600; text-transform: uppercase;
-      cursor: pointer; border: none; transition: all 0.3s ease;
-      font-size: 13px; letter-spacing: 1.5px; color: white;
-    }
-    .btn-primary { background: var(--gold); color: #111; }
-    .btn-primary:active { background: var(--gold-dark); transform: scale(0.97); }
-
-    .btn-add-table {
-      position: absolute; bottom: 35px; right: 35px;
-      background: var(--gold); color: #111; height: 60px; padding: 0 30px;
-      border-radius: 20px; font-weight: 600; text-transform: uppercase;
-      font-size: 13px; letter-spacing: 1.5px; border: none;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.5); transition: 0.3s; z-index: 100; cursor: pointer;
-    }
-    .btn-add-table:active { transform: scale(0.95); }
-
-    .dashboard-body { display: flex; flex: 1; gap: 25px; min-height: 0; }
-
-    .sidebar {
-      width: 360px; background: rgba(0,0,0,0.2);
-      border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; display: flex; flex-direction: column;
-      flex-shrink: 0;
-    }
-    
-    .sidebar-header { padding: 25px 20px; border-bottom: 1px solid rgba(255,255,255,0.05); text-align: center; }
-    .sidebar-header h3 { color: var(--text); font-size: 1.2rem; margin-bottom: 12px; font-weight: 400; letter-spacing: 1px;}
-
-    .legend { display: flex; justify-content: center; gap: 15px; font-size: 0.85rem; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;}
-    .legend-item { display: flex; align-items: center; gap: 8px; }
-    .dot { width: 10px; height: 10px; border-radius: 50%; }
-    
-    /* Touch optimization for scrolling areas */
-    .guest-list { 
-      flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; 
-      -webkit-overflow-scrolling: touch; 
+    .mesa {
+      border: 2px solid #333;
+      padding: 10px;
+      min-width: 200px;
+      min-height: 150px;
+      background: #fafafa;
     }
 
-    .guest {
-      background: rgba(255,255,255,0.03); padding: 16px 20px; border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.05); cursor: grab; font-size: 0.95rem;
-      transition: all 0.2s ease; display: flex; justify-content: space-between; align-items: center;
-      border-left: 5px solid transparent; width: 100%;
-      -webkit-user-select: none; user-select: none; /* Prevents text selection on iPad while dragging */
-    }
-    .guest-info { display: flex; flex-direction: column; pointer-events: none;}
-    .guest-name { font-weight: 600; color: var(--text); }
-    .guest-passes { font-size: 0.8rem; color: var(--text-muted); letter-spacing: 0.5px; margin-top: 2px;}
-
-    .guest.status-confirmado { border-left-color: var(--status-conf); background: rgba(102, 187, 106, 0.05); }
-    .guest.status-pendiente { border-left-color: var(--status-pend); background: rgba(255, 213, 79, 0.05); }
-    .guest.status-declinado { border-left-color: var(--status-decl); opacity: 0.4; text-decoration: line-through; cursor: not-allowed; }
-    .guest:active:not(.status-declinado) { cursor: grabbing; transform: scale(0.98); background: var(--gold); color: #111; }
-    .guest:active:not(.status-declinado) .guest-name, .guest:active:not(.status-declinado) .guest-passes { color: #111; }
-    .guest.dragging { opacity: 0.5; }
-
-    .main-area {
-      flex: 1; border-radius: 25px; padding: 25px;
-      overflow-y: auto; background: rgba(0,0,0,0.15); border: 1px solid rgba(255,255,255,0.05);
-      position: relative; -webkit-overflow-scrolling: touch;
-    }
-
-    .room-layout {
-      width: 100%; max-width: 1100px; margin: 0 auto; 
-      background: rgba(0, 0, 0, 0.2); border: 1px solid var(--gold); 
-      border-radius: 20px; padding: 35px 25px;
-      display: flex; flex-direction: column; gap: 30px; position: relative; 
-    }
-
-    .top-stage { width: 100%; display: flex; justify-content: center; padding-bottom: 25px; border-bottom: 1px dashed rgba(212, 175, 55, 0.3); }
-
-    .floor-grid { display: flex; justify-content: space-between; align-items: stretch; gap: 20px; }
-    .side-zone { display: flex; flex-direction: column; gap: 25px; width: 30%; }
-
-    .dance-floor-area {
-      width: 35%; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 15px; 
-      background: rgba(10, 10, 12, 0.3); color: var(--text-muted); 
-      letter-spacing: 2px; font-weight: 400; font-size: 1rem;
-      display: flex; align-items: center; justify-content: center; text-align: center;
-      min-height: 480px;
-    }
-
-    .extra-area { width: 100%; max-width: 1100px; margin: 25px auto 0 auto; display: flex; flex-wrap: wrap; gap: 20px; justify-content: center; }
-
-    .table-slot { width: 100%; min-height: 180px; border: 1px dashed rgba(255, 255, 255, 0.1); border-radius: 18px; display: flex; justify-content: center; align-items: center; transition: all 0.3s ease; position: relative; }
-    .table-slot.slot-highlight { background: rgba(102, 187, 106, 0.1); border-color: var(--status-conf); }
-    .extra-area .table-slot { width: calc(33.333% - 14px); min-width: 250px; }
-
-    .table-card {
-      width: 100%; background: rgba(255,255,255,0.02); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.1); border-radius: 18px; 
-      display: flex; flex-direction: column; box-shadow: 0 8px 30px rgba(0,0,0,0.3); 
-    }
-    
-    #card-mesa-novios { width: 100%; max-width: 450px; border: 2px solid var(--gold); background: rgba(212, 175, 55, 0.05); box-shadow: 0 0 30px rgba(212, 175, 55, 0.15); }
-    #card-mesa-novios .table-header { cursor: default; touch-action: auto; background: transparent; } 
-    #card-mesa-novios .table-header input { color: var(--gold); font-size: 1.3rem; font-weight: 600;}
-
-    .table-header {
-      background: rgba(0, 0, 0, 0.3); padding: 15px 20px; border-radius: 18px 18px 0 0;
-      border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center;
-      cursor: grab; touch-action: none; user-select: none; -webkit-user-select: none;
-    }
-    .table-header:active { cursor: grabbing; }
-    
-    .table-header input { background: transparent; border: none; color: var(--text); font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 600; width: 50%; outline: none; pointer-events: auto; letter-spacing: 0.5px; }
-    
-    .table-controls { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-muted); }
-    
-    /* iPad Touch target optimization */
-    .btn-small { background: rgba(255,255,255,0.08); border: none; color: var(--text); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; transition: 0.2s; font-weight: 600; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;}
-    .btn-small:active { background: var(--gold); color: #111; transform: scale(0.95); }
-    
-    .btn-delete { background: rgba(239, 154, 154, 0.1); border: none; color: var(--status-decl); width: 40px; height: 40px; border-radius: 10px; cursor: pointer; margin-left: 8px; font-weight: 600; transition: 0.2s; font-size: 1.3rem; display: flex; justify-content: center; align-items: center;}
-    .btn-delete:active { background: var(--status-decl); color: #111; transform: scale(0.95); }
-    
-    .cap-display { font-size: 1.1rem; width: 25px; text-align: center; }
-
-    .table-seats { padding: 12px 18px; min-height: 140px; max-height: 280px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; -webkit-overflow-scrolling: touch;}
-    .table-seats.drag-over { background: rgba(212, 175, 55, 0.05); }
-    .table-seats .guest { padding: 10px 14px; font-size: 0.85rem; border-radius: 10px; border-left-width: 4px; box-shadow: none; border-color: transparent; margin-bottom: 0;}
-
-    .seat-count { 
-      text-align: center; padding: 15px; font-size: 0.8rem; font-weight: 600; 
-      color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.05); background: rgba(0,0,0,0.2);
-      border-radius: 0 0 18px 18px; letter-spacing: 1px; text-transform: uppercase;
-    }
-
-    .loader { border: 3px solid rgba(255,255,255,0.1); border-top: 3px solid var(--gold); border-radius: 50%; width: 24px; height: 24px; animation: spin 1s linear infinite; margin: 20px auto; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-    @media (max-width: 1024px) {
-      .dashboard-body { gap: 15px; }
-      .sidebar { width: 300px; }
+    .tarjeta-invitado {
+      border: 1px solid #666;
+      background: #eee;
+      padding: 6px;
+      margin: 4px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
   </style>
 </head>
 <body>
 
-<div class="glass-card">
-  
-  <div class="card-header">
-    <div class="header-text">
-      <span class="date-badge">19 • Diciembre • 2026</span>
-      <h1>Mapeado del Salón</h1>
-      <div id="connection-status">Sincronizando base de datos...</div>
-    </div>
-    
-    <button class="btn-action btn-primary" id="btn-save-layout" onclick="saveLayout()">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-      Guardar Cambios
-    </button>
+  <h2>Acomodador de Mesas</h2>
+
+  <div>
+    <input type="text" id="nuevo-nombre" placeholder="Nombre del invitado">
+    <button onclick="agregarInvitado()">+ Agregar Invitado</button>
+    <button onclick="agregarMesa()">+ Agregar Mesa</button>
   </div>
 
-  <div class="dashboard-body">
-    
-    <div class="sidebar">
-      <div class="sidebar-header">
-        <h3>Por Acomodar</h3>
-        <div class="legend">
-          <div class="legend-item"><div class="dot" style="background:var(--status-conf)"></div> Conf.</div>
-          <div class="legend-item"><div class="dot" style="background:var(--status-pend)"></div> Pend.</div>
-          <div class="legend-item"><div class="dot" style="background:var(--status-decl)"></div> Decl.</div>
+  <div class="panel">
+    <div>
+      <h3>Sin Mesa</h3>
+      <div id="lista-espera" class="columna-invitados">
+        <!-- Invitados de prueba iniciales -->
+        <div class="tarjeta-invitado" id="inv-1">
+          <span>Invitado 1</span>
+          <button onclick="moverAMesa('inv-1')">Mover a...</button>
         </div>
-      </div>
-      <div class="guest-list" id="unseated-guests">
-        <div class="loader" id="loading-guests"></div>
       </div>
     </div>
 
-    <div class="main-area" id="scroll-container">
-      <div class="room-layout">
-        
-        <div class="top-stage" id="stage-area">
-            <div class="table-slot fixed-slot" id="slot-novios"></div>
-        </div>
-
-        <div class="floor-grid">
-          <div class="side-zone" id="left-tables">
-              <div class="table-slot fixed-slot" id="slot-izq-1"></div>
-              <div class="table-slot fixed-slot" id="slot-izq-2"></div>
-              <div class="table-slot fixed-slot" id="slot-izq-3"></div>
-              <div class="table-slot fixed-slot" id="slot-izq-4"></div>
-          </div>
-          <div class="dance-floor-area"><span>PISTA DE BAILE</span></div>
-          <div class="side-zone" id="right-tables">
-              <div class="table-slot fixed-slot" id="slot-der-1"></div>
-              <div class="table-slot fixed-slot" id="slot-der-2"></div>
-              <div class="table-slot fixed-slot" id="slot-der-3"></div>
-              <div class="table-slot fixed-slot" id="slot-der-4"></div>
-          </div>
-        </div>
+    <div>
+      <h3>Mesas</h3>
+      <div id="contenedor-mesas" class="grid-mesas">
+        <!-- Las mesas se generarán aquí -->
       </div>
+    </div>
+  </div>
+
+  <script>
+    let contadorMesa = 0;
+    let contadorInvitado = 1;
+
+    // Crear la primera mesa por defecto
+    agregarMesa();
+
+    function agregarMesa() {
+      contadorMesa++;
+      const contenedor = document.getElementById('contenedor-mesas');
+      const divMesa = document.createElement('div');
+      divMesa.className = 'mesa';
+      divMesa.id = `mesa-${contadorMesa}`;
+      divMesa.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong>Mesa ${contadorMesa}</strong>
+          <button onclick="eliminarMesa('mesa-${contadorMesa}')">X</button>
+        </div>
+        <hr>
+        <div class="zona-sillas" id="sillas-mesa-${contadorMesa}"></div>
+      `;
+      contenedor.appendChild(divMesa);
+    }
+
+    function agregarInvitado() {
+      const input = document.getElementById('nuevo-nombre');
+      const nombre = input.value.trim();
+      if (!nombre) return;
+
+      contadorInvitado++;
+      const idInv = `inv-${contadorInvitado}`;
+      const listaEspera = document.getElementById('lista-espera');
       
-      <div class="extra-area" id="extra-tables"></div>
-    </div>
-
-  </div>
-
-  <button class="btn-add-table" onclick="addTable()">+ Mesa Extra</button>
-
-</div>
-
-<script>
-  const SUPABASE_URL = 'https://kuwtppqumrhdnveaocgt.supabase.co';
-  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1d3RwcHF1bXJoZG52ZWFvY2d0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ5MDU1ODUsImV4cCI6MjA5MDQ4MTU4NX0.jj5QIOAQ4RVSMRm_syaMXvaIURoqJD2KerOhr848WSw';
-
-  let tableCount = 0;
-  let draggedGuest = null; 
-
-  function createTableHTML(name, capacity, tableId, slotId) {
-    const isNovios = tableId === 'mesa-novios';
-    const hideDelete = isNovios ? 'style="display:none;"' : '';
-    
-    const tableHTML = `
-      <div class="table-card" id="card-${tableId}">
-        <div class="table-header">
-          <input type="text" value="${name}" id="name-${tableId}" ${isNovios ? 'readonly' : ''}>
-          <div class="table-controls">
-            <button class="btn-small" onclick="changeCapacity('${tableId}', -1)">-</button>
-            <span class="cap-display">${capacity}</span>
-            <button class="btn-small" onclick="changeCapacity('${tableId}', 1)">+</button>
-            <button class="btn-delete" ${hideDelete} onclick="removeTable('${tableId}')" title="Eliminar Mesa">×</button>
-          </div>
-        </div>
-        <div class="table-seats" data-capacity="${capacity}" id="seats-${tableId}"></div>
-        <div class="seat-count" id="count-${tableId}">0 / ${capacity} sillas ocupadas</div>
-      </div>
-    `;
-
-    let targetSlot = document.getElementById(slotId);
-    if (!targetSlot) {
-        const extraHTML = `<div class="table-slot" id="${slotId}"></div>`;
-        document.getElementById('extra-tables').insertAdjacentHTML('beforeend', extraHTML);
-        targetSlot = document.getElementById(slotId);
+      const divInv = document.createElement('div');
+      divInv.className = 'tarjeta-invitado';
+      divInv.id = idInv;
+      divInv.innerHTML = `
+        <span>${nombre}</span>
+        <button onclick="moverAMesa('${idInv}')">Mover a...</button>
+      `;
+      
+      listaEspera.appendChild(divInv);
+      input.value = '';
     }
 
-    targetSlot.innerHTML = tableHTML;
-    setupDropZone(document.getElementById(`seats-${tableId}`));
-  }
-
-  function initFloorPlan() {
-    document.getElementById('slot-novios').innerHTML = '';
-    createTableHTML('🤵 Carlos & Joselyn 👰', 2, 'mesa-novios', 'slot-novios');
-    tableCount = 0; 
-  }
-
-  function addTable(capacity = 10) {
-    tableCount++;
-    const newId = `mesa-${tableCount}`;
-    
-    const fixedSlots = Array.from(document.querySelectorAll('.fixed-slot:not(#slot-novios)'));
-    let emptySlot = fixedSlots.find(slot => slot.children.length === 0);
-    
-    if (emptySlot) {
-        createTableHTML(`Mesa ${tableCount}`, capacity, newId, emptySlot.id);
-    } else {
-        createTableHTML(`Mesa ${tableCount}`, capacity, newId, `slot-extra-${tableCount}`);
-    }
-  }
-
-  function removeTable(tableId) {
-    if(tableId === 'mesa-novios') return; 
-    if(!confirm("¿Seguro de eliminar esta mesa? Las demás se reacomodarán automáticamente.")) return;
-    
-    const tableCard = document.getElementById(`card-${tableId}`);
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    const unseatedZone = document.getElementById('unseated-guests');
-    const slot = tableCard.parentElement; 
-    
-    const guests = seatsZone.querySelectorAll('.guest');
-    guests.forEach(g => unseatedZone.appendChild(g));
-    
-    tableCard.remove(); 
-    if (!slot.classList.contains('fixed-slot')) slot.remove();
-    
-    reindexAndRepackTables();
-    markUnsavedChanges();
-  }
-
-  function reindexAndRepackTables() {
-    const allCards = Array.from(document.querySelectorAll('.table-card:not(#card-mesa-novios)'));
-    
-    allCards.sort((a, b) => {
-       let numA = parseInt(a.id.replace('card-mesa-', '')) || 0;
-       let numB = parseInt(b.id.replace('card-mesa-', '')) || 0;
-       return numA - numB;
-    });
-
-    tableCount = allCards.length;
-    const slots = ['slot-izq-1', 'slot-izq-2', 'slot-izq-3', 'slot-izq-4', 'slot-der-1', 'slot-der-2', 'slot-der-3', 'slot-der-4'];
-    const extraZone = document.getElementById('extra-tables');
-
-    allCards.forEach((card, index) => {
-      let newNum = index + 1;
-      let newId = `mesa-${newNum}`;
-
-      card.id = `card-${newId}`;
-      let input = card.querySelector('.table-header input');
-      input.id = `name-${newId}`;
-      if (/^Mesa \d+$/i.test(input.value)) {
-          input.value = `Mesa ${newNum}`;
+    function moverAMesa(idInvitado) {
+      const invitado = document.getElementById(idInvitado);
+      const mesas = document.querySelectorAll('.mesa');
+      
+      if (mesas.length === 0) {
+        alert("Primero crea una mesa.");
+        return;
       }
 
-      let btns = card.querySelectorAll('.btn-small');
-      btns[0].setAttribute('onclick', `changeCapacity('${newId}', -1)`);
-      btns[1].setAttribute('onclick', `changeCapacity('${newId}', 1)`);
-      card.querySelector('.btn-delete').setAttribute('onclick', `removeTable('${newId}')`);
-      card.querySelector('.table-seats').id = `seats-${newId}`;
-      card.querySelector('.seat-count').id = `count-${newId}`;
+      // Crear lista de opciones para seleccionar mesa
+      let opciones = "Ingresa el número de mesa al que deseas moverlo:\n\n";
+      opciones += "0 = Sin Mesa (Lista de espera)\n";
+      mesas.forEach((m, index) => {
+        const num = m.id.replace('mesa-', '');
+        opciones += `${num} = Mesa ${num}\n`;
+      });
 
-      if (newNum <= 8) {
-         document.getElementById(slots[newNum-1]).appendChild(card);
+      const seleccion = prompt(opciones);
+      if (seleccion === null) return;
+
+      if (seleccion.trim() === '0') {
+        document.getElementById('lista-espera').appendChild(invitado);
       } else {
-         let extraSlotId = `slot-extra-${newNum}`;
-         let targetSlot = document.getElementById(extraSlotId);
-         if (!targetSlot) {
-            extraZone.insertAdjacentHTML('beforeend', `<div class="table-slot" id="${extraSlotId}"></div>`);
-            targetSlot = document.getElementById(extraSlotId);
-         }
-         targetSlot.appendChild(card);
-      }
-    });
-    
-    document.querySelectorAll('#extra-tables .table-slot').forEach(slot => {
-       if(slot.children.length === 0) slot.remove();
-    });
-    updateAllCounters();
-  }
-
-  async function loadAllGuests() {
-    const statusText = document.getElementById('connection-status');
-    const guestList = document.getElementById('unseated-guests');
-    
-    try {
-      const response = await fetch(`${SUPABASE_URL}/rest/v1/invitados?select=id,nombre,pases,estado,mesa&es_duplicado=is.false`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
-      
-      if (!response.ok) throw new Error('Error de red');
-      
-      const invitados = await response.json();
-      document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = `${invitados.length} Registros Sincronizados`;
-
-      invitados.forEach(invitado => {
-        const estadoActual = (invitado.estado || "").toLowerCase().trim();
-        let statusClass = 'status-pendiente'; 
-        let isDraggable = true;
-
-        if (estadoActual === 'confirmado' || estadoActual === 'si') statusClass = 'status-confirmado';
-        else if (estadoActual === 'declinado' || estadoActual === 'no') {
-            statusClass = 'status-declinado';
-            isDraggable = false; 
-        }
-
-        const pases = parseInt(invitado.pases) || 1;
-        const uniqueId = `guest-${invitado.id}`;
-        
-        const guestHTML = `
-          <div class="guest ${statusClass}" draggable="${isDraggable}" id="${uniqueId}" data-db-id="${invitado.id}" data-passes="${pases}">
-            <div class="guest-info">
-              <span class="guest-name">${invitado.nombre}</span>
-              <span class="guest-passes">Pases: ${pases}</span>
-            </div>
-          </div>
-        `;
-
-        let targetZone = guestList;
-        
-        if (invitado.mesa && invitado.mesa.trim() !== '') {
-            let tableZone = document.getElementById(`seats-${invitado.mesa}`);
-            
-            if (!tableZone && invitado.mesa !== 'mesa-novios') {
-                let tNum = parseInt(invitado.mesa.replace(/\D/g, ''));
-                if(!isNaN(tNum)) {
-                    if (tNum > tableCount) tableCount = tNum; 
-                    
-                    const fixedSlots = Array.from(document.querySelectorAll('.fixed-slot:not(#slot-novios)'));
-                    let emptySlot = fixedSlots.find(slot => slot.children.length === 0);
-                    
-                    createTableHTML(`Mesa ${tNum}`, 10, `mesa-${tNum}`, emptySlot ? emptySlot.id : `slot-extra-${tNum}`);
-                    tableZone = document.getElementById(`seats-${invitado.mesa}`);
-                }
-            }
-            if(tableZone) targetZone = tableZone;
-        }
-
-        targetZone.insertAdjacentHTML('beforeend', guestHTML);
-      });
-      updateAllCounters();
-    } catch (error) {
-      document.getElementById('loading-guests').style.display = 'none';
-      statusText.innerText = "Error cargando base de datos.";
-      statusText.style.color = "#e74c3c";
-    }
-  }
-
-  document.addEventListener('dragstart', (e) => {
-    const guestBlock = e.target.closest('.guest');
-    if(guestBlock && !guestBlock.classList.contains('status-declinado')) {
-      draggedGuest = guestBlock;
-      setTimeout(() => draggedGuest.classList.add('dragging'), 0);
-    }
-  });
-
-  document.addEventListener('dragend', (e) => {
-    if(draggedGuest) {
-      draggedGuest.classList.remove('dragging');
-      draggedGuest = null;
-      updateAllCounters();
-      markUnsavedChanges();
-    }
-  });
-
-  function setupDropZone(zone) {
-    zone.addEventListener('dragover', e => {
-      e.preventDefault();
-      if(zone.classList.contains('table-seats') && draggedGuest) {
-        const capacity = parseInt(zone.dataset.capacity);
-        const incomingPasses = parseInt(draggedGuest.dataset.passes);
-        let currentUsed = 0;
-        zone.querySelectorAll('.guest').forEach(g => {
-            if(g !== draggedGuest) currentUsed += parseInt(g.dataset.passes);
-        });
-        if((currentUsed + incomingPasses) > capacity) {
-            e.dataTransfer.dropEffect = "none";
-            return;
+        const destino = document.getElementById(`sillas-mesa-${seleccion.trim()}`);
+        if (destino) {
+          destino.appendChild(invitado);
+        } else {
+          alert("Esa mesa no existe.");
         }
       }
-      zone.classList.add('drag-over');
-    });
+    }
 
-    zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-
-    zone.addEventListener('drop', e => {
-      e.preventDefault();
-      zone.classList.remove('drag-over');
+    function eliminarMesa(idMesa) {
+      const mesa = document.getElementById(idMesa);
+      const sillas = mesa.querySelector('.zona-sillas');
+      const listaEspera = document.getElementById('lista-espera');
       
-      if (draggedGuest) {
-        if(zone.classList.contains('table-seats')) {
-            const capacity = parseInt(zone.dataset.capacity);
-            const incomingPasses = parseInt(draggedGuest.dataset.passes);
-            let currentUsed = 0;
-            zone.querySelectorAll('.guest').forEach(g => {
-                if(g !== draggedGuest) currentUsed += parseInt(g.dataset.passes);
-            });
-            if((currentUsed + incomingPasses) > capacity) {
-                alert(`No hay sillas suficientes. Ocupan ${incomingPasses} lugares.`);
-                return;
-            }
-        }
-        zone.appendChild(draggedGuest);
+      // Regresar invitados a la lista de espera antes de borrar la mesa
+      while (sillas.firstChild) {
+        listaEspera.appendChild(sillas.firstChild);
       }
-    });
-  }
-
-  setupDropZone(document.getElementById('unseated-guests'));
-
-  function changeCapacity(tableId, change) {
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    let cap = parseInt(seatsZone.dataset.capacity) + change;
-    if(cap < 1) cap = 1;
-    let currentUsed = 0;
-    seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
-    if(cap < currentUsed) {
-      alert("Saca primero a un invitado antes de quitar la silla.");
-      return;
+      mesa.remove();
     }
-    seatsZone.dataset.capacity = cap;
-    document.querySelector(`#card-${tableId} .cap-display`).innerText = cap;
-    updateCounter(tableId);
-  }
+  </script>
 
-  function updateCounter(tableId) {
-    const seatsZone = document.getElementById(`seats-${tableId}`);
-    if(!seatsZone) return;
-    let currentUsed = 0;
-    seatsZone.querySelectorAll('.guest').forEach(g => { currentUsed += parseInt(g.dataset.passes); });
-    const cap = parseInt(seatsZone.dataset.capacity);
-    const countDisplay = document.getElementById(`count-${tableId}`);
-    countDisplay.innerText = `${currentUsed} / ${cap} sillas ocupadas`;
-    
-    if(currentUsed === cap) countDisplay.style.color = "var(--status-conf)";
-    else if (currentUsed > cap) countDisplay.style.color = "var(--status-decl)";
-    else countDisplay.style.color = "var(--text-muted)"; 
-  }
-
-  function updateAllCounters() {
-    updateCounter('mesa-novios');
-    document.querySelectorAll('.table-card:not(#card-mesa-novios)').forEach(card => {
-       let num = card.id.replace('card-mesa-', '');
-       updateCounter(`mesa-${num}`);
-    });
-  }
-
-  function markUnsavedChanges() {
-    const btn = document.getElementById('btn-save-layout');
-    btn.style.background = "var(--status-pend)"; 
-    btn.style.color = "#111";
-    btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios *';
-  }
-
-  async function saveLayout() { 
-    const btn = document.getElementById('btn-save-layout');
-    const originalHTML = btn.innerHTML;
-    
-    btn.innerHTML = '<div style="width:18px;height:18px;border:2px solid #111;border-top-color:transparent;border-radius:50%;animation:spin 1s linear infinite;"></div> Guardando...';
-    btn.style.background = "var(--gold)"; 
-    btn.disabled = true;
-    
-    try {
-        const guests = document.querySelectorAll('.guest');
-        const updates = [];
-        guests.forEach(guest => {
-            const dbId = guest.dataset.dbId;
-            const parentZone = guest.parentElement.id; 
-            let targetMesa = parentZone.startsWith("seats-") ? parentZone.replace("seats-", "") : "";
-            updates.push(
-                fetch(`${SUPABASE_URL}/rest/v1/invitados?id=eq.${dbId}`, {
-                    method: 'PATCH',
-                    headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}`, 'Prefer': 'return=minimal' },
-                    body: JSON.stringify({ mesa: targetMesa })
-                })
-            );
-        });
-        await Promise.all(updates);
-        
-        btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> ¡Guardado!';
-        btn.style.background = "var(--status-conf)";
-        
-        setTimeout(() => { 
-          btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Guardar Cambios'; 
-          btn.style.background = "var(--gold)";
-          btn.disabled = false; 
-        }, 3000);
-    } catch (error) { 
-        alert("Error al guardar."); 
-        btn.innerHTML = originalHTML; 
-        btn.style.background = "var(--status-decl)"; 
-        btn.disabled = false; 
-    }
-  }
-
-  let draggedTableUI = null;
-  let originalSlot = null;
-  let offsetX = 0;
-  let offsetY = 0;
-  
-  let autoScrollInterval = null;
-  const scrollContainer = document.getElementById('scroll-container');
-  const scrollSpeed = 15; 
-  const edgeThreshold = 80; 
-
-  function handleAutoScroll(clientY) {
-    if (!draggedTableUI) return;
-    const containerRect = scrollContainer.getBoundingClientRect();
-    if (clientY - containerRect.top < edgeThreshold && scrollContainer.scrollTop > 0) {
-        if (!autoScrollInterval) { autoScrollInterval = setInterval(() => { scrollContainer.scrollTop -= scrollSpeed; }, 20); }
-    } else if (containerRect.bottom - clientY < edgeThreshold) {
-        if (!autoScrollInterval) { autoScrollInterval = setInterval(() => { scrollContainer.scrollTop += scrollSpeed; }, 20); }
-    } else { clearInterval(autoScrollInterval); autoScrollInterval = null; }
-  }
-
-  function handleDragStart(e) {
-    const header = e.target.closest('.table-header');
-    const card = header ? header.closest('.table-card') : null;
-    
-    if (header && !e.target.closest('.btn-small') && !e.target.closest('.btn-delete') && e.target.tagName !== 'INPUT' && card.id !== 'card-mesa-novios') {
-      
-      draggedTableUI = card;
-      originalSlot = draggedTableUI.parentElement; 
-      
-      const rect = draggedTableUI.getBoundingClientRect();
-      
-      draggedTableUI.style.width = rect.width + 'px'; 
-      draggedTableUI.style.height = rect.height + 'px';
-      
-      draggedTableUI.style.position = 'fixed';
-      draggedTableUI.style.zIndex = "9999";
-      draggedTableUI.style.pointerEvents = "none"; 
-      
-      document.body.appendChild(draggedTableUI);
-      
-      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      
-      offsetX = clientX - rect.left;
-      offsetY = clientY - rect.top;
-      
-      draggedTableUI.style.left = (clientX - offsetX) + 'px';
-      draggedTableUI.style.top = (clientY - offsetY) + 'px';
-    }
-  }
-
-  function handleDragMove(e) {
-    if (draggedTableUI) {
-      e.preventDefault(); 
-      
-      let clientX = e.touches ? e.touches[0].clientX : e.clientX;
-      let clientY = e.touches ? e.touches[0].clientY : e.clientY;
-      
-      draggedTableUI.style.left = (clientX - offsetX) + 'px';
-      draggedTableUI.style.top = (clientY - offsetY) + 'px';
-      handleAutoScroll(clientY);
-
-      let elementBelow = document.elementFromPoint(clientX, clientY);
-      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
-
-      document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
-      if (targetSlot && targetSlot !== originalSlot) {
-          targetSlot.classList.add('slot-highlight');
-      }
-    }
-  }
-
-  function handleDragEnd(e) {
-    if (draggedTableUI) {
-      clearInterval(autoScrollInterval);
-      autoScrollInterval = null;
-
-      let clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
-      let clientY = e.changedTouches ? e.changedTouches[0].clientY : e.clientY;
-      
-      let elementBelow = document.elementFromPoint(clientX, clientY);
-      let targetSlot = elementBelow ? elementBelow.closest('.table-slot:not(#slot-novios)') : null;
-      
-      draggedTableUI.style.pointerEvents = "auto";
-      document.querySelectorAll('.table-slot').forEach(s => s.classList.remove('slot-highlight'));
-
-      if (targetSlot && targetSlot !== originalSlot) {
-          let existingTable = targetSlot.querySelector('.table-card');
-          if (existingTable) { originalSlot.appendChild(existingTable); }
-          targetSlot.appendChild(draggedTableUI); 
-          markUnsavedChanges();
-      } else { originalSlot.appendChild(draggedTableUI); }
-
-      draggedTableUI.style.position = '';
-      draggedTableUI.style.left = '';
-      draggedTableUI.style.top = '';
-      draggedTableUI.style.zIndex = '';
-      draggedTableUI.style.width = '100%'; 
-      draggedTableUI.style.height = ''; 
-      
-      draggedTableUI = null;
-      originalSlot = null;
-    }
-  }
-
-  document.addEventListener('mousedown', handleDragStart);
-  document.addEventListener('mousemove', handleDragMove, {passive: false});
-  document.addEventListener('mouseup', handleDragEnd);
-
-  document.addEventListener('touchstart', handleDragStart, {passive: false});
-  document.addEventListener('touchmove', handleDragMove, {passive: false});
-  document.addEventListener('touchend', handleDragEnd);
-
-  window.onload = () => {
-    initFloorPlan(); 
-    loadAllGuests(); 
-  };
-</script>
 </body>
 </html>
